@@ -1359,6 +1359,7 @@
                 document.getElementById('serialInput').classList.remove('hidden');
             }
         }
+        
         const products = [];
         function addItem(event) {
             event.preventDefault();
