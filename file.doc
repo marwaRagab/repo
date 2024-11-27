@@ -1,0 +1,8 @@
+// Testing with Postman  Api Resources
+// You can test these routes using Postman by sending requests to:
+
+// List posts: GET http://your-app.test/api/posts
+// Create a post: POST http://your-app.test/api/posts with JSON body
+// View a post: GET http://your-app.test/api/posts/{id}
+// Update a post: PUT/PATCH http://your-app.test/api/posts/{id} with JSON body
+// Delete a post: DELETE http://your-app.test/api/posts/{id}

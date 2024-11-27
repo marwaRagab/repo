@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+     <!--Shahy code-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FGCESV3T4Y"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-FGCESV3T4Y');
+</script>
+     <!--Shahy code-->
+       <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><link href="../Select/select2.css" rel="stylesheet" />
+    <script src="../Select/select2.js"  type="text/javascript"></script>
+     <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <link href="../style/default/css/default.css" rel="stylesheet" type="text/css" media="all" /><link href="../default/bootstrap/css/bootstrap.min.css" rel="stylesheet" /><link href="../default/bootstrap/css/bootstrap.css" rel="stylesheet" /><link href="../style/default/css/main.css" rel="stylesheet" /><link href="../default/font-awesome-4.1.0/css/font-awesome.css" rel="stylesheet" /><link href="../css/Fonts.css" rel="stylesheet" /><link href="../css/main.css" rel="stylesheet" /><link href="../css/plugins.css" rel="stylesheet" /><link href="../css/SideMenu.css" rel="stylesheet" /><link href="../css/StyleSheet.css" rel="stylesheet" /><link href="../css/droidarabickufi.css" rel="stylesheet" /><link href="../masterPages/default/font-awesome-4.1.0/css/font-awesome.css" rel="stylesheet" /><link href="../css/SSDefault_Jobs.css" rel="stylesheet" /><link href="SSDefault_Jobs.css" rel="stylesheet" /><title>
+	بوابة الوظائف الحكومية
+</title>
+    <link href="../css/Grid.css" rel="stylesheet" />
+<link href="/WebResource.axd?d=14xv64VRUBFffDrmnZ1ilJmtcIjNb4WA5PrWYeYCO4lpToW7zMOupZJR0mvDISB0vI6ERE3MKTLBH3dfb8i2YLVaunC7lt2cZrNyOlZjlRqmdnNpRRCcgBl39lDrHh7GJtSLhA2&amp;t=634092926420000000" type="text/css" rel="stylesheet" /></head>
+<body>
+    <form method="post" action="./ShowJob.aspx?JobID=V8o38OzRkQrQNCXfUtzfqQ%3d%3d" id="form1" dir="rtl">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<script src="/WebResource.axd?d=pXTVtFIShXiE1h4MJClD7SKAEPCMbrGN-ShXdGtlx2mSStjghbNpEu-R_iuYjC3h-X0zsv_muMOazK9kRRQHt6NmflQ1&amp;t=638379495171842803" type="text/javascript"></script>
+
+
+<script src="/ScriptResource.axd?d=orosN00dCz4-cpagbA7Ve38F04-YAirR-y3SIEDyRCvvaF-Tkp_6Oc666Kw6MLcRBSUe0v2FryKeOxr_QVRgqdjP0oEX6uNDBaQz5WKYrQdsA3INMxjrrRUCerR2xluKAT74aA2&amp;t=f2cd5c5" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=-HufCeaG0MbMQ9rb3ngg9ACr3RDXE6aUDIcxd_raIwt7JXFENh_9_eOP5_4pJ2PHF1RzIqeYTKIPzXBnaCAqYjCNavjP3Ay1cRshACjzYmTjK6pQoy2KXTLpFPswSfNpdwYsEw2&amp;t=f2cd5c5" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="1FE8BD74" />
+	<input type="hidden" name="__SCROLLPOSITIONX" id="__SCROLLPOSITIONX" value="0" />
+	<input type="hidden" name="__SCROLLPOSITIONY" id="__SCROLLPOSITIONY" value="0" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+	<input type="hidden" name="__PREVIOUSPAGE" id="__PREVIOUSPAGE" value="43G1B2qoJpjIqm0v0UuhetKhHqK-FDuH0bhnNlbShisNovPcnz29hSMG8pZYQuZ6-46q2ZFUzfAwrFxJBOed5t4nLVE1" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="xEmDnSi0MP6O5BoN6vy3fPg5aQcMjeaPL/T88PCACgEkmZcM9KwN6B4t4oy3fH23TEklAiVrOd1UH8tUjZIZrCXJAL2VoJqsnUnUgj++bSXF8h9j+a4tGfBqdlazFIjHkQeYlLmqauNHKim5S1pmKVtLtAwxus5CaF/sd4ef90MquzQirmMdg/qYW3p0RIWSLrfgww==" />
+</div>
+        <style>
+            .toolbutton {
+                margin-right:20px;
+                 
+            }
+            .lbLoginName {
+            margin-right:20px;
+            }
+            .UMResponsive {
+                 font-size: calc(0.5em + 1vw);
+            }
+           
+  
+        </style>
+          
+         <nav class="navbar-fixed-top" style=" border-bottom-style:solid;
+         border-bottom-color:#f2f2f2;  border-bottom-width:thin;  background-color:#cec7c7;
+         font-family:'Droid Arabic Kufi', serif, 'Helvetica Neue', Helvetica, Arial, sans-serif;" >
+           <div class="container-fluid">
+
+               <div class="row " style="background-color:#3c3c3c; color:white; padding:5px ">
+                    <div class="col-lg-2 col-sm-2  col-xs-2" style=" padding-top:5px;text-align:left">
+                          <img id="Image1" src="../Images/EJLogo.png" style="width:50px;" />
+                         </div>
+                  
+                   <div class="col-lg-8 col-sm-8 col-xs-8 example" style="text-align: center; padding-top:10px;" > 
+                       <span id="Label1">بوابة الوظائف الحكومية</span></div>
+                      
+                    <div class="col-lg-2 col-sm-2 col-xs-2" style="padding-top:5px">
+                 
+                       <img id="Image3" src="../Images/caoaLogo1.png" style="height:50px;width:50px;" />
+                      
+                       
+
+                   </div>
+              
+
+                        
+                 
+               </div>
+               
+           </div>
+          
+               <div  class="container-fluid" >
+                      <div class="row " >
+
+               <div class="col-lg-12 col-sm-12 col-xs-12"  style="text-align:center" > 
+               <div class="topnav  "  id="myTopnav">
+
+                 
+           <a id="lbMain" class="UMResponsive" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$lbMain&quot;, &quot;&quot;, false, &quot;&quot;, &quot;../Default_Jobs.aspx&quot;, false, true))" style="color:#940A1A;">
+                         <span class="glyphicon glyphicon-home "></span> الرئيسية 
+                       </a>
+                   
+
+   <a id="lbSearchJobs" href="javascript:__doPostBack(&#39;ctl00$lbSearchJobs&#39;,&#39;&#39;)" style="color:#940A1A;">
+                         <span class="glyphicon glyphicon-search"></span> الوظائف 
+                       </a>
+
+                   
+  
+                
+                 
+ 
+</div>
+           
+       </div>
+                   </div>
+         </div>
+
+
+           
+                       
+              
+        
+       </nav>
+      <div class="container-fluid" style="margin-top:180px">
+          <div class="row" >
+              <div class="col-lg-1 col-sm pull-right" style="border-left-color:#940a1a ;border-left-style:solid;  border-left-width:thin;width:282px; 
+font-family:'Droid Arabic Kufi', serif, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                    
+         
+               </div>
+              <div class="col-lg-9 col-sm-9 pull-right" style="text-align:right;margin-right:5px; padding-top:20px;">
+  
+      <link href="../css/StyleSheet.css" rel="stylesheet" />
+    
+    <link href="SSDefault_Jobs.css" rel="stylesheet" />
+    <style>
+        .labelTitle {
+            font-size:large;
+            color:#004080;
+        }
+    </style>
+    <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ContentPlaceHolder1$ScriptManager1', 'form1', [], [], [], 90, 'ctl00');
+//]]>
+</script>
+
+     <div class="row">
+           <br /> 
+            <div class="col-lg-1 col-sm-7 pull-left">
+             
+          </div>
+       </div>
+ <div class="row">
+     <div class="col-lg-12 col-sm pull-right">
+<span id="ContentPlaceHolder1_lb" style="font-weight:bold;"></span>
+     </div>
+ </div>
+     
+            
+        <div class="row">
+           <br />
+            <div class="col-lg-12 col-sm-7 pull-right">
+                  
+
+          
+<span id="ContentPlaceHolder1_tbJobTitle" style="color:#004080;font-size:X-Large;">معاون خبير هندسى (تخصص حاسبات ونظم المعلومات)  (تعيين)</span>
+          </div>
+       </div>
+     <div class="row">
+           <br />
+          <div class="col-lg-12">
+ <span id="ContentPlaceHolder1_Label1" class="lll">   بيانات الوظيفة</span>
+          </div>
+       </div>
+ 
+  
+        <div class="row">
+         
+       <br />
+               
+         
+            <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+
+         <span id="ContentPlaceHolder1_Label2" class="lbl1">  الجهة طالبة الإعلان:</span>
+             </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+         <span id="ContentPlaceHolder1_tbEntity" class="lbl2">مصلحة الخبراء</span>  
+         </div>
+      
+     </div>
+   <div class="row">
+                   <br />
+        
+                   
+       
+       </div>
+   <div class="row">
+                   <br />
+        
+                    
+        <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+                        <span id="ContentPlaceHolder1_Label26" class="lbl1"> المجموعة الوظيفية:</span>
+                      </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+                          <span id="ContentPlaceHolder1_tbJobCat" class="lbl2">الوظائف التخصصية</span>
+                    </div>
+         </div>
+  
+            <div class="row">
+            <br />
+                    
+                 <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+                        
+                    </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+                         <span id="ContentPlaceHolder1_tbJobType" class="lbl2"></span>
+                      
+                    </div> 
+                </div>
+  
+            <div class="row">
+            <br />
+     
+                <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label4" class="lbl1">الجهه التابع لها:</span>
+         </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbMininster" class="lbl2">وزارة العدل</span>
+              </div>
+     </div>
+        <div class="row">
+            <br />
+        
+            <div class="col-lg-3 col-sm-3 col-xs-5  pull-right">
+         <span id="ContentPlaceHolder1_Label5" class="lbl1">  وصف الوظيفة:</span>
+                  </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+         <span id="ContentPlaceHolder1_tbJobDesc" class="lbl2">تقع هذه الوظيفة بالادارة العامة للخبرة الهندسية المختصة التابعة للادارة المركزية لمكتب خبراء المحافظة التابع لنائب رئيس مصلحة الخبراء التابع لرئيس مصلحة الخبراء بمصلحة الخبراء.<br/>يقوم شاغل هذه الوظيفة بمباشرة مأموريات الخبرة التى يندب لادائها من المختصين بالادارة العامة التابع لها والواردة من جهات القضاء المختلفة<br/></span>
+          
+                </div>
+     </div>
+        
+    
+ 
+           <div class="row">
+           <br />
+          <div class="col-lg-12">
+ <span id="ContentPlaceHolder1_Label9" class="lll">  المهارات المطلوبة</span>
+          </div>
+       </div>
+         <div class="row">
+            <br />
+       
+               <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label6" class="lbl1">المهارات الأساسية:</span>
+               </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+       
+              <span id="ContentPlaceHolder1_tbMainSkill" class="lbl2">الالمام بالقوانين واللوائح المنظمة للعمل وذات الصلة.<br/>القدرة على انجاز الاعمال التى يكلف بها فى وقت مناسب على النحو الامثل<br/>القدرة على التعامل مع الحاسب الالى<br/></span>
+              </div>
+     </div>
+        <div class="row">
+           <br />
+           
+              <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label7" class="lbl1">المهارات الفنية:</span>
+         </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbTechSkills" class="lbl2">اجتياز الاختبارات المقررة لشغل هذه الوظيفة<br/>توافر المهارات والقدرات والسمات الشخصية التى تتطلبها اعمال الوظيفة<br/></span>
+              </div>
+     </div>
+    <div class="row">
+            <br />
+          
+          <div class="col-lg-3 col-sm-3  col-xs-5 pull-right">
+         
+        
+          
+                </div>
+         <div class="col-lg-6 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_lbJobGrad" class="lbl2"></span>
+             </div>
+     </div>
+        <div class="row">
+         <br />
+            
+                      <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         
+                           </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7  pull-right">
+        
+              <span id="ContentPlaceHolder1_tbExperience" class="lbl2"></span>
+              </div>
+     </div>
+         <div class="row">
+           <br />
+          <div class="col-lg-12">
+ <span id="ContentPlaceHolder1_Label11" class="lll">   شروط المتقدمين</span>
+          </div>
+       </div>
+      
+        <div class="row">
+         <br />
+        
+          <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label13" class="lbl1"> العمر:</span>
+        </div>
+              <div class="col-lg-6 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbAge" class="lbl2"> يجب ألا يزيد عمر المتقدم عن 30 عام</span>
+              </div>
+     </div>
+       
+       <div class="row">
+            <br />
+              
+       <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label14" class="lbl1"> مستوى المؤهل:</span>
+           </div>
+            <div class="col-lg-6 col-sm-8 col-xs-7 pull-right">
+         <span id="ContentPlaceHolder1_tbeduLevel" class="lbl2">*مؤهل عال<br></span>  
+              </div>
+              
+     </div>
+       <div class="row">
+            <br />
+     
+            <div class="col-lg-3 col-sm-3  col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label15" class="lbl1">  المؤهل:</span>
+       
+              </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+                 <span id="ContentPlaceHolder1_tbQual" class="lbl2">*مؤهل عال-مؤهل عال هندسي   تخصص  حاسبات ونظم المعلومات<br><br></span>
+               </div>
+     </div>
+  <div class="row">
+                    <br />
+                
+                    <div class="col-lg-3 col-sm-3 col-xs-5  pull-right">
+         <span id="ContentPlaceHolder1_Label47" class="lbl1">  شروط   المؤهل:</span>
+         </div>
+          <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+            <span id="ContentPlaceHolder1_tbQualDesc" class="lbl2">***جميع الشروط الواردة بهذا الإعلان علي مسئولية الجهة***</span>
+               
+            
+               </div>
+                </div>
+      
+       <div class="row">
+            <br />
+    
+           <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label17" class="lbl1"> التقدير:</span>
+               </div>
+         <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+                <span id="ContentPlaceHolder1_tbGrade" class="lbl2">ألا يقل عن جيد</span>
+              </div>
+     </div>
+     
+
+          <div class="row">
+            <br />
+    
+                <div class="col-lg-3 col-sm-3 col-xs-5  pull-right">
+          
+             
+         <span id="ContentPlaceHolder1_Label18" class="lbl1">المستندات المطلوبة:</span>
+              </div>
+   
+                <div class="col-lg-8 col-sm-8 col-xs-7  pull-right"  style="font-family: 'Droid Arabic Kufi';font-size:10pt;color:black">
+                 <span id="ContentPlaceHolder1_tbDocuments" style="font-family:Droid Arabic Kufi;">* الصورة الشخصية <br><br>*الرقم القومي وجه أول سارية<br><br>*الرقم القومي وجه ثاني سارية<br><br>*المؤهل الدراسي<br><br>*المؤهل الأعلى إن وجد<br><br>* الموقف من الخدمة العسكرية للذكور أو الخدمة العامة للأناث<br><br>*شهادة التأهيل أو بطاقة الخدمات المتكاملة في حالة الإعاقة<br><br>*كارنيه نقابة المهندسين<br><br>* إيصال الإيداع البنكي<br><br>*صحيفة الحالة الجنائية سارية وموجهة للجهاز المركزي للتنظيم والإدارة أو وزارة العدل   (وجهين بحسب الأحوال)<br><br></span>
+               </div>
+             
+         
+     </div>
+           <div class="row">
+           <br />
+                  
+          <div class="col-lg-12">
+ <span id="ContentPlaceHolder1_Label19" class="lll">بيانات الإعلان</span>
+          </div>
+       </div>
+   <div class="row">
+         <br />
+      
+       <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label25" class="lbl1">  حالة الوظيفة:</span>
+           </div>
+          <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbjobstate" class="lbl2">وظيفة خالية                                                                                         </span>
+             
+              </div>
+     </div>
+    
+         <div class="row">
+         <br />
+       
+             <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label20" class="lbl1">  بداية الإعلان:</span>
+         </div>
+          <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbstartdate" class="lbl2">2024/01/02</span>
+             
+              </div>
+     </div>
+         <div class="row">
+         <br />
+      
+              <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label21" class="lbl1">    نهاية الإعلان:</span>
+          </div>
+          <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbenddate" class="lbl2">2024/01/31</span>
+               
+              </div>
+     </div>
+         <div class="row">
+         <br />
+      
+              <div class="col-lg-3 col-sm-3 col-xs-5 pull-right">
+         
+          </div>
+          <div class="col-lg-8 col-sm-8 col-xs-7 pull-right">
+              
+              </div>
+     </div>
+    
+                       <div class="row">
+            <br />
+          
+                           <div class="col-lg-3  col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label23" class="lbl1">  بيانات الإتصال:</span>
+       </div>
+                        
+                           <div  class="col-lg-8  col-sm-8 col-xs-7 pull-right">
+              <span id="ContentPlaceHolder1_tbContact" class="lbl2">ملاحظات هامة جدا يجب مراعاتها أثناء التسجيل:-<br/>-------------------------------------------------------------<br/>- يتعين عدم البدء فى إدخال البيانات إلا بعد استيفاء المستندات المطلوبة وسداد الرسوم المقرره والحصول على إيصال الإيداع .<br/>- يجب رفع أصول المستندات المطلوبة بصيغة jpg ولا يتعدى حجم الملف 1 ميجا.<br/>- في حال ما لم تكن المستندات أصلية ملونة سيتم رفض الطلب.<br/>- في حال وجود اختلاف بين البيانات المسجلة بالطلب والبيانات الواردة بالمستندات المرفقة به سيتم رفض الطلب مثال (عدم إدخال الإسم صحيحا وكاملا كما هو ثابت ببطاقة الرقم القومي) سيتم رفض الطلب.<br/>- في حال عدم مطابقة المستندات للشروط المطلوبة بالإعلان سيتم رفض الطلب.<br/>- في حال عدم وضوح البيانات بالمستندات المرفقة سيتم رفض الطلب.<br/>- في حال وجود تعديل بالبيانات في المستندات المرفقة سواء بالكشط أو الحذف أو الإضافة سيتم رفض الطلب.<br/>- في حال تقديم إفادة بالموهل يجب أن تشتمل على البيانات الأساسية ولاسيما (التقديرالعام والنسبة المئوية والتخصص) وإلا سيتم رفض الطلب.<br/>- في حال الإعاقة يجب إرفاق شهادة التأهيل أو بطاقة الخدمات المتكاملة وإلا سيتم رفض الطلب.<br/>يلتزم المتقدم لإعلانات الوظائف بإيداع مبلغ 26 جنيهاً لحساب الجهاز المركزي للتنظيم و الإدارة رقم 9450781200 ح- (بنك مصر - بنك القاهرة- البنك الأهلي المصري)علماً بانه يكون الايصال وارد به اسم الجهاز المركزى للتنظيم والادارة وكذا رقم حساب الجهاز و سيتم رفض طلب المتقدم حال إيداع (مبلغ أقل من المذكور أو ان يكون إيصال الإيداع بتاريخ سابق على تاريخ الإعلان أو باسم شخص آخر غير المتقدم)<br/><br/><br/>***يرجى الاحتفاظ برقم التسجيل الخاص بك بعد إتمام عملية التسجيل.***</span>
+              </div>
+     </div>
+    <div id="ContentPlaceHolder1_pnlinks">
+	
+        
+        <div class="row">
+            <br />
+         
+         <div class="col-lg-3  col-sm-6 col-xs-6 pull-right">
+         
+       </div>
+            </div>
+         <div class="row">
+             <br />
+                   
+     <div class="col-lg-8 col-sm-8 pull-right" style="text-align: center;
+font-family: 'Droid Arabic Kufi', serif, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+           <div>
+
+	</div>
+     </div>
+    </div>
+    
+</div>
+    <div id="ContentPlaceHolder1_pnDoc">
+	
+
+        <div class="row">
+            <br />
+         
+         <div class="col-lg-3  col-sm-3 col-xs-5 pull-right">
+         <span id="ContentPlaceHolder1_Label3" class="lbl1">  الملفات الخاصة بالوظيفة:</span>
+       </div>
+            </div>
+
+      
+        <div class="row">
+      <div class="col-lg-8 col-sm-8 pull-right" style="text-align: center;
+font-family: 'Droid Arabic Kufi', serif, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+           <div>
+		<table cellspacing="0" cellpadding="2" id="ContentPlaceHolder1_grdJobFiles" style="border-collapse:collapse;">
+			<tr>
+				<td>تفاصيل أكثر للوظيفة</td><td>
+                                        <a id="ContentPlaceHolder1_grdJobFiles_filePath_0" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$grdJobFiles$ctl02$filePath&#39;,&#39;&#39;)">اعلان مصلحة الخبراء.pdf                                                                                                                               </a>
+                                    </td>
+			</tr>
+		</table>
+	</div>
+     </div>
+            </div>
+    
+</div>
+    
+    
+
+        <div id="ContentPlaceHolder1_PnApp">
+	
+    <div class="row">
+         <br />
+         <div class="col-lg-1 pull-left">
+
+         </div>
+          <div class="col-lg-3 pull-left">
+         <input type="submit" name="ctl00$ContentPlaceHolder1$btnRecord" value="تقديم طلب" onclick="return confirm(&#39;هل انت متاكد من التسجيل فى  هذا الاعلان&#39;) ;WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnRecord&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="ContentPlaceHolder1_btnRecord" class="newActionButton" />
+         </div>
+      
+        <br />
+     </div>
+            
+</div>
+    
+
+  <div class="row">
+                    <br />
+              
+              </div>
+    
+
+              </div>
+          </div>
+      </div>  
+    <div>
+      
+    </div>
+    
+
+<script type="text/javascript">
+//<![CDATA[
+
+theForm.oldSubmit = theForm.submit;
+theForm.submit = WebForm_SaveScrollPositionSubmit;
+
+theForm.oldOnSubmit = theForm.onsubmit;
+theForm.onsubmit = WebForm_SaveScrollPositionOnSubmit;
+//]]>
+</script>
+</form>
+    <div style="height:40px"></div>
+     <div class="footer">
+<center> 
+    <span id="Label3" class="lblFooter">كل الحقوق محفوظة © الجهاز المركزي للتنظيم و الإدارة 2021</span>
+     </center>
+</div>
+</body>
+</html>
