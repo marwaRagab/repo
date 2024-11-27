@@ -477,7 +477,7 @@
             <div class="form-group mb-3 col-lg-4 col-md-6">
                 <label class="form-label">
                     الاسم الرابع (العربيه)
-                    <span class="text-danger">*</span>
+                    {{-- <span class="text-danger">*</span> --}}
                 </label>
                 <input
                     class="form-input form-control"
@@ -557,7 +557,7 @@
             <div class="form-group mb-3 col-lg-4 col-md-6">
                 <label class="form-label">
                     الاسم الرابع (الانجليزية)
-                    <span class="text-danger">*</span>
+                    {{-- <span class="text-danger">*</span> --}}
                 </label>
                 <input
                     class="form-input form-control"
@@ -592,6 +592,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="gender" name="gender" class="form-select" required>
+                    <option value ="">اختر</option> 
                     <option value="male">ذكر</option>
                     <option value="female">انثي</option>
                 </select>
@@ -606,6 +607,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="nationality" name="nationality" class="form-select" >
+                    <option value ="">اختر</option> 
                     @foreach ($nationality as $item)
                     <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                 @endforeach
@@ -724,6 +726,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="region" name="region" class="form-select" required>
+                    <option value ="">اختر</option> 
                     @foreach ($region as $item)
                     <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                 @endforeach
@@ -890,6 +893,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="bank" name="bank" class="form-select" required>
+                    <option value ="">اختر</option> 
                     @foreach ($bank as $item)
                         <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                     @endforeach

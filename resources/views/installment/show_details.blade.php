@@ -227,59 +227,545 @@
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                         data-bs-parent="#accordionFlushExampleNotes">
                         <div class="accordion-body">
-                            <div class="d-flex flex-wrap mb-1">
-                                <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
-                                    كل الملاحظات </a>
-                                <a class="btn-filter bg-info-subtle text-info  px-4 fs-4 mx-1 mb-2">
-                                    ملاحظات التقديم </a>
-                                <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-                                    ملاحظات اقبول </a>
-                                <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-                                    SMS </a>
-                                <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-                                    السيارات </a>
 
-                                <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
 
-                                    القضايا </a>
-                                <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
-                                    قضايا التنفيذ </a>
-                                <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
-                                    التدقيق </a>
-                                <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
-                                    الشئون القانونية </a>
+
+                            <ul class="nav nav-pills" role="tablist">
+                                <li class="nav-item">
+                                  <a class="nav-link active bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-1" role="tab">
+                                    <span>   كل الملاحظات </span>
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-2" role="tab">
+                                    <span>     ملاحظات التقديم </span>
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                  <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-3" role="tab">
+                                    <span>ملاحظات اقبول </span>
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-4" role="tab">
+                                      <span> SMS </span>
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-5" role="tab">
+                                      <span>السيارات </span>
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-6" role="tab">
+                                      <span>القضايا </span>
+                                    </a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-7" role="tab">
+                                      <span>  قضايا التنفيذ  </span>
+                                    </a>
+                                  </li>      
+                                  <li class="nav-item">
+                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-8" role="tab">
+                                      <span>   التدقيق  </span>
+                                    </a>
+                                  </li>      
+                                  <li class="nav-item">
+                                    <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-9" role="tab">
+                                      <span>          الشئون القانونية   </span>
+                                    </a>
+                                  </li>      
+                            </ul>
+                              <!-- Tab panes -->
+                            <div class="tab-content border mt-2">
+                                <div class="tab-pane active p-3" id="navpill-1" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                {{-- $data['InstallmentClientNote'] --}}
+                                                @foreach( $data['InstallmentClientNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->rely}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                                @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->connect}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-2" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+
+                                                @foreach( $data['InstallmentClientNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+
+                                                    <td>{{$item->rely}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-3" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->connect}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-4" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->connect}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-5" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>النوع </th>
+                                                    <th> السنة </th>
+                                                    <th>متوسط السعر</th>
+                                                   
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                @foreach( $data['Installmentcar'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->type_car}} </td>
+                                                    <td>{{$item->model_year}}</td>
+                                                    <td>{{$item->average_price}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-6" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th> رقم القضايا </th>
+                                                    <th>الحالة</th>
+                                                    <th> المبلغ </th>
+                                                    <th> الجهة </th>
+                                                    <th>التاريخ</th>
+                                                  
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+
+                                                @foreach( $data['Installmentissue'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>
+                                                        {{$item->number_issue ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->status == "open" ? 'مفتوح' : 'مغلق'}} </td>
+                                                    <td>{{$item->status == "open" ? $item->opening_amount : $item->closing_amount }}</td>
+                                                    <td>{{$item->working_company}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                  
+                                                    
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-7" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->connect}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-8" role="tabpanel">
+                                    <div class="table-responsive pb-4">
+                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                            <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                    <th> اليوزر </th>
+                                                    <th>الاتصال </th>
+                                                    <th> الساعة </th>
+                                                    <th>التاريخ</th>
+                                                    <th> الملاحظة</th>
+        
+                                                </tr>
+                                                <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                                <!-- start row -->
+                                                @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->connect}} </td>
+                                                    <td>{{$item->time}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->note}}</td>
+        
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-3" id="navpill-9" role="tabpanel">
+                                    <ul class="nav nav-pills" role="tablist">
+                                        <li class="nav-item">
+                                          <a class="nav-link active bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-1" role="tab">
+                                            <span>الكل</span>
+                                          </a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-2" role="tab">
+                                            <span> فتح ملف </span>
+                                          </a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-3" role="tab">
+                                            <span>اعلان التنفيذ </span>
+                                          </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-4" role="tab">
+                                              <span> الامج </span>
+                                            </a>
+                                          </li>
+                                      </ul>
+                                      <!-- Tab panes -->
+                                      <div class="tab-content border mt-2">
+                                        <div class="tab-pane active p-3" id="navpill-inside-1" role="tabpanel">
+                                          <table id="notes1" class="table table-bordered border text-wrap align-middle">
+                                            <thead>
+                                              <!-- start row -->
+                                              <tr>
+                                                <th>اليوزر</th>
+
+                                                <th>النوع</th>
+                                                <th>الملاحظة</th>
+                                                <th> الساعة</th>
+                                                <th>التاريخ</th>
+                            
+                            
+                            
+                            
+                                              </tr>
+                                              <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                              <!-- start row -->
+
+                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                <td>
+                                                  تقى
+                                                </td>
+                                                <td>
+                                                  ملاحظة
+                                                </td>
+                                                <td>
+                                                  <p>
+                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
+                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
+                                                  </p>
+                                                </td>
+                                                <td>12:00 <span class="d-block">مساءا</span></td>
+                                                <td>29/10/2024</td>
+                            
+                                              </tr>
+                                              @foreach( $data['InstallmentNote'] as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
+                                                    </td>
+                                                    <td>{{$item->type}} </td>
+                                                    <td>{{$item->note}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('h:i A') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
+
+                                                    
+        
+                                                </tr>
+                                                @endforeach
+
+                                            </tbody>
+                                          </table>
+                                          
+                                        </div>
+                                        <div class="tab-pane p-3" id="navpill-inside-2" role="tabpanel">
+                                          <table id="notes2" class="table table-bordered border text-wrap align-middle">
+                                            <thead>
+                                              <!-- start row -->
+                                              <tr>
+                                                <th>اليوزر</th>
+                                                <th>النوع</th>
+                                                <th>الملاحظة</th>
+                                                <th> الساعة</th>
+                                                <th>التاريخ</th>
+                            
+                            
+                            
+                            
+                                              </tr>
+                                              <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                              <!-- start row -->
+                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                <td>
+                                                  تقى
+                                                </td>
+                                                <td>
+                                                  ملاحظة
+                                                </td>
+                                                <td>
+                                                  <p>
+                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
+                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
+                                                  </p>
+                                                </td>
+                                                <td>12:00 <span class="d-block">مساءا</span></td>
+                                                <td>29/10/2024</td>
+                            
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="tab-pane p-3" id="navpill-inside-3" role="tabpanel">
+                                          <table id="notes3" class="table table-bordered border text-wrap align-middle">
+                                            <thead>
+                                              <!-- start row -->
+                                              <tr>
+                                                <th>اليوزر</th>
+                                                <th>النوع</th>
+                                                <th>الملاحظة</th>
+                                                <th> الساعة</th>
+                                                <th>التاريخ</th>
+                                              </tr>
+                                              <!-- end row -->
+                                            </thead>
+                                            <tbody>
+                                              <!-- start row -->
+                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                                                aria-controls="collapseExample">
+                                                <td>
+                                                  
+                                                </td>
+                                                <td>
+                                                  ملاحظة
+                                                </td>
+                                                <td>
+                                                  <p>
+                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
+                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
+                                                  </p>
+                                                </td>
+                                                <td>12:00 <span class="d-block">مساءا</span></td>
+                                                <td>29/10/2024</td>
+                            
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="tab-pane p-3" id="navpill-inside-4" role="tabpanel">
+                                            <table id="notes3" class="table table-bordered border text-wrap align-middle">
+                                              <thead>
+                                                <!-- start row -->
+                                                <tr>
+                                                  <th>اليوزر</th>
+                                                  <th>النوع</th>
+                                                  <th>الملاحظة</th>
+                                                  <th> الساعة</th>
+                                                  <th>التاريخ</th>
+                                                </tr>
+                                                <!-- end row -->
+                                              </thead>
+                                              <tbody>
+                                                <!-- start row -->
+                                                <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                                                  aria-controls="collapseExample">
+                                                  <td>
+                                                    
+                                                  </td>
+                                                  <td>
+                                                    ملاحظة
+                                                  </td>
+                                                  <td>
+                                                    <p>
+                                                      تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
+                                                      اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
+                                                    </p>
+                                                  </td>
+                                                  <td>12:00 <span class="d-block">مساءا</span></td>
+                                                  <td>29/10/2024</td>
+                              
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                      </div>
+                               
+                                </div>
                             </div>
-                            <div class="table-responsive pb-4">
-                                <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                    <thead>
-                                        <!-- start row -->
-                                        <tr>
-                                            <th> اليوزر </th>
-                                            <th>الاتصال </th>
-                                            <th> الساعة </th>
-                                            <th>التاريخ</th>
-                                            <th> الملاحظة</th>
 
-                                        </tr>
-                                        <!-- end row -->
-                                    </thead>
-                                    <tbody>
-                                        <!-- start row -->
-                                        @foreach( $InstallmentNote as $item)
-                                        <tr>
-                                            <td>
-                                                {{$item->created_by}}
-                                            </td>
-                                            <td>{{$item->connect}} </td>
-                                            <td>{{$item->time}}</td>
-                                            <td>{{$item->date}}</td>
-                                            <td>{{$item->note}}</td>
-
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>

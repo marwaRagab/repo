@@ -279,6 +279,7 @@ class InstallmentApproveController extends Controller
         $installment_client = Installment_Client::find($request->installment_client_id);
         $installment_client->client_id = $client->id;
         $installment_client->email = $request->email;
+        $installment_client->status = "installment_client";
         $installment_client->cinet_installment = $request->cinet_installment;
         $installment_client->updated_by = Auth::user()->id ?? null;
         $installment_client->save();
