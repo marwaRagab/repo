@@ -179,6 +179,16 @@
                                             <form action="{{ route('myinstall.update', $item->id) }}" method="post"
                                                 style="display:inline;">
                                                 @csrf
+                                                <input type="hidden" name="status" value="advanced">
+                                                <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
+                                                    المتقدمين
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="{{ route('myinstall.update', $item->id) }}" method="post"
+                                                style="display:inline;">
+                                                @csrf
                                                 <input type="hidden" name="status" value="under_inquiry">
                                                 <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
                                                     قيد الاستعلام
