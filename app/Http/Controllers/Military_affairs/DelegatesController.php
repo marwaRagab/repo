@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Military_affairs;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\military_affairs_notes;
 use App\Models\military_affairs_deligation;
 use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_amount;
+
 
 class DelegatesController extends Controller
 {
@@ -176,4 +179,39 @@ class DelegatesController extends Controller
             compact('title', 'view', 'breadcrumb', 'data')
         );
     }
+
+    public function get_statistics_lawaffaires($user_id)
+    {
+        $title = 'الملاحظات ';
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "الاحصائيات";
+        $breadcrumb[1]['url'] = route("military_affairs.delegates.get_statistics");
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        
+        $data['users'] = User::where('type', 'emp')->get();
+        $data['Military_affairs'] = Military_affair::where('created_by', $user_id)->get();
+        
+        // Iterate through the Military_affairs collection to get each id
+        $data['delegates'] = Military_affairs_amount::whereIn('military_affairs_id', $data['Military_affairs']->pluck('id'))->get();
+        // dd($data['delegates'] );
+        // $data['delegates'] = Military_affair::where('emp_id', $data['delegate_user']->emp_id)->with('installment')->get();
+        //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
+        if ($data) {
+            // $user_id = 1;
+              $user_id =  Auth::user()->id;
+            $message = "تم دخول صفحة احصائيات استعلام رصيد التنفيذ";
+            $this->log($user_id, $message);
+        }
+
+        $view = 'military_affairs.delegates.get-statistics-lawaffaires';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data')
+        );
+    }
+
 }
