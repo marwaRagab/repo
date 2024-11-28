@@ -1,17 +1,16 @@
-<link rel="stylesheet" href="{{ asset('assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}" />
 @if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 @endif
 @if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
 @endif
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
@@ -26,181 +25,181 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                             <i class="ti ti-user-check fs-6 d-block mx-1" style="color: rgb(1, 122, 58);"></i> بيانات
                             العميل <span class="text-gray mx-1">( قم بالضغط هنا لاظهار البيانات العميل)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                        data-bs-parent="#accordionFlushExample">
+                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <div class="table-responsive pb-4">
-<table class="table">
+                                <table class="table">
                                     <tbody>
-                                        <tr>
-                                            <th>الاسم</th>
-                                            <td>{{$Installment->client->name_ar ?? 'لا يوجد '}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>الرقم المدني</th>
-                                            <td>{{$Installment->client->civil_number ?? 'لا يوجد'}}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>الهاتف</th>
-                                            @if($Client && $Client->client_phone && $Client->client_phone->last())
-                                                <td>{{ $Client->client_phone->last()->phone }}</td>
-                                            @else
-                                                <td>لا يوجد</td>
-                                            @endif
-                                            
-                                        </tr>
-                                        <tr>
-                                            <th>المقدم الاساسي</th>
-                                            <td>{{$Installment->part ?? 'لا يوجد'}} </td>
-                                        </tr>
-                                        <tr>
-                                            <th>المقدم الاضافي</th>
-                                            <td>{{$Installment->extra_first_amount ?? 'لا يوجد'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>اجمالي المقدم</th>
-                                            <!-- <td>{{ number_format($Installment->first_amount + $Installment->extra_first_amount , 3)}} -->
-                                            <!-- </td> -->
-                                            <td>{{number_format($Installment->total_first_amount, 3)}}</td>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <td>{{$Installment->client->name_ar ?? 'لا يوجد '}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>الرقم المدني</th>
+                                        <td>{{$Installment->client->civil_number ?? 'لا يوجد'}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>الهاتف</th>
+                                        @if($Client && $Client->client_phone && $Client->client_phone->last())
+                                            <td>{{ $Client->client_phone->last()->phone }}</td>
+                                        @else
+                                            <td>لا يوجد</td>
+                                        @endif
 
-                                        </tr>
-                                        <tr>
-                                            <th>المبالغ المدفوعة</th>
-                                            <td>
-                                                {{  number_format(($done_amount + $Installment->total_first_amount  + $done_amount_settlement), '3') }}
-                                                {{  number_format(($done_amount ), '3') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>المبلغ الاجمالي</th>
-                                            <td>{{  number_format(($done_amount + $not_done_amount), '3') }}</td>
-                                        </tr>
-                                        <!-- <tr>
+                                    </tr>
+                                    <tr>
+                                        <th>المقدم الاساسي</th>
+                                        <td>{{$Installment->part ?? 'لا يوجد'}} </td>
+                                    </tr>
+                                    <tr>
+                                        <th>المقدم الاضافي</th>
+                                        <td>{{$Installment->extra_first_amount ?? 'لا يوجد'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>اجمالي المقدم</th>
+                                        <!-- <td>{{ number_format($Installment->first_amount + $Installment->extra_first_amount , 3)}} -->
+                                        <!-- </td> -->
+                                        <td>{{number_format($Installment->total_first_amount, 3)}}</td>
+
+                                    </tr>
+                                    <tr>
+                                        <th>المبالغ المدفوعة</th>
+                                        <td>
+                                            {{  number_format(($done_amount + $Installment->total_first_amount  + $done_amount_settlement), '3') }}
+                                            {{  number_format(($done_amount ), '3') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>المبلغ الاجمالي</th>
+                                        <td>{{  number_format(($done_amount + $not_done_amount), '3') }}</td>
+                                    </tr>
+                                    <!-- <tr>
                                             <th>المتبقي</th>
                                             @if($Installment->law == 0)
-                                            <td>{{ number_format(($Installment->total + $Installment->first_amount - $done_amount) ,3)}}</td>
+                                        <td>{{ number_format(($Installment->total + $Installment->first_amount - $done_amount) ,3)}}</td>
                                             @else
-                                            <td>{{ number_format(($Installment->total - $mil_amount),3)}}</td>
+                                        <td>{{ number_format(($Installment->total - $mil_amount),3)}}</td>
                                             @endif
-                                        </tr> -->
-                                        <tr>
-                                            <th>المبلغ المتبقى</th>
-                                          @if (!empty($data["military_affairs_item"]))
-                                                <td>
-                                                    {{ number_format(
-                                                        $data["military_affairs_item"]->eqrar_dain_amount 
-                                                        - $done_amount 
-                                                        - $data["military_affairs_item"]->excute_actions_amount 
-                                                        - $data["military_affairs_item"]->excute_actions_check_amount 
-                                                        - $done_amount_settlement, 
-                                                        3
-                                                    ) }}
-                                                </td>
-                                            @else
+                                    </tr> -->
+                                    <tr>
+                                        <th>المبلغ المتبقى</th>
+                                        @if (!empty($data["military_affairs_item"]))
+                                            <td>
+                                                {{ number_format(
+                                                    $data["military_affairs_item"]->eqrar_dain_amount
+                                                    - $done_amount
+                                                    - $data["military_affairs_item"]->excute_actions_amount
+                                                    - $data["military_affairs_item"]->excute_actions_check_amount
+                                                    - $done_amount_settlement,
+                                                    3
+                                                ) }}
+                                            </td>
+                                        @else
                                             <td>{{  number_format( ((($done_amount + $not_done_amount)) - $Installment->total_first_amount ), '3')}}</td>
-                                            @endif
-                                            
-                                        </tr>
-                                        <tr>
-                                            <th>مبلغ اقرار الدين</th>
-                                            <td>{{$Installment->eqrardain_amount}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط</th>
-                                            <td>{{$Installment->count_months}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المتأخرة</th>
-                                            <td>{{ $not_done_count_lated }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المدفوعة</th>
-                                            <td>{{$Installment['months'] - $not_done_count}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>قيمة الخصم</th>
-                                            <!-- <td> {{ count($install_discount) > 0  ? $install_discount->amount : 0}}</td> -->
-                                             <td>{{$nstallment_discount}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المستحقة</th>
-                                            <td>{{$not_done_count}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>القسط الشهري</th>
-                                            <td>{{$Installment->monthly_amount }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>القسط الداخلي</th>
-                                            <td>{{$Installment->intrenal_installment}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>قسط الساينت</th>
-                                            <td>{{$Installment->installment_client->cinet_installment}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>بنك العميل</th>
-                                            <td>{{ $data['Installment_Client']->bank->name_ar ?? 'N/A' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>كويت فايندر</th>
-                                            <td>{{$Installment->client->location}}</td>
-                                        </tr>
+                                        @endif
 
-                                        <tr>
+                                    </tr>
+                                    <tr>
+                                        <th>مبلغ اقرار الدين</th>
+                                        <td>{{$Installment->eqrardain_amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط</th>
+                                        <td>{{$Installment->count_months}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المتأخرة</th>
+                                        <td>{{ $not_done_count_lated }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المدفوعة</th>
+                                        <td>{{$Installment['months'] - $not_done_count}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>قيمة الخصم</th>
+                                        <!-- <td> {{ count($install_discount) > 0  ? $install_discount->amount : 0}}</td> -->
+                                        <td>{{$nstallment_discount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المستحقة</th>
+                                        <td>{{$not_done_count}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>القسط الشهري</th>
+                                        <td>{{$Installment->monthly_amount }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>القسط الداخلي</th>
+                                        <td>{{$Installment->intrenal_installment}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>قسط الساينت</th>
+                                        <td>{{$Installment->installment_client->cinet_installment}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>بنك العميل</th>
+                                        <td>{{ $data['Installment_Client']->bank->name_ar ?? 'N/A' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>كويت فايندر</th>
+                                        <td>{{$Installment->client->location}}</td>
+                                    </tr>
+
+                                    <tr>
                                         <th>جهة العمل (1)</th>
                                         <td>
                                             @foreach ($data['ministries'] as $ministry)
                                                 {{ $ministry->name_ar }}<br>
                                             @endforeach
                                         </td>
-                                        </tr>
-                                         <tr>
-                                            <th>رقم الحساب (1)</th>
-                                            @if($Installment->client && $Installment->client->ipan)
-                                                 <td>{{$Installment->client->ipan}}</td>
-                                                 @elseif($data['client_banks'])
-                                                 <td>{{$data['client_banks']->bank_account_number}}</td>
-                                            @else
-                                                <td>لا يوجد</td>
-                                            @endif
-                                           
-                                        </tr>
-                                        <tr>
-                                            <th>العنوان</th>
-                                            <td>
-                                            المنطقة :- {{$data['regions']->name_ar}}
-                                                   القطعة :- {{$Client->client_address->first()->block}}
-                                                شارع :- {{$Client->client_address->first()->street}}
+                                    </tr>
+                                    <tr>
+                                        <th>رقم الحساب (1)</th>
+                                        @if($Installment->client && $Installment->client->ipan)
+                                            <td>{{$Installment->client->ipan}}</td>
+                                        @elseif($data['client_banks'])
+                                            <td>{{$data['client_banks']->bank_account_number}}</td>
+                                        @else
+                                            <td>لا يوجد</td>
+                                        @endif
+
+                                    </tr>
+                                    <tr>
+                                        <th>العنوان</th>
+                                        <td>
+                                            المنطقة :- {{$data['regions']->name_ar   ?? ''}}
+                                            القطعة :- {{$Client->client_address->first()->block}}
+                                            شارع :- {{$Client->client_address->first()->street}}
                                             مبنى :- {{$Client->client_address->first()->building}}</td>
 
-                                        </tr>
-                                        <tr>
-                                            <th>الراتب</th>
-                                            <td>{{$Client->salary ?? 'لا يوجد'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>بنك الاستقطاع</th>
-                                            <td>
-                                                <button id="btnGroupDrop1" type="button" class="btn bg-primary-subtle text-primary  dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    طباعة
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="text-align: right;">
-                                                    <a class="dropdown-item" href="{{route('installment/edit_images',array('id' => $Installment->id))}}">تعديل</a>
-                                                    <a class="dropdown-item" href="{{ route('installment.madionia_certificate',$Installment->id) }}">شهادة المديونية</a>
-                                                    <a class="dropdown-item" href="{{url('installment/recive_install_paper/'.$Installment->id)}}">إيصال إستلام الأوراق</a>
-                                                    <a class="dropdown-item" href="{{url('installment/show_upload_papers/'.$Installment->id)}}">طباعة العقود</a>
-                                                    <a class="dropdown-item" href="{{url('installment/print_install_paper_info/'.$Installment->id)}}">طباعة النموذج الورقي</a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    </tr>
+                                    <tr>
+                                        <th>الراتب</th>
+                                        <td>{{$Client->salary ?? 'لا يوجد'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>بنك الاستقطاع</th>
+                                        <td>
+                                            <button id="btnGroupDrop1" type="button" class="btn bg-primary-subtle text-primary  dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                طباعة
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="text-align: right;">
+                                                <a class="dropdown-item" href="{{route('installment/edit_images',array('id' => $Installment->id))}}">تعديل</a>
+                                                <a class="dropdown-item" href="{{ route('installment.madionia_certificate',$Installment->id) }}">شهادة المديونية</a>
+                                                <a class="dropdown-item" href="{{url('installment/recive_install_paper/'.$Installment->id)}}">إيصال إستلام الأوراق</a>
+                                                <a class="dropdown-item" href="{{url('installment/show_upload_papers/'.$Installment->id)}}">طباعة العقود</a>
+                                                <a class="dropdown-item" href="{{url('installment/print_install_paper_info/'.$Installment->id)}}">طباعة النموذج الورقي</a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -219,553 +218,67 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                             <i class="ti ti-message-2 fs-6 d-block mx-1" style="color: blueviolet;"></i> الملاحظات <span
                                 class="text-gray mx-1">( قم بالضغط هنا لاظهار الملاحظات)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
-                        data-bs-parent="#accordionFlushExampleNotes">
+                         data-bs-parent="#accordionFlushExampleNotes">
                         <div class="accordion-body">
+                            <div class="d-flex flex-wrap mb-1">
+                                <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+                                    كل الملاحظات </a>
+                                <a class="btn-filter bg-info-subtle text-info  px-4 fs-4 mx-1 mb-2">
+                                    ملاحظات التقديم </a>
+                                <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                    ملاحظات اقبول </a>
+                                <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+                                    SMS </a>
+                                <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+                                    السيارات </a>
 
+                                <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
 
-
-                            <ul class="nav nav-pills" role="tablist">
-                                <li class="nav-item">
-                                  <a class="nav-link active bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-1" role="tab">
-                                    <span>   كل الملاحظات </span>
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-2" role="tab">
-                                    <span>     ملاحظات التقديم </span>
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                  <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-3" role="tab">
-                                    <span>ملاحظات اقبول </span>
-                                  </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-4" role="tab">
-                                      <span> SMS </span>
-                                    </a>
-                                  </li>
-                                  <li class="nav-item">
-                                    <a class="nav-link bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-5" role="tab">
-                                      <span>السيارات </span>
-                                    </a>
-                                  </li>
-                                  <li class="nav-item">
-                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-6" role="tab">
-                                      <span>القضايا </span>
-                                    </a>
-                                  </li>
-                                  <li class="nav-item">
-                                    <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-7" role="tab">
-                                      <span>  قضايا التنفيذ  </span>
-                                    </a>
-                                  </li>      
-                                  <li class="nav-item">
-                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-8" role="tab">
-                                      <span>   التدقيق  </span>
-                                    </a>
-                                  </li>      
-                                  <li class="nav-item">
-                                    <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-9" role="tab">
-                                      <span>          الشئون القانونية   </span>
-                                    </a>
-                                  </li>      
-                            </ul>
-                              <!-- Tab panes -->
-                            <div class="tab-content border mt-2">
-                                <div class="tab-pane active p-3" id="navpill-1" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                {{-- $data['InstallmentClientNote'] --}}
-                                                @foreach( $data['InstallmentClientNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->rely}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                                @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->connect}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-2" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-
-                                                @foreach( $data['InstallmentClientNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-
-                                                    <td>{{$item->rely}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-3" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->connect}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-4" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->connect}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-5" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>النوع </th>
-                                                    <th> السنة </th>
-                                                    <th>متوسط السعر</th>
-                                                   
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                @foreach( $data['Installmentcar'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->type_car}} </td>
-                                                    <td>{{$item->model_year}}</td>
-                                                    <td>{{$item->average_price}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-6" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th> رقم القضايا </th>
-                                                    <th>الحالة</th>
-                                                    <th> المبلغ </th>
-                                                    <th> الجهة </th>
-                                                    <th>التاريخ</th>
-                                                  
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-
-                                                @foreach( $data['Installmentissue'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>
-                                                        {{$item->number_issue ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->status == "open" ? 'مفتوح' : 'مغلق'}} </td>
-                                                    <td>{{$item->status == "open" ? $item->opening_amount : $item->closing_amount }}</td>
-                                                    <td>{{$item->working_company}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                  
-                                                    
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-7" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->connect}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-8" role="tabpanel">
-                                    <div class="table-responsive pb-4">
-                                        <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                            <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th> اليوزر </th>
-                                                    <th>الاتصال </th>
-                                                    <th> الساعة </th>
-                                                    <th>التاريخ</th>
-                                                    <th> الملاحظة</th>
-        
-                                                </tr>
-                                                <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                                <!-- start row -->
-                                                @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->connect}} </td>
-                                                    <td>{{$item->time}}</td>
-                                                    <td>{{$item->date}}</td>
-                                                    <td>{{$item->note}}</td>
-        
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane p-3" id="navpill-9" role="tabpanel">
-                                    <ul class="nav nav-pills" role="tablist">
-                                        <li class="nav-item">
-                                          <a class="nav-link active bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-1" role="tab">
-                                            <span>الكل</span>
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-2" role="tab">
-                                            <span> فتح ملف </span>
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                          <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-3" role="tab">
-                                            <span>اعلان التنفيذ </span>
-                                          </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-inside-4" role="tab">
-                                              <span> الامج </span>
-                                            </a>
-                                          </li>
-                                      </ul>
-                                      <!-- Tab panes -->
-                                      <div class="tab-content border mt-2">
-                                        <div class="tab-pane active p-3" id="navpill-inside-1" role="tabpanel">
-                                          <table id="notes1" class="table table-bordered border text-wrap align-middle">
-                                            <thead>
-                                              <!-- start row -->
-                                              <tr>
-                                                <th>اليوزر</th>
-
-                                                <th>النوع</th>
-                                                <th>الملاحظة</th>
-                                                <th> الساعة</th>
-                                                <th>التاريخ</th>
-                            
-                            
-                            
-                            
-                                              </tr>
-                                              <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                              <!-- start row -->
-
-                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-                                                aria-controls="collapseExample">
-                                                <td>
-                                                  تقى
-                                                </td>
-                                                <td>
-                                                  ملاحظة
-                                                </td>
-                                                <td>
-                                                  <p>
-                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
-                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
-                                                  </p>
-                                                </td>
-                                                <td>12:00 <span class="d-block">مساءا</span></td>
-                                                <td>29/10/2024</td>
-                            
-                                              </tr>
-                                              @foreach( $data['InstallmentNote'] as $item)
-                                                <tr>
-                                                    <td>
-                                                        {{$item->user->name_ar ?? 'لا يوجد'}}
-                                                    </td>
-                                                    <td>{{$item->type}} </td>
-                                                    <td>{{$item->note}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('h:i A') }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
-
-                                                    
-        
-                                                </tr>
-                                                @endforeach
-
-                                            </tbody>
-                                          </table>
-                                          
-                                        </div>
-                                        <div class="tab-pane p-3" id="navpill-inside-2" role="tabpanel">
-                                          <table id="notes2" class="table table-bordered border text-wrap align-middle">
-                                            <thead>
-                                              <!-- start row -->
-                                              <tr>
-                                                <th>اليوزر</th>
-                                                <th>النوع</th>
-                                                <th>الملاحظة</th>
-                                                <th> الساعة</th>
-                                                <th>التاريخ</th>
-                            
-                            
-                            
-                            
-                                              </tr>
-                                              <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                              <!-- start row -->
-                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-                                                aria-controls="collapseExample">
-                                                <td>
-                                                  تقى
-                                                </td>
-                                                <td>
-                                                  ملاحظة
-                                                </td>
-                                                <td>
-                                                  <p>
-                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
-                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
-                                                  </p>
-                                                </td>
-                                                <td>12:00 <span class="d-block">مساءا</span></td>
-                                                <td>29/10/2024</td>
-                            
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <div class="tab-pane p-3" id="navpill-inside-3" role="tabpanel">
-                                          <table id="notes3" class="table table-bordered border text-wrap align-middle">
-                                            <thead>
-                                              <!-- start row -->
-                                              <tr>
-                                                <th>اليوزر</th>
-                                                <th>النوع</th>
-                                                <th>الملاحظة</th>
-                                                <th> الساعة</th>
-                                                <th>التاريخ</th>
-                                              </tr>
-                                              <!-- end row -->
-                                            </thead>
-                                            <tbody>
-                                              <!-- start row -->
-                                              <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-                                                aria-controls="collapseExample">
-                                                <td>
-                                                  
-                                                </td>
-                                                <td>
-                                                  ملاحظة
-                                                </td>
-                                                <td>
-                                                  <p>
-                                                    تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
-                                                    اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
-                                                  </p>
-                                                </td>
-                                                <td>12:00 <span class="d-block">مساءا</span></td>
-                                                <td>29/10/2024</td>
-                            
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <div class="tab-pane p-3" id="navpill-inside-4" role="tabpanel">
-                                            <table id="notes3" class="table table-bordered border text-wrap align-middle">
-                                              <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                  <th>اليوزر</th>
-                                                  <th>النوع</th>
-                                                  <th>الملاحظة</th>
-                                                  <th> الساعة</th>
-                                                  <th>التاريخ</th>
-                                                </tr>
-                                                <!-- end row -->
-                                              </thead>
-                                              <tbody>
-                                                <!-- start row -->
-                                                <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-                                                  aria-controls="collapseExample">
-                                                  <td>
-                                                    
-                                                  </td>
-                                                  <td>
-                                                    ملاحظة
-                                                  </td>
-                                                  <td>
-                                                    <p>
-                                                      تم مراجعة قسم الاعلان للوقوف على سبب تاخر الامج وتيبن تاخير المندوب فى تسليم الملف للامج وتم عمل
-                                                      اللازم وادخال الملف امج وسيتم عمل الحسبه ومتابعة باقى الاجراءات
-                                                    </p>
-                                                  </td>
-                                                  <td>12:00 <span class="d-block">مساءا</span></td>
-                                                  <td>29/10/2024</td>
-                              
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                      </div>
-                               
-                                </div>
+                                    القضايا </a>
+                                <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
+                                    قضايا التنفيذ </a>
+                                <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+                                    التدقيق </a>
+                                <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
+                                    الشئون القانونية </a>
                             </div>
+                            <div class="table-responsive pb-4">
+                                <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                    <thead>
+                                    <!-- start row -->
+                                    <tr>
+                                        <th> اليوزر </th>
+                                        <th>الاتصال </th>
+                                        <th> الساعة </th>
+                                        <th>التاريخ</th>
+                                        <th> الملاحظة</th>
 
+                                    </tr>
+                                    <!-- end row -->
+                                    </thead>
+                                    <tbody>
+                                    <!-- start row -->
+                                    @foreach( $InstallmentNote as $item)
+                                        <tr>
+                                            <td>
+                                                {{$item->created_by}}
+                                            </td>
+                                            <td>{{$item->connect}} </td>
+                                            <td>{{$item->time}}</td>
+                                            <td>{{$item->date}}</td>
+                                            <td>{{$item->note}}</td>
+
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -835,35 +348,35 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingFour">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseFour" aria-expanded="false"
-                            aria-controls="flush-collapseFour">
+                                data-bs-target="#flush-collapseFour" aria-expanded="false"
+                                aria-controls="flush-collapseFour">
                             <i class="ti ti-sort-descending-2 fs-6 mx-1" style="color: rgb(245, 18, 18);"></i> عدد
                             الاصناف <span class="text-gray mx-1">( قم بالضغط هنا لاظهار عدد الاصناف)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
-                        data-bs-parent="#accordionFlushExampleItems">
+                         data-bs-parent="#accordionFlushExampleItems">
                         <div class="accordion-body">
                             <div class="table-responsive pb-4">
                                 <table id="all-student" class="table table-bordered border text-nowrap align-middle">
                                     <thead>
-                                        <!-- start row -->
+                                    <!-- start row -->
 
-                                        <tr>
-                                            <th> الماركة </th>
-                                            <th>الصنف </th>
-                                            <th> الموديل </th>
-                                            <th>سعر البيع </th>
-                                            <th> سعر المعروض</th>
-                                            <th> سعر تكلفة الوحدة</th>
-                                            <th> العدد </th>
-                                            <th> اجمالي التكلفة </th>
-                                        </tr>
-                                        <!-- end row -->
+                                    <tr>
+                                        <th> الماركة </th>
+                                        <th>الصنف </th>
+                                        <th> الموديل </th>
+                                        <th>سعر البيع </th>
+                                        <th> سعر المعروض</th>
+                                        <th> سعر تكلفة الوحدة</th>
+                                        <th> العدد </th>
+                                        <th> اجمالي التكلفة </th>
+                                    </tr>
+                                    <!-- end row -->
                                     </thead>
                                     <tbody>
-                                        <!-- start row -->
-                                        @foreach( $purchase_orders_items as $item)
+                                    <!-- start row -->
+                                    @foreach( $purchase_orders_items as $item)
 
                                         <tr>
                                             <td>
@@ -877,7 +390,7 @@
                                             <td>{{$item->count}}</td>
                                             <td>{{$item->count * $item->product->price}}</td>
                                         </tr>
-                                        @endforeach
+                                    @endforeach
 
                                     </tbody>
                                 </table>
@@ -890,52 +403,51 @@
     </div>
 </div>
 
-{{-- <div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <div class="accordion accordion-flush" id="accordionFlushExampleFiles">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseFive" aria-expanded="false"
-                            aria-controls="flush-collapseFive">
-                            <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة
-                            <span class="text-gray mx-1">( قم بالضغط هنا لاظهار الملفات المرفوعة)</span>
-                        </button>
-                    </h2>
-                    <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
-                        data-bs-parent="#accordionFlushExampleFiles">
-                        <div class="accordion-body">
-                            <div class="scroll-container">
-                                @foreach($installment_months as $item)
-                                <div class="item" data-file="{{ $item->img_dir }}">
-                                    <img src="{{ $item->img_dir }}" alt="{{ $item->notes ?? 'Image' }}">
-                                </div>
-                                @endforeach
+<!--<div class="card">-->
+<!--    <div class="card-body">-->
+<!--        <div class="table-responsive">-->
+<!--            <div class="accordion accordion-flush" id="accordionFlushExampleFiles">-->
+<!--                <div class="accordion-item">-->
+<!--                    <h2 class="accordion-header" id="flush-headingFive">-->
+<!--                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                            data-bs-target="#flush-collapseFive" aria-expanded="false"-->
+<!--                            aria-controls="flush-collapseFive">-->
+<!--                            <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة-->
+<!--                            <span class="text-gray mx-1">( قم بالضغط هنا لاظهار الملفات المرفوعة)</span>-->
+<!--                        </button>-->
+<!--                    </h2>-->
+<!--                    <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"-->
+<!--                        data-bs-parent="#accordionFlushExampleFiles">-->
+<!--                        <div class="accordion-body">-->
+<!--                            <div class="scroll-container">-->
+<!--                                @foreach($installment_months as $item)-->
+<!--                                <div class="item" data-file="{{ $item->img_dir }}">-->
+<!--                                    <img src="{{ $item->img_dir }}" alt="{{ $item->notes ?? 'Image' }}">-->
+<!--                                </div>-->
+<!--                                @endforeach-->
 
-                            </div>
+<!--                            </div>-->
 
-                            <div class="modal" id="modal">
-                                <span class="close" id="close">&times;</span>
-                                <iframe id="modal-content" src="" frameborder="0"></iframe>
-                                <div class="modal-buttons d-flex ">
-                                    <div>
-                                        <button class="btn-primary mx-1 " id="print">طباعة</button>
-                                    </div>
-                                    <div>
-                                        <button class="btn-primary mx-1" id="download" href="" download>تحميل</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
+<!--                            <div class="modal" id="modal">-->
+<!--                                <span class="close" id="close">&times;</span>-->
+<!--                                <iframe id="modal-content" src="" frameborder="0"></iframe>-->
+<!--                                <div class="modal-buttons d-flex ">-->
+<!--                                    <div>-->
+<!--                                        <button class="btn-primary mx-1 " id="print">طباعة</button>-->
+<!--                                    </div>-->
+<!--                                    <div>-->
+<!--                                        <button class="btn-primary mx-1" id="download" href="" download>تحميل</button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-{{-- {{ dd($data['Client']) }} --}}
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -943,14 +455,14 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingFive">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseFive" aria-expanded="false"
-                            aria-controls="flush-collapseFive">
+                                data-bs-target="#flush-collapseFive" aria-expanded="false"
+                                aria-controls="flush-collapseFive">
                             <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة
                             <span class="text-gray mx-1">( قم بالضغط هنا لاظهار الملفات المرفوعة)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
-                        data-bs-parent="#accordionFlushExampleFiles">
+                         data-bs-parent="#accordionFlushExampleFiles">
                         <div class="accordion-body">
                             <div class="scroll-container">
                                 {{-- @foreach($installment_months as $item)
@@ -964,256 +476,256 @@
                                     @if ($Installment->contract_1 != Null)
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                            <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                            <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net{{ $Installment->contract_1 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net{{ $Installment->contract_1 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                            </div>
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                    <button type="button"
+                                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                        تحميل
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                        طباعة
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
                                     @if ($Installment->contract_2 != Null)
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net{{ $Installment->contract_2 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net{{ $Installment->contract_2 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                    <button type="button"
+                                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                        تحميل
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                        طباعة
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        </div>
-                                    </div>
                                     @endif
                                     @if ($Installment->contract_cinet_1 != Null)
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                            onclick="checkFileAndRedirect('https://electron-kw.net{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                           class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                           تحميل
-                                           </button>
-                                           <button type="button" 
-                                            onclick="checkFileAndPRINT('https://electron-kw.net{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                           طباعة
-                                           </button>
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                    <button type="button"
+                                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                        تحميل
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                        طباعة
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        </div>
-                                    </div>
                                     @endif
                                     @if ($Installment->contract_cinet_2 != Null)
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                            onclick="checkFileAndRedirect('https://electron-kw.net{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                           class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                           تحميل
-                                           </button>
-                                           <button type="button" 
-                                            onclick="checkFileAndPRINT('https://electron-kw.net{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                           طباعة
-                                           </button>
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                    <button type="button"
+                                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                        تحميل
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                        طباعة
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        </div>
-                                    </div>
                                     @endif
                                     @if ($Installment->prods_recieved_img != Null)
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com{{ $Installment->contract_1 }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                    <button type="button"
+                                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                        تحميل
+                                                    </button>
+                                                    <button type="button"
+                                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
+                                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                        طباعة
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        </div>
-                                    </div>
                                     @endif
                                     {{-- client --}}
 
                                     @foreach ($data['Client']->client_image as $img_Client)
 
-                                    @if ($img_Client->type != "my_img")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if ($img_Client->type != "my_img")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                    @if ($img_Client->type != "work_img")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if ($img_Client->type != "work_img")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                    @if ($img_Client->type != "salary_img")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    @if ($img_Client->type != "cid_img1")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    
-                                    @if ($img_Client->type != "cid_img_2")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if ($img_Client->type != "salary_img")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                        @if ($img_Client->type != "cid_img1")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                    @if ($img_Client->type != "cinet_img")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if ($img_Client->type != "cid_img_2")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                    @if ($img_Client->type != "civil_img")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            <button type="button" 
-                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                تحميل
-                                                </button>
-                                                <button type="button" 
-                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                طباعة
-                                                </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @if ($img_Client->type != "cinet_img")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
 
-                                        
+                                        @if ($img_Client->type != "civil_img")
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        <button type="button"
+                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                            تحميل
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                            طباعة
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+
+
                                     @endforeach
-                                                                      
-                                   
 
-                                    
 
-                                  </div>
+
+
+
+                                </div>
 
                             </div>
 
-                           
+
                         </div>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -1229,45 +741,45 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingSix">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                                data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
                             <i class="ti ti-inbox fs-6 mx-1" style="color: rgb(18, 245, 226);"></i> كشف الحساب <span
                                 class="text-gray mx-1">( قم بالضغط هنا لاظهار كشف الحساب)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseSix" class="accordion-collapse collapse" aria-labelledby="flush-headingSix"
-                        data-bs-parent="#accordionFlushExampleAccount">
+                         data-bs-parent="#accordionFlushExampleAccount">
                         <div class="accordion-body">
                             <div class="table-responsive pb-4">
                                 <table id="all-student" class="table table-bordered border text-nowrap align-middle">
                                     <thead>
-                                        <!-- start row -->
-                                        <tr>
-                                            <th> م </th>
-                                            <th>الرصيد </th>
-                                            <th> الدائن </th>
-                                            <th> المدين </th>
-                                            <th> التاريخ</th>
-                                            <th> طريقة الدفع</th>
-                                            <th> صورة المستند </th>
-                                        </tr>
-                                        <!-- end row -->
+                                    <!-- start row -->
+                                    <tr>
+                                        <th> م </th>
+                                        <th>الرصيد </th>
+                                        <th> الدائن </th>
+                                        <th> المدين </th>
+                                        <th> التاريخ</th>
+                                        <th> طريقة الدفع</th>
+                                        <th> صورة المستند </th>
+                                    </tr>
+                                    <!-- end row -->
                                     </thead>
                                     <tbody>
-                                        <!-- start row -->
-                                        @php $i=1; $the_balance = $total_madionia1 
+                                    <!-- start row -->
+                                    @php $i=1; $the_balance = $total_madionia1
                                         ; @endphp
-                                        <tr>
-                                            <td>{{ $i }}</td>
-                                            <td>{{ number_format($total_madionia1  ,3)}}
-                                            </td>
-                                            <td>{{ number_format ($total_madionia1 ,3)}}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{$Installment->created_at->format('Y-m-d')}}</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        @if($Installment->months == 24)
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ number_format($total_madionia1  ,3)}}
+                                        </td>
+                                        <td>{{ number_format ($total_madionia1 ,3)}}
+                                        </td>
+                                        <td>-</td>
+                                        <td>{{$Installment->created_at->format('Y-m-d')}}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    @if($Installment->months == 24  && $Installment->laws==1 )
                                         <tr>
                                             <td> {{$i+1}} </td>
                                             <td>{{ ($total_madionia1 )}}
@@ -1279,11 +791,11 @@
                                             <td></td>
                                             <td><span class="btn btn-danger"> أتعاب المحامى </span></td>
                                         </tr>
-                                        @endif
-                                        @php
+                                    @endif
+                                    @php
                                         $total_madionia = $total_madionia1 ;
-                                        @endphp
-                                        @foreach($invoices as $one)
+                                    @endphp
+                                    @foreach($invoices as $one)
                                         <tr>
                                             <td>{{$i+1 }}</td>
                                             <td>
@@ -1293,19 +805,19 @@
                                             <td>{{$one->amount}}</td>
                                             <td>{{$one->date}}</td>
                                             @if($one->payment_type=='cash')
-                                            <td>{{ 'كاش'}}</td>
+                                                <td>{{ 'كاش'}}</td>
                                             @endif
                                             @if ($one->payment_type=='knet')
-                                            <td>{{ 'كى نت'}}</td>
+                                                <td>{{ 'كى نت'}}</td>
                                             @endif
                                             @if ($one->payment_type == 'check')
-                                            <td>{{ 'شيك '}}</td>
+                                                <td>{{ 'شيك '}}</td>
                                             @endif
                                             @if($one->payment_type == 'part')
-                                            <td>
+                                                <td>
                                                 <span class="btn btn-success">
                                                     رابط </span>
-                                            </td>
+                                                </td>
                                             @endif
                                             <td>
                                                 <h6>{{ $one->payment_date }}</h6>
@@ -1315,27 +827,27 @@
                                             </td>
                                         </tr>
                                         @php $i++ @endphp
-                                        @endforeach
+                                    @endforeach
 
-                                        @php $total_amounts = 0; @endphp
+                                    @php $total_amounts = 0; @endphp
 
-                                        @if (!($mil_amount))
+                                    @if (!($mil_amount))
                                         @foreach($mil_amount as $military_affairs_amount)
-                                        $total_amounts = $total_amounts + $military_affairs_amount->amount
-                                        $total_diff = $total_amounts - $total_checkat;
+                                            $total_amounts = $total_amounts + $military_affairs_amount->amount
+                                            $total_diff = $total_amounts - $total_checkat;
 
 
-                                        @if ($total_diff > 0)
-                                        <tr>
-                                            <td> {{ $loop->iteration }} </td>
-                                            <td> $total_madionia = $total_madionia - $military_affairs_amount->amount
-                                            </td>
-                                            <td> -</td>
-                                            <td>{{ $military_affairs_amount->amount }}
-                                            </td>
-                                            <td>{{ $military_affairs_amount->date }}
-                                            </td>
-                                            <td>
+                                            @if ($total_diff > 0)
+                                                <tr>
+                                                    <td> {{ $loop->iteration }} </td>
+                                                    <td> $total_madionia = $total_madionia - $military_affairs_amount->amount
+                                                    </td>
+                                                    <td> -</td>
+                                                    <td>{{ $military_affairs_amount->amount }}
+                                                    </td>
+                                                    <td>{{ $military_affairs_amount->date }}
+                                                    </td>
+                                                    <td>
                                                 <span class="label label-danger font-weight-100 ">
                                                     switch ($military_affairs_amount->check_type ) {
 
@@ -1365,19 +877,19 @@
                                                     }
 
                                                 </span>
-                                            </td>
-                                            <td>
-                                                <a href="{{ $military_affairs_amount->img_dir ?? '/' }}"
-                                                    target=" _blank">
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ $military_affairs_amount->img_dir ?? '/' }}"
+                                                           target=" _blank">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endif
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endif
 
                                         @endforeach
-                                        @endif
+                                    @endif
 
                                     </tbody>
                                 </table>
@@ -1397,23 +909,23 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingSeven">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseSeven" aria-expanded="false"
-                            aria-controls="flush-collapseSeven">
+                                data-bs-target="#flush-collapseSeven" aria-expanded="false"
+                                aria-controls="flush-collapseSeven">
                             <i class="ti ti-basket fs-6 mx-1" style="color: rgb(245, 18, 226);"></i> الاقساط
                             <span class="text-gray mx-1">( قم بالضغط هنا لاظهار الاقساط)</span>
                         </button>
                     </h2>
                     <div id="flush-collapseSeven" class="accordion-collapse collapse"
-                        aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExampleInstallments">
+                         aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExampleInstallments">
                         <form action="{{ route('installment.pay_all',$id) }}" method="POST"
-                            enctype="multipart/form-data">
+                              enctype="multipart/form-data">
                             <div class="accordion-body">
                                 <div class="d-flex flex-wrap ">
                                     <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
-                                        data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}">
+                                       data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}">
                                         دفع المديونية مع الخصم </a>
                                     <div id="pay-total-discount_{{$id}}" class="modal fade" tabindex="-1"
-                                        aria-labelledby="pay-total-discountLabel{{$id}}" aria-hidden="true">
+                                         aria-labelledby="pay-total-discountLabel{{$id}}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header d-flex align-items-center">
@@ -1421,7 +933,7 @@
                                                         دفع المديونية مع خصم </h4>
                                                     <hr>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-header">
                                                     <label class="form-label" for="input1"> المبلغ
@@ -1430,13 +942,13 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="{{ route('installment.pay_total_discount',$id) }}"
-                                                        method="POST" enctype="multipart/form-data">
+                                                          method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group mb-3">
                                                             <label class="form-label" for="real_price"> اجمالى المديونية
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="total"
-                                                                name="total" disabled value="{{ $sum }}">
+                                                                   name="total" disabled value="{{ $sum }}">
                                                             @error('total')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1445,8 +957,8 @@
                                                             <label class="form-label" for="cash"> الخصم
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="discount"
-                                                                name="discount"
-                                                                onchange="calculate(this.value,'discount_amount');">
+                                                                   name="discount"
+                                                                   onchange="calculate(this.value,'discount_amount');">
                                                             @error('discount')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1455,8 +967,8 @@
                                                             <label class="form-label" for="amount"> المدفوع
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="amount"
-                                                                name="amount" disabled value="{{ $sum }}"
-                                                                onchange="calculate_2(this.value,'amount');">
+                                                                   name="amount" disabled value="{{ $sum }}"
+                                                                   onchange="calculate_2(this.value,'amount');">
                                                             @error('amount')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1466,9 +978,9 @@
                                                                 النقدي
                                                             </label>
                                                             <input type="text" class="form-control mb-2"
-                                                                id="discount_cash" name="discount_cash" disabled
-                                                                value="{{ $sum }}"
-                                                                onchange="calculate_2(this.value,'discount_cash');">
+                                                                   id="discount_cash" name="discount_cash" disabled
+                                                                   value="{{ $sum }}"
+                                                                   onchange="calculate_2(this.value,'discount_cash');">
                                                             @error('discount_cash')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1479,8 +991,8 @@
                                                                 بالكي نت
                                                             </label>
                                                             <input type="text" class="form-control mb-2"
-                                                                id="discount_knet" name="discount_knet"
-                                                                onchange="calculate_2(this.value,'discount_knet');">
+                                                                   id="discount_knet" name="discount_knet"
+                                                                   onchange="calculate_2(this.value,'discount_knet');">
                                                             @error('discount_knet')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1490,14 +1002,14 @@
                                                                 رقم وصل الكي نت
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="knet_code"
-                                                                name="knet_code">
+                                                                   name="knet_code">
                                                             @error('knet_code')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="form-group mb-3">
                                                             <input type="file" name="paper_img_dir"
-                                                                class="form-control" />
+                                                                   class="form-control" />
                                                             @error('paper_img_dir')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1506,8 +1018,8 @@
                                                         <div class="modal-footer d-flex ">
                                                             <button type="submit" class="btn btn-primary">دفع </button>
                                                             <button type="button"
-                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                data-bs-dismiss="modal">
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
                                                                 الغاء
                                                             </button>
                                                         </div>
@@ -1520,12 +1032,12 @@
                                     </div>
 
                                     <a data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}"
-                                        class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
-                                        onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
+                                       class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
+                                       onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
                                         دفع كامل المديونية
                                     </a>
                                     <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
-                                        aria-labelledby="pay-totalLabel{{$id}}" aria-hidden="true">
+                                         aria-labelledby="pay-totalLabel{{$id}}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header d-flex align-items-center">
@@ -1533,7 +1045,7 @@
                                                         دفع كامل المديونية </h4>
                                                     <hr>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-header">
                                                     <label class="form-label" for="input1"> المبلغ
@@ -1542,15 +1054,15 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="{{ route('installment.pay_total',$id) }}"
-                                                        method="POST" enctype="multipart/form-data">
+                                                          method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group mb-3">
                                                             <label class="form-label" for="cash"> المبلغ
                                                                 النقدي
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="cash"
-                                                                name="cash"
-                                                                onchange="calculate(this.value,'cash_amount');">
+                                                                   name="cash"
+                                                                   onchange="calculate(this.value,'cash_amount');">
                                                             @error('cash')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1561,7 +1073,7 @@
                                                                 بالكي نت
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="knet"
-                                                                name="knet">
+                                                                   name="knet">
                                                             @error('knet')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1571,14 +1083,14 @@
                                                                 رقم وصل الكي نت
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="knet_code"
-                                                                name="knet_code">
+                                                                   name="knet_code">
                                                             @error('knet_code')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="form-group mb-3">
                                                             <input type="file" name="paper_img_dir"
-                                                                class="form-control" />
+                                                                   class="form-control" />
                                                             @error('paper_img_dir')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1586,8 +1098,8 @@
                                                         <div class="modal-footer d-flex ">
                                                             <button type="submit" class="btn btn-primary">دفع </button>
                                                             <button type="button"
-                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                data-bs-dismiss="modal">
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
                                                                 الغاء
                                                             </button>
                                                         </div>
@@ -1600,10 +1112,10 @@
                                     </div>
 
                                     <a data-bs-toggle="modal" data-bs-target="#pay-some_{{$id}}"
-                                        class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                       class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
                                         دفع جزء </a>
                                     <div id="pay-some_{{$id}}" class="modal fade" tabindex="-1"
-                                        aria-labelledby="pay-someLabel{{$id}}" aria-hidden="true">
+                                         aria-labelledby="pay-someLabel{{$id}}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header d-flex align-items-center">
@@ -1611,7 +1123,7 @@
                                                         دفع جزء </h4>
                                                     <hr>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-header">
                                                     <label class="form-label" for="input1"> اجمالي المبلغ المتأخر
@@ -1625,27 +1137,27 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="{{ route('installment.pay_some',$id) }}" method="POST"
-                                                        enctype="multipart/form-data">
+                                                          enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group mb-3">
                                                             <label class="form-label" for="some_amount"> المبلغ
                                                                 النقدي
                                                             </label>
                                                             <input type="text" class="form-control mb-2"
-                                                                id="some_amount" name="some_amount"
-                                                                onchange="calculate(this.value,'some_amount');">
+                                                                   id="some_amount" name="some_amount"
+                                                                   onchange="calculate(this.value,'some_amount');">
                                                             @error('some_amount')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
                                                         </div>
                                                         <input type="hidden" id="real_price_some"
-                                                            value="{{$install_amount}}">
+                                                               value="{{$install_amount}}">
                                                         <div class="form-group mb-3">
                                                             <label class="form-label" for="knet">
                                                                 طريقة الدفع
                                                             </label>
                                                             <select name="pay_way" id="pay_way"
-                                                                class="form-control mb-2">
+                                                                    class="form-control mb-2">
                                                                 <option value="cash">كاش</option>
                                                                 <option value="knet">كى نت</option>
                                                             </select>
@@ -1658,7 +1170,7 @@
                                                                 رقم وصل الكي نت
                                                             </label>
                                                             <input type="text" class="form-control mb-2" id="some_code"
-                                                                name="some_code">
+                                                                   name="some_code">
                                                             @error('some_code')
                                                             <div style='color:red'>{{$message}}</div>
                                                             @enderror
@@ -1672,8 +1184,8 @@
                                                         <div class="modal-footer d-flex ">
                                                             <button type="submit" class="btn btn-primary">دفع </button>
                                                             <button type="button"
-                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                data-bs-dismiss="modal">
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
                                                                 الغاء
                                                             </button>
                                                         </div>
@@ -1686,13 +1198,13 @@
                                     </div>
 
                                     @if ($Installment['laws'] == 0)
-                                    <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
-                                        onclick="valthisform()">
-                                        دفع </a>
+                                        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                                           onclick="valthisform()">
+                                            دفع </a>
                                     @endif
 
                                     <div id="pay-total-checked_{{$id}}" class="modal fade" tabindex="-1"
-                                        aria-labelledby="pay-total-checkedLabel{{$id}}" aria-hidden="true">
+                                         aria-labelledby="pay-total-checkedLabel{{$id}}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header d-flex align-items-center">
@@ -1700,7 +1212,7 @@
                                                         دفع </h4>
                                                     <hr>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <!-- <div class="modal-header">
                                                     <label class="form-label" for="input1"> المبلغ
@@ -1714,8 +1226,8 @@
                                                             النقدي
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="cash"
-                                                            name="cash"
-                                                            onchange="calculate(this.value,'cash_checked');">
+                                                               name="cash"
+                                                               onchange="calculate(this.value,'cash_checked');">
                                                         @error('cash')
                                                         <div style='color:red'>{{$message}}</div>
                                                         @enderror
@@ -1727,7 +1239,7 @@
                                                             بالكي نت
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="knet_checked"
-                                                            name="knet">
+                                                               name="knet">
                                                         @error('knet')
                                                         <div style='color:red'>{{$message}}</div>
                                                         @enderror
@@ -1737,7 +1249,7 @@
                                                             رقم وصل الكي نت
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="knet_code"
-                                                            name="knet_code">
+                                                               name="knet_code">
                                                         @error('knet_code')
                                                         <div style='color:red'>{{$message}}</div>
                                                         @enderror
@@ -1751,8 +1263,8 @@
                                                     <div class="modal-footer d-flex ">
                                                         <button type="submit" class="btn btn-primary">دفع </button>
                                                         <button type="button"
-                                                            class="btn bg-danger-subtle text-danger  waves-effect"
-                                                            data-bs-dismiss="modal">
+                                                                class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                data-bs-dismiss="modal">
                                                             الغاء
                                                         </button>
                                                     </div>
@@ -1770,250 +1282,250 @@
                                 </div> -->
                                 <div class="table-responsive pb-4">
                                     <table id="all-student"
-                                        class="table table-bordered border text-nowrap align-middle">
+                                           class="table table-bordered border text-nowrap align-middle">
                                         <thead>
-                                            <!-- start row -->
-                                            <tr>
-                                                <th> م </th>
-                                                <th>تاريخ الاستحقاق </th>
-                                                <th> المبلغ (دينار) </th>
-                                                <th> دفع يدوي </th>
-                                                <th> دفع رابط</th>
-                                                <th> تاريخ الدفع</th>
-                                                @if ($Installment['laws'] == 0)
+                                        <!-- start row -->
+                                        <tr>
+                                            <th> م </th>
+                                            <th>تاريخ الاستحقاق </th>
+                                            <th> المبلغ (دينار) </th>
+                                            <th> دفع يدوي </th>
+                                            <th> دفع رابط</th>
+                                            <th> تاريخ الدفع</th>
+                                            @if ($Installment['laws'] == 0)
                                                 <th>
                                                     <input type="checkbox" class="form-check-input" name="checkAll"
-                                                        id="checkAll">
+                                                           id="checkAll">
                                                 </th>
-                                                @endif
-                                            </tr>
-                                            <!-- end row -->
+                                            @endif
+                                        </tr>
+                                        <!-- end row -->
                                         </thead>
                                         <tbody>
-                                            <!-- start row -->
-                                            @foreach($installment_months as $month)
+                                        <!-- start row -->
+                                        @foreach($installment_months as $month)
                                             <tr>
                                                 <td> {{ $loop->index + 1 }} </td>
                                                 <td>{{ $month->date }} </td>
                                                 <td>{{ $month->amount }}
                                                     @if ($month->installment_type == "first_amount")
-                                                    <label class="btn btn-success ">المقدم</label>
+                                                        <label class="btn btn-success ">المقدم</label>
                                                     @endif
                                                     @if ($month->installment_type == "law_percent")
-                                                    <label class="btn btn-success ">اتعاب
-                                                        محامى</label>
+                                                        <label class="btn btn-success ">اتعاب
+                                                            محامى</label>
                                                     @endif
                                                 </td>
                                                 @if($month->status=='not_done')
-                                                <td>
-                                                    <a class="btn btn-info " data-bs-toggle="modal"
-                                                        data-bs-target="#pay-one_{{$month->id}}">
-                                                        <label> دفع </label>
-                                                        @if ($month->installment_type == "first_amount")
-                                                        المقدم
-                                                        @endif </a>
-                                                    <div id="pay-one_{{$month->id}}" class="modal fade" tabindex="-1"
-                                                        aria-labelledby="pay-oneLabel{{$month->id}}" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-flex align-items-center">
-                                                                    <h4 class="modal-title mt-2" id="myModalLabel">
-                                                                        دفع قسط </h4>
-                                                                    <hr>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
+                                                    <td>
+                                                        <a class="btn btn-info " data-bs-toggle="modal"
+                                                           data-bs-target="#pay-one_{{$month->id}}">
+                                                            <label> دفع </label>
+                                                            @if ($month->installment_type == "first_amount")
+                                                                المقدم
+                                                            @endif </a>
+                                                        <div id="pay-one_{{$month->id}}" class="modal fade" tabindex="-1"
+                                                             aria-labelledby="pay-oneLabel{{$month->id}}" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-flex align-items-center">
+                                                                        <h4 class="modal-title mt-2" id="myModalLabel">
+                                                                            دفع قسط </h4>
+                                                                        <hr>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-header">
+                                                                        <label class="form-label" for="input1"> المبلغ
+                                                                            المطلوب : {{ $month->amount }} دينار
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <form
+                                                                            action="{{ route('installment.pay_one',$month->installment_id) }}"
+                                                                            method="POST" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label" for="cash"> المبلغ
+                                                                                    النقدي
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="cash_one" name="cash"
+                                                                                       onchange="calculate(this.value,'cash_one');">
+                                                                                @error('cash')
+                                                                                <div style='color:red'>{{$message}}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                            <input type="hidden" id="real_price_one"
+                                                                                   value="{{$month->amount}}">
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label" for="knet_one">
+                                                                                    المبلغ
+                                                                                    بالكي نت
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="knet_one" name="knet">
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label" for="knet_code">
+                                                                                    رقم وصل الكي نت
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="knet_code" name="knet_code">
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <input type="file" name="img_dir"
+                                                                                       class="form-control" />
+                                                                            </div>
+                                                                            <div class="modal-footer d-flex ">
+                                                                                <button type="submit"
+                                                                                        class="btn btn-primary">دفع </button>
+                                                                                <button type="button"
+                                                                                        class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                                        data-bs-dismiss="modal">
+                                                                                    الغاء
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="modal-header">
-                                                                    <label class="form-label" for="input1"> المبلغ
-                                                                        المطلوب : {{ $month->amount }} دينار
-                                                                    </label>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form
-                                                                        action="{{ route('installment.pay_one',$month->installment_id) }}"
-                                                                        method="POST" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="form-group mb-3">
-                                                                            <label class="form-label" for="cash"> المبلغ
-                                                                                النقدي
-                                                                            </label>
-                                                                            <input type="text" class="form-control mb-2"
-                                                                                id="cash_one" name="cash"
-                                                                                onchange="calculate(this.value,'cash_one');">
-                                                                            @error('cash')
-                                                                            <div style='color:red'>{{$message}}</div>
-                                                                            @enderror
-                                                                        </div>
-                                                                        <input type="hidden" id="real_price_one"
-                                                                            value="{{$month->amount}}">
-                                                                        <div class="form-group mb-3">
-                                                                            <label class="form-label" for="knet_one">
-                                                                                المبلغ
-                                                                                بالكي نت
-                                                                            </label>
-                                                                            <input type="text" class="form-control mb-2"
-                                                                                id="knet_one" name="knet">
-                                                                        </div>
-                                                                        <div class="form-group mb-3">
-                                                                            <label class="form-label" for="knet_code">
-                                                                                رقم وصل الكي نت
-                                                                            </label>
-                                                                            <input type="text" class="form-control mb-2"
-                                                                                id="knet_code" name="knet_code">
-                                                                        </div>
-                                                                        <div class="form-group mb-3">
-                                                                            <input type="file" name="img_dir"
-                                                                                class="form-control" />
-                                                                        </div>
-                                                                        <div class="modal-footer d-flex ">
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary">دفع </button>
-                                                                            <button type="button"
-                                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                                data-bs-dismiss="modal">
-                                                                                الغاء
-                                                                            </button>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
+                                                                <!-- /.modal-content -->
                                                             </div>
-                                                            <!-- /.modal-content -->
+                                                            <!-- /.modal-dialog -->
                                                         </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @if ($month->installment_type == "installment")
-                                                    <a class="btn btn-info " data-bs-toggle="modal"
-                                                        data-bs-target="#pay-part_{{$month->id}}">
-                                                        <label>دفع رابط </label>
-                                                    </a>
-                                                    <div id="pay-part_{{$month->id}}" class="modal fade" tabindex="-1"
-                                                        aria-labelledby="pay-partLabel{{$month->id}}"
-                                                        aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header d-flex align-items-center">
-                                                                    <h4 class="modal-title mt-2" id="myModalLabel">
-                                                                        دفع قسط </h4>
-                                                                    <hr>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-header">
-                                                                    <label class="form-label" for="input1"> المبلغ
-                                                                        المطلوب : {{ $month->amount }} دينار
-                                                                    </label>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form
-                                                                        action="{{ route('installment.pay_part',$month->installment_id) }}"
-                                                                        method="POST" enctype="multipart/form-data">
-                                                                        @csrf
-                                                                        <div class="form-group mb-3">
-                                                                            <input type="file" name="img_dir"
-                                                                                class="form-control" />
+                                                    </td>
+                                                    <td>
+                                                        @if ($month->installment_type == "installment")
+                                                            <a class="btn btn-info " data-bs-toggle="modal"
+                                                               data-bs-target="#pay-part_{{$month->id}}">
+                                                                <label>دفع رابط </label>
+                                                            </a>
+                                                            <div id="pay-part_{{$month->id}}" class="modal fade" tabindex="-1"
+                                                                 aria-labelledby="pay-partLabel{{$month->id}}"
+                                                                 aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header d-flex align-items-center">
+                                                                            <h4 class="modal-title mt-2" id="myModalLabel">
+                                                                                دفع قسط </h4>
+                                                                            <hr>
+                                                                            <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
                                                                         </div>
-                                                                        <div class="form-group mb-3">
-                                                                            <label class="form-label" for="knet_code">
-                                                                                كود الرابط
+                                                                        <div class="modal-header">
+                                                                            <label class="form-label" for="input1"> المبلغ
+                                                                                المطلوب : {{ $month->amount }} دينار
                                                                             </label>
-                                                                            <input type="text" class="form-control mb-2"
-                                                                                id="knet_code" name="knet_code">
                                                                         </div>
-                                                                        <div class="modal-footer d-flex ">
-                                                                            <button type="submit"
-                                                                                class="btn btn-primary">دفع </button>
-                                                                            <button type="button"
-                                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                                data-bs-dismiss="modal">
-                                                                                الغاء
-                                                                            </button>
+                                                                        <div class="modal-body">
+                                                                            <form
+                                                                                action="{{ route('installment.pay_part',$month->installment_id) }}"
+                                                                                method="POST" enctype="multipart/form-data">
+                                                                                @csrf
+                                                                                <div class="form-group mb-3">
+                                                                                    <input type="file" name="img_dir"
+                                                                                           class="form-control" />
+                                                                                </div>
+                                                                                <div class="form-group mb-3">
+                                                                                    <label class="form-label" for="knet_code">
+                                                                                        كود الرابط
+                                                                                    </label>
+                                                                                    <input type="text" class="form-control mb-2"
+                                                                                           id="knet_code" name="knet_code">
+                                                                                </div>
+                                                                                <div class="modal-footer d-flex ">
+                                                                                    <button type="submit"
+                                                                                            class="btn btn-primary">دفع </button>
+                                                                                    <button type="button"
+                                                                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                                            data-bs-dismiss="modal">
+                                                                                        الغاء
+                                                                                    </button>
+                                                                                </div>
+                                                                            </form>
                                                                         </div>
-                                                                    </form>
+                                                                    </div>
+                                                                    <!-- /.modal-content -->
                                                                 </div>
+                                                                <!-- /.modal-dialog -->
                                                             </div>
-                                                            <!-- /.modal-content -->
-                                                        </div>
-                                                        <!-- /.modal-dialog -->
-                                                    </div>
-                                                    @elseif ($month->installment_type == "law_percent")
-                                                    <a class="btn btn-danger  ">
-                                                        أتعاب المحامي
-                                                    </a>
-                                                    @elseif ($month->installment_type == "2_._5_percent")
-                                                    <a class="btn btn-danger  ">رسوم
-                                                        المحكمة
-                                                    </a>
-                                                    @else
-                                                    <a class="btn btn-success  "
-                                                        href="{{ route('installment.pay_one',$month->installment_id) }}">دفع
-                                                        المقدم
-                                                    </a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    لا يوجد
-                                                </td>
+                                                        @elseif ($month->installment_type == "law_percent")
+                                                            <a class="btn btn-danger  ">
+                                                                أتعاب المحامي
+                                                            </a>
+                                                        @elseif ($month->installment_type == "2_._5_percent")
+                                                            <a class="btn btn-danger  ">رسوم
+                                                                المحكمة
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-success  "
+                                                               href="{{ route('installment.pay_one',$month->installment_id) }}">دفع
+                                                                المقدم
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        لا يوجد
+                                                    </td>
                                                 @elseif ($month->status == "delay")
-                                                <td>
-                                                    <a class="btn btn-warning  " href="#">سماح </a>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-warning  " href="#">سماح </a>
-                                                </td>
-                                                <td>
-                                                    <a class="btn btn-warning  " href="#">سماح </a>
-                                                </td>
+                                                    <td>
+                                                        <a class="btn btn-warning  " href="#">سماح </a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-warning  " href="#">سماح </a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-warning  " href="#">سماح </a>
+                                                    </td>
                                                 @else
-                                                <td>
-                                                    @if ($month->installment_type == 'discount')
-                                                    <span class="btn btn-warning">
+                                                    <td>
+                                                        @if ($month->installment_type == 'discount')
+                                                            <span class="btn btn-warning">
                                                         خصم </span>
-                                                    @elseif ($month->payment_type != "part")
-                                                    <a href="#">
+                                                        @elseif ($month->payment_type != "part")
+                                                            <a href="#">
                                                         <span class="btn btn-success">
                                                             تم الدفع </span></a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($month->payment_type == "part")
-                                                    <a href="#"> <span class="btn btn-success">
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($month->payment_type == "part")
+                                                            <a href="#"> <span class="btn btn-success">
                                                             تم الدفع </span> </a>
-                                                    @endif
-                                                </td>
-                                                <td>
+                                                        @endif
+                                                    </td>
+                                                    <td>
 
-                                                    <h6>{{ $month->payment_date }}</h6>
-                                                    <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
+                                                        <h6>{{ $month->payment_date }}</h6>
+                                                        <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
                                                             <span class="btn btn-info"> صورة
                                                                 الايصال </span>
-                                                        </a></h6>
+                                                            </a></h6>
 
-                                                     <a target="_blank"
-                                                    href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
-                                                    <i class="fa fa-print text-dark m-r-10"></i>
-                                                </a>
-                                              <!--  <a href="installment/admin/get_papers/ $month->id ?>">
-                                        <i class="fa fa-edit text-dark m-r-10"></i>
-                                        </a> -->
-                                                </td>
+                                                        <a target="_blank"
+                                                           href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
+                                                            <i class="fa fa-print text-dark m-r-10"></i>
+                                                        </a>
+                                                        <!--  <a href="installment/admin/get_papers/ $month->id ?>">
+                                                  <i class="fa fa-edit text-dark m-r-10"></i>
+                                                  </a> -->
+                                                    </td>
 
                                                 @endif
                                                 <td>
                                                     @if ($month->status == "not_done" && $Installment->law == 0)
-                                                    <input type="checkbox" disc="{{ $month->amout}}"
-                                                        onclick="calculate($month->id )" class="form-check-input"
-                                                        id="payment_order_id_{{$month->id}}" name="payment_order_id[]"
-                                                        value="{{ $month->id }}">
-                                                    <input type="hidden" name="sum_check[]"
-                                                        value="{{ $month->amount }}">
+                                                        <input type="checkbox" disc="{{ $month->amout}}"
+                                                               onclick="calculate($month->id )" class="form-check-input"
+                                                               id="payment_order_id_{{$month->id}}" name="payment_order_id[]"
+                                                               value="{{ $month->id }}">
+                                                        <input type="hidden" name="sum_check[]"
+                                                               value="{{ $month->amount }}">
                                                     @endif
                                                 </td>
                                             </tr>
-                                            @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -2028,106 +1540,106 @@
 </div>
 
 @if(isset($settle_item) && count($settle_item) > 0 )
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <div class="accordion accordion-flush" id="accordionFlushExampleInstallments">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="flush-headingSeven">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseSeven" aria-expanded="false"
-                            aria-controls="flush-collapseSeven">
-                            <i class="ti ti-basket fs-6 mx-1" style="color: rgb(245, 18, 226);"></i> التسوية
-                            <span class="text-gray mx-1">( قم بالضغط هنا لاظهار اقساط التسوية)</span>
-                        </button>
-                    </h2>
-                    <div id="flush-collapseSeven" class="accordion-collapse collapse"
-                        aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExampleInstallments">
-                        <div class="accordion-body">
-                            <div class="d-flex flex-wrap ">
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="accordion accordion-flush" id="accordionFlushExampleInstallments">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingSeven">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapseSeven" aria-expanded="false"
+                                    aria-controls="flush-collapseSeven">
+                                <i class="ti ti-basket fs-6 mx-1" style="color: rgb(245, 18, 226);"></i> التسوية
+                                <span class="text-gray mx-1">( قم بالضغط هنا لاظهار اقساط التسوية)</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseSeven" class="accordion-collapse collapse"
+                             aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExampleInstallments">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-wrap ">
 
-                                <a data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}"
-                                    class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
-                                    onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
-                                    دفع كامل المديونية
-                                </a>
-                                <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
-                                    aria-labelledby="pay-totalLabel{{$id}}" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header d-flex align-items-center">
-                                                <h4 class="modal-title mt-2" id="myModalLabel">
-                                                    دفع كامل المديونية </h4>
-                                                <hr>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                    <a data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}"
+                                       class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
+                                       onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
+                                        دفع كامل المديونية
+                                    </a>
+                                    <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
+                                         aria-labelledby="pay-totalLabel{{$id}}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-flex align-items-center">
+                                                    <h4 class="modal-title mt-2" id="myModalLabel">
+                                                        دفع كامل المديونية </h4>
+                                                    <hr>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-header">
+                                                    <label class="form-label" for="input1"> المبلغ
+                                                        المطلوب : {{ $sum }} دينار
+                                                    </label>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('installment.pay_total',$id) }}" method="POST"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label" for="cash"> المبلغ
+                                                                النقدي
+                                                            </label>
+                                                            <input type="text" class="form-control mb-2" id="cash"
+                                                                   name="cash" onchange="calculate(this.value,'cash_amount');">
+                                                            @error('cash')
+                                                            <div style='color:red'>{{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <input type="hidden" id="real_price" value="{{ $sum }}">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label" for="knet"> المبلغ
+                                                                بالكي نت
+                                                            </label>
+                                                            <input type="text" class="form-control mb-2" id="knet"
+                                                                   name="knet">
+                                                            @error('knet')
+                                                            <div style='color:red'>{{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label" for="knet_code">
+                                                                رقم وصل الكي نت
+                                                            </label>
+                                                            <input type="text" class="form-control mb-2" id="knet_code"
+                                                                   name="knet_code">
+                                                            @error('knet_code')
+                                                            <div style='color:red'>{{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <input type="file" name="paper_img_dir" class="form-control" />
+                                                            @error('paper_img_dir')
+                                                            <div style='color:red'>{{$message}}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="modal-footer d-flex ">
+                                                            <button type="submit" class="btn btn-primary">دفع </button>
+                                                            <button type="button"
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
+                                                                الغاء
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                            <div class="modal-header">
-                                                <label class="form-label" for="input1"> المبلغ
-                                                    المطلوب : {{ $sum }} دينار
-                                                </label>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="{{ route('installment.pay_total',$id) }}" method="POST"
-                                                    enctype="multipart/form-data">
-                                                    @csrf
-                                                    <div class="form-group mb-3">
-                                                        <label class="form-label" for="cash"> المبلغ
-                                                            النقدي
-                                                        </label>
-                                                        <input type="text" class="form-control mb-2" id="cash"
-                                                            name="cash" onchange="calculate(this.value,'cash_amount');">
-                                                        @error('cash')
-                                                        <div style='color:red'>{{$message}}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <input type="hidden" id="real_price" value="{{ $sum }}">
-                                                    <div class="form-group mb-3">
-                                                        <label class="form-label" for="knet"> المبلغ
-                                                            بالكي نت
-                                                        </label>
-                                                        <input type="text" class="form-control mb-2" id="knet"
-                                                            name="knet">
-                                                        @error('knet')
-                                                        <div style='color:red'>{{$message}}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <label class="form-label" for="knet_code">
-                                                            رقم وصل الكي نت
-                                                        </label>
-                                                        <input type="text" class="form-control mb-2" id="knet_code"
-                                                            name="knet_code">
-                                                        @error('knet_code')
-                                                        <div style='color:red'>{{$message}}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="form-group mb-3">
-                                                        <input type="file" name="paper_img_dir" class="form-control" />
-                                                        @error('paper_img_dir')
-                                                        <div style='color:red'>{{$message}}</div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="modal-footer d-flex ">
-                                                        <button type="submit" class="btn btn-primary">دفع </button>
-                                                        <button type="button"
-                                                            class="btn bg-danger-subtle text-danger  waves-effect"
-                                                            data-bs-dismiss="modal">
-                                                            الغاء
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                            <!-- /.modal-content -->
                                         </div>
-                                        <!-- /.modal-content -->
+                                        <!-- /.modal-dialog -->
                                     </div>
-                                    <!-- /.modal-dialog -->
                                 </div>
-                            </div>
 
-                            <div class="table-responsive pb-4">
-                                <table id="all-student" class="table table-bordered border text-nowrap align-middle">
-                                    <thead>
+                                <div class="table-responsive pb-4">
+                                    <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                        <thead>
                                         <!-- start row -->
                                         <tr>
                                             <th> م </th>
@@ -2138,131 +1650,132 @@
                                             <th> تاريخ الدفع</th>
                                         </tr>
                                         <!-- end row -->
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
                                         <!-- start row -->
                                         @foreach($settle_item as $month)
-                                        <tr>
-                                            <td> {{ $loop->index + 1 }} </td>
-                                            <td>{{ $month->date }} </td>
-                                            <td>{{ $month->amount }}
-                                                @if ($month->installment_type == "first_amount")
-                                                <label class="btn btn-success ">المقدم</label>
-                                                @endif
-                                            </td>
-                                            @if($month->status=='not_done')
-                                            <td>
-                                                <a class="btn btn-info " data-bs-toggle="modal"
-                                                    data-bs-target="#pay-settle_{{$month->id}}">
-                                                    <label> دفع </label>
+                                            <tr>
+                                                <td> {{ $loop->index + 1 }} </td>
+                                                <td>{{ $month->date }} </td>
+                                                <td>{{ $month->amount }}
                                                     @if ($month->installment_type == "first_amount")
-                                                    المقدم
-                                                    @endif </a>
-                                                <div id="pay-settle_{{$month->id}}" class="modal fade" tabindex="-1"
-                                                    aria-labelledby="pay-oneLabel{{$month->id}}" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header d-flex align-items-center">
-                                                                <h4 class="modal-title mt-2" id="myModalLabel">
-                                                                    دفع قسط </h4>
-                                                                <hr>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-header">
-                                                                <label class="form-label" for="input1"> المبلغ
-                                                                    المطلوب : {{ $month->amount }} دينار
-                                                                </label>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form
-                                                                    action="{{ route('installment.pay_settle',$month->installment_id) }}"
-                                                                    method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="form-label" for="cash"> المبلغ
-                                                                            النقدي
+                                                        <label class="btn btn-success ">المقدم</label>
+                                                    @endif
+                                                </td>
+                                                @if($month->status=='not_done')
+                                                    <td>
+                                                        <a class="btn btn-info " data-bs-toggle="modal"
+                                                           data-bs-target="#pay-settle_{{$month->id}}">
+                                                            <label> دفع </label>
+                                                            @if ($month->installment_type == "first_amount")
+                                                                المقدم
+                                                            @endif </a>
+                                                        <div id="pay-settle_{{$month->id}}" class="modal fade" tabindex="-1"
+                                                             aria-labelledby="pay-oneLabel{{$month->id}}" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header d-flex align-items-center">
+                                                                        <h4 class="modal-title mt-2" id="myModalLabel">
+                                                                            دفع قسط </h4>
+                                                                        <hr>
+                                                                        <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-header">
+                                                                        <label class="form-label" for="input1"> المبلغ
+                                                                            المطلوب : {{ $month->amount }} دينار
                                                                         </label>
-                                                                        <input type="text" class="form-control mb-2"
-                                                                            id="cash_settle" name="cash"
-                                                                            onchange="calculate(this.value,'cash_settle');">
-                                                                        @error('cash')
-                                                                        <div style='color:red'>{{$message}}</div>
-                                                                        @enderror
                                                                     </div>
-                                                                    <input type="hidden" id="real_price_settle"
-                                                                        value="{{$month->amount}}">
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="form-label" for="knet_settle">
-                                                                            المبلغ
-                                                                            بالكي نت
-                                                                        </label>
-                                                                        <input type="text" class="form-control mb-2"
-                                                                            id="knet_settle" name="knet_settle">
+                                                                    <div class="modal-body">
+                                                                        <form
+                                                                            action="{{ route('installment.pay_settle',$month->installment_id) }}"
+                                                                            method="POST" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label" for="cash"> المبلغ
+                                                                                    النقدي
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="cash_settle" name="cash"
+                                                                                       onchange="calculate(this.value,'cash_settle');">
+                                                                                @error('cash')
+                                                                                <div style='color:red'>{{$message}}</div>
+                                                                                @enderror
+                                                                            </div>
+                                                                            <input type="hidden" id="real_price_settle"
+                                                                                   value="{{$month->amount}}">
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label" for="knet_settle">
+                                                                                    المبلغ
+                                                                                    بالكي نت
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="knet_settle" name="knet_settle">
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <label class="form-label"
+                                                                                       for="knet_code_settle">
+                                                                                    رقم وصل الكي نت
+                                                                                </label>
+                                                                                <input type="text" class="form-control mb-2"
+                                                                                       id="knet_code_settle"
+                                                                                       name="knet_code_settle">
+                                                                            </div>
+                                                                            <div class="form-group mb-3">
+                                                                                <input type="file" name="img_dir"
+                                                                                       class="form-control" />
+                                                                            </div>
+                                                                            <div class="modal-footer d-flex ">
+                                                                                <button type="submit"
+                                                                                        class="btn btn-primary">دفع </button>
+                                                                                <button type="button"
+                                                                                        class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                                        data-bs-dismiss="modal">
+                                                                                    الغاء
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
                                                                     </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <label class="form-label"
-                                                                            for="knet_code_settle">
-                                                                            رقم وصل الكي نت
-                                                                        </label>
-                                                                        <input type="text" class="form-control mb-2"
-                                                                            id="knet_code_settle"
-                                                                            name="knet_code_settle">
-                                                                    </div>
-                                                                    <div class="form-group mb-3">
-                                                                        <input type="file" name="img_dir"
-                                                                            class="form-control" />
-                                                                    </div>
-                                                                    <div class="modal-footer d-flex ">
-                                                                        <button type="submit"
-                                                                            class="btn btn-primary">دفع </button>
-                                                                        <button type="button"
-                                                                            class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                            data-bs-dismiss="modal">
-                                                                            الغاء
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
+                                                                </div>
+                                                                <!-- /.modal-content -->
                                                             </div>
+                                                            <!-- /.modal-dialog -->
                                                         </div>
-                                                        <!-- /.modal-content -->
-                                                    </div>
-                                                    <!-- /.modal-dialog -->
-                                                </div>
-                                            </td>
+                                                    </td>
 
-                                            <td>
-                                                لا يوجد
-                                            </td>
+                                                    <td>
+                                                        لا يوجد
+                                                    </td>
 
-                                            @else
-                                            @if ($month->payment_type != "part")
-                                            <td>
-                                                <a href="{{ route('installment.print_recive_ins_money',$month->installment_id ,$month->id) }}" class="btn btn-info"> طباعة
-                                                </a>
+                                                @else
+                                                    @if ($month->payment_type != "part")
+                                                        <td>
+                                                            <a href="{{ route('installment.print_recive_ins_money',$month->installment_id ,$month->id) }}" class="btn btn-info"> طباعة
+                                                            </a>
 
 
-                                                <h6>{{ $month->payment_date }}</h6>
-                                                <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
+                                                            <h6>{{ $month->payment_date }}</h6>
+                                                            <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
 
-                                                    </a></h6>
-                                            </td>
-                                            @endif
-                                            <!-- <td> @if ($month->status == "not_done")
-                                                <input type="checkbox" disc="{{ $month->amout}}"
+                                                                </a></h6>
+                                                        </td>
+                                                    @endif
+                                                    <!-- <td> @if ($month->status == "not_done")
+                                                        <input type="checkbox" disc="{{ $month->amout}}"
                                                     onclick="calculate( $month->id );"
                                                     id="payment_order_id_{{$month->id}}" name="payment_order_id[]"
                                                     value="{{ $month->id }}" />
                                                 @endif
-                                            </td> -->
+                                                    </td> -->
 
-                                            @endif
-                                        </tr>
+                                                @endif
+                                            </tr>
                                         @endforeach
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2270,200 +1783,149 @@
             </div>
         </div>
     </div>
-</div>
 @endif
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-    async function checkFileAndRedirect(primaryUrl, fallbackUrl) {
-        console.log("Checking primary URL:", primaryUrl);
-
-        const primaryReachable = await checkImage(primaryUrl);
-        if (primaryReachable) {
-            console.log("Primary URL exists, redirecting...");
-            window.location.href = primaryUrl; // Uncomment to enable redirection
+    $('#checkAll').click(function(event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function() {
+                this.checked = true;
+            });
         } else {
-            console.log("Primary URL not found, redirecting to fallback...");
-            window.location.href = fallbackUrl; // Uncomment to enable redirection
+            $(':checkbox').each(function() {
+                this.checked = false;
+            });
         }
-    }
+    });
 
-    async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
-
-        const primaryReachable = await checkImage(primaryUrl);
-        if (primaryReachable) {
-            console.log("Primary URL exists, redirecting...");
-            // window.location.href = primaryUrl; // Uncomment to enable redirection
-            const newWindow = window.open(primaryUrl, '_blank');
-            newWindow.onload = () => newWindow.print();
-        } else {
-            console.log("Primary URL not found, redirecting to fallback...");
-            // window.location.href = fallbackUrl; // Uncomment to enable redirection
-            const newWindow = window.open(fallbackUrl, '_blank');
-            newWindow.onload = () => newWindow.print();
-        }
-
-
-    }
-
-    function checkImage(url) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-                console.log('Image is accessible:', url);
-                resolve(true);
-            };
-            img.onerror = () => {
-                console.log('Image is not accessible:', url);
-                resolve(false);
-            };
-            img.src = url;
-        });
-    }
-
-</script>
-
-<script>
-$('#checkAll').click(function(event) {
-    if (this.checked) {
-        // Iterate each checkbox
-        $(':checkbox').each(function() {
-            this.checked = true;
-        });
-    } else {
-        $(':checkbox').each(function() {
-            this.checked = false;
-        });
-    }
-});
-
-function valthisform() {
-    var checkboxs = document.getElementsByName("payment_order_id[]");
-    alert($('#sum_check').val());
-    var okay = false;
-    for (var i = 0, l = checkboxs.length; i < l; i++) {
-        if (checkboxs[i].checked) {
-            okay = true;
-            // alert($(this).val());
-            break;
-        }
-
-    }
-    if (!okay) {
-        alert("يجب اختيار قسط على الاقل");
-        const checkbox = document.getElementById('checkAll');
-        const modal = new bootstrap.Modal(document.getElementById('pay-total-checked_{{$Installment->id}}'), {
-            keyboard: false
-        });
-
-        checkboxs.addEventListener('change', function() {
-            if (checkboxs.checked) {
-                modal.show();
-            } else {
-                modal.hide();
+    function valthisform() {
+        var checkboxs = document.getElementsByName("payment_order_id[]");
+        alert($('#sum_check').val());
+        var okay = false;
+        for (var i = 0, l = checkboxs.length; i < l; i++) {
+            if (checkboxs[i].checked) {
+                okay = true;
+                // alert($(this).val());
+                break;
             }
-        });
 
-        // return false;
-    } else {
-        const modal = new bootstrap.Modal(document.getElementById('pay-total-checked_{{$Installment->id}}'), {
-            keyboard: false
-        });
-        modal.show();
-    }
-}
+        }
+        if (!okay) {
+            alert("يجب اختيار قسط على الاقل");
+            const checkbox = document.getElementById('checkAll');
+            const modal = new bootstrap.Modal(document.getElementById('pay-total-checked_{{$Installment->id}}'), {
+                keyboard: false
+            });
 
-function calculate(value, type) {
-    var real_price = parseFloat($('#real_price').val()).toFixed(3);
-    // alert(value);
-    if (type == "cash_one") {
+            checkboxs.addEventListener('change', function() {
+                if (checkboxs.checked) {
+                    modal.show();
+                } else {
+                    modal.hide();
+                }
+            });
 
-        var real_price = parseFloat($('#real_price_one').val()).toFixed(3);
-        //alert(value);alert(real_price);
-        var cash = convert(value);
-        // alert(cash);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-        $('#knet_one').val(knet_n);
-
-    }
-    if (type == "knet") {
-        // var knet = parseFloat($('#knet').val()).toFixed(3);
-        var knet = convert(value);
-        var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
-        $('#cash').val(cash_n);
-
-    }
-    if (type == 'discount_amount') {
-        var real_price = parseFloat($('#total').val()).toFixed(3);
-        var cash = convert(value);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-
-        $('#amount').val(knet_n);
-        $('#discount_cash').val(knet_n);
-        $('#discount_knet').val('0.000');
-        //  calculate_2(knet_n,'real_price');
-    }
-    if (type == 'cash_settle') {
-        var real_price = parseFloat($('#real_price_settle').val()).toFixed(3);
-        var cash = convert(value);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-        $('#knet_settle').val(knet_n);
-    }
-
-    if (type == 'some_amount') {
-        var real_price = parseFloat($('#real_price_some').val()).toFixed(3);
-        real_price = real_price * 1000;
-        value = value * 1000;
-        //  alert(real_price);alert(value);
-        if (value < real_price) {
-            alert(' مبلغ الدفع اقل من القسط الشهري ');
-            return false;
+            // return false;
+        } else {
+            const modal = new bootstrap.Modal(document.getElementById('pay-total-checked_{{$Installment->id}}'), {
+                keyboard: false
+            });
+            modal.show();
         }
     }
-    if (type == 'cash_checked') {
-        alert($('#payment_order_id_{{$month->id}}').val());
-        var real_price = parseFloat($('#real_price_checked').val()).toFixed(3);
-        var cash = convert(value);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-        $('#knet_checked').val(knet_n);
+
+    function calculate(value, type) {
+        var real_price = parseFloat($('#real_price').val()).toFixed(3);
+        // alert(value);
+        if (type == "cash_one") {
+
+            var real_price = parseFloat($('#real_price_one').val()).toFixed(3);
+            //alert(value);alert(real_price);
+            var cash = convert(value);
+            // alert(cash);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+            $('#knet_one').val(knet_n);
+
+        }
+        if (type == "knet") {
+            // var knet = parseFloat($('#knet').val()).toFixed(3);
+            var knet = convert(value);
+            var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
+            $('#cash').val(cash_n);
+
+        }
+        if (type == 'discount_amount') {
+            var real_price = parseFloat($('#total').val()).toFixed(3);
+            var cash = convert(value);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+
+            $('#amount').val(knet_n);
+            $('#discount_cash').val(knet_n);
+            $('#discount_knet').val('0.000');
+            //  calculate_2(knet_n,'real_price');
+        }
+        if (type == 'cash_settle') {
+            var real_price = parseFloat($('#real_price_settle').val()).toFixed(3);
+            var cash = convert(value);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+            $('#knet_settle').val(knet_n);
+        }
+
+        if (type == 'some_amount') {
+            var real_price = parseFloat($('#real_price_some').val()).toFixed(3);
+            real_price = real_price * 1000;
+            value = value * 1000;
+            //  alert(real_price);alert(value);
+            if (value < real_price) {
+                alert(' مبلغ الدفع اقل من القسط الشهري ');
+                return false;
+            }
+        }
+        if (type == 'cash_checked') {
+            var real_price = parseFloat($('#real_price_checked').val()).toFixed(3);
+            var cash = convert(value);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+            $('#knet_checked').val(knet_n);
+        }
+
+
+        return false;
     }
 
-
-    return false;
-}
-
-function convert(val) {
-    if (isNaN(val)) {
-        var val = 0;
-    } else {
-        var val = val * 1000;
+    function convert(val) {
+        if (isNaN(val)) {
+            var val = 0;
+        } else {
+            var val = val * 1000;
+        }
+        return val;
     }
-    return val;
-}
 
-function calculate_2(value, type) {
-    var real_price = parseFloat($('#amount').val()).toFixed(3);
-    var discount = parseFloat($('#discount').val()).toFixed(3);
+    function calculate_2(value, type) {
+        var real_price = parseFloat($('#amount').val()).toFixed(3);
+        var discount = parseFloat($('#discount').val()).toFixed(3);
 
-    // if (discount == 0) {
-    //     alert('برجاء ادخال قيمة الخصم');
-    //     $('#knet').val('0.000');
-    // } else {
-    if (type == "discount_cash") {
-        var cash = parseFloat($('#discount_cash').val()).toFixed(3);
-        var cash = convert(cash);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-        $('#knet').val(knet_n);
+        // if (discount == 0) {
+        //     alert('برجاء ادخال قيمة الخصم');
+        //     $('#knet').val('0.000');
+        // } else {
+        if (type == "discount_cash") {
+            var cash = parseFloat($('#discount_cash').val()).toFixed(3);
+            var cash = convert(cash);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+            $('#knet').val(knet_n);
 
+        }
+        if (type == "discount_knet") {
+            var knet = parseFloat($('#discount_knet').val()).toFixed(3);
+            var knet = convert(knet);
+            var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
+            $('#cash').val(cash_n);
+
+        }
+        // }
+        return false;
     }
-    if (type == "discount_knet") {
-        var knet = parseFloat($('#discount_knet').val()).toFixed(3);
-        var knet = convert(knet);
-        var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
-        $('#cash').val(cash_n);
-
-    }
-    // }
-    return false;
-}
 </script>
