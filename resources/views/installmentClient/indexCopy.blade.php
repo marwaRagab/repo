@@ -735,7 +735,7 @@
                     <div class="modal-body">
                         <div id="formRows">
                             <div class="form-row">
-                                <div class="form-group mb-3">
+                                <div class="form-group mb-3" style="display:none;">
                                     <label class="form-label block mx-1">
                                         الحالة</label>
                                     <input class="form-control" placeholder="الحالة" type="text" name="status"
@@ -744,8 +744,8 @@
                                 <div class="form-group mb-3">
 
                                     <label class="form-label block mx-1">
-                                        السبب</label>
-                                    <input class="form-control" placeholder="السبب" type="text" name="reason" />
+                                        شرط القبول</label>
+                                    <input class="form-control" placeholder="شرط القبول" type="text" name="reason" />
                                 </div>
                             </div>
                             {{-- <div class="flex mt-4">
@@ -784,7 +784,7 @@
                         <div id="formRows">
                             <div class="px-4 py-4 sm:px-5">
                                 <div class="flex mt-4">
-                                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3"  style="display:none;">
                                         <label class="block mx-1">
                                             الحالة</label>
 
@@ -845,7 +845,7 @@
                         <div id="formRows">
                             <div class="px-4 py-4 sm:px-5">
                                 <div class="flex mt-4">
-                                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3" style="display:none;">
                                         <label class="form-label block mx-1">
                                             الحالة</label>
                                         <input class="form-control" placeholder="الحالة" type="text"
