@@ -148,6 +148,9 @@ Route::post('/reset_password', [LoginController::class, 'reset_password'])->name
 Route::get('/dasboard', [LoginController::class, 'dasboard'])->name('dasboard');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/insert_to_invoice',[InstallmentApproveController::class, 'insert_to_invoice']);
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

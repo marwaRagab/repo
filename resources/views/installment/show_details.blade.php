@@ -465,17 +465,18 @@
                          data-bs-parent="#accordionFlushExampleFiles">
                         <div class="accordion-body">
                             <div class="scroll-container">
-                                {{-- @foreach($installment_months as $item)
-                                <div class="item" data-file="{{ $item->img_dir }}">
-                                    <img src="{{ $item->img_dir }}" alt="{{ $item->notes ?? 'Image' }}">
-                                </div>
-                                @endforeach --}}
+                                <!--{{-- @foreach($installment_months as $item)-->
+                                <!--<div class="item" data-file="{{ $item->img_dir }}">-->
+                                <!--    <img src="{{ $item->img_dir }}" alt="{{ $item->notes ?? 'Image' }}">-->
+                                <!--</div>-->
+                                <!--@endforeach --}}-->
 
                                 <div class="owl-carousel leadership-carousel owl-theme mt-lg-5 mb-lg-7">
 
                                     @if ($Installment->contract_1 != Null)
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+
                                                 <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                                 <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
                                                     <button type="button"
@@ -489,10 +490,12 @@
                                                         طباعة
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     @endif
                                     @if ($Installment->contract_2 != Null)
+==
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                                 <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
@@ -509,9 +512,11 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     @endif
                                     @if ($Installment->contract_cinet_1 != Null)
+
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                                 <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
@@ -528,9 +533,11 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     @endif
                                     @if ($Installment->contract_cinet_2 != Null)
+
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                                 <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
@@ -547,9 +554,11 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     @endif
                                     @if ($Installment->prods_recieved_img != Null)
+
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                                 <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
@@ -566,150 +575,152 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     @endif
                                     {{-- client --}}
 
                                     @foreach ($data['Client']->client_image as $img_Client)
 
-                                        @if ($img_Client->type != "my_img")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
 
-                                        @if ($img_Client->type != "work_img")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @if ($img_Client->type == "my_img")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <a href="https://electron-kw.com//uploads/new_photos/1731507043_6734b363d5950.pdf"
+                                             onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميلzzz
+                                                </a>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
 
-                                        @if ($img_Client->type != "salary_img")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        @if ($img_Client->type != "cid_img1")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @if ($img_Client->type == "work_img")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
 
-                                        @if ($img_Client->type != "cid_img_2")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @if ($img_Client->type == "salary_img")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    @if ($img_Client->type == "cid_img1")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
+                                    @if ($img_Client->type == "cid_img_2")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
 
-                                        @if ($img_Client->type != "cinet_img")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @if ($img_Client->type == "cinet_img")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
 
-                                        @if ($img_Client->type != "civil_img")
-                                            <div class="item">
-                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
-                                                    <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                        <button type="button"
-                                                                onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
-                                                            تحميل
-                                                        </button>
-                                                        <button type="button"
-                                                                onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
-                                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
-                                                            طباعة
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @if ($img_Client->type == "civil_img")
+                                    <div class="item">
+                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
+                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <button type="button" 
+                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
+                                                تحميل
+                                                </button>
+                                                <button type="button" 
+                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
+                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
+                                                طباعة
+                                                </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    @endif
 
 
                                     @endforeach

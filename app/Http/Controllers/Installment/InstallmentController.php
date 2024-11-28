@@ -212,14 +212,14 @@ class InstallmentController extends Controller
         $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
-       $data['Client'] = Client::with(['user', 'client_address', 'client_phone'])
+       $data['Client'] = Client::with(['user', 'client_address', 'client_phone','client_image'])
             ->where('id', $data['Installment']->client_id)
             ->first();
         // $data['phone'] = ClientPhone::where('client_id',$client->id);
         $data['OrderItem'] = DB::table('orders_items')->where('order_id', $data['Installment']->order_id)->get();
         $data['purchase_orders_items'] = PurchaseOrderItem::with('product')->where('order_id', $data['Installment']->order_id)->get();
 
-        $data['installment_months'] = Installment_month::where('installment_id', $id)->get();
+        $data['installment_months'] = Installment_month::where('installment_id', $id)->orderBy('date')->get();
 
 
         $data['count_installment_months'] = Installment_month::where('installment_id', $id)->where('status', 'done')->where('installment_type','!=','first_amount')->where('installment_type','!=','law_percent')->count();
