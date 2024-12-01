@@ -59,34 +59,36 @@ use App\Http\Controllers\Military_affairs\SearchController;
 use App\Http\Controllers\ImportingCompanies\ClassController;
 
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
-use App\Http\Controllers\Military_affairs\CheckingController;
+use App\Http\Controllers\TechnicalSupport\ProblemController;
 
-use App\Http\Controllers\Military_affairs\Stop_carController;
+use App\Http\Controllers\TechnicalSupport\RequestController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
 
 // use App\Http\Controllers\Transfer\TransferController;
+use App\Http\Controllers\Military_affairs\CheckingController;
+use App\Http\Controllers\Military_affairs\Stop_carController;
+// use App\Http\Controllers\Military_affairs\Stop_bankController;
 use App\Http\Controllers\ImportingCompanies\CompanyController;
 use App\Http\Controllers\ImportingCompanies\ProductController;
-// use App\Http\Controllers\Military_affairs\Stop_bankController;
+
+// use App\Http\Controllers\Military_affairs\Stop_travelController;
+
 use App\Http\Controllers\ImportingCompanies\TawreedController;
 use App\Http\Controllers\Military_affairs\DelegatesController;
-
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
 use App\Http\Controllers\Military_affairs\EqrardainController;
-use App\Http\Controllers\Military_affairs\Open_fileController;
-// use App\Http\Controllers\Military_affairs\Stop_travelController;
-
-use App\Http\Controllers\Military_affairs\Stop_bankController;
 
 // use App\Http\Controllers\Military_affairs\Excute_actionsController;
 
 
 
-use App\Http\Controllers\Military_affairs\SettlementController;
+use App\Http\Controllers\Military_affairs\Open_fileController;
 
+use App\Http\Controllers\Military_affairs\Stop_bankController;
+use App\Http\Controllers\Military_affairs\SettlementController;
 use App\Http\Controllers\Military_affairs\CertificateController;
 use App\Http\Controllers\Military_affairs\Stop_salaryController;
 use App\Http\Controllers\Military_affairs\Stop_travelController;
@@ -98,8 +100,6 @@ use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\HumanResources\TransactionsCompletedController;
-use App\Http\Controllers\TechnicalSupport\ProblemController;
-use App\Http\Controllers\TechnicalSupport\RequestController;
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -250,6 +250,7 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs/show_images/{id}', [DelegatesController::class, 'show_images'])->name('show_images');
     Route::get('military_affairs/admin/get_statistics_deligations/{user_id}', [DelegatesController::class, 'get_statistics_deligations'])->name('military_affairs.get_statistics_deligations');
     Route::get('military_affairs/admin/get_statistics_notes_details/{user_id}', [DelegatesController::class, 'get_statistics_notes_details'])->name('military_affairs.get_statistics_notes_details');
+    Route::get('military_affairs/admin/get_statistics_lawaffaires/{user_id}', [DelegatesController::class, 'get_statistics_lawaffaires'])->name('military_affairs.get_statistics_lawaffaires');
 
     // ghada military_affairs routes
     Route::get('/open_file/{id?}', [Open_fileController::class, 'index'])->name('open_file');
