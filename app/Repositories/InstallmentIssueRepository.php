@@ -53,17 +53,13 @@ class InstallmentIssueRepository implements InstallmentIssueRepositoryInterface
         // $Installment_Client->issue_pdf = asset('storage/issue_pdf/' . $filename);
         $Installment_Client->save();
         $savedIssues = [];
-        if($request->exist1 != "notexist")
-        {
-            foreach($request->installment_issue as $index => $item)
-            {
+        if ($request->exist1 != "notexist") {
+            foreach ($request->installment_issue as $index => $item) {
                 $item = (object) $item;
-                if ($item->status == "on") {
-                    $status = 'open';
-                } else {
-                    $status = 'close';
-                }
-                // dd($item->image);
+        
+                $status = $item->status === "on" ? 'open' : 'close';
+        
+                // Create a new InstallmentIssue record
                 $data = new InstallmentIssue;
                 $data->number_issue = $item->number_issue;
                 $data->opening_amount = $item->opening_amount ?? 0;
@@ -75,18 +71,19 @@ class InstallmentIssueRepository implements InstallmentIssueRepositoryInterface
                 $data->created_by = Auth::user()->id ?? null;
                 $data->updated_by = Auth::user()->id ?? null;
                 $data->save();
-    
-                if (isset($item->image) &&  $request->hasFile("installment_issue.$index.image")) {
-                    // dd("ss");
+        
+                // Handle image upload
+                if (isset($item->image) && $request->hasFile("installment_issue.$index.image")) {
                     $file = $request->file("installment_issue.$index.image");
                     $path = 'InstallmentClients/issue/images';
-    
+                
+                    // Call the UploadImage function
                     UploadImage($path, 'image', $data, $file);
                 }
-    
-    
+        
                 $savedIssues[] = $data;
             }
+            // dd($savedIssues);
         }
         else{
             $data = new InstallmentIssue;
