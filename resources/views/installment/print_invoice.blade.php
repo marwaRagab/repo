@@ -48,21 +48,23 @@
                 <tbody>
 
                 @php
-                    $x=0;
+                    $x=1;
                 @endphp
-                @foreach($order->order_items as $value)
+                @if(isset($order->order_item))
+                @foreach($order->order_item as $value)
 
                     <tr>
                         <td>{{$x++}} </td>
-                        <td>{{$value->product->mark->name_ar}}</td>
-                        <td>{{$value->product->class->name_ar}}</td>
+                        <td>{{$value->product_order_items->mark->name_ar}}</td>
+                        <td>{{$value->product_order_items->class->name_ar}}</td>
                         <td>{{$value->model}}</td>
                         <td>{{$value->counter}}</td>
-                        <td>{{$value->product_items->serial_number}}</td>
+                        <td>{{$value->product_items_order->serial_number}}</td>
 
 
                     </tr>
                 @endforeach
+                @endif
 
 
                 </tbody>
@@ -84,8 +86,8 @@
         </div>
 
         <div class="col-12 mx-5 py-1 d-flex justify-content-between">
-            <h6> :User name </h6>
-            <h6> : Date</h6>
+            <h6> المستخدم:  {{$user_name}}  </h6>
+            <h6>   التاريخ :{{date('Y-m-d')}} </h6>
         </div>
 
 

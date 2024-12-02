@@ -27,11 +27,12 @@ class TransferRepository implements TransferRepositoryInterface
                     'class_name' => $products->first()->class->name_ar,
                     'class_id' => $classId,
                     'count_prods' => $products->sum(function ($product)   {
-                        return $product->productsItems->count();
+                        return $product->productsItems->where('branch_id', Auth::user()->branch_id ?? '')->count();
                     }),
                     'products' => $products,
                     'sum_pro' => $products->sum(function ($product)  {
-                        return  $product->counte;
+
+                        return  $product->productsItems->where('serial_number','=','')->where('branch_id', Auth::user()->branch_id ?? '')->count();
                     }),
                 ];
             })
@@ -52,12 +53,12 @@ class TransferRepository implements TransferRepositoryInterface
 
     public function getAvailableProductsByClassId($classId)
     {
-        
+
         $items = products_items::with('product')->where('available', 1)
             ->whereHas('product', function ($query) use ($classId) {
                 $query->where('class_id', $classId);
             })->where('branch_id', Auth::user()->branch_id ?? '')->get();
-           
+
         $view = 'transfer.available-products.show_available_products';
         $title = 'تفاصيل المنتجات المتوفرة';
         $breadcrumb = array();

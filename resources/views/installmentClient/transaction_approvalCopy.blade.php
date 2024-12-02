@@ -285,7 +285,7 @@
                 بداية أول قسط
                 <span class="text-danger">*</span>
             </label>
-            @if ($ministry) 
+            @if ($ministry)
                 <select name="start_date" class="form-control form-select">
                      @for ($i = 0; $i < 3; $i++)
                         @php
@@ -592,7 +592,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="gender" name="gender" class="form-select" required>
-                    <option value ="">اختر</option> 
+                    <option value ="">اختر</option>
                     <option value="male">ذكر</option>
                     <option value="female">انثي</option>
                 </select>
@@ -607,7 +607,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="nationality" name="nationality" class="form-select" >
-                    <option value ="">اختر</option> 
+                    <option value ="">اختر</option>
                     @foreach ($nationality as $item)
                     <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                 @endforeach
@@ -631,6 +631,21 @@
 
                 @error('phone')
                     <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="form-group mb-3 col-lg-4 col-md-6">
+                <label class="form-label">
+                    الفرع
+                    <span class="text-danger">*</span>
+                </label>
+                <select id="branch_id" name="branch_id" class="form-select" >
+                    <option value ="">اختر</option>
+                    @foreach ($branches as $branche)
+                        <option value="{{ $branche->id }}">{{ $branche->name_ar }}</option>
+                    @endforeach
+                </select>
+                @error('branch_id')
+                <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -726,7 +741,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="region" name="region" class="form-select" required>
-                    <option value ="">اختر</option> 
+                    <option value ="">اختر</option>
                     @foreach ($region as $item)
                     <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                 @endforeach
@@ -893,7 +908,7 @@
                     <span class="text-danger">*</span>
                 </label>
                 <select id="bank" name="bank" class="form-select" required>
-                    <option value ="">اختر</option> 
+                    <option value ="">اختر</option>
                     @foreach ($bank as $item)
                         <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                     @endforeach
@@ -1359,7 +1374,7 @@
                 document.getElementById('serialInput').classList.remove('hidden');
             }
         }
-        
+
         const products = [];
         function addItem(event) {
             event.preventDefault();
@@ -1386,10 +1401,30 @@
                 .then(response => response.json())
                 .then(data => {
 
-                    console.log(data);
+
 
                     if (data.success) {
-                        appendRow(data.product, barcodeSelected);
+                        console.log(data.product.number);
+                        if(products.length > 0){
+                            products.forEach(element => {
+                                // ...use `element`...
+                                if(element.number == data.product.number){
+                                 alert('هذا المنتج موجود بالفعل')
+
+                                }else {
+                                    appendRow(data.product, barcodeSelected)
+                                }
+                            });
+
+
+                          //  console.log(products);
+                        }else {
+                              console.log(products);
+                            appendRow(data.product, barcodeSelected)
+
+                        }
+
+
                     } else {
                         alert(data.message);
                     }
@@ -1401,18 +1436,22 @@
             document.getElementById("serialValue").value = "";
         }
 
+
+
+
         function appendRow(product, barcodeSelected) {
+
             const productTableBody = document.getElementById("productTableBody");
 
             const newRow = document.createElement("tr");
             newRow.className = "border-y border-transparent border-b-slate-200 dark:border-b-navy-500";
 
             newRow.innerHTML = `
-           
+
                 <td class="whitespace-nowrap py-3 sm:px-5">
                     <p>${product.model || 'الصنف'}</p>
                 </td>
-                 <td class="whitespace-nowrap py-3 sm:px-5">${product.number || 0 }</td>
+                 <td  id="${product.number}" class="whitespace-nowrap py-3 sm:px-5">${product.number || 0 }</td>
 
                 <td class="whitespace-nowrap py-3 sm:px-5 cost-cell">(${product.cost || 0} د . ك)</td>
                 <td class="whitespace-nowrap py-3 sm:px-5">(${product.price || 0} د . ك)</td>
@@ -1477,8 +1516,8 @@
                 $('#monthly_amount').val(Math.floor(monthly_amount));
                 // freation
                 let frection = monthly_amount - Math.floor(monthly_amount);
-                
-                 let partt =frection* count_monthsselectedValue; 
+
+                 let partt =frection* count_monthsselectedValue;
 
                 part = (parseFloat(cost_install) - parseFloat(price_cost)) + partt;
                 $('#part').val(Math.floor(part));
@@ -1492,9 +1531,9 @@
                 final_total= (parseFloat(total)) + parseFloat(total_first_amount);
                 $('#final_total').val(final_total);
 
-               
 
-               
+
+
                 // monthly_amount = (parseFloat(price_cost)*3) /count_monthsselectedValue;
                 // $('#monthly_amount').val(Math.floor(monthly_amount));
                 $('#eqrardain_amount').val(total);
@@ -1507,7 +1546,7 @@
                 $('#monthly_amount').val(Math.floor(monthly_amount));
 
                 let frection = monthly_amount - Math.floor(monthly_amount);
-                
+
                 part =frection* count_monthsselectedValue;
                 $('#part').val(Number(part).toFixed(3));
 
@@ -1516,10 +1555,10 @@
 
                 total = Math.floor(monthly_amount) * count_monthsselectedValue;
                 $('#total').val(total);
-                
+
                 final_total= (parseFloat(total)) +  parseFloat(total_first_amount);
                 $('#final_total').val(final_total);
-               
+
                 $('#eqrardain_amount').val(total);
                 console.log("ee");
                 console.log(monthly_amount);

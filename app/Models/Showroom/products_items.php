@@ -5,6 +5,7 @@ namespace App\Models\Showroom;
 use App\Models\Company;
 use App\Models\ImportingCompanies\Product;
 use App\Models\ImportingCompanies\Tawreed\OrdersFiles;
+use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,6 +35,6 @@ class products_items extends Model
     }
     public function product_items()
     {
-        return $this->belongsTo(products_items::class, 'product_items_id');
+        return $this->belongsTo(OrderItem::class, 'product_items_id');
     }
 }
