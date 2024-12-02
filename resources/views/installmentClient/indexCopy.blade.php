@@ -116,7 +116,7 @@
                                         @break
                                     @case('help_socity')
                                         مساعدة اجتماعية
-                                        @break
+                                        @break 
                                     @case('work_finish')
                                         متقاعد
                                         @break
