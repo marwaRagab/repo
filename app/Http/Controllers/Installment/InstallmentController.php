@@ -1685,8 +1685,8 @@ class InstallmentController extends Controller
         // dd( $clients);
         return view('installment.madionia_certificate', compact('installment','Military_affair','invoices_installment','months'));
     }
-    
-    
+
+
       public function print_install_paper_info($id)
     {
 
@@ -1698,11 +1698,11 @@ class InstallmentController extends Controller
         $client = Client::findorfail($item->client_id);
 
 
-      
+
        $rec_name = Auth::user()->name_ar;
 
 
-     
+
         return view('installment.print_install_paper_info', compact('item', 'client','rec_name'));
 
     }
@@ -1731,6 +1731,7 @@ class InstallmentController extends Controller
 
            $order =Order::findorfail($id);
            $client = Client::findorfail($order->client_id);
+        $user_name = Auth::user()->name_ar;
        //    dd($order->order_items);
 
           /* $data["items"] = $this->order_prods_details_sql($id);
@@ -1741,7 +1742,7 @@ class InstallmentController extends Controller
            }*/
 
 
-        return view('installment.print_invoice',compact('order','client'));
+        return view('installment.print_invoice',compact('order','client','user_name'));
 
     }
 

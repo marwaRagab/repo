@@ -35,7 +35,7 @@
                         <!-- <th>الشركه الموردة </th> -->
                         <th> السريال / الباركود</th>
 
-                        <th>حذف </th>
+
                     </tr>
                     <!-- end row -->
                 </thead>
@@ -60,16 +60,7 @@
                             {{ $item->serial_number }}
                         </td>
                         @endif
-                        <td class="whitespace-nowrap py-3 sm:px-5">
-                            <form action="{{ route('products.items.delete', $item->id) }}" method="POST"
-                                onsubmit="return confirm('هل انت متأكد انك تريد حذف هذا المنتج من المنتجات المتاحة؟');">
-                                @csrf
-                                <button type="submit" class="btn bg-danger-subtle text-danger waves-effect">
-                                    <i class="fas fa-trash-alt"></i>
 
-                                </button>
-                            </form>
-                        </td>
                     </tr>
                     @endforeach
 
