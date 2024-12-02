@@ -430,8 +430,8 @@ class InstallmentApproveController extends Controller
         $installment_months_part->installment_id = $installment->id;
         $installment_months_part->amount = $request->total_first_amount;
         $installment_months_part->installment_type = "first_amount";
-        $installment_months_part->cinet_amount = 0;
-        $installment_months_part->internal_amount = 0;
+        $installment_months_part->cinet_amount = $installment->cinet_installment;
+        $installment_months_part->internal_amount =$installment->intrenal_installment;
         $installment_months_part->status = "done";
         $installment_months_part->img_dir = "";
         $installment_months_part->notes = "";
@@ -451,6 +451,8 @@ class InstallmentApproveController extends Controller
 
         $item = Invoices_installment::latest()->first();
 
+
+       
 
         $invoice_installment = new Invoices_installment;
         $invoice_installment->amount = $request->total_first_amount;
@@ -734,6 +736,45 @@ class InstallmentApproveController extends Controller
         return view('installmentClient.print_eqrardain', compact('data'));
 
 
+    }
+
+    public function insert_to_invoice()
+    {
+        $installment = Installment::whereBetween('id', [1410, 1424])->get();
+        
+        foreach($installment as $item)
+        {
+        $last = Invoices_installment::latest()->first();
+
+        $installment_months_part = Installment_month::where('installment_id',$item->id)->where('status','done')->where('installment_type','first_amount')->first();
+
+        $invoice_installment = new Invoices_installment;
+        $invoice_installment->amount = $item->total_first_amount;
+        $invoice_installment->installment_id = $item->id;
+        $invoice_installment->description = "عملية  دفع مقدم عن المعاملة  رقم " . " " .$item->id;
+        $invoice_installment->type = "income";
+        $invoice_installment->payment_type = $item->payment_type;
+        $invoice_installment->date = $item->date;
+        $invoice_installment->install_month_id = $installment_months_part->id;
+        $invoice_installment->debtor = 1;
+        $invoice_installment->branch_id = $item->user->branch_id ?? null;
+        $invoice_installment->balance = (int)$item->total_first_amount + (int)$last['balance'];
+        $invoice_installment->balance_bank = $last->balance_bank;
+        if ($item->payment_type == 'cash') {
+            $invoice_installment->balance_cash = $last['balance_cash'] + $item->total_first_amount;
+            $invoice_installment['balance_knet'] = $last['balance_knet'];
+            update_invoice_central_bank('cash', '+', $item->total_first_amount, 'installment');
+        } else {
+            $invoice_installment['balance_cash'] = $last['balance_cash'];
+            $invoice_installment['balance_knet'] = $last['balance_knet'] + $item->total_first_amount;
+            update_invoice_central_bank('knet', '+', $item->total_first_amount, 'installment');
+        }
+
+        $invoice_installment->save();
+
+        }
+
+        
     }
 
 

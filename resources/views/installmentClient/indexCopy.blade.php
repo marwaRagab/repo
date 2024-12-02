@@ -106,7 +106,49 @@
                                 {{ $item->installmentBroker->name }}
                             </td>
                             <td>{{ $item->salary }} </td>
-                            <td>{{ $item->ministry_working->name_ar ?? 'لا يوجد' }}</td>
+                           
+                           
+
+                            <td>
+                                @switch($item->ministry_id)
+                                    @case('ministry_employe')
+                                        موظف وزارة
+                                        @break
+                                    @case('help_socity')
+                                        مساعدة اجتماعية
+                                        @break 
+                                    @case('work_finish')
+                                        متقاعد
+                                        @break
+                                    @case('military')
+                                        عسكري
+                                        @break
+                                    @case('arm_student_help')
+                                        إعانة طالب عسكري
+                                        @break
+                                    @case('student_help')
+                                        إعانة طالب دراسة
+                                        @break
+                                    @case('worker_help')
+                                        دعم عمالة
+                                        @break
+                                    @case('special_needs_help')
+                                        ذوي الإحتياجات الخاصة
+                                        @break
+                                    @case('dead_help')
+                                        راتب مرحوم
+                                        @break
+                                    @case('special_needs_care_help')
+                                        رعاية ذوي الإحتياجات الخاصة
+                                        @break
+                                    @default
+                                        @php
+                                            $ministry = \App\Models\Ministry::find($item->ministry_id);
+                                        @endphp
+                                        {{ $ministry ? $ministry->name_ar : 'لايوجد' }}
+                                @endswitch
+                            </td>
+                            
                             @if (request()->route('status') === 'car_inquiry')
                                 <td>
                                     <div class="d-block">
@@ -175,6 +217,16 @@
                                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         نتيجة الاستعلام </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <li>
+                                            <form action="{{ route('myinstall.update', $item->id) }}" method="post"
+                                                style="display:inline;">
+                                                @csrf
+                                                <input type="hidden" name="status" value="advanced">
+                                                <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
+                                                    المتقدمين
+                                                </button>
+                                            </form>
+                                        </li>
                                         <li>
                                             <form action="{{ route('myinstall.update', $item->id) }}" method="post"
                                                 style="display:inline;">
