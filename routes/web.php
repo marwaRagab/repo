@@ -490,7 +490,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/transfer/available_products/delete/{id}', [TransferController::class, 'delete_available_product'])->name('products.items.delete'); //->middleware('permission:update_products_items');
     Route::get('/products/data', [ProductController::class, 'getProductsData'])->name('products.data');
 
-    Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
+    // Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
     // Importing companies
     // Route::Resource('products', ProductController::class);
     Route::get('/products', [ProductController::class, 'index'])->name('products.index'); //->middleware('permission:view_products');

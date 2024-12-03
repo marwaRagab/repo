@@ -584,7 +584,8 @@ class InstallmentApproveController extends Controller
         $data->save();
         // $this->installment_notes($request->installment_clients_id, $message);
         // $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
-        return redirect()->route('installment.admin');
+        // return redirect()->route('installment.admin');
+        return redirect()->route('installment.show_upload_papers', ['id' => $installment->id ]);
     }
 
     /**
@@ -661,7 +662,7 @@ class InstallmentApproveController extends Controller
             $product = Product::where('number', $request->barcode)->with(['productsItems' => function ($query) {
                 $query->where('available', 1);
             }])->first();
-            dd($product);
+            // dd($product);
             $id = $product->id;
             $number = $request->barcode;
             $model = $product->model;
@@ -676,7 +677,7 @@ class InstallmentApproveController extends Controller
 
 
             $product = products_items::where('available', 1)->where('serial_number', $request->serial)->with('product')->first();
-            // dd($product);
+     
             // return response()->json($product);
             $id = $product->product->id;
             $model = $product->product->model;
@@ -687,7 +688,6 @@ class InstallmentApproveController extends Controller
 
         }
 
-        //  dd($product);
 
         // Check if product was found
         if ($product) {
