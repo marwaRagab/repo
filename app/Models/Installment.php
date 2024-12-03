@@ -97,11 +97,7 @@ class Installment extends Model
     }
 
 
-    public function orders()
-    {
-        // dd($this->belongsTo( Order::class, 'client_id', 'client_id'));
-        return $this->belongsTo( Order::class, 'client_id', 'client_id');
-    }
+   
 
 
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $table = 'products';
+    protected $table = 'products_new';
 
     public function purchaseOrderItems()
 {
