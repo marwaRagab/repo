@@ -15,7 +15,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class LoginController extends Controller
 {
-
+ 
     public function getall()
     {
         // dd("dd");
