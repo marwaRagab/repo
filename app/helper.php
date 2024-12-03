@@ -178,25 +178,32 @@ if (!function_exists('send_sms_code')) {
 //     return null;
 // }
 
-function UploadImage($path, $image, $model, $request)
+function UploadImage($path, $image, $model, $file)
 {
+    // dd($file);
+    // Ensure the directory exists
+    if (!file_exists(public_path($path))) {
+        mkdir(public_path($path), 0755, true);
+    }
 
-    // $thumbnail = $request;
-    // $destinationPath = $path;
-    // $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
-    // $thumbnail->move($destinationPath, $filename);
+    if (!$file->isValid()) {
+        dd("dd");
+        throw new Exception('Uploaded file is invalid.');
+    }
 
-    // $model->$image = asset($path) . '/' . $filename;
 
-    // $model->save();
-    $thumbnail = $request;
-    $destinationPath = $path;
-    $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
-    $thumbnail->move($destinationPath, $filename);
-    // $filename = $thumbnail->store($destinationPath, 'public');
-    // $model->$image = $filename;
+    dd('ee');
+
+    // Generate a unique filename
+    $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+    // Move the uploaded file to the specified directory
+    $file->move(public_path($path), $filename);
+
+    // Set the file path in the model
     $model->$image = $path . '/' . $filename;
 
+    // Save the model
     $model->save();
 }
 
