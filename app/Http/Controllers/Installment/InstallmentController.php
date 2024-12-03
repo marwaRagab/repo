@@ -206,8 +206,15 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        // $data['Installment'] = Installment::findOrFail($id);
+       
+        $data['orders'] = Installment::with('orders.order_item.product_order')->findOrFail($id);
 
+            // Use a collection to gather the product order items
+            $purchase_orders_array = $data['orders']->orders->flatMap(function ($order) {
+                return $order->order_item->flatMap(function ($item) {
+                    return $item->product_order;
+                });
+            });
 
         $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
@@ -360,8 +367,12 @@ class InstallmentController extends Controller
 
         }
 
+        // order items
+
+       
+
         $data['view'] = 'installment/show_details';
-        return view('layout', $data, compact('breadcrumb', 'data'));
+        return view('layout', $data, compact('breadcrumb', 'data','purchase_orders_array'));
 
         //  return $this->respondSuccess($data, 'Get Data successfully.');
 
