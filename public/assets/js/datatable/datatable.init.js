@@ -5,6 +5,7 @@ $(function () {
     });
 
     $("#all-student").DataTable({
+
         columnDefs: [{
             targets: [0],
             orderData: [0, 1],
@@ -18,7 +19,7 @@ $(function () {
             orderData: [4, 0],
         },
         ],
-        
+
         "language": {
           "loadingRecords": "جارٍ التحميل...",
           "lengthMenu": "أظهر _MENU_ مدخلات",
@@ -265,7 +266,7 @@ $(function () {
           "decimal": ",",
           "infoFiltered": "(مرشحة من مجموع _MAX_ مُدخل)",
           "searchPlaceholder": "مثال بحث"
-        } 
+        }
     });
 
 });

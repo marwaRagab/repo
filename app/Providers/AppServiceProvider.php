@@ -51,6 +51,7 @@ use App\Interfaces\Military_affairs\ImageRepositoryInterface;
 use App\Interfaces\Military_affairs\PapersRepositoryInterface;
 use App\Interfaces\MinistryPercentageRepositoryInterface;
 use App\Interfaces\MinistryRepositoryInterface;
+use App\Interfaces\NotificationRepositoryInterface;
 use App\Interfaces\NationalityRepositoryInterface;
 use App\Interfaces\PermissionRepositoryInterface;
 use App\Repositories\ImportingCompanies\ProductRepository;
@@ -64,6 +65,7 @@ use App\Interfaces\WorkingIncomeRepositoryInterface;
 use App\Repositories\HumanResources\CommuncationMethodRepository;
 use App\Repositories\GovernorateRepository;
 use App\Repositories\WorkingIncomeRepository;
+use App\Repositories\NotificationRepository;
 
 use App\Repositories\InstallmentCarRepository;
 use App\Repositories\InstallmentClientNoteRepository;
@@ -177,6 +179,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SearchRepositoryInterface::class, SearchRepository::class);
          $this->app->bind(ProblemRepositoryInterface::class, ProblemRepository::class);
         $this->app->bind(RequestRepositoryInterface::class, RequestRepository::class);
+        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
 
         
 
