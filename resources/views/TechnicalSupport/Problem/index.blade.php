@@ -16,7 +16,8 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
         <a href="{{ route('supportProblem.index', ['status' => 'all']) }}"
-            class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2" style="display:none;">الكل</a>
+            class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
+            style="display:none;">الكل</a>
         @php
             $btnColors = [
                 1 => 'info',
@@ -30,8 +31,7 @@
         @endphp
         @foreach ($statusMapping as $key => $label)
             <a href="{{ route('supportProblem.index', ['status' => $key]) }}"
-             class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
-                >
+                class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
                 {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
             </a>
         @endforeach
@@ -52,7 +52,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id ="file-export" class="table table-bordered border text-nowrap align-middle">
+            <table id ="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <tr>
                         <th>م</th>
