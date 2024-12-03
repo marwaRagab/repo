@@ -22,7 +22,7 @@
                     </a>
                 </li>
 
-  <li class="sidebar-item">
+                <li class="sidebar-item">
                     <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
                         <iconify-icon icon="solar:document-text-line-duotone" class="fs-6 aside-icon text-danger">
                         </iconify-icon>
@@ -37,7 +37,7 @@
                                 </span>
                             </a>
                         </li>
-                </ul>
+                    </ul>
                 </li>
                 <!-- ============================= -->
                 <!-- Apps -->
@@ -49,7 +49,7 @@
                         </span>
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
-                        
+
                         <li class="sidebar-item">
                             <a href="{{ route('nationality.index') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
@@ -68,7 +68,7 @@
                                 <span class="hide-menu">المحافظات</span>
                             </a>
                         </li>
-                        
+
                         <li class="sidebar-item">
                             <a href="{{ route('ministry.index') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
@@ -178,7 +178,8 @@
                     </span>
                 </li>
                 <li class="sidebar-item mega-dropdown">
-                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <iconify-icon icon="solar:file-text-line-duotone" class="fs-6 aside-icon text-warning">
                         </iconify-icon>
                         <span class="hide-menu pe-1"> الشئون القانونية
@@ -283,7 +284,7 @@
                         <li class="sidebar-item">
                             <a href="{{ route('search.index') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
-                                <span class="hide-menu"> البحث 
+                                <span class="hide-menu"> البحث
                                 </span>
                             </a>
                         </li>
@@ -314,7 +315,8 @@
                 <!-- =================== -->
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <iconify-icon icon="solar:cpu-bolt-line-duotone" class="fs-6 aside-icon text-info">
                         </iconify-icon>
                         <span class="hide-menu pe-1"> عملاء الأقساط
@@ -348,7 +350,8 @@
                 <!-- المنتجات -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <iconify-icon icon="solar:book-2-line-duotone" class="fs-6 aside-icon text-success">
                         </iconify-icon>
                         <span class="hide-menu pe-1"> مخزن المعرض </span>
@@ -380,7 +383,8 @@
 -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <iconify-icon icon="solar:bedside-table-2-line-duotone" class="fs-6 aside-icon text-danger">
                         </iconify-icon>
                         <span class="hide-menu pe-1"> الشركات الموردة
@@ -459,7 +463,7 @@
                         <span class="hide-menu pe-1"> المنتجات
                         </span>
                     </a>
-                    
+
                 </li> -->
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -467,7 +471,8 @@
                     </span>
                 </li>
                 <li class="sidebar-item mega-dropdown">
-                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <iconify-icon icon="solar:lock-keyhole-line-duotone" class="fs-6 aside-icon text-warning">
                         </iconify-icon>
                         <span class="hide-menu pe-1">
@@ -555,7 +560,8 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link primary-hover-bg" href="" id="get-url" aria-expanded="false">
+                    <a class="sidebar-link sidebar-link primary-hover-bg" href="" id="get-url"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-primary-subtle rounded-1">
                             <iconify-icon icon="solar:screencast-2-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -580,7 +586,8 @@
                     <span class="hide-menu">Apps</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:smart-speaker-minimalistic-line-duotone" class="fs-6">
                             </iconify-icon>
@@ -640,7 +647,8 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-warning-subtle rounded-1">
                             <iconify-icon icon="solar:pie-chart-3-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -663,7 +671,8 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-danger-subtle rounded-1">
                             <iconify-icon icon="solar:user-circle-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -685,7 +694,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link indigo-hover-bg" href="../horizontal/app-email.html" aria-expanded="false">
+                    <a class="sidebar-link indigo-hover-bg" href="../horizontal/app-email.html"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-indigo-subtle rounded-1">
                             <iconify-icon icon="solar:mailbox-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -693,7 +703,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link info-hover-bg" href="../horizontal/app-calendar.html" aria-expanded="false">
+                    <a class="sidebar-link info-hover-bg" href="../horizontal/app-calendar.html"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-info-subtle rounded-1">
                             <iconify-icon icon="solar:calendar-add-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -701,7 +712,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link success-hover-bg" href="../horizontal/app-kanban.html" aria-expanded="false">
+                    <a class="sidebar-link success-hover-bg" href="../horizontal/app-kanban.html"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:window-frame-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -709,7 +721,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link primary-hover-bg" href="../horizontal/app-chat.html" aria-expanded="false">
+                    <a class="sidebar-link primary-hover-bg" href="../horizontal/app-chat.html"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-primary-subtle rounded-1">
                             <iconify-icon icon="solar:chat-round-unread-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -745,7 +758,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link danger-hover-bg" href="../horizontal/app-invoice.html" aria-expanded="false">
+                    <a class="sidebar-link danger-hover-bg" href="../horizontal/app-invoice.html"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-danger-subtle rounded-1">
                             <iconify-icon icon="solar:file-text-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -856,7 +870,8 @@
                 <!-- Teachers -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:lightbulb-bolt-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -882,7 +897,8 @@
                 <!-- Exam -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-warning-subtle rounded-1">
                             <iconify-icon icon="solar:file-text-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -914,7 +930,8 @@
                 <!-- Students -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-danger-subtle rounded-1">
                             <iconify-icon icon="solar:square-academic-cap-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -974,7 +991,8 @@
                 <!-- UI Elements -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-primary-subtle rounded-1">
                             <iconify-icon icon="solar:cpu-bolt-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1168,7 +1186,8 @@
                 <!-- Components -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:command-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1281,7 +1300,8 @@
                 <!-- Form Input -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:ruler-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1349,7 +1369,8 @@
                 <!-- Form Addons -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-primary-subtle rounded-1">
                             <iconify-icon icon="solar:qr-code-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1381,7 +1402,8 @@
                 <!-- Form Validation -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-indigo-subtle rounded-1">
                             <iconify-icon icon="solar:danger-circle-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1407,7 +1429,8 @@
                 <!-- Form Pickers -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow success-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:document-add-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1445,7 +1468,8 @@
                 <!-- Form Editor -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-indigo-subtle rounded-1">
                             <iconify-icon icon="solar:dna-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1474,7 +1498,8 @@
                     <a class="sidebar-link sidebar-link warning-hover-bg" href="../horizontal/form-wizard.html"
                         aria-expanded="false">
                         <span class="aside-icon p-2 bg-warning-subtle rounded-1">
-                            <iconify-icon icon="solar:password-minimalistic-line-duotone" class="fs-6"></iconify-icon>
+                            <iconify-icon icon="solar:password-minimalistic-line-duotone"
+                                class="fs-6"></iconify-icon>
                         </span>
                         <span class="hide-menu ps-1">Form Wizard</span>
                     </a>
@@ -1497,7 +1522,8 @@
                 <!-- Tables -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Tables</span>
                 </li>
 
@@ -1505,9 +1531,11 @@
                 <!-- Bootstrap Table -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-indigo-subtle rounded-1">
-                            <iconify-icon icon="solar:sidebar-minimalistic-line-duotone" class="fs-6"></iconify-icon>
+                            <iconify-icon icon="solar:sidebar-minimalistic-line-duotone"
+                                class="fs-6"></iconify-icon>
                         </span>
                         <span class="hide-menu ps-1">Bootstrap Table</span>
                     </a>
@@ -1546,7 +1574,8 @@
                 <!-- Datatable -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow info-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow info-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-info-subtle rounded-1">
                             <iconify-icon icon="solar:tablet-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1580,7 +1609,8 @@
                 <!-- Charts -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Charts</span>
                 </li>
 
@@ -1588,9 +1618,11 @@
                 <!-- Apex Chart -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow primary-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-primary-subtle rounded-1">
-                            <iconify-icon icon="solar:dropper-minimalistic-2-line-duotone" class="fs-6"></iconify-icon>
+                            <iconify-icon icon="solar:dropper-minimalistic-2-line-duotone"
+                                class="fs-6"></iconify-icon>
                         </span>
                         <span class="hide-menu ps-1">Apex Charts</span>
                     </a>
@@ -1643,12 +1675,14 @@
                 <!-- Sample Pages -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Sample Pages</span>
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-danger-subtle rounded-1">
                             <iconify-icon icon="solar:file-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1698,7 +1732,8 @@
                 <!-- Icons -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Icons</span>
                 </li>
 
@@ -1733,13 +1768,14 @@
                 <!-- Auth -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Auth</span>
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link success-hover-bg" href="../horizontal/authentication-error.html"
-                        aria-expanded="false">
+                    <a class="sidebar-link sidebar-link success-hover-bg"
+                        href="../horizontal/authentication-error.html" aria-expanded="false">
                         <span class="aside-icon p-2 bg-success-subtle rounded-1">
                             <iconify-icon icon="solar:danger-circle-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1747,7 +1783,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-warning-subtle rounded-1">
                             <iconify-icon icon="solar:login-2-line-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1770,7 +1807,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow danger-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-danger-subtle rounded-1">
                             <iconify-icon icon="solar:user-plus-broken" class="fs-6"></iconify-icon>
                         </span>
@@ -1793,7 +1831,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow indigo-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-indigo-subtle rounded-1">
                             <iconify-icon icon="solar:refresh-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
@@ -1816,7 +1855,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow info-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link has-arrow info-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-info-subtle rounded-1">
                             <iconify-icon icon="solar:magnifer-zoom-in-linear" class="fs-6"></iconify-icon>
                         </span>
@@ -1852,7 +1892,8 @@
                 <!-- Documentation -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Documentation</span>
                 </li>
 
@@ -1870,14 +1911,16 @@
                 <!-- OTHER -->
                 <!-- ============================= -->
                 <li class="nav-small-cap">
-                    <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
+                    <iconify-icon icon="solar:menu-dots-bold-duotone"
+                        class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Other</span>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow secondary-hover-bg" href="javascript:void(0)"
                         aria-expanded="false">
                         <span class="aside-icon p-2 bg-secondary-subtle rounded-1">
-                            <iconify-icon icon="solar:layers-minimalistic-line-duotone" class="fs-6"></iconify-icon>
+                            <iconify-icon icon="solar:layers-minimalistic-line-duotone"
+                                class="fs-6"></iconify-icon>
                         </span>
                         <span class="hide-menu ps-1">Menu Level</span>
                     </a>
@@ -1901,7 +1944,8 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <a class="sidebar-link has-arrow" href="javascript:void(0)"
+                                        aria-expanded="false">
                                         <span class="sidebar-icon"></span>
                                         <span class="hide-menu">Level 2.1</span>
                                     </a>
@@ -1976,7 +2020,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link info-hover-bg" href="javascript:void(0)" aria-expanded="false">
+                    <a class="sidebar-link sidebar-link info-hover-bg" href="javascript:void(0)"
+                        aria-expanded="false">
                         <span class="aside-icon p-2 bg-info-subtle rounded-1">
                             <iconify-icon icon="solar:star-line-duotone" class="fs-6"></iconify-icon>
                         </span>

@@ -180,19 +180,10 @@ if (!function_exists('send_sms_code')) {
 
 function UploadImage($path, $image, $model, $file)
 {
-    // dd($file);
     // Ensure the directory exists
-    if (!file_exists(public_path($path))) {
-        mkdir(public_path($path), 0755, true);
-    }
-
-    if (!$file->isValid()) {
-        dd("dd");
-        throw new Exception('Uploaded file is invalid.');
-    }
-
-
-    dd('ee');
+    // if (!file_exists($path)) {
+    //     mkdir($path, 0755, true);
+    // }
 
     // Generate a unique filename
     $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();

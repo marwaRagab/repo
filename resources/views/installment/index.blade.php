@@ -97,12 +97,14 @@
                             <td>
 
                                 <div class="d-block">
+{{--                                    @if(auth()->user()->hasPermission('delete_products'))--}}
                                     <div>
                                         <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
                                             href="{{ route('installment.show-installment', ['id' => $item->id]) }}">
                                             عرض التفاصيل
                                         </a>
                                     </div>
+{{--                                    @endif--}}
                                     <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
                                         data-bs-toggle="modal" data-bs-target="#open-file">
                                         تعديل الرابط </button>

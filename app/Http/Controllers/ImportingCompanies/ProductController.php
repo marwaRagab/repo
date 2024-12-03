@@ -1,15 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\ImportingCompanies;
-ini_set('memory_limit', '1000M');
+
 use App\Http\Controllers\Controller;
 use App\Interfaces\ImportingCompanies\ProductRepositoryInterface;
 use App\Models\ImportingCompanies\Product;
 use Illuminate\Http\Request;
 // use App\Http\Requests\ProductsRequest;
-
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +23,7 @@ class ProductController extends Controller
         $data = $this->productRepository->index();
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم الدخول لصفحة المنتجات ";
             $this->log($user_id, $message);
         }
@@ -38,7 +35,7 @@ class ProductController extends Controller
         $data = $this->productRepository->store($request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم اضافة منتج {$request->model} ";
             $this->log($user_id, $message);
         }
@@ -51,7 +48,7 @@ class ProductController extends Controller
         $data = $this->productRepository->update($id, $request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم تحديث منتج {$request->model} ";
             $this->log($user_id, $message);
         }
@@ -64,12 +61,18 @@ class ProductController extends Controller
         $data = $this->productRepository->destroy($id);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم حذف منتج";
             $this->log($user_id, $message);
         }
 
         return $data;
+    }
+
+    public function getProductsData()
+    {
+        return $this->productRepository->getProductsData();
+
     }
 
     public function getProductDetailsByNumber(Request $request)
@@ -87,7 +90,7 @@ class ProductController extends Controller
                 $query->where('available', 1);
             }])->where('number_type', 1)->where('number', $request->barcode)->first();
         } elseif ($request->has('serial')) {
-            $product =  Product::with(['productsItems' => function ($query) {
+            $product = Product::with(['productsItems' => function ($query) {
                 $query->where('available', 1);
             }])->where('number_type', 2)->where('number', $request->serial)->first();
             // Product::where('serial_number', $request->serial)->first();
@@ -114,7 +117,8 @@ class ProductController extends Controller
         }
     }
 
-    public function print_all(){
+    public function print_all()
+    {
         return $this->productRepository->print_all();
     }
 }

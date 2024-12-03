@@ -193,7 +193,7 @@
                 <div class="mb-3">
                     <label for="fileUpload" class="form-label">إرفاق صورة أو فيديو</label>
                     <input type="file" id="fileUpload" name="file" class="form-control"
-                        accept="image/*,video/*,application/pdf" required>
+                        accept="image/*,video/*,application/pdf">
                     <small class="form-text text-muted">يجب أن يكون حجم الملف أقل من 10 ميجا.</small>
                 </div>
 

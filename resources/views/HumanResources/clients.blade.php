@@ -343,12 +343,12 @@
 
                                 <div>
                                     <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                                         href="{{ route('clients.show', $client->id)}}"
-                                           >
+                                       href="{{ route('clients.show', $client->id)}}"
+                                    >
                                         تعديل
                                     </a>
                                 </div>
-                                    <!-- sample modal content -->
+                                <!-- sample modal content -->
                                 <div>
                                     <form action="{{ route('clients.delete', $client->id) }}" method="POST"
                                           onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟');">

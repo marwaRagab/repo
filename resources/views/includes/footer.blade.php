@@ -8,44 +8,48 @@
 <script src="{{ asset('assets/js/theme/sidebarmenu.js') }}"></script>
 <script src="{{ asset('assets/js/theme/feather.min.js') }}"></script>
 
+<!-- solar icons -->
+
+
 <script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
 <script>
     $('.leadership-carousel').owlCarousel({
-    //   loop: true,
-      nav: true,
-      dots: true,
-      margin: 30,
-      rtl: true,
-      responsive: {
-        0: {
-          items: 1
+        //   loop: true,
+        nav: true,
+        dots: true,
+        margin: 30,
+        rtl: true,
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 3
+            },
+            992: {
+                items: 4
+            },
+            1024: {
+                items: 5
+            }
         },
-        600: {
-          items: 3
-        },
-        992: {
-          items: 4
-        },
-        1024: {
-          items: 5
-        }
-      }, 
-      navText:["<div class='btn btn-primary mx-2'>السابق</div>","<div class='btn btn-primary mx-2'>التالي</div>"],
+        navText: ["<div class='btn btn-primary mx-2'>السابق</div>",
+            "<div class='btn btn-primary mx-2'>التالي</div>"
+        ],
 
     });
     $('.owl-carousel').find('.owl-nav').removeClass('disabled');
-
-</script>   
-
-<!-- solar icons -->
+</script>
 
 
 
 <!-- solar icons -->
+
 <script src="{{ asset('assets/js/iconify-icon.min.js') }}"></script>
 <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/js/datatable/datatable.init.js') }}"></script>
 <script src="{{ asset('assets/js/datatable/datatable-advanced.init.js') }}"></script>
+
 
 </body>
 
