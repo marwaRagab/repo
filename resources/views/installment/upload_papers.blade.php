@@ -65,7 +65,8 @@
                     <label for="productReceiptImage" class="form-label">صورة استلام المنتجات</label>
                     <div class="d-flex align-items-center">
                         <input type="file" class="form-control" name="prods_recieved_img" id="productReceiptImage">
-                        <a type="button"  href="" class="btn btn-secondary me-3 ">  صورة استلام المنتجات </a>
+                        <a type="button"  href="{{url('installment/print_invoice/'.$item['order_id'])}}" class="btn btn-secondary me-3 ">  صورة استلام المنتجات </a>
+
 
                     </div>
                 </div>

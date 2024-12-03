@@ -19,13 +19,29 @@
         src: url(../fonts/tabler-icons/fonts/tabler-icons.svg#tabler-icons) format("svg")
     }
 }
-
+.notification-img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+}
 body {
     direction: rtl;
     font-family: "Noto Kufi Arabic", sans-serif;
 
 }
-
+.notification-tab{
+    display: flex
+    ;
+        align-items: center;
+        justify-content: center;
+        background: #f2f3f4;
+        padding: 2rem;
+        margin-top: 2rem;
+        border-radius: 1rem;
+}
+.notification-border{
+    border-left: 1px solid #ddd;
+}
 .logo {
     width: 100%;
     height: 75px;

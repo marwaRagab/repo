@@ -2,17 +2,16 @@
 
 namespace App\Repositories\ImportingCompanies;
 
-use App\Models\ImportingCompanies\Product;
-use App\Models\ProductClass;
-use App\Models\Mark;
+use App\Interfaces\ImportingCompanies\ProductRepositoryInterface;
 use App\Models\Company;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Log;
+use App\Models\ImportingCompanies\Product;
+use App\Models\Mark;
+use App\Models\ProductClass;
+use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Http\Request;
 
-use App\Http\Requests\ProductsRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Interfaces\ImportingCompanies\ProductRepositoryInterface;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -26,11 +25,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function index()
     {
-        $products = Product::with('mark','class')->get();
+        //   $products = Product::with('mark','class')->get();
 
-        $totalProducts = $products->count();
-        $totalNetPrice = $products->sum('net_price');
-        $totalPrice = $products->sum('price');
+        $totalPrice = Product::sum('price');
+        $totalNetPrice = Product::sum('net_price');
+        $totalProducts = Product::count();
 
         $Allcompany = $this->data['companies'];
         $classes = $this->data['classes'];
@@ -48,8 +47,32 @@ class ProductRepository implements ProductRepositoryInterface
         $view = 'importingCompanies/products/index2';
         return view(
             'layout',
-            compact('title', 'products', 'Allcompany', 'classes', 'marks', 'view', 'breadcrumb', 'totalProducts', 'totalNetPrice', 'totalPrice')
+            compact('title', 'Allcompany', 'classes', 'marks', 'view', 'breadcrumb', 'totalProducts', 'totalNetPrice', 'totalPrice')
         );
+    }
+
+    public function getProductsData()
+    {
+
+        $products = Product::with('mark', 'class')->select(['id', 'mark_id', 'class_id', 'model', 'number', 'net_price', 'price']);
+
+        return DataTables::of($products)
+            ->addColumn('mark', function ($product) {
+                return $product->mark->name_ar ?? '';
+            })
+            ->addColumn('class', function ($product) {
+                return $product->class->name_ar ?? '';
+            })
+            ->addColumn('actions', function ($product) {
+                $Allcompany = $this->data['companies'];
+                $classes = $this->data['classes'];
+                $marks = $this->data['marks'];
+
+                return view('importingCompanies.products.partials.actions', compact('product', 'Allcompany', 'classes', 'marks'))->render();
+            })
+            ->rawColumns(['actions']) // Actions column may contain raw HTML.
+            ->addIndexColumn()
+            ->make(true);
     }
 
     public function store($request)
@@ -64,7 +87,7 @@ class ProductRepository implements ProductRepositoryInterface
             'number_type' => 'required|in:0,1',
             'barcode_number' => 'nullable|string|max:255',
             'serial' => 'nullable|string|max:255',
-            'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048'
+            'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
 
         $data = new Product();
@@ -106,7 +129,7 @@ class ProductRepository implements ProductRepositoryInterface
             'number_type' => 'nullable|in:0,1',
             'barcode_number' => 'nullable|string|max:255',
             'serial' => 'nullable|string|max:255',
-            'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048'
+            'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
 
         $data = Product::findOrFail($id);
@@ -145,12 +168,12 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function print_all()
     {
-        $products = Product::with('mark','class','productsItems')
-        ->whereHas('productsItems', function ($query) {
-            $query->groupBy('product_id'); 
-        })
-        ->get();
-    
+        $products = Product::with('mark', 'class', 'productsItems')
+            ->whereHas('productsItems', function ($query) {
+                $query->groupBy('product_id');
+            })
+            ->get();
+
         $title = "المنتجات";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " ";
