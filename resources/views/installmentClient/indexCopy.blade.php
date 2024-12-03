@@ -1371,6 +1371,7 @@
                                 // Check if car.image exists
                                 if (issue.image) {
                                     const isPDF = issue.image.endsWith('.pdf');
+                                    console.log(isPDF);
                                     if (isPDF) {
                                         // Display PDF in an embedded viewer
                                         row += `
