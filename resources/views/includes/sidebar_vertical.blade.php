@@ -1443,9 +1443,12 @@
                 <p class="mb-0">Admin</p>
               </div>
             </div>
-            <a href="../horizontal/authentication-login.html" class="position-relative" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Logout">
-              <iconify-icon icon="solar:logout-line-duotone" class="fs-8"></iconify-icon>
-            </a>
+
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                  @csrf
+                <button type="submit" class="btn btn-link">Logout</button>
+            </form>
+          
           </div>
         </div>
       </div>
