@@ -199,9 +199,9 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
                         $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
                         $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
                         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
-                        $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert' ])->first();
+                        $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert','date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
                         $update_note['date_end']= date(' Y-m-d H:i:s');
-                        $update_note['times_type_id']=$request->id_time_type_new;
+                     //   $update_note['times_type_id']=$request->id_time_type_new;
                         $update_note['updated_at']= date('Y-m-d H:i:s');
                         $data_military['status']='images';
                         $data_military['a3lan_jalsa_done_date']=$request->jalasat_alert_date;
