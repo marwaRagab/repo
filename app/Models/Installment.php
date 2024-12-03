@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Military_affairs\Military_affair;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Installment extends Model
 {
     use HasFactory,SoftDeletes;
@@ -76,6 +78,22 @@ class Installment extends Model
 
         return Installment_month::where(['installment_id'=>$this->id,'status' =>'not_done', 'installment_type' =>'installment'])->where('date','<',date('Y-m-d'))->count();
 
+    }
+
+    // public function order()
+    // {
+    //     return Order::where(['client_id'=>$this->client_id])->get();
+    // }
+
+    // public function orders()
+    // {
+    //     // dd($this->belongsTo( Order::class, 'client_id', 'client_id'));
+    //     return $this->belongsTo( Order::class, 'client_id', 'client_id');
+    // }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'client_id', 'client_id');
     }
 
 
