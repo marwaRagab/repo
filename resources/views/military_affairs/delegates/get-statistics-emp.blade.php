@@ -9,6 +9,7 @@
             <div class="form-group col-md-5">
                 <label for="durationSelect">اختر المدة</label>
                 <select name="month_range" id="durationSelect" class="form-control">
+                    <option value="0"> اختر المدة</option>
                     <option value="3">آخر 3 شهور</option>
                     <option value="6">آخر 6 شهور</option>
                     <option value="9">آخر 9 شهور</option>
@@ -36,12 +37,12 @@
             <tbody>
                 @foreach ($statistics as $index => $stat)
                     <tr>
-                        <td>{{ (int)$index + 1 }}</td>
+                        <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $stat['department'] }}</td>
                         <td>{{ $stat['count'] }}</td>
                         <td>
-                            @if ($stat['count'] > 0)
-                                {{ $stat['average'] / $stat['count'] }}
+                            @if ($stat['average'] > 0)
+                                {{ $stat['average'] }}
                             @else
                                 0
                             @endif

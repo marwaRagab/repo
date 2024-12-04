@@ -242,6 +242,7 @@ class DelegatesController extends Controller
             ->get();
 
         $departments = [
+            
             'open_file' => 'فتح ملف',
             'execute_alert' => 'إعلان تنفيذ',
             'images' => 'الصور',
@@ -260,7 +261,7 @@ class DelegatesController extends Controller
             $noteCountDays = $this->countNotesType($user_id, $key, []);
         
             // Calculate the average (you can adjust this calculation as needed)
-            $average = $countDays > 0 ? $count / $countDays : 0;
+            $average = $count > 0 ? $countDays / $count : 0;
         
             $statistics[$key] = [
                 'department' => $name,
@@ -282,83 +283,83 @@ class DelegatesController extends Controller
     }
     
     public function countFilesType($id, $type, $where)
-{
-    $baseQuery = DB::table('military_affairs')
-        ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
-        ->join('clients', 'installment.client_id', '=', 'clients.id')
-        ->join('military_affairs_deligations', 'military_affairs.id', '=', 'military_affairs_deligations.military_affairs_id')
-        ->where('military_affairs_deligations.emp_id', $id)
-        ->where('military_affairs.archived', 0)
-        ->where('installment.finished', 0);
+    {
+        $baseQuery = DB::table('military_affairs')
+            ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
+            ->join('clients', 'installment.client_id', '=', 'clients.id')
+            ->join('military_affairs_deligations', 'military_affairs.id', '=', 'military_affairs_deligations.military_affairs_id')
+            ->where('military_affairs_deligations.emp_id', $id)
+            ->where('military_affairs.archived', 0)
+            ->where('installment.finished', 0);
 
-    switch ($type) {
-        case 'open_file':
-            $baseQuery->whereNotNull('military_affairs_deligations.open_file_date')
-                ->whereNull('end_date')
-                ->where('military_affairs.status', 'military');
-            break;
-        case 'execute_alert':
-            $baseQuery->whereNotNull('execute_date')
-                ->where('military_affairs.status', 'execute_alert')
-                ->where('military_affairs.jalasat_alert_status', '!=', 'accepted')
-                ->whereNull('end_date');
-            break;
-        // Add similar conditions for other types as needed
-    }
-
-    return $baseQuery->where($where)->count();
-}
-
-public function countNotesType($id, $type, $where2)
-{
-    $count = DB::table('military_affairs')
-        ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
-        ->join('clients', 'installment.client_id', '=', 'clients.id')
-        ->join('military_affairs_notes', 'military_affairs.id', '=', 'military_affairs_notes.military_affairs_id')
-        ->where('military_affairs_notes.user_id', $id)
-        ->whereIn('military_affairs_notes.replay', ['note', 'answered', 'refused'])
-        ->where('military_affairs_notes.cat2', $type)
-        ->where('military_affairs.archived', 0)
-        ->where('installment.finished', 0)
-        ->count();
-
-    return $count ?: 0; // Return 0 if count is null
-}
-
-public function getCountDays($emp_id, $type, $where2)
-{
-    $items = DB::table('military_affairs')
-        ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
-        ->join('clients', 'installment.client_id', '=', 'clients.id')
-        ->join('military_affairs_deligations', 'military_affairs.id', '=', 'military_affairs_deligations.military_affairs_id')
-        ->whereNull('military_affairs_deligations.end_date')
-        ->where('military_affairs_deligations.emp_id', $emp_id)
-        ->select('military_affairs_deligations.*', 'clients.job_type')
-        ->get();
-
-    $totalDays = 0;
-    $currentTime = now();
-
-    foreach ($items as $item) {
-        $dateField = match ($type) {
-            'open_file' => $item->open_file_date,
-            'execute_alert' => $item->execute_date,
-            'images' => $item->image_date,
-            'case_proof' => $item->case_proof_date,
-            'Military_certificate' => $item->certificate_date,
-            'stop_travel' => $item->travel_date,
-            'stop_car' => $item->car_date,
-            'stop_bank' => $item->bank_date,
-            'stop_salary' => $item->salary_date,
-            default => $item->assign_date,
-        };
-
-        if ($dateField && !$item->end_date) {
-            $totalDays += Carbon::createFromTimestamp($dateField)->diffInDays($currentTime);
+        switch ($type) {
+            case 'open_file':
+                $baseQuery->whereNotNull('military_affairs_deligations.open_file_date')
+                    ->whereNull('end_date')
+                    ->where('military_affairs.status', 'military');
+                break;
+            case 'execute_alert':
+                $baseQuery->whereNotNull('execute_date')
+                    ->where('military_affairs.status', 'execute_alert')
+                    ->where('military_affairs.jalasat_alert_status', '!=', 'accepted')
+                    ->whereNull('end_date');
+                break;
+            // Add similar conditions for other types as needed
         }
+
+        return $baseQuery->where($where)->count();
     }
 
-    return $totalDays;
-}
+    public function countNotesType($id, $type, $where2)
+    {
+        $count = DB::table('military_affairs')
+            ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
+            ->join('clients', 'installment.client_id', '=', 'clients.id')
+            ->join('military_affairs_notes', 'military_affairs.id', '=', 'military_affairs_notes.military_affairs_id')
+            ->where('military_affairs_notes.created_by', $id)
+            ->whereIn('military_affairs_notes.type', ['note', 'answered', 'refused'])
+            ->where('military_affairs_notes.cat2', $type)
+            ->where('military_affairs.archived', 0)
+            ->where('installment.finished', 0)
+            ->count();
+
+        return $count ?: 0; // Return 0 if count is null
+    }
+
+    public function getCountDays($emp_id, $type, $where2)
+    {
+        $items = DB::table('military_affairs')
+            ->join('installment', 'military_affairs.installment_id', '=', 'installment.id')
+            ->join('clients', 'installment.client_id', '=', 'clients.id')
+            ->join('military_affairs_deligations', 'military_affairs.id', '=', 'military_affairs_deligations.military_affairs_id')
+            ->whereNull('military_affairs_deligations.end_date')
+            ->where('military_affairs_deligations.emp_id', $emp_id)
+            ->select('military_affairs_deligations.*', 'clients.job_type')
+            ->get();
+
+        $totalDays = 0;
+        $currentTime = now();
+        
+        foreach ($items as $item) {
+            $dateField = match ($type) {
+                'open_file' => $item->open_file_date,
+                'execute_alert' => $item->execute_date,
+                'images' => $item->image_date,
+                'case_proof' => $item->case_proof_date,
+                'Military_certificate' => $item->certificate_date,
+                'stop_travel' => $item->travel_date,
+                'stop_car' => $item->car_date,
+                'stop_bank' => $item->bank_date,
+                'stop_salary' => $item->salary_date,
+                default => $item->assign_date,
+            };
+
+            if ($dateField && !$item->end_date) {
+                $totalDays += Carbon::createFromTimestamp($dateField)->diffInDays($currentTime);
+            }
+        }
+
+        return $totalDays;
+    }
 
 }
