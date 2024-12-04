@@ -390,6 +390,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/installments/search', [InstallmentClientController::class, 'search'])->name('installments.search');
     Route::post('/check-civil-number', [InstallmentClientController::class, 'checkCivilNumber'])->name('checkCivilNumber');
+    Route::post('/check-civil-number-accept', [InstallmentClientController::class, 'checkCivilNumber_accept'])->name('checkCivilNumber_accept');
+
 
     // فورم التقديم ف المعاملات المقدمة
     Route::get('Aksat/convert_approved/{id}', [InstallmentClientController::class, 'convert_approved'])->name('installment.convert_approved');
