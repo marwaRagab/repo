@@ -93,6 +93,7 @@ class LoginController extends Controller
             Auth::login($user); // Log the user in
             // $user->device_token = $request->device_token;
             $user->token = $token; //->token;
+            $user->on = 1;
             $user->save();
             $success['token'] = $token; //->token;
             $success['user'] = $user;
@@ -102,11 +103,11 @@ class LoginController extends Controller
             //        $user = Auth::user();
       Auth::user()->id;
 
-        $role = Role::findOrFail($user->role_id);
+            $role = Role::findOrFail($user->role_id);
 
-        $permission_ids = $role->permissions->pluck('id')->toArray(); // Get IDs of the permissions
+            $permission_ids = $role->permissions->pluck('id')->toArray(); // Get IDs of the permissions
 //        dd($permission_ids);
-        $allPermissions = Permission::whereIn('id', $permission_ids)->with('parent')->get();
+            $allPermissions = Permission::whereIn('id', $permission_ids)->with('parent')->get();
 //            dd($allPermissions);
 //            session()->put('user_permission', $allPermissions);
             // Create an array to store concatenated titles
@@ -162,7 +163,6 @@ class LoginController extends Controller
     }
     public function reset_password(Request $request)
     {
-
 
         $messages = [
             'username.required' => 'اسم المستخدم  مطلوب.',
@@ -272,6 +272,9 @@ class LoginController extends Controller
         // Auth::user()->tokens()->delete();
         // // $request->user()->tokens()->delete();
         // return $this->respondSuccess(null, trans('تسجيل خروج'));
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->on = 0;
+        $user->save();
 
         Auth::logout();
         return redirect('/login');

@@ -14,7 +14,7 @@ class Problem extends Model
 {
     use HasFactory;
 
-    protected $table = 'prev_table_problem_solving';
+    protected $table = 'problem_solving';
     protected $fillable = ['installment_id', 'title', 'link', 'descr', 'file', 'read', 'status', 'user_id'];
 
     public function user()

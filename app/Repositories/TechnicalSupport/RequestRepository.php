@@ -3,11 +3,11 @@
 namespace App\Repositories\TechnicalSupport;
 
 use App\Interfaces\TechnicalSupport\RequestRepositoryInterface;
-use App\Models\Notification;
 use App\Models\TechnicalSupport\RequestReply;
 use App\Models\TechnicalSupport\SupportRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class RequestRepository implements RequestRepositoryInterface
 {
@@ -18,8 +18,8 @@ class RequestRepository implements RequestRepositoryInterface
 
         $data = ($status === 'all')
 
-            ? SupportRequest::with('user')->orderBy('created_at', 'desc')->get()
-            : SupportRequest::with('user')->where('status', $status)
+        ? SupportRequest::with('user')->orderBy('created_at', 'desc')->get()
+        : SupportRequest::with('user')->where('status', $status)
             ->orderBy('created_at', 'desc')->get();
 
         $statusMapping = [
@@ -90,25 +90,35 @@ class RequestRepository implements RequestRepositoryInterface
     public function store($request)
     {
 
-        $request->validate([
-            'installement_id' => 'required|exists:installment,id',
+        $messages = [
+            'title.required' => 'عنوان المشكلة اجباري.',
+            'link.required' => 'رابط المشكلة اجباري',
+            'descr.required' => 'وصف المشكلة اجباري',
+        ];
+        $validator = Validator::make($request->all(), [
+            //'installement_id' => 'required|exists:installment,id',
             'title' => 'required|string|max:255',
             'link' => 'required|string|max:255',
             'descr' => 'required|string|max:255',
             'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
-        ]);
+        ], $messages);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
 
-        $data = new SupportRequest();
-        $data->installement_id = $request->installement_id;
-        $data->title = $request->title;
-        $data->link = $request->link;
-        $data->descr = $request->descr;
-        if ($request->hasFile('file')) {
-            $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            $data = new SupportRequest();
+            $data->installement_id = $request->installement_id;
+            $data->title = $request->title;
+            $data->link = $request->link;
+            $data->descr = $request->descr;
+            if ($request->hasFile('file')) {
+                $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            }
+            $data->user_id = Auth::user()->id;
+            $data->save();
         }
-        $data->user_id = Auth::user()->id;
-        $data->save();
-
         // $notification = new Notification();
         // $notification->title = $request->title;
         // $notification->descr = $request->descr;
@@ -140,7 +150,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function addReply($request)
     {
         $request->validate([
-            'problem_id' => 'required|exists:prev_table_requests,id',
+            'problem_id' => 'required|exists:requests,id',
             'descr' => 'required|string|max:255',
             'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
         ]);
