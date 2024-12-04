@@ -1,17 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
@@ -48,20 +34,19 @@
                             <td class="whitespace-nowrap  py-3 sm:px-5">{{ $loop->iteration }}</td>
                             <td class="whitespace-nowrap  py-3 font-medium text-slate-700 dark:text-navy-100 lg:px-2">
                                 {{ $item->product->model }}</td>
-                             @if ($item->product->class_id != 63)
+                            @if ($item->product->class_id != 63)
                                 <td class="whitespace-nowrap py-3 sm:px-5">
                                     {{ $item->product->number }}
                                 </td>
-                                @else
+                            @else
                                 <td class="whitespace-nowrap py-3 sm:px-5">
                                     {{ $item->serial_number }}
                                 </td>
-                                @endif
+                            @endif
                             <td class="whitespace-nowrap py-3 sm:px-5">
                                 <form method="POST" action="{{ route('transferProduct.addToCart') }}">
                                     @csrf
-                                    <input type="hidden" name="product_item_id"
-                                        value="{{ $item->id }}">
+                                    <input type="hidden" name="product_item_id" value="{{ $item->id }}">
                                     <button type="submit" class="btn bg-success text-white waves-effect">نقل</button>
                                 </form>
                             </td>

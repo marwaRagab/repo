@@ -1,61 +1,48 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">الفروع</h4>
-        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal" 
-    data-bs-target="#bs-example-modal-md">
-    أضف فرع
-</button>
+        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal"
+            data-bs-target="#bs-example-modal-md">
+            أضف فرع
+        </button>
 
-<!-- Modal content -->
-<div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">أضف فرع</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="branchForm" action="{{ route('branch.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateBranchForm(event)">
-                @csrf
-            <div class="modal-body">
-                
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="input1">الإسم بالعربية</label>
-                            <input type="text" class="form-control mb-2" id="input1" name="name_ar">
-                            <small id="input1-error" class="text-danger"></small>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2">الإسم بالإنجليزية</label>
-                            <input type="text" class="form-control mb-2" id="input2" name="name_en">
-                            <small id="input2-error" class="text-danger"></small>
-                        </div>
+        <!-- Modal content -->
+        <div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">أضف فرع</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-            </div>
-            <div class="modal-footer d-flex">
-                <button type="submit" form="branchForm" class="btn btn-primary">حفظ</button>
-                <button type="button" class="btn bg-danger-subtle text-danger waves-effect" data-bs-dismiss="modal">الغاء</button>
-            </div>
-        </form>
+                    <form id="branchForm" action="{{ route('branch.store') }}" method="POST"
+                        enctype="multipart/form-data" onsubmit="return validateBranchForm(event)">
+                        @csrf
+                        <div class="modal-body">
 
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="input1">الإسم بالعربية</label>
+                                    <input type="text" class="form-control mb-2" id="input1" name="name_ar">
+                                    <small id="input1-error" class="text-danger"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="input2">الإسم بالإنجليزية</label>
+                                    <input type="text" class="form-control mb-2" id="input2" name="name_en">
+                                    <small id="input2-error" class="text-danger"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex">
+                            <button type="submit" form="branchForm" class="btn btn-primary">حفظ</button>
+                            <button type="button" class="btn bg-danger-subtle text-danger waves-effect"
+                                data-bs-dismiss="modal">الغاء</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
@@ -157,7 +144,7 @@
         const nameEnInput = document.getElementById('input2');
         const nameArError = document.getElementById('input1-error');
         const nameEnError = document.getElementById('input2-error');
-        
+
         let isValid = true;
 
         // Clear previous error messages
@@ -205,8 +192,10 @@
                     .then(data => {
                         console.log(data);
                         // Populate modal fields with fetched data
-                        document.getElementById('name_ar_e').value = data?.name_ar ??'لايوجد';
-                        document.getElementById('name_en_e').value = data?.name_en ??'لايوجد';
+                        document.getElementById('name_ar_e').value = data?.name_ar ??
+                            'لايوجد';
+                        document.getElementById('name_en_e').value = data?.name_en ??
+                            'لايوجد';
                         document.getElementById('editbranchForm').setAttribute('action',
                             `/branch/update/${itemId}`);
 
@@ -220,5 +209,3 @@
         });
     });
 </script>
-
-

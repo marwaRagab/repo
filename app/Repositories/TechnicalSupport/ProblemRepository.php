@@ -9,6 +9,7 @@ use App\Models\TechnicalSupport\ProblemReply;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
@@ -56,8 +57,12 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     public function show($id)
     {
-        $data = Problem::with('user')->findOrFail($id);
+        $pr = Problem::with('user')->where('id', $id)->first();
+        if ($pr == null) {
+            return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
 
+        }
+        $data = Problem::with('user')->findOrFail($id);
         $replies = ProblemReply::with('user')->where('problem_id', $id)->get();
 
         $statusMapping = [
@@ -88,24 +93,35 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function store($request)
     {
 
-        $request->validate([
-            'installement_id' => 'required|exists:installment,id',
+        $messages = [
+            'title.required' => 'عنوان المشكلة اجباري.',
+            'link.required' => 'رابط المشكلة اجباري',
+            'descr.required' => 'وصف المشكلة اجباري',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            //   'installement_id' => 'exists:installment,id',
             'title' => 'required|string|max:255',
             'link' => 'required|string|max:255',
             'descr' => 'required|string|max:255',
-            'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
-        ]);
-
-        $data = new Problem();
-        $data->installement_id = $request->installement_id;
-        $data->title = $request->title;
-        $data->link = $request->link;
-        $data->descr = $request->descr;
-        if ($request->hasFile('file')) {
-            $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            'file' => 'file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
+        ], $messages);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
+            $data = new Problem();
+            $data->installement_id = $request->installement_id;
+            $data->title = $request->title;
+            $data->link = $request->link;
+            $data->descr = $request->descr;
+            if ($request->hasFile('file')) {
+                $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            }
+            $data->user_id = Auth::user()->id;
+            $data->save();
         }
-        $data->user_id = Auth::user()->id;
-        $data->save();
 
         $support_users = User::where('support', 1)->get();
 
@@ -143,9 +159,9 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function addReply($request)
     {
         $request->validate([
-            'problem_id' => 'required|exists:problem_solving,id',
+            'problem_id' => 'required',
             'descr' => 'required|string|max:255',
-            'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
+            'file' => 'file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
         ]);
 
         $data = new ProblemReply();
@@ -157,16 +173,38 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data->user_id = Auth::user()->id;
         $data->save();
 
-        $notification = new Notification();
-        $notification->title = "تعليق جديد على مشكلة في الدعم الفني";
-        $notification->descr = $request->descr;
-        $notification->user_id = Auth::user()->id;
-        $notification->problem_id = $data->problem_id;
-        if ($request->hasFile('file')) {
+        if (Auth::user()->support == 1) {
+
+            $pr = Problem::with('user')->where('id', $request->problem_id)->first();
+            $notification = new Notification();
+            $notification->title = "تعليق جديد على مشكلة في الدعم الفني";
+            $notification->descr = $request->descr;
+            $notification->user_id = $pr->user_id;
+            $notification->problem_id = $data->problem_id;
+            /* if ($request->hasFile('file')) {
             $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+            }
+             */
+            $notification->created_at = now();
+            $notification->save();
+        } else {
+            $support_users = User::where('support', 1)->get();
+
+            foreach ($support_users as $one) {
+
+                $notification = new Notification();
+                $notification->title = 'تم اضافة مشكلة جديدة بالدعم الفني';
+                $notification->descr = '';
+                $notification->user_id = $one->id;
+                $notification->problem_id = $data->id;
+                if ($request->hasFile('file')) {
+                    $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+                }
+                $notification->created_at = now();
+                $notification->save();
+
+            }
         }
-        $notification->created_at = now();
-        $notification->save();
 
         return redirect()->route('supportProblem.show', ['id' => $request->problem_id])
             ->with('success', 'تم إضافة رد على المشكلة بنجاح');
