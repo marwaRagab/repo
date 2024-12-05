@@ -5,7 +5,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive pb-4">
-                <table id="all" class="table table-bordered table-striped border text-nowrap align-middle">
+                <table id="all-student" class="table table-bordered table-striped border text-nowrap align-middle">
                     <thead class="thead-dark">
                         <tr>
                           <th>م</th>

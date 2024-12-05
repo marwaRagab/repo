@@ -1,65 +1,52 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">المحافظات</h4>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                href="{{ route('region.index') }}">
-                المناطق </a>
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('region.index') }}">
+            المناطق </a>
         <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal"
-    data-bs-target="#bs-example-modal-md">
-    أضف محافظة
-</button>
+            data-bs-target="#bs-example-modal-md">
+            أضف محافظة
+        </button>
 
-<!-- sample modal content -->
-<div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">أضف محافظة</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="govForm" action="{{ route('government.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm(event)">
-                @csrf
-            <div class="modal-body">
-                
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="input1">الإسم بالعربية</label>
-                            <input type="text" class="form-control mb-2" id="input1" name="name_ar">
-                            <small id="input1-error" class="text-danger"></small>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2">الإسم بالإنجليزية</label>
-                            <input type="text" class="form-control mb-2" id="input2" name="name_en">
-                            <small id="input2-error" class="text-danger"></small>
-                        </div>
+        <!-- sample modal content -->
+        <div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myModalLabel">أضف محافظة</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-            </div>
-            <div class="modal-footer d-flex">
-                <button type="submit" form="govForm" class="btn btn-primary">حفظ</button>
-                <button type="button" class="btn bg-danger-subtle text-danger waves-effect" data-bs-dismiss="modal">
-                    الغاء
-                </button>
-            </div>
-        </form>
+                    <form id="govForm" action="{{ route('government.store') }}" method="POST"
+                        enctype="multipart/form-data" onsubmit="return validateForm(event)">
+                        @csrf
+                        <div class="modal-body">
 
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="input1">الإسم بالعربية</label>
+                                    <input type="text" class="form-control mb-2" id="input1" name="name_ar">
+                                    <small id="input1-error" class="text-danger"></small>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="input2">الإسم بالإنجليزية</label>
+                                    <input type="text" class="form-control mb-2" id="input2" name="name_en">
+                                    <small id="input2-error" class="text-danger"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex">
+                            <button type="submit" form="govForm" class="btn btn-primary">حفظ</button>
+                            <button type="button" class="btn bg-danger-subtle text-danger waves-effect"
+                                data-bs-dismiss="modal">
+                                الغاء
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
@@ -87,7 +74,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('region.filter', $item->id) }}" target="_blank">
-                                    {{$item->region_count}}
+                                    {{ $item->region_count }}
                                 </a>
 
                             </td>
@@ -103,7 +90,8 @@
                                         data-bs-target="#bs-example-modal-edit" data-id ="{{ $item->id }}">
                                         <i class="ti ti-pencil fs-5"></i>
                                     </a>
-                                    <a href="{{ route('government.destroy', $item->id) }}" class="text-dark delete ms-2">
+                                    <a href="{{ route('government.destroy', $item->id) }}"
+                                        class="text-dark delete ms-2">
                                         <i class="ti ti-trash fs-5"></i>
                                     </a>
                                     <div id="bs-example-modal-edit" class="modal fade" tabindex="-1"
@@ -169,7 +157,7 @@
         const input2 = document.getElementById('input2');
         const input1Error = document.getElementById('input1-error');
         const input2Error = document.getElementById('input2-error');
-        
+
         let isValid = true;
 
         // Clear previous error messages
@@ -215,8 +203,10 @@
                     .then(data => {
                         console.log(data);
                         // Populate modal fields with fetched data
-                        document.getElementById('name_ar_e').value = data?.name_ar ??'لايوجد';
-                        document.getElementById('name_en_e').value = data?.name_en ??'لايوجد';
+                        document.getElementById('name_ar_e').value = data?.name_ar ??
+                            'لايوجد';
+                        document.getElementById('name_en_e').value = data?.name_en ??
+                            'لايوجد';
                         document.getElementById('editgovernmentForm').setAttribute('action',
                             `/government/update/${itemId}`);
 
@@ -230,5 +220,3 @@
         });
     });
 </script>
-
-

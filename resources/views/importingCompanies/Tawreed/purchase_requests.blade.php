@@ -1,17 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 <div class="card mt-4 py-3">
     <form method="GET" action="{{ route('tawreed.purchaseOrders') }}" class="w-100"> <!-- Ensure the correct route -->
         <div class="row pt-3 px-4">
@@ -89,7 +75,8 @@
                             <td> {{ $order->place }}</td>
                             <td> {{ $order->amount }}
                             </td>
-                            <td> <a href="{{ route('tawreed.print_order_company', $order->id)}}" class="text-info">طباعة</a></td>
+                            <td> <a href="{{ route('tawreed.print_order_company', $order->id) }}"
+                                    class="text-info">طباعة</a></td>
 
                             <td>
                                 <div class="btn-group  mb-6 me-6">

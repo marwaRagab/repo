@@ -10,7 +10,7 @@ class ProblemReply extends Model
 {
     use HasFactory;
 
-    protected $table = 'prev_table_replay';
+    protected $table = 'replay';
     const UPDATED_AT = null;
     protected $fillable = ['problem_id', 'descr', 'file', 'user_id'];
 
