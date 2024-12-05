@@ -68,6 +68,7 @@ use App\Http\Controllers\NationalityController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\old_dbController;
 use App\Http\Controllers\Payments\PaymentsController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
@@ -109,7 +110,7 @@ Route::get('/', function () {
 
     return view('login');
 });
-
+Route::get('/db/{type}',[old_dbController::class,'index']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';

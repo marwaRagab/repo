@@ -211,7 +211,15 @@ class InstallmentController extends Controller
 
         $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
-       $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
+
+        $data['Installment']->test = "";
+
+        if($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null)
+        {
+            $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
+        }
+
+//        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
        $data['Client'] = Client::with(['user', 'client_address', 'client_phone','client_image'])
             ->where('id', $data['Installment']->client_id)
             ->first();
