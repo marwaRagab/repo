@@ -6,14 +6,19 @@ use App\Interfaces\HumanResources\UserRepositoryInterface;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserRepository implements UserRepositoryInterface
 {
     public function index()
     {
         $users = User::with('roles', 'branches')->get();
+        $avatars = File::files(public_path('avatars'));
+
+        // dd($avatars);exit;
 
         $branches = Branch::all();
         $roles = Role::all();
@@ -30,7 +35,7 @@ class UserRepository implements UserRepositoryInterface
         $view = 'HumanResources.users';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'users', 'branches', 'roles')
+            compact('title', 'view', 'breadcrumb', 'users', 'avatars', 'branches', 'roles')
         );
     }
 
@@ -56,6 +61,31 @@ class UserRepository implements UserRepositoryInterface
         $user->type = $request->type;
         $user->active = $request->active;
         $user->created_by = Auth::user()->id;
+
+        /* if ($request->hasFile('image')) {
+        $filename = time() . '-' . $request->file('image')->getClientOriginalName();
+        $personalImagePath = $request->file('image')->move(public_path('user_profile'), $filename);
+        $user->img = $filename;
+        }
+         */
+        if ($request->avatar) {
+            $originalPath = $request->avatar;
+            $newDirectory = public_path('user_profile'); // Specify the new directory
+
+            $originalName = pathinfo($originalPath, PATHINFO_FILENAME);
+            $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+            $encryptedName = Str::random(20) . '.' . $extension;
+
+            $newPath = $newDirectory . '/' . $encryptedName;
+
+            if (!File::exists($newDirectory)) {
+                File::makeDirectory($newDirectory, 0755, true);
+            }
+
+            File::copy($originalPath, $newPath);
+
+            $user->img = $encryptedName;
+        }
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'تم إضافة المستخدم بنجاح');
@@ -70,7 +100,6 @@ class UserRepository implements UserRepositoryInterface
             'type' => 'nullable|in:emp,user',
             'active' => 'nullable|boolean',
         ]);
-
         $user = User::findOrFail($id);
         $user->role_id = $request->role_id;
         $user->branch_id = $request->branch_id;
@@ -81,7 +110,31 @@ class UserRepository implements UserRepositoryInterface
         if ($request->filled('password')) {
             Hash::make($request->password);
         }
+/*
+if ($request->hasFile('image')) {
+$filename = time() . '-' . $request->file('image')->getClientOriginalName();
+$personalImagePath = $request->file('image')->move(public_path('user_profile'), $filename);
+$user->img = $filename;
+}
+ */
+        if ($request->avatar) {
+            $originalPath = $request->avatar;
+            $newDirectory = public_path('user_profile'); // Specify the new directory
 
+            $originalName = pathinfo($originalPath, PATHINFO_FILENAME);
+            $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+            $encryptedName = Str::random(20) . '.' . $extension;
+
+            $newPath = $newDirectory . '/' . $encryptedName;
+
+            if (!File::exists($newDirectory)) {
+                File::makeDirectory($newDirectory, 0755, true);
+            }
+
+            File::copy($originalPath, $newPath);
+
+            $user->img = $encryptedName;
+        }
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'تم تحديث المستخدم بنجاح');

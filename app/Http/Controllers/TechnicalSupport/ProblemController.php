@@ -20,7 +20,7 @@ class ProblemController extends Controller
         $data = $this->problemRepository->index($request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم الدخول لصفحة الدعم الفني ";
             $this->log($user_id, $message);
         }
@@ -29,10 +29,11 @@ class ProblemController extends Controller
     }
     public function show($id)
     {
+
         $data = $this->problemRepository->show($id);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم الدخول لمشكلة {$id} ";
             $this->log($user_id, $message);
         }
@@ -45,7 +46,7 @@ class ProblemController extends Controller
         $data = $this->problemRepository->store($request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = ":تم اضافة مشكلة {$request->title} ";
             $this->log($user_id, $message);
         }
@@ -53,13 +54,12 @@ class ProblemController extends Controller
         return $data;
     }
 
-
-    public function updateStatus($id,  Request $request)
+    public function updateStatus($id, Request $request)
     {
         $data = $this->problemRepository->updateStatus($id, $request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = ":تم تحديث مشكلة {$id} ";
             $this->log($user_id, $message);
         }
@@ -72,7 +72,7 @@ class ProblemController extends Controller
         $data = $this->problemRepository->addReply($request);
 
         if ($data) {
-            $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم اضافة رد على مشكلة: {$request->problem_id}";
             $this->log($user_id, $message);
         }

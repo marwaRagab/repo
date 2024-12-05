@@ -1,34 +1,20 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء</h4>
         <div class="d-flex">
             <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
-                    data-bs-target="#bs-example-modal-md">
+                data-bs-target="#bs-example-modal-md">
                 أضف جديد
             </button>
             <!-- sample modal content -->
             <div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
-                 aria-hidden="true">
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                         <div class="modal-header d-flex align-items-center">
                             <h4 class="modal-title" id="myModalLabel">اضف جديد</h4>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                aria-label="Close"></button>
                         </div>
                         <form action="{{ route('clients.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -38,21 +24,21 @@
                                         <div class="mb-3">
                                             <label class="form-label"> الإسم بالعربية <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="name_ar" class="form-control" required/>
+                                            <input type="text" name="name_ar" class="form-control" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الإسم بالانجليزية <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="name_en" class="form-control" required/>
+                                            <input type="text" name="name_en" class="form-control" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الرقم المدني <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="civil_number" class="form-control" required/>
+                                            <input type="text" name="civil_number" class="form-control" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -80,79 +66,79 @@
                                     <div class="col-md-6">
                                         <div class="mb-3"><label for="edit_date">تاريخ الميلاد</label>
                                             <input type="date" name="birth_date" class="form-control mb-2"
-                                                   id="edit_date">
+                                                id="edit_date">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الهاتف <span class="text-danger">*</span></label>
-                                            <input type="text" name="phone" class="form-control" required/>
+                                            <input type="text" name="phone" class="form-control" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> البريد الالكترونى </label>
-                                            <input type="email" name="email" class="form-control"/>
+                                            <input type="email" name="email" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> هاتف العمل </label>
-                                            <input type="text" name="phone_work" class="form-control"/>
+                                            <input type="text" name="phone_work" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> هاتف اقرب شخص </label>
-                                            <input type="text" name="nearist_phone" class="form-control"/>
+                                            <input type="text" name="nearist_phone" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الهاتف الارضي </label>
-                                            <input type="text" name="phone_land" class="form-control"/>
+                                            <input type="text" name="phone_land" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الرقم الالي </label>
-                                            <input type="text" name="house_id" class="form-control"/>
+                                            <input type="text" name="house_id" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> القطعة </label>
-                                            <input type="text" name="block" class="form-control"/>
+                                            <input type="text" name="block" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> شارع </label>
-                                            <input type="text" name="street" class="form-control"/>
+                                            <input type="text" name="street" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> جادة </label>
-                                            <input type="text" name="jada" class="form-control"/>
+                                            <input type="text" name="jada" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> مبنى </label>
-                                            <input type="text" name="building" class="form-control"/>
+                                            <input type="text" name="building" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> الدور </label>
-                                            <input type="text" name="floor" class="form-control"/>
+                                            <input type="text" name="floor" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> المنزل </label>
-                                            <input type="text" name="flat" class="form-control"/>
+                                            <input type="text" name="flat" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -208,7 +194,7 @@
                                         <div class="mb-3">
                                             <label class="form-label"> الراتب <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="salary" class="form-control" required/>
+                                            <input type="text" name="salary" class="form-control" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -226,13 +212,13 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> iban </label>
-                                            <input type="text" name="iban" class="form-control"/>
+                                            <input type="text" name="iban" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label"> رقم الحساب البنكي </label>
-                                            <input type="text" name="bank_account_number" class="form-control"/>
+                                            <input type="text" name="bank_account_number" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -240,8 +226,8 @@
                                             <label class="form-label"> صورة شهادة الراتب <span
                                                     class="text-danger">*</span></label>
                                             <input type="file" name="images[0][path]" class="form-control"
-                                                   required/>
-                                            <input type="hidden" name="images[0][type]" value="contract"/>
+                                                required />
+                                            <input type="hidden" name="images[0][type]" value="contract" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -249,8 +235,8 @@
                                             <label class="form-label"> صورة البطاقة وجه <span
                                                     class="text-danger">*</span></label>
                                             <input type="file" name="images[1][path]" class="form-control"
-                                                   required/>
-                                            <input type="hidden" name="images[1][type]" value="personal"/>
+                                                required />
+                                            <input type="hidden" name="images[1][type]" value="personal" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -258,8 +244,8 @@
                                             <label class="form-label"> صورة البطاقة ظهر <span
                                                     class="text-danger">*</span></label>
                                             <input type="file" name="images[2][path]" class="form-control"
-                                                   required/>
-                                            <input type="hidden" name="images[2][type]" value="working"/>
+                                                required />
+                                            <input type="hidden" name="images[2][type]" value="working" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -267,8 +253,8 @@
                                             <label class="form-label"> صورة استعلام الساينت <span
                                                     class="text-danger">*</span></label>
                                             <input type="file" name="images[3][path]" class="form-control"
-                                                   required/>
-                                            <input type="hidden" name="images[3][type]" value="contract"/>
+                                                required />
+                                            <input type="hidden" name="images[3][type]" value="contract" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -276,8 +262,8 @@
                                             <label class="form-label"> صورة هوية العمل <span
                                                     class="text-danger">*</span></label>
                                             <input type="file" name="images[4][path]" class="form-control"
-                                                   required/>
-                                            <input type="hidden" name="images[4][type]" value="personal"/>
+                                                required />
+                                            <input type="hidden" name="images[4][type]" value="personal" />
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +271,7 @@
                             <div class="modal-footer d-flex ">
                                 <button type="submit" class="btn btn-primary">حفظ</button>
                                 <button type="button" class="btn bg-danger-subtle text-danger waves-effect"
-                                        data-bs-dismiss="modal">
+                                    data-bs-dismiss="modal">
                                     الغاء
                                 </button>
                             </div>
@@ -304,72 +290,71 @@
         <div class="table-responsive pb-4">
             <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
-                <!-- start row -->
-                <tr>
-                    <th>#</th>
-                    <th>الاسم</th>
-                    <th>الرقم المدني</th>
-                    <th>الهاتف</th>
-                    <th>الراتب</th>
-                    <th>الاجراءات</th>
+                    <!-- start row -->
+                    <tr>
+                        <th>#</th>
+                        <th>الاسم</th>
+                        <th>الرقم المدني</th>
+                        <th>الهاتف</th>
+                        <th>الراتب</th>
+                        <th>الاجراءات</th>
 
-                </tr>
-                <!-- end row -->
+                    </tr>
+                    <!-- end row -->
                 </thead>
                 <tbody>
-                <!-- start row -->
-                @forelse ($clients as $client)
-                    <tr>
+                    <!-- start row -->
+                    @forelse ($clients as $client)
+                        <tr>
 
-                        <td>
-                            {{ $loop->index + 1 }}
-                        </td>
-                        <td>
-                            {{ $client->name_ar }}
-                        </td>
-                        <td>{{ $client->civil_number }}</td>
-                        <td>
-                            @if ($client->client_phone->isNotEmpty())
-                                {{ $client->client_phone->last()->phone }}
-                            @else
-                                لا توجد أرقام هاتفية
-                            @endif
-                        </td>
+                            <td>
+                                {{ $loop->index + 1 }}
+                            </td>
+                            <td>
+                                {{ $client->name_ar }}
+                            </td>
+                            <td>{{ $client->civil_number }}</td>
+                            <td>
+                                @if ($client->client_phone->isNotEmpty())
+                                    {{ $client->client_phone->last()->phone }}
+                                @else
+                                    لا توجد أرقام هاتفية
+                                @endif
+                            </td>
 
-                        <td>{{ $client->salary }}</td>
+                            <td>{{ $client->salary }}</td>
 
-                        <td>
-                            <div class="d-block">
+                            <td>
+                                <div class="d-block">
 
-                                <div>
-                                    <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                                       href="{{ route('clients.show', $client->id)}}"
-                                    >
-                                        تعديل
-                                    </a>
-                                </div>
-                                <!-- sample modal content -->
-                                <div>
-                                    <form action="{{ route('clients.delete', $client->id) }}" method="POST"
-                                          onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
+                                    <div>
+                                        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                            href="{{ route('clients.show', $client->id) }}">
+                                            تعديل
+                                        </a>
+                                    </div>
+                                    <!-- sample modal content -->
+                                    <div>
+                                        <form action="{{ route('clients.delete', $client->id) }}" method="POST"
+                                            onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا العنصر؟');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
                                                 class="btn me-1 mb-1 bg-danger-subtle text-danger px-4 fs-4">
-                                            حذف
-                                        </button>
-                                    </form>
+                                                حذف
+                                            </button>
+                                        </form>
+                                    </div>
+
                                 </div>
+                            </td>
+                        </tr>
 
-                            </div>
-                        </td>
-                    </tr>
-
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center">لا يوجد عملاء</td>
-                    </tr>
-                @endforelse
+                    @empty
+                        <tr>
+                            <td colspan="6" class="text-center">لا يوجد عملاء</td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
             </table>

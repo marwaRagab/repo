@@ -11,7 +11,7 @@ class SupportRequest extends Model
 {
     use HasFactory;
 
-    protected $table = 'prev_table_requests';
+    protected $table = 'requests';
     protected $fillable = ['installment_id', 'title', 'link', 'descr', 'file', 'read', 'status', 'user_id'];
 
     public function user()

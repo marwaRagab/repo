@@ -492,7 +492,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/transfer/available_products/delete/{id}', [TransferController::class, 'delete_available_product'])->name('products.items.delete'); //->middleware('permission:update_products_items');
     Route::get('/products/data', [ProductController::class, 'getProductsData'])->name('products.data');
 
-    Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
+    // Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
     // Importing companies
     // Route::Resource('products', ProductController::class);
     Route::get('/products', [ProductController::class, 'index'])->name('products.index'); //->middleware('permission:view_products');
@@ -516,6 +516,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/human-resources/clients/{id}', [ClientController::class, 'update'])->name('clients.update'); //->middleware('permission:update_clients');
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
+
+    Route::get('/update-tab', [NotificationController::class, 'updateTab']);
 
     //transactions
     Route::get('/human-resources/transactions-done', [TransactionsCompletedController::class, 'index'])->name('transactions.done.index'); //->middleware('permission:view_transactions_completed');

@@ -148,6 +148,7 @@ class CertificateRepository implements CertificateRepositoryInterface
 
         $message = "تم    التحويل الى  الصادر والوارد";
 
+
         $user_id = Auth::user()->id;
         log_move($user_id, $message);
 

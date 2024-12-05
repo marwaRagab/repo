@@ -506,6 +506,12 @@
                                                         <input type="hidden" name="military_affairs_id"
                                                                value="{{$item->id}}">
 
+                                                        <input type="hidden" name="type"
+                                                               value="certificate">
+                                                        <input type="hidden" name="type_id"
+                                                               value="{{ \App\Models\Military_affairs\Military_affairs_certificate_type::where('slug','=','export')->first()->id }}">
+
+
                                                         <div class="modal-header d-flex align-items-center">
                                                             <h4 class="modal-title" id="myModalLabel">
                                                                 كتاب الاستعلام</h4>

@@ -1,20 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">البنوك</h4>
@@ -141,7 +124,7 @@
                                 {{ $item->iban }}
                             </td>
                             <td>
-                            @if($item->active == 1)
+                                @if ($item->active == 1)
                                     مفعل
                                 @else
                                     غير مفعل
@@ -167,88 +150,104 @@
                                     </a>
 
 
-                                    <div id="bs-example-modal-edit" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">
-                    تعديل بنك</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editBankForm" method="get" enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="input1 "> الإسم
-                                بالعربية</label>
-                            <input type="text" class="form-control mb-2" id="name_ar_e" name="name_ar">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 ">الإسم
-                                بالإنجليزية </label>
-                            <input type="text" class="form-control mb-2" id="name_en_e" name="name_en"
-                                value="{{ $item->name_en }}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 ">رقم الحساب
-                                البنكى</label>
-                            <input type="text" class="form-control mb-2" id="bank_account_number_e"
-                                name="bank_account_number" value="{{ $item->bank_account_number }}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 "> تاريخ الحساب
-                                البنكى </label>
-                            <input type="date" class="form-control mb-2" id="bank_account_date_e"
-                                name="bank_account_date" value="{{ $item->bank_account_date }}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 "> iban
-                            </label>
-                            <input type="text" class="form-control mb-2" id="iban_e" name="iban"
-                                value="{{ $item->iban }}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 ">الفرع</label>
-                            <input type="text" class="form-control mb-2" id="branch_e" name="branch"
-                                value="{{ $item->branch }}">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 "> المفوض
-                                بالتوقيع 1 </label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_1_e"
-                                name="authorized_signatory_1" value="{{ $item->authorized_signatory_1 }}">
+                                    <div id="bs-example-modal-edit" class="modal fade" tabindex="-1"
+                                        aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header d-flex align-items-center">
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                        تعديل بنك</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="editBankForm" method="get"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-row">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input1 "> الإسم
+                                                                    بالعربية</label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="name_ar_e" name="name_ar">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 ">الإسم
+                                                                    بالإنجليزية </label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="name_en_e" name="name_en"
+                                                                    value="{{ $item->name_en }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 ">رقم الحساب
+                                                                    البنكى</label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="bank_account_number_e"
+                                                                    name="bank_account_number"
+                                                                    value="{{ $item->bank_account_number }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 "> تاريخ الحساب
+                                                                    البنكى </label>
+                                                                <input type="date" class="form-control mb-2"
+                                                                    id="bank_account_date_e" name="bank_account_date"
+                                                                    value="{{ $item->bank_account_date }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 "> iban
+                                                                </label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="iban_e" name="iban"
+                                                                    value="{{ $item->iban }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 ">الفرع</label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="branch_e" name="branch"
+                                                                    value="{{ $item->branch }}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 "> المفوض
+                                                                    بالتوقيع 1 </label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="authorized_signatory_1_e"
+                                                                    name="authorized_signatory_1"
+                                                                    value="{{ $item->authorized_signatory_1 }}">
 
-                            {{-- <img id="authorized_signatory_1_img" alt="" srcset=""> --}}
-                            <!-- <img id="authorized_signatory_1_img" width="25%" alt="Signature 1"> -->
+                                                                {{-- <img id="authorized_signatory_1_img" alt="" srcset=""> --}}
+                                                                <!-- <img id="authorized_signatory_1_img" width="25%" alt="Signature 1"> -->
 
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 ">المفوض
-                                بالتوقيع 2</label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_2_e"
-                                name="authorized_signatory_2" value="{{ $item->authorized_signatory_2 }}">
-                            {{-- <img id="authorized_signatory_2_img"  alt="" srcset=""> --}}
-                            <!-- <img id="authorized_signatory_2_img" width="25%" alt="Signature 2"> -->
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="input2 ">المفوض
-                                بالتوقيع 3</label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_3_e"
-                                name="authorized_signatory_3" value="{{ $item->authorized_signatory_3 }}">
-                            {{-- <img id="authorized_signatory_3_img"  alt="" srcset=""> --}}
-                            <!-- <img id="authorized_signatory_3_img" width="25%" alt="Signature 3"> -->
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">التفعيل</label>
-                            <select class="form-select" id="active_e" name="active">
-                                <option>أختر </option>
-                                <option value="1" selected>مفعل</option>
-                                <option value="0">غير مفعل</option>
-                            </select>
-                        </div>
-                    </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 ">المفوض
+                                                                    بالتوقيع 2</label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="authorized_signatory_2_e"
+                                                                    name="authorized_signatory_2"
+                                                                    value="{{ $item->authorized_signatory_2 }}">
+                                                                {{-- <img id="authorized_signatory_2_img"  alt="" srcset=""> --}}
+                                                                <!-- <img id="authorized_signatory_2_img" width="25%" alt="Signature 2"> -->
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="input2 ">المفوض
+                                                                    بالتوقيع 3</label>
+                                                                <input type="text" class="form-control mb-2"
+                                                                    id="authorized_signatory_3_e"
+                                                                    name="authorized_signatory_3"
+                                                                    value="{{ $item->authorized_signatory_3 }}">
+                                                                {{-- <img id="authorized_signatory_3_img"  alt="" srcset=""> --}}
+                                                                <!-- <img id="authorized_signatory_3_img" width="25%" alt="Signature 3"> -->
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="form-label">التفعيل</label>
+                                                                <select class="form-select" id="active_e"
+                                                                    name="active">
+                                                                    <option>أختر </option>
+                                                                    <option value="1" selected>مفعل</option>
+                                                                    <option value="0">غير مفعل</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
 
                                                 </div>
                                                 <div class="modal-footer d-flex ">
@@ -278,70 +277,83 @@
                                                 </div>
                                                 <div class="modal-body">
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="input1 "> الإسم
-                            بالعربية</label>
-                        <input type="text" class="form-control mb-2" id="name_ar_s" name="name_ar" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 ">الإسم
-                            بالإنجليزية </label>
-                        <input type="text" class="form-control mb-2" id="name_en_s" name="name_en" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 ">رقم الحساب
-                            البنكى</label>
-                        <input type="text" class="form-control mb-2" id="bank_account_number_s"
-                            name="bank_account_number"disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 "> تاريخ الحساب
-                            البنكى </label>
-                        <input type="date" class="form-control mb-2" id="bank_account_date_s"
-                            name="bank_account_date" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 "> iban
-                        </label>
-                        <input type="text" class="form-control mb-2" id="iban_s" name="iban" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 ">الفرع</label>
-                        <input type="text" class="form-control mb-2" id="branch_s" name="branch" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 "> المفوض
-                            بالتوقيع 1 </label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_1_s" name="authorized_signatory_1" disabled>
-                        <!-- <img id="authorized_signatory_1_img_s" width="25%" alt="Signature 1"> -->
+                                                    <div class="form-row">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input1 "> الإسم
+                                                                بالعربية</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="name_ar_s" name="name_ar" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 ">الإسم
+                                                                بالإنجليزية </label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="name_en_s" name="name_en" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 ">رقم الحساب
+                                                                البنكى</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="bank_account_number_s"
+                                                                name="bank_account_number"disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 "> تاريخ الحساب
+                                                                البنكى </label>
+                                                            <input type="date" class="form-control mb-2"
+                                                                id="bank_account_date_s" name="bank_account_date"
+                                                                disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 "> iban
+                                                            </label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="iban_s" name="iban" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 ">الفرع</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="branch_s" name="branch" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 "> المفوض
+                                                                بالتوقيع 1 </label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="authorized_signatory_1_s"
+                                                                name="authorized_signatory_1" disabled>
+                                                            <!-- <img id="authorized_signatory_1_img_s" width="25%" alt="Signature 1"> -->
 
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 ">المفوض
-                            بالتوقيع 2</label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_2_s" name="authorized_signatory_2" disabled>
-                        <!-- <img id="authorized_signatory_2_img_s" width="25%" alt="Signature 2"> -->
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="input2 ">المفوض
-                            بالتوقيع 3</label>
-                            <input type="text" class="form-control mb-2" id="authorized_signatory_3_s" name="authorized_signatory_3" disabled>
-                        <!-- <img id="authorized_signatory_3_img_s" width="25%" alt="Signature 3"> -->
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">التفعيل</label>
-                        <input class="form-control" id="active_s" name="active" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">انشأ بواسطة</label>
-                        <input class="form-control" id="create_by_s" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">اخرتعديل بواسطة</label>
-                        <input class="form-control" id="update_by_s" disabled>
-                    </div>
-                </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 ">المفوض
+                                                                بالتوقيع 2</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="authorized_signatory_2_s"
+                                                                name="authorized_signatory_2" disabled>
+                                                            <!-- <img id="authorized_signatory_2_img_s" width="25%" alt="Signature 2"> -->
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="input2 ">المفوض
+                                                                بالتوقيع 3</label>
+                                                            <input type="text" class="form-control mb-2"
+                                                                id="authorized_signatory_3_s"
+                                                                name="authorized_signatory_3" disabled>
+                                                            <!-- <img id="authorized_signatory_3_img_s" width="25%" alt="Signature 3"> -->
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label">التفعيل</label>
+                                                            <input class="form-control" id="active_s" name="active"
+                                                                disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label">انشأ بواسطة</label>
+                                                            <input class="form-control" id="create_by_s" disabled>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label">اخرتعديل بواسطة</label>
+                                                            <input class="form-control" id="update_by_s" disabled>
+                                                        </div>
+                                                    </div>
 
 
                                                 </div>
@@ -391,9 +403,12 @@
                             'لايوجد';
                         document.getElementById('iban_e').value = data?.iban ?? 'لايوجد';
 
-                        document.getElementById('authorized_signatory_1_e').value = data?.authorized_signatory_1 ?? 'لايوجد';
-                        document.getElementById('authorized_signatory_2_e').value = data?.authorized_signatory_2 ?? 'لايوجد';
-                        document.getElementById('authorized_signatory_3_e').value = data?.authorized_signatory_3 ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_1_e').value = data
+                            ?.authorized_signatory_1 ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_2_e').value = data
+                            ?.authorized_signatory_2 ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_3_e').value = data
+                            ?.authorized_signatory_3 ?? 'لايوجد';
                         // document.getElementById('authorized_signatory_1_img').src = data
                         //     ?.authorized_signatory_1 || 'path/to/default-image1.jpg';
                         // document.getElementById('authorized_signatory_2_img').src = data
@@ -445,11 +460,16 @@
                         document.getElementById('branch_s').value = data?.branch ??
                             'لايوجد';
                         document.getElementById('iban_s').value = data?.iban ?? 'لايوجد';
-                        document.getElementById('create_by_s').value = data?.user?.name_ar ?? 'لايوجد';
-                        document.getElementById('update_by_s').value = data?.user?.name_ar ?? 'لايوجد';
-                        document.getElementById('authorized_signatory_1_s').value = data?.authorized_signatory_1 ?? 'لايوجد';
-                        document.getElementById('authorized_signatory_2_s').value = data?.authorized_signatory_2 ?? 'لايوجد';
-                        document.getElementById('authorized_signatory_3_s').value = data?.authorized_signatory_3 ?? 'لايوجد';
+                        document.getElementById('create_by_s').value = data?.user
+                            ?.name_ar ?? 'لايوجد';
+                        document.getElementById('update_by_s').value = data?.user
+                            ?.name_ar ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_1_s').value = data
+                            ?.authorized_signatory_1 ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_2_s').value = data
+                            ?.authorized_signatory_2 ?? 'لايوجد';
+                        document.getElementById('authorized_signatory_3_s').value = data
+                            ?.authorized_signatory_3 ?? 'لايوجد';
                         // document.getElementById('authorized_signatory_1_img_s').src = data?.authorized_signatory_1 || 'path/to/default-image1.jpg';
                         // document.getElementById('authorized_signatory_2_img_s').src = data?.authorized_signatory_2 || 'path/to/default-image2.jpg';
                         // document.getElementById('authorized_signatory_3_img_s').src = data?.authorized_signatory_3 || 'path/to/default-image3.jpg';

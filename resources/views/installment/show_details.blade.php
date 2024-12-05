@@ -868,17 +868,23 @@
                                         <!-- start row -->
                                         @foreach( $purchase_orders_array as $item)
                                         
+                                    
                                         <tr>
                                             <td>
-                                                {{$item->mark->name_ar}}
+                                                {{ $item['product_order']->first()?->mark->name_ar ?? '' }}
                                             </td>
-                                            <td>{{$item->class->name_ar}} </td>
-                                            <td>{{$item->model}}</td>
-                                            <td>{{$item->price}}</td>
-                                            <td>{{$item->net_price}}</td>
-                                            <td>{{$item->price}}</td>
-                                            <td>1</td>
-                                            <td>{{$item->net_price}}</td>
+                                            <td>{{$item['product_order']->first()?->class->name_ar}} </td>
+                                            <td>{{$item['product_order']->first()?->model}}</td>
+                                            <td>{{$item['product_order']->first()?->price}}</td>
+                                            <td>{{floatval($item['product_order']->first()?->cost)+(floatval($item['product_order']->first()?->cost)*35/100)}}</td>
+                                            <td>{{$item['product_order']->first()?->net_price}}</td>
+                                            <td>{{ $item['counter'] }}</td>
+                                            @if (($item['counter'] != "")  || ($item['counter']!= null)  )
+                                            <td>{{floatval($item['product_order']->first()?->net_price)* floatval($item['counter'])}}</td>
+                                            @else
+                                            <td>{{floatval($item['product_order']->first()?->net_price)}}</td>   
+                                            @endif
+                                           
                                         </tr>
                                         @endforeach
 
@@ -983,8 +989,7 @@
                                                  --}}
                                                  <p for="">العقد 1</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_1 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_1 }}', 'https://electron-kw.com/{{$Installment->contract_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -992,8 +997,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_1 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1}}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1021,8 +1025,7 @@
                                                 </button> --}}
                                                 <p for="">العقد 2</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_2 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_2}}', 'https://electron-kw.com/{{ $Installment->contract_2 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1030,8 +1033,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_2 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_2 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1059,8 +1061,7 @@
                                            
                                            <p for="">عقد الساينت 1</p>
                                            <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_cinet_1 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1068,8 +1069,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_cinet_1 }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1096,8 +1096,7 @@
                                            </button> --}}
                                            <p for="">عقد الساينت 2</p>
                                            <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_cinet_2  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_2  }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1105,8 +1104,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->contract_cinet_2  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_2  }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1134,8 +1132,7 @@
                                                 </button> --}}
                                                 <p for="">صورة استسلام المنتجات</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->prods_recieved_img   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/{{ $Installment->prods_recieved_img   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1143,8 +1140,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $Installment->prods_recieved_img   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/{{ $Installment->prods_recieved_img   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1223,8 +1219,7 @@
 
                                                 <p for="">صورة هوية العمل</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1232,8 +1227,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path   }}" 
+                                                     target="_blank" 
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1262,8 +1256,7 @@
 
                                                 <p for="">شهادة الراتب  </p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1271,8 +1264,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1300,8 +1292,7 @@
 
                                                 <p for="">صورة  البطاقة المدنية وجه</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1309,8 +1300,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1339,8 +1329,7 @@
 
                                                 <p for=""> صورة البطاقة المدنية ضهر </p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path  }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1348,8 +1337,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1378,8 +1366,7 @@
 
                                                 <p for="">عقد الساينت</p>
                                                 <a 
-                                                    id="downloadLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path  }}" 
+                                                    target="_blank" 
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
@@ -1387,8 +1374,7 @@
                                                 </a>
 
                                                 <a 
-                                                    id="printLink" 
-                                                    href="https://electron-kw.net/{{ $img_Client->path   }}" 
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -2516,6 +2502,7 @@
         console.log("Checking primary URL:", primaryUrl);
 
         const primaryReachable = await checkImage(primaryUrl);
+        alert(primaryReachable);
         if (primaryReachable) {
             console.log("Primary URL exists, redirecting...");
             // window.location.href = primaryUrl; // Uncomment to enable redirection
@@ -2524,7 +2511,10 @@
             console.log("Primary URL not found, redirecting to fallback...");
             // window.location.href = fallbackUrl; // Uncomment to enable redirection
             window.open(fallbackUrl, '_blank');
+            
+            
         }
+      
     }
 
     async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
@@ -2545,61 +2535,64 @@
 
     }
 
-    function checkImage(url) {
-       return new Promise((resolve) => {
-           const img = new Image();
-           img.onload = () => {
-               console.log('Image is accessible:', url);
-               resolve(true);
-           };
-           img.onerror = () => {
-               console.log('Image is not accessible:', url);
-               resolve(false);
-           };
-           img.src = url;
-       });
-    }
-
     // function checkImage(url) {
-    // return new Promise((resolve) => {
-    //     // Check file extension
-    //     const extension = url.split('.').pop().toLowerCase();
-    //     alert(extension);
-        
-    //     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
-    //         // Check if the URL is a valid image
-    //         const img = new Image();
-    //         img.onload = () => {
-    //             console.log('The file is an accessible image:', url);
-    //             resolve('image');
-    //         };
-    //         img.onerror = () => {
-    //             console.log('The file is not an accessible image:', url);
-    //             resolve('invalid');
-    //         };
-    //         img.src = url;
-    //     } else if (extension === 'pdf') {
-    //         // For PDF, check using a fetch call
-    //         fetch(url, { method: 'HEAD' })
-    //             .then((response) => {
-    //                 if (response.ok && response.headers.get('content-type') === 'application/pdf') {
-    //                     console.log('The file is a PDF:', url);
-    //                     resolve('pdf');
-    //                 } else {
-    //                     console.log('The file is not a valid PDF:', url);
-    //                     resolve('invalid');
-    //                 }
-    //             })
-    //             .catch(() => {
-    //                 console.log('Error accessing the file:', url);
-    //                 resolve('invalid');
-    //             });
-    //     } else {
-    //         console.log('Unknown file type:', url);
-    //         resolve('unknown');
-    //     }
-    // });
-// }
+    //    return new Promise((resolve) => {
+    //        const img = new Image();
+    //        img.onload = () => {
+    //            console.log('Image is accessible:', url);
+    //            resolve(true);
+    //        };
+    //        img.onerror = () => {
+    //            console.log('Image is not accessible:', url);
+    //            resolve(false);
+    //        };
+    //        img.src = url;
+    //    });
+    // }
+
+    function checkImage(url) {
+        return new Promise((resolve) => {
+            // Check file extension
+            const extension = url.split('.').pop().toLowerCase();
+            // alert(extension);
+            
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+                // Check if the URL is a valid image
+                const img = new Image();
+                img.onload = () => {
+                    console.log('The file is an accessible image:', url);
+                    resolve(true);
+                };
+                img.onerror = () => {
+                    console.log('The file is not an accessible image:', url);
+                    resolve(false);
+                };
+                img.src = url;
+            } else if (extension === 'pdf') {
+               
+                const substring = "uploads/";
+                if (url.includes(substring)) {
+                    console.log("The URL contains the substring:", substring);
+                    resolve(true);  // URL contains the substring
+                } else {
+                    console.log("The URL does not contain the substring:", substring);
+                    // return false;  // URL does not contain the substring
+                    resolve(false);
+                }
+           
+                
+            } else {
+                console.log('Unknown file type:', url);
+                // resolve('unknown');
+                resolve(false);
+            }
+        });
+    }
+    
+    
+
+    
+
 
 
 </script>
