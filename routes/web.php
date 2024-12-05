@@ -1,16 +1,10 @@
 <?php
 require __DIR__ . '/auth.php';
 
-
-use Inertia\Inertiar;
 use App\Exports\ClientsExport;
-use App\Models\InstallmentIssue;
-// use App\Exports\ClientsExport;
-use App\Models\TransactionCompleted;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
 use App\Http\Controllers\BankController;
-
+// use App\Exports\ClientsExport;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BokerController;
 use App\Http\Controllers\CourtController;
@@ -18,18 +12,17 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MinistryController;
-
-// use App\Exports\ClientsExport;
-//use App\Models\InstallmentIssue;
-// use Maatwebsite\Excel\Facades\Excel;
-
 use App\Http\Controllers\Auth\LoginController;
-
 use App\Http\Controllers\PermissionController;
-// use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\GovernorateController;
 use App\Http\Controllers\NationalityController;
+
+// use App\Exports\ClientsExport;
+//// use Maatwebsite\Excel\Facades\Excel;
+
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PoliceStationController;
+// use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WorkingIncomeController;
 use App\Http\Controllers\InstallmentCarController;
 use App\Http\Controllers\InstallmentIssueController;
@@ -38,9 +31,7 @@ use App\Http\Controllers\Payments\PaymentsController;
 use App\Http\Controllers\Showroom\ShowroomController;
 use App\Http\Controllers\Transfer\TransferController;
 use App\Http\Controllers\InstallmentApproveController;
-
 use App\Http\Controllers\MinistryPercentageController;
-
 use App\Http\Controllers\HumanResources\UserController;
 use App\Http\Controllers\HumanResources\ClientController;
 use App\Http\Controllers\HumanResources\MemberController;
@@ -48,53 +39,47 @@ use App\Http\Controllers\InstallmentClientNoteController;
 use App\Http\Controllers\InstallmentPercentageController;
 use App\Http\Controllers\InstallmentSubmissionController;
 use App\Http\Controllers\Military_affairs\ImageController;
-
-// use App\Http\Controllers\Showroom\ShowroomController;
 use App\Http\Controllers\ImportingCompanies\MarkController;
 use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\Military_affairs\PapersController;
+use App\Http\Controllers\Military_affairs\SearchController;
+
+// use App\Http\Controllers\Showroom\ShowroomController;
+use App\Http\Controllers\ImportingCompanies\ClassController;
+use App\Http\Controllers\TechnicalSupport\ProblemController;
 // use App\Http\Controllers\Military_affairs\CheckingController;
 
-use App\Http\Controllers\Military_affairs\SearchController;
-use App\Http\Controllers\ImportingCompanies\ClassController;
+use App\Http\Controllers\TechnicalSupport\RequestController;
+use App\Http\Controllers\Military_affairs\CheckingController;
 
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
-use App\Http\Controllers\TechnicalSupport\ProblemController;
-
-use App\Http\Controllers\TechnicalSupport\RequestController;
+use App\Http\Controllers\Military_affairs\Stop_carController;
+use App\Http\Controllers\ImportingCompanies\CompanyController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
-
 // use App\Http\Controllers\Transfer\TransferController;
-use App\Http\Controllers\Military_affairs\CheckingController;
-use App\Http\Controllers\Military_affairs\Stop_carController;
-// use App\Http\Controllers\Military_affairs\Stop_bankController;
-use App\Http\Controllers\ImportingCompanies\CompanyController;
 use App\Http\Controllers\ImportingCompanies\ProductController;
-
-// use App\Http\Controllers\Military_affairs\Stop_travelController;
-
 use App\Http\Controllers\ImportingCompanies\TawreedController;
+// use App\Http\Controllers\Military_affairs\Stop_bankController;
 use App\Http\Controllers\Military_affairs\DelegatesController;
+use App\Http\Controllers\Military_affairs\EqrardainController;
+
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
-use App\Http\Controllers\Military_affairs\EqrardainController;
+use App\Http\Controllers\Military_affairs\Open_fileController;
+use App\Http\Controllers\Military_affairs\Stop_bankController;
+// use App\Http\Controllers\Military_affairs\Stop_travelController;
+
+use App\Http\Controllers\Military_affairs\SettlementController;
 
 // use App\Http\Controllers\Military_affairs\Excute_actionsController;
 
-
-
-use App\Http\Controllers\Military_affairs\Open_fileController;
-
-use App\Http\Controllers\Military_affairs\Stop_bankController;
-use App\Http\Controllers\Military_affairs\SettlementController;
 use App\Http\Controllers\Military_affairs\CertificateController;
 use App\Http\Controllers\Military_affairs\Stop_salaryController;
 use App\Http\Controllers\Military_affairs\Stop_travelController;
 use App\Http\Controllers\Military_affairs\Execute_alertController;
 use App\Http\Controllers\Military_affairs\Excute_actionsController;
-use App\Http\Controllers\Military_affairs\Militar_affairsController;
 use App\Http\Controllers\HumanResources\CommuncationMethodController;
 use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
@@ -112,7 +97,7 @@ use App\Http\Controllers\HumanResources\TransactionsCompletedController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -135,10 +120,9 @@ Route::get('/run-artisan-commands', function () {
     Artisan::call('config:cache');
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
-    
+
     return response()->json(['message' => 'Artisan commands executed successfully']);
 });
-
 
 Route::get('/login', [LoginController::class, 'show_login'])->name('login.show');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
@@ -148,8 +132,7 @@ Route::post('/reset_password', [LoginController::class, 'reset_password'])->name
 Route::get('/dasboard', [LoginController::class, 'dasboard'])->name('dasboard');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/insert_to_invoice',[InstallmentApproveController::class, 'insert_to_invoice']);
-
+Route::get('/insert_to_invoice', [InstallmentApproveController::class, 'insert_to_invoice']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -181,11 +164,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/show_convert/{id}', [Open_fileController::class, 'show']);
     Route::any('/update_a3lan', [Execute_alertController::class, 'update_a3lan']);
     Route::get('/Certificate/{id?}', [CertificateController::class, 'index'])->name('Certificate');
-     Route::get('/data_certificate', [CertificateController::class, 'data_certificate']);
+    Route::get('/data_certificate', [CertificateController::class, 'data_certificate']);
     /// ghad routes
-
-
-
 
     Route::get('/stop_bank/{id?}', [Stop_bankController::class, 'index'])->name('stop_bank');
     Route::post('/stop_travel_convert', [Stop_travelController::class, 'stop_travel_convert']);
@@ -213,7 +193,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/eqrardain/{id?}', [EqrardainController::class, 'index'])->name('eqrardain');
     //Route::get('/please_cancel_eqrar/{id?}', [ EqrardainController::class, 'please_cancel_eqrar']);
 
-
     Route::get('military_affairs', [Military_affairsController::class, 'index'])->name('military_affairs');
     Route::get('military_affairs/stop_car/{governorate_id?}/{stop_car_type?}/{police_station_id?}', [Stop_carController::class, 'index'])->name('stop_car');
 
@@ -223,11 +202,9 @@ Route::middleware('auth')->group(function () {
     Route::post('military_affairs/image/to_a3lan_eda3', [ImageController::class, 'to_a3lan_eda3'])->name('image.to_a3lan_eda3');
     Route::get('military_affairs/image/athbat_7ala/{installment_id}', [ImageController::class, 'athbat_7ala'])->name('image.athbat_7ala');
 
-
     Route::get('military_affairs/convert/{installment_id}', [Military_affairsController::class, 'convert'])->name('military_affairs.convert');
     Route::get('military_affairs/papers/eqrar_dain', [PapersController::class, 'eqrar_not_received'])->name('papers.eqrar_dain');
     Route::get('military_affairs/papers/nmozag_eqrar/{installment_id}', [PapersController::class, 'nmozag_eqrar'])->name('papers.nmozag_eqrar');
-
 
     Route::get('military_affairs/papers/eqrar_dain_received', [PapersController::class, 'eqrar_received'])->name('papers.eqrar_dain_received');
     Route::get('military_affairs/papers/getall_eqrar', [PapersController::class, 'getall_eqrar'])->name('papers.getalleqrar');
@@ -240,9 +217,6 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs/search', [SearchController::class, 'index'])->name('search.index');
     Route::post('military_affairs/search', [SearchController::class, 'get_searched'])->name('search.get_searched');
 
-
-
-
     Route::get('military_affairs/delegates', [DelegatesController::class, 'index'])->name('military_affairs.delegates');
     Route::post('military_affairs/delegates/{user_id}', [DelegatesController::class, 'update'])->name('delegate.update');
     Route::get('military_affairs/delegates/get_statistics', [DelegatesController::class, 'get_statistics'])->name('military_affairs.delegates.get_statistics');
@@ -250,7 +224,8 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs/show_images/{id}', [DelegatesController::class, 'show_images'])->name('show_images');
     Route::get('military_affairs/admin/get_statistics_deligations/{user_id}', [DelegatesController::class, 'get_statistics_deligations'])->name('military_affairs.get_statistics_deligations');
     Route::get('military_affairs/admin/get_statistics_notes_details/{user_id}', [DelegatesController::class, 'get_statistics_notes_details'])->name('military_affairs.get_statistics_notes_details');
-    Route::get('military_affairs/admin/get_statistics_lawaffaires/{user_id}', [DelegatesController::class, 'get_statistics_lawaffaires'])->name('military_affairs.get_statistics_lawaffaires');
+    Route::get( 'military_affairs/admin/get_statistics_lawaffaires/{user_id}', [DelegatesController::class, 'get_statistics_lawaffaires'])->name('military_affairs.get_statistics_lawaffaires');
+    Route::get( 'military_affairs/admin/get_statistics_emp/{user_id}', [DelegatesController::class, 'get_statistics_emp'])->name('military_affairs.get_statistics_emp');
 
     // ghada military_affairs routes
     Route::get('/open_file/{id?}', [Open_fileController::class, 'index'])->name('open_file');
@@ -294,17 +269,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/get_invoices_papers', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/installment/invoices_installment/print_invoice/{id1}/{id2}', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/export_all', [PaymentsController::class, 'export_all']);
-     Route::get('/print_invoice_export/{id1}/{id2}', [PaymentsController::class, 'print_invoice']);
-
-
-
-
+    Route::get('/print_invoice_export/{id1}/{id2}', [PaymentsController::class, 'print_invoice']);
 
     // Route::Resource('branches', BranchController::class);
     // Route::get('branches/getall', [BranchController::class, 'getall'])->name('branches.getall');
     // Route::Resource('banks', BankController::class);
-
-
 
     // government
     Route::get('government', [GovernorateController::class, 'index'])->name('government.index');
@@ -331,8 +300,6 @@ Route::middleware('auth')->group(function () {
     Route::any('courts/delete/{id}', [CourtController::class, 'destroy'])->name('courts.destroy');
     Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');
 
-
-
     // nationality
     Route::get('nationality', [NationalityController::class, 'index'])->name('nationality.index');
     Route::post('nationality/store', [NationalityController::class, 'store'])->name('nationality.store');
@@ -348,7 +315,6 @@ Route::middleware('auth')->group(function () {
     Route::any('installment__percentages/update/{id}', [InstallmentPercentageController::class, 'update'])->name('installment__percentages.update');
     Route::any('installment__percentages/delete/{id}', [InstallmentPercentageController::class, 'destroy'])->name(name: 'installment__percentages.destroy');
     Route::any('installment__percentages/show/{id}', [InstallmentPercentageController::class, 'show'])->name('installment__percentages.show');
-
 
     // ministry_percentages
     Route::get('ministry_percentages', [MinistryPercentageController::class, 'index'])->name('ministry_percentages.index');
@@ -398,7 +364,6 @@ Route::middleware('auth')->group(function () {
     Route::any('permission/delete/{id}', [PermissionController::class, 'destroy'])->name('permission.destroy');
     Route::any('permission/show/{id}', [PermissionController::class, 'show'])->name('permission.show');
 
-
     // Route::Resource( 'broker', BokerController::class);
     Route::get('/broker', [BokerController::class, 'index'])->name('broker.index');
     // Route::get('broker/getall', [BokerController::class, 'getAll'])->name('getallbroker');
@@ -425,6 +390,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/installments/search', [InstallmentClientController::class, 'search'])->name('installments.search');
     Route::post('/check-civil-number', [InstallmentClientController::class, 'checkCivilNumber'])->name('checkCivilNumber');
+    Route::post('/check-civil-number-accept', [InstallmentClientController::class, 'checkCivilNumber_accept'])->name('checkCivilNumber_accept');
+
 
     // فورم التقديم ف المعاملات المقدمة
     Route::get('Aksat/convert_approved/{id}', [InstallmentClientController::class, 'convert_approved'])->name('installment.convert_approved');
@@ -449,14 +416,11 @@ Route::middleware('auth')->group(function () {
     Route::get('installment/show_upload_papers/{id}', [InstallmentController::class, 'show_upload_papers'])->name('installment.show_upload_papers');
     Route::post('installment/upload_papers/{id?}', [InstallmentController::class, 'upload_papers']);
 
-
     Route::post('installment/pay_total_installs/{id}', [InstallmentController::class, 'pay_total_installs'])->name('installment.pay_total');
     Route::post('installment/pay_total_discount_installs/{id}', [InstallmentController::class, 'pay_total_with_discount'])->name('installment.pay_total_discount');
     Route::post('installment/pay_some_installs/{id}', [InstallmentController::class, 'pay_some_of_amount'])->name('installment.pay_some');
     Route::post('installment/pay_settle/{id}', [InstallmentController::class, 'pay_settle'])->name('installment.pay_settle');
     Route::post('installment/pay_from_all/{id}', [InstallmentController::class, 'get_sum_installments'])->name('installment.pay_all');
-
-
 
     Route::get('installment/lated-installments', [InstallmentController::class, 'lated_installments'])->name('installment.lated-installments');
     // lated_installments_update
@@ -481,7 +445,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/installment/admin/print_recive_ins_money/{id}/{id2}', [InstallmentController::class, 'print_recive_ins_money'])->name('installment.print_recive_ins_money');;
     Route::get('/installment/admin/madionia_certificate/{id}', [InstallmentController::class, 'madionia_certificate'])->name('installment.madionia_certificate');;
 
-
     Route::post('installmentClient/store', [InstallmentClientController::class, 'store'])->name('installmentClient.store');
     Route::post('installmentClient/update/{id}', [InstallmentClientController::class, 'update'])->name('installmentClient.update');
 
@@ -492,11 +455,9 @@ Route::middleware('auth')->group(function () {
     Route::get('installmentIssue/{id}', [InstallmentIssueController::class, 'index'])->name('installmentIssue.index');
     Route::any('installmentIssue/store', [InstallmentIssueController::class, 'store'])->name('installmentIssue.store');
 
-
     // Installment Client Note
     Route::get('InstallmentClientNote/getall/{id}', [InstallmentClientNoteController::class, 'getAll'])->name('InstallmentClientNote.getall');
     Route::post('InstallmentClientNote/store', [InstallmentClientNoteController::class, 'store'])->name('InstallmentClientNote.store');
-
 
     //tawreed
     // Route::view('/tawreed/cart', 'importingCompanies.tawreed.cart');
@@ -510,10 +471,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('tawreed/cart/delete/{product_id}', [TawreedController::class, 'deleteProductFromCart'])->name('cart.delete'); //->middleware('permission:delete_cart');
     Route::get('tawreed/print_order_company/{id}', [TawreedController::class, 'print_order_company'])->name('tawreed.print_order_company'); //->middleware('permission:view_products');
     Route::get('tawreed/print_purchase/{id}', [TawreedController::class, 'print_purchase'])->name('tawreed.print_purchase'); //->middleware('permission:view_products');
-
-    
-    
-
 
     Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
 
@@ -529,13 +486,13 @@ Route::middleware('auth')->group(function () {
     Route::get('showroom/show_serial/{id}', [ShowroomController::class, 'show_serial'])->name('showroom.showSerial');
     Route::post('showroom/add_serial/{id}', [ShowroomController::class, 'add_serial'])->name('showroom.addSerial');
 
-
     //Products
     Route::get('/transfer/get_available_products', [TransferController::class, 'get_available_products'])->name('Transfer.getAvailableProducts'); //->middleware('permission:view_products_items');
     Route::get('/transfer/show_available_products/{classId}', [TransferController::class, 'show_available_products'])->name('Transfer.showAvailableProducts'); //->middleware('permission:view_products_items');
     Route::post('/transfer/available_products/delete/{id}', [TransferController::class, 'delete_available_product'])->name('products.items.delete'); //->middleware('permission:update_products_items');
+    Route::get('/products/data', [ProductController::class, 'getProductsData'])->name('products.data');
 
-    Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
+    // Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
     // Importing companies
     // Route::Resource('products', ProductController::class);
     Route::get('/products', [ProductController::class, 'index'])->name('products.index'); //->middleware('permission:view_products');
@@ -558,6 +515,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/human-resources/clients', [ClientController::class, 'store'])->name('clients.store'); //->middleware('permission:create_clients');
     Route::put('/human-resources/clients/{id}', [ClientController::class, 'update'])->name('clients.update'); //->middleware('permission:update_clients');
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
+
+    Route::post('/update-tab', [NotificationController::class, 'updateTab']);
 
     //transactions
     Route::get('/human-resources/transactions-done', [TransactionsCompletedController::class, 'index'])->name('transactions.done.index'); //->middleware('permission:view_transactions_completed');
@@ -593,12 +553,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/order-products/{id}', [PurchaseOrdersController::class, 'showOrderProducts'])->name('orders.products');
     Route::get('/orders/print_invoice/{id}', [PurchaseOrdersController::class, 'print_invoice'])->name('orders.print_invoice');
 
-
     //marks
     Route::get('/marks', [MarkController::class, 'index'])->name('mark.index');
     Route::post('/marks', [MarkController::class, 'store'])->name('mark.store');
     Route::put('/marks/{id}', [MarkController::class, 'update'])->name('mark.update');
-    
+
     //classes
     Route::get('/classes', [ClassController::class, 'index'])->name('class.index');
     Route::post('/classes', [ClassController::class, 'store'])->name('class.store');
@@ -618,7 +577,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transfer-products/cart', [TransferProductController::class, 'viewCart'])->name('transferProduct.viewCart');
     Route::delete('/transfer-products/delete-from-cart/{id}', [TransferProductController::class, 'deleteFromCart'])->name('transferProduct.deleteFromCart');
     Route::post('/transfer-products/transfer', [TransferProductController::class, 'transfer'])->name('transferProduct.transfer');
-    
+
     //Technical Support
     Route::get('/technical-support/problems', [ProblemController::class, 'index'])->name('supportProblem.index');
     Route::post('/technical-support/problems', [ProblemController::class, 'store'])->name('supportProblem.store');

@@ -2,25 +2,25 @@
 
 namespace App\Repositories\TechnicalSupport;
 
-
-use Illuminate\Http\Request;
-use App\Models\CommuncationMethod;
-use Illuminate\Support\Facades\Auth;
 use App\Interfaces\TechnicalSupport\RequestRepositoryInterface;
 use App\Models\TechnicalSupport\RequestReply;
 use App\Models\TechnicalSupport\SupportRequest;
-use App\Models\TechnicalSupport\Technical;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class RequestRepository implements RequestRepositoryInterface
 {
 
     public function index($request)
     {
-        $status = $request->input('status', 'all');
+        $status = $request->input('status', 1);
 
         $data = ($status === 'all')
-            ? SupportRequest::with('user')->get()
-            : SupportRequest::with('user')->where('status', $status)->get();
+
+        ? SupportRequest::with('user')->orderBy('created_at', 'desc')->get()
+        : SupportRequest::with('user')->where('status', $status)
+            ->orderBy('created_at', 'desc')->get();
 
         $statusMapping = [
             1 => 'جديد',
@@ -30,7 +30,7 @@ class RequestRepository implements RequestRepositoryInterface
             5 => 'قيد العمل',
             6 => 'قيد المراجعة',
             7 => 'تم الانتهاء منها',
-            8 => 'مغلقة'
+            8 => 'مغلقة',
         ];
 
         $statusCounts = [];
@@ -56,7 +56,7 @@ class RequestRepository implements RequestRepositoryInterface
 
     public function show($id)
     {
-        $data =  SupportRequest::with('user')->findOrFail($id);
+        $data = SupportRequest::with('user')->findOrFail($id);
 
         $replies = RequestReply::with('user')->where('problem_id', $id)->get();
 
@@ -68,7 +68,7 @@ class RequestRepository implements RequestRepositoryInterface
             5 => 'قيد العمل',
             6 => 'قيد المراجعة',
             7 => 'تم الانتهاء منها',
-            8 => 'مغلقة'
+            8 => 'مغلقة',
         ];
 
         $title = "مشاهدة الطلب";
@@ -90,28 +90,48 @@ class RequestRepository implements RequestRepositoryInterface
     public function store($request)
     {
 
-        $request->validate([
-            'installement_id' => 'required|exists:installment,id',
+        $messages = [
+            'title.required' => 'عنوان المشكلة اجباري.',
+            'link.required' => 'رابط المشكلة اجباري',
+            'descr.required' => 'وصف المشكلة اجباري',
+        ];
+        $validator = Validator::make($request->all(), [
+            //'installement_id' => 'required|exists:installment,id',
             'title' => 'required|string|max:255',
             'link' => 'required|string|max:255',
             'descr' => 'required|string|max:255',
             'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
-        ]);
+        ], $messages);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        } else {
 
-        $data = new SupportRequest();
-        $data->installement_id = $request->installement_id;
-        $data->title = $request->title;
-        $data->link = $request->link;
-        $data->descr = $request->descr;
-        if ($request->hasFile('file')) {
-            $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            $data = new SupportRequest();
+            $data->installement_id = $request->installement_id;
+            $data->title = $request->title;
+            $data->link = $request->link;
+            $data->descr = $request->descr;
+            if ($request->hasFile('file')) {
+                $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            }
+            $data->user_id = Auth::user()->id;
+            $data->save();
         }
-        $data->user_id = Auth::user()->id;
-        $data->save();
+        // $notification = new Notification();
+        // $notification->title = $request->title;
+        // $notification->descr = $request->descr;
+        // $notification->user_id = Auth::user()->id;
+        // $notification->problem_id = $data->id;
+        // if ($request->hasFile('file')) {
+        //     $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+        // }
+        // $notification->created_at = now();
+        // $notification->save();
 
         return redirect()->route('supportRequest.index')->with('success', 'تم إضافة الطلب بنجاح');
     }
-
 
     public function updateStatus($id, Request $request)
     {
@@ -130,7 +150,7 @@ class RequestRepository implements RequestRepositoryInterface
     public function addReply($request)
     {
         $request->validate([
-            'problem_id' => 'required|exists:prev_table_requests,id',
+            'problem_id' => 'required|exists:requests,id',
             'descr' => 'required|string|max:255',
             'file' => 'required|file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
         ]);
@@ -143,6 +163,17 @@ class RequestRepository implements RequestRepositoryInterface
         }
         $data->user_id = Auth::user()->id;
         $data->save();
+
+        // $notification = new Notification();
+        // $notification->title = "تعليق جديد على طلب في الدعم الفني";
+        // $notification->descr = $request->descr;
+        // $notification->user_id = Auth::user()->id;
+        // $notification->problem_id = $data->problem_id;
+        // if ($request->hasFile('file')) {
+        //     $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+        // }
+        // $notification->created_at = now();
+        // $notification->save();
 
         return redirect()->route('supportRequest.show', ['id' => $request->problem_id])
             ->with('success', 'تم إضافة رد على الطلب بنجاح');

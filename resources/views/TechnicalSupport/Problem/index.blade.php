@@ -1,22 +1,8 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
         <a href="{{ route('supportProblem.index', ['status' => 'all']) }}"
-            class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2" style="display:none;">الكل</a>
+            class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
+            style="display:none;">الكل</a>
         @php
             $btnColors = [
                 1 => 'info',
@@ -30,8 +16,7 @@
         @endphp
         @foreach ($statusMapping as $key => $label)
             <a href="{{ route('supportProblem.index', ['status' => $key]) }}"
-             class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
-                >
+                class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
                 {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
             </a>
         @endforeach
@@ -42,9 +27,11 @@
         <h4 class="card-title mb-0">الدعم الفني
         </h4>
         <div class="button-group">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
-                data-bs-target="#add">
-                أضف مشكلة جديدة </button>
+            @if (Auth::user()->support != 1)
+                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+                    data-bs-target="#add">
+                    أضف مشكلة جديدة </button>
+            @endif
             <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 "
                 href="{{ route('supportRequest.index') }}">
                 التطوير</a>
@@ -52,7 +39,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id ="file-export" class="table table-bordered border text-nowrap align-middle">
+            <table id ="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <tr>
                         <th>م</th>

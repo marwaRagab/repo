@@ -1,19 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">نسب الوزارات</h4>
@@ -131,8 +115,8 @@
                                         <i class="ti ti-pencil fs-5"></i>
                                     </a>
                                     <form id="delete-form-{{ $item->id }}"
-                                        action="{{ route('ministry_percentages.destroy', $item->id) }}"
-                                        method="POST" style="display: inline;">
+                                        action="{{ route('ministry_percentages.destroy', $item->id) }}" method="POST"
+                                        style="display: inline;">
                                         @csrf
                                         @method('DELETE')
                                         <a href="javascript:void(0);" class="text-danger"

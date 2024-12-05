@@ -53,17 +53,13 @@ class InstallmentIssueRepository implements InstallmentIssueRepositoryInterface
         // $Installment_Client->issue_pdf = asset('storage/issue_pdf/' . $filename);
         $Installment_Client->save();
         $savedIssues = [];
-        if($request->exist1 != "notexist")
-        {
-            foreach($request->installment_issue as $index => $item)
-            {
+        if ($request->exist1 != "notexist") {
+            foreach ($request->installment_issue as $index => $item) {
                 $item = (object) $item;
-                if ($item->status == "on") {
-                    $status = 'open';
-                } else {
-                    $status = 'close';
-                }
-                // dd($item->image);
+        
+                $status = $item->status === "on" ? 'open' : 'close';
+        
+                // Create a new InstallmentIssue record
                 $data = new InstallmentIssue;
                 $data->number_issue = $item->number_issue;
                 $data->opening_amount = $item->opening_amount ?? 0;
@@ -75,32 +71,37 @@ class InstallmentIssueRepository implements InstallmentIssueRepositoryInterface
                 $data->created_by = Auth::user()->id ?? null;
                 $data->updated_by = Auth::user()->id ?? null;
                 $data->save();
-    
-                if (isset($item->image) &&  $request->hasFile("installment_issue.$index.image")) {
-                    // dd("ss");
+        
+                // Handle image upload
+                if (isset($item->image) && $request->hasFile("installment_issue.$index.image")) {
                     $file = $request->file("installment_issue.$index.image");
                     $path = 'InstallmentClients/issue/images';
-    
+                
+                    // Call the UploadImage function
                     UploadImage($path, 'image', $data, $file);
                 }
-    
-    
+        
                 $savedIssues[] = $data;
             }
+            // dd($savedIssues);
         }
         else{
+
+            // dd($request);
             $data = new InstallmentIssue;
             $data->installment_clients_id = $request->installment_clients_id;
             $data->exist1 = $request->exist1 ?? 'exist';
             $data->number_issue = null;
-                $data->opening_amount = null;
-                $data->closing_amount = null;
-                $data->date = null;
-                $data->status = 'close';
-                $data->working_company = null;
-                $data->created_by = Auth::user()->id ?? null;
-                $data->updated_by = Auth::user()->id ?? null;
-                $data->save();
+            $data->opening_amount = null;
+            $data->closing_amount = null;
+            $data->date = null;
+            $data->status = 'close';
+            $data->working_company = null;
+            $data->created_by = Auth::user()->id ?? null;
+            $data->updated_by = Auth::user()->id ?? null;
+            $data->image  = $Installment_Client->issue_pdf;
+            
+            $data->save();
 
         }
         

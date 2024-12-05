@@ -106,50 +106,59 @@
                                 {{ $item->installmentBroker->name }}
                             </td>
                             <td>{{ $item->salary }} </td>
-                           
-                           
+
+
 
                             <td>
                                 @switch($item->ministry_id)
                                     @case('ministry_employe')
                                         موظف وزارة
-                                        @break
+                                    @break
+
                                     @case('help_socity')
                                         مساعدة اجتماعية
-                                        @break
+                                    @break
+
                                     @case('work_finish')
                                         متقاعد
-                                        @break
+                                    @break
+
                                     @case('military')
                                         عسكري
-                                        @break
+                                    @break
+
                                     @case('arm_student_help')
                                         إعانة طالب عسكري
-                                        @break
+                                    @break
+
                                     @case('student_help')
                                         إعانة طالب دراسة
-                                        @break
+                                    @break
+
                                     @case('worker_help')
                                         دعم عمالة
-                                        @break
+                                    @break
+
                                     @case('special_needs_help')
                                         ذوي الإحتياجات الخاصة
-                                        @break
+                                    @break
+
                                     @case('dead_help')
                                         راتب مرحوم
-                                        @break
+                                    @break
+
                                     @case('special_needs_care_help')
                                         رعاية ذوي الإحتياجات الخاصة
-                                        @break
-                                    @default
+                                    @break
+
                                     @default
                                         @php
-                                            $ministry_id = \App\Models\Ministry::find($item->ministry_id);
+                                            $ministry = \App\Models\Ministry::find($item->ministry_id);
                                         @endphp
-                                        {{ $ministry_id ? $ministry_id->name_ar : 'لايوجد' }}
+                                        {{ $ministry ? $ministry->name_ar : 'لايوجد' }}
                                 @endswitch
                             </td>
-                            
+
                             @if (request()->route('status') === 'car_inquiry')
                                 <td>
                                     <div class="d-block">
@@ -164,7 +173,7 @@
                                         @if ($item->installment_car->isNotEmpty() || $item->installment_car->count() > 0)
                                             <div>
                                                 {{-- {{ dd($item->installment_car) }} --}}
-                                                @if ($item->installment_car->first()->image != NULL)
+                                                @if ($item->installment_car->first()->image != null)
                                                     <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
                                                         href="{{ $item->installment_car->first()->image }}"
                                                         download="car.jpg">
@@ -200,8 +209,8 @@
                                         </div>
                                         @if ($item->installment_issue->isNotEmpty() || $item->installment_issue->count() > 0)
                                             <div>
-                                                 <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                                                     href="{{ asset($item->issue_pdf) }}" download="issue.pdf">
+                                                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                                    href="{{ asset($item->issue_pdf) }}" download="issue.pdf">
                                                     صوره الاستعلام </a>
                                             </div>
                                         @else
@@ -623,7 +632,6 @@
                                     <select class="form-select" id="bank" name="bank_id" required>
                                         <option value="">اختر</option>
                                         @foreach ($bank as $item)
-                                        
                                             <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                                         @endforeach
                                     </select>
@@ -633,7 +641,7 @@
                                 <div class="mb-3">
                                     <label class="form-label"> المحافظة </label>
                                     <select class="form-select" name="governorate_id" required>
-                                         <option value="">اختر</option>
+                                        <option value="">اختر</option>
                                         @foreach ($government as $item)
                                             <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                                         @endforeach
@@ -657,7 +665,7 @@
                                     <label class="form-label"> جهه العمل </label>
                                     <select class="form-select" id="work" name="ministry_id" required>
                                         <option value="">اختر</option>
-                                        @foreach ($ministry as $item)
+                                        @foreach ($data['ministry'] as $item)
                                             <option value="{{ $item->id }}">{{ $item->name_ar }}</option>
                                         @endforeach
                                     </select>
@@ -788,7 +796,7 @@
                     <div class="modal-body">
                         <div id="formRows">
                             <div class="form-row">
-                                <div class="form-group mb-3" style="display:none;">
+                                <div class="form-group mb-3">
                                     <label class="form-label block mx-1">
                                         الحالة</label>
                                     <input class="form-control" placeholder="الحالة" type="text" name="status"
@@ -797,8 +805,8 @@
                                 <div class="form-group mb-3">
 
                                     <label class="form-label block mx-1">
-                                        شرط القبول</label>
-                                    <input class="form-control" placeholder="شرط القبول" type="text" name="reason" />
+                                        السبب</label>
+                                    <input class="form-control" placeholder="السبب" type="text" name="reason" />
                                 </div>
                             </div>
                             {{-- <div class="flex mt-4">
@@ -837,7 +845,7 @@
                         <div id="formRows">
                             <div class="px-4 py-4 sm:px-5">
                                 <div class="flex mt-4">
-                                    <div class="form-group mb-3"  style="display:none;">
+                                    <div class="form-group mb-3">
                                         <label class="block mx-1">
                                             الحالة</label>
 
@@ -898,7 +906,7 @@
                         <div id="formRows">
                             <div class="px-4 py-4 sm:px-5">
                                 <div class="flex mt-4">
-                                    <div class="form-group mb-3" style="display:none;">
+                                    <div class="form-group mb-3">
                                         <label class="form-label block mx-1">
                                             الحالة</label>
                                         <input class="form-control" placeholder="الحالة" type="text"
@@ -1076,27 +1084,27 @@
             var civilNumberSub = civilNumber.substring(0, 1);
 
             if (civilNumber) {
-                if(civilNumberSub ==2 || civilNumberSub==3){
-                fetch('{{ route('checkCivilNumber') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            civil_number: civilNumber
+                if (civilNumberSub == 2 || civilNumberSub == 3) {
+                    fetch('{{ route('checkCivilNumber') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                civil_number: civilNumber
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.exists) {
-                            errorElement.style.display = 'block';
-                        } else {
-                            errorElement.style.display = 'none';
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            }else {
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.exists) {
+                                errorElement.style.display = 'block';
+                            } else {
+                                errorElement.style.display = 'none';
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
                     alert('الرقم المدنى لابد ان يبدا ب 2 او 3');
                 }
             }
@@ -1342,7 +1350,7 @@
                     }
                 });
                 // issue
-               $.ajax({
+                $.ajax({
                     url: '/myinstall/notesissue/' + itemId,
                     method: 'GET',
                     success: function(response) {
@@ -1362,15 +1370,30 @@
 
                                 // Check if car.image exists
                                 if (issue.image) {
-                                    row += `
-                                        <td>
-                                            <a href="/${issue.image}" target="_blank">
-                                                <img src="/${issue.image}" alt="Issue Image" style="width: 50px; height: auto; cursor: pointer;">
-                                            </a>
-                                        </td>
-                                    `;
+                                    const isPDF = issue.image.endsWith('.pdf');
+                                    console.log(isPDF);
+                                    if (isPDF) {
+                                        // Display PDF in an embedded viewer
+                                        row += `
+                                                <td>
+                                                    <a href="/${issue.image}" target="_blank">
+                                                        <embed src="/${issue.image}" type="application/pdf" width="100" height="150" style="cursor: pointer;" />
+                                                    </a>
+                                                </td>
+                                            `;
+                                    } else {
+                                            // Display as an image
+                                            row += `
+                                                <td>
+                                                    <a href="/${issue.image}" target="_blank">
+                                                        <img src="/${issue.image}" alt="Issue Image" style="width: 50px; height: auto; cursor: pointer;">
+                                                    </a>
+                                                </td>
+                                            `;
+                                    }
                                 } else {
-                                    row += `<td><a href="/${response.pdf}" target="_blank">رابط</a></td>`; // Fallback if no image
+                                    row +=
+                                        `<td> "لايوجد"</td>`; // Fallback if no image
                                 }
 
                                 // Close the row
@@ -1645,9 +1668,9 @@
 
                 formRows.appendChild(newRow);
                 const statusOpen1 = document.getElementById("exist1");
-        if (statusOpen1 && statusOpen1.checked) {
-            addToggleFunctionality(index); // Add toggle functionality for the new row
-        }
+                if (statusOpen1 && statusOpen1.checked) {
+                    addToggleFunctionality(index); // Add toggle functionality for the new row
+                }
 
             });
             formRows.addEventListener('click', function(event) {
@@ -1659,29 +1682,31 @@
             });
 
             function addToggleFunctionality(index) {
-                const closingAmountField = document.querySelector(`input[name="installment_issue[${index}][closing_amount]"]`);
-                const openingAmountField = document.querySelector(`input[name="installment_issue[${index}][opening_amount]"]`);
+                const closingAmountField = document.querySelector(
+                    `input[name="installment_issue[${index}][closing_amount]"]`);
+                const openingAmountField = document.querySelector(
+                    `input[name="installment_issue[${index}][opening_amount]"]`);
                 const openStatusRadio = document.getElementById(`flexRadioDefaultOpen${index}`);
                 const closeStatusRadio = document.getElementById(`flexRadioDefaultClose${index}`);
 
                 // Function to toggle the disabled state of opening and closing amount fields
                 function toggleAmountFields() {
-            if (openStatusRadio && openStatusRadio.checked) {
-                closingAmountField.disabled = true;
-                closingAmountField.value = 0;
-                openingAmountField.disabled = false;
-                openingAmountField.value = "";
-            } else if (closeStatusRadio && closeStatusRadio.checked) {
-                openingAmountField.disabled = true;
-                openingAmountField.value = 0;
-                closingAmountField.disabled = false;
-                closingAmountField.value = "";
-            }
-        }
+                    if (openStatusRadio && openStatusRadio.checked) {
+                        closingAmountField.disabled = true;
+                        closingAmountField.value = 0;
+                        openingAmountField.disabled = false;
+                        openingAmountField.value = "";
+                    } else if (closeStatusRadio && closeStatusRadio.checked) {
+                        openingAmountField.disabled = true;
+                        openingAmountField.value = 0;
+                        closingAmountField.disabled = false;
+                        closingAmountField.value = "";
+                    }
+                }
 
                 // Add event listeners for both radio buttons
                 if (openStatusRadio) openStatusRadio.addEventListener('change', toggleAmountFields);
-        if (closeStatusRadio) closeStatusRadio.addEventListener('change', toggleAmountFields);
+                if (closeStatusRadio) closeStatusRadio.addEventListener('change', toggleAmountFields);
 
                 // Initial check when row is added
                 toggleAmountFields();
@@ -1695,16 +1720,26 @@
             function updateRowIndices() {
                 document.querySelectorAll('.issue-row').forEach((row, index) => {
                     row.setAttribute('data-index', index);
-                    row.querySelector('input[name^="installment_issue"][name$="[number_issue]"]').name = `installment_issue[${index}][number_issue]`;
-                    row.querySelector('input[name^="installment_issue"][name$="[working_company]"]').name = `installment_issue[${index}][working_company]`;
-                    row.querySelector('input[name^="installment_issue"][name$="[opening_amount]"]').name = `installment_issue[${index}][opening_amount]`;
-                    row.querySelector('input[name^="installment_issue"][name$="[closing_amount]"]').name = `installment_issue[${index}][closing_amount]`;
-                    row.querySelector('input[name^="installment_issue"][name$="[image]"]').name = `installment_issue[${index}][image]`;
-                    row.querySelector('input[name^="installment_issue"][name$="[date]"]').name = `installment_issue[${index}][date]`;
-                    row.querySelector('input[id^="flexRadioDefaultOpen"]').id = `flexRadioDefaultOpen${index}`;
-                    row.querySelector('label[for^="flexRadioDefaultOpen"]').setAttribute("for", `flexRadioDefaultOpen${index}`);
-                    row.querySelector('input[id^="flexRadioDefaultClose"]').id = `flexRadioDefaultClose${index}`;
-                    row.querySelector('label[for^="flexRadioDefaultClose"]').setAttribute("for", `flexRadioDefaultClose${index}`);
+                    row.querySelector('input[name^="installment_issue"][name$="[number_issue]"]').name =
+                        `installment_issue[${index}][number_issue]`;
+                    row.querySelector('input[name^="installment_issue"][name$="[working_company]"]').name =
+                        `installment_issue[${index}][working_company]`;
+                    row.querySelector('input[name^="installment_issue"][name$="[opening_amount]"]').name =
+                        `installment_issue[${index}][opening_amount]`;
+                    row.querySelector('input[name^="installment_issue"][name$="[closing_amount]"]').name =
+                        `installment_issue[${index}][closing_amount]`;
+                    row.querySelector('input[name^="installment_issue"][name$="[image]"]').name =
+                        `installment_issue[${index}][image]`;
+                    row.querySelector('input[name^="installment_issue"][name$="[date]"]').name =
+                        `installment_issue[${index}][date]`;
+                    row.querySelector('input[id^="flexRadioDefaultOpen"]').id =
+                        `flexRadioDefaultOpen${index}`;
+                    row.querySelector('label[for^="flexRadioDefaultOpen"]').setAttribute("for",
+                        `flexRadioDefaultOpen${index}`);
+                    row.querySelector('input[id^="flexRadioDefaultClose"]').id =
+                        `flexRadioDefaultClose${index}`;
+                    row.querySelector('label[for^="flexRadioDefaultClose"]').setAttribute("for",
+                        `flexRadioDefaultClose${index}`);
                 });
             }
 
@@ -1850,7 +1885,7 @@
                         const issueModal = document.getElementById('estlaam-modal-md');
                         const button = event.relatedTarget;
                         const issuenameAr = button.getAttribute(
-                        'data-name'); // Set the name inside the span
+                            'data-name'); // Set the name inside the span
                         const nameSpan = issueModal.querySelector('.text-info');
                         if (nameSpan) {
                             nameSpan.textContent = `(${issuenameAr})`;

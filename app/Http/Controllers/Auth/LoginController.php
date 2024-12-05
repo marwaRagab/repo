@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class LoginController extends Controller
 {
@@ -38,6 +42,11 @@ class LoginController extends Controller
         return view('layout', compact('breadcrumb', 'view'));
 
     }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function login(Request $request)
     {
         //  dd('dd');
@@ -84,12 +93,36 @@ class LoginController extends Controller
             Auth::login($user); // Log the user in
             // $user->device_token = $request->device_token;
             $user->token = $token; //->token;
+            $user->on = 1;
             $user->save();
             $success['token'] = $token; //->token;
             $success['user'] = $user;
 
             // return redirect()->to('/');
 
+            //        $user = Auth::user();
+      Auth::user()->id;
+
+            $role = Role::findOrFail($user->role_id);
+
+            $permission_ids = $role->permissions->pluck('id')->toArray(); // Get IDs of the permissions
+//        dd($permission_ids);
+            $allPermissions = Permission::whereIn('id', $permission_ids)->with('parent')->get();
+//            dd($allPermissions);
+//            session()->put('user_permission', $allPermissions);
+            // Create an array to store concatenated titles
+            $permissionsWithParentTitles = $allPermissions->map(function ($permission) {
+                // Concatenate title_ar of permission and parent (if exists)
+                $parentTitle = $permission->parent ? $permission->parent->title_ar : '';
+                $permissionTitle = $permission->title_ar;
+
+                // Concatenate titles
+                return $permissionTitle . '_' . $parentTitle;
+            })->toArray();
+
+// Store the concatenated results in the session
+            session()->put('user_permission', $permissionsWithParentTitles);
+//         dd(session()->get('user_permission'));
             // return $this->respondSuccess($success, 'User login successfully.');
             return redirect()->route('dasboard');
             //}
@@ -131,7 +164,6 @@ class LoginController extends Controller
     public function reset_password(Request $request)
     {
 
-       
         $messages = [
             'username.required' => 'اسم المستخدم  مطلوب.',
             'password.required' => 'كلمة المرور مطلوبة.',
@@ -148,9 +180,9 @@ class LoginController extends Controller
             return back()->withErrors($validatedData->errors())->withInput();
             // return $this->respondError('Validation Error.', $validatedData->errors(), 400);
         }
-      
+
         $user = User::where('username', $request->username)->first();
-       
+
         if (!$user) {
             return back()->withErrors(['error' => 'الاسم لا يتطابق مع سجلاتنا'])->withInput();
             // return $this->respondError('Validation Error.', ['email' => [' الايميل لا يتطابق مع سجلاتنا']], 400);
@@ -240,6 +272,9 @@ class LoginController extends Controller
         // Auth::user()->tokens()->delete();
         // // $request->user()->tokens()->delete();
         // return $this->respondSuccess(null, trans('تسجيل خروج'));
+        $user = User::where('id', Auth::user()->id)->first();
+        $user->on = 0;
+        $user->save();
 
         Auth::logout();
         return redirect('/login');

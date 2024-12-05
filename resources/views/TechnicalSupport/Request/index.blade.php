@@ -1,22 +1,5 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
-        <a href="{{ route('supportRequest.index', ['status' => 'all']) }}"
-            class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">الكل</a>
         @php
             $btnColors = [
                 1 => 'info',
@@ -49,7 +32,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id ="all-student" class="table table-bordered border text-nowrap align-middle">
+            <table id ="all-student" class="table table-bordered border text-wrap align-middle">
                 <thead>
                     <tr>
                         <th>م</th>
@@ -132,8 +115,8 @@
                                                 </li>
                                                 <li>
                                                     <button type="submit"
-                                                        class="btn btn-dark rounded-0 btn-sm w-100 mt-2"
-                                                        name="status" value="8">مغلقة</button>
+                                                        class="btn btn-dark rounded-0 btn-sm w-100 mt-2" name="status"
+                                                        value="8">مغلقة</button>
                                                 </li>
                                             </ul>
                                         </form>
@@ -183,15 +166,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="input2 "> العنوان</label>
-                            <input type="text" class="form-control mb-2" id="input2" name="title">
+                            <input type="text" class="form-control mb-2" id="input2" name="title" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="input3"> الرابط</label>
-                            <input type="text" class="form-control mb-2" id="input3" name="link">
+                            <input type="text" class="form-control mb-2" id="input3" name="link" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label"> الوصف</label>
-                            <textarea class="form-control" rows="5" name="descr"></textarea>
+                            <textarea class="form-control" rows="5" name="descr" required></textarea>
                         </div>
                         <div class="form-group my-3">
                             <label for="formFile" class="form-label">ارفاق صورة أو فيديو</label>

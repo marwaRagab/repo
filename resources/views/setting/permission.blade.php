@@ -1,26 +1,9 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">الصلاحيات</h4>
         <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
             data-bs-target="#bs-example-modal-md">
-             أضف  صلاحية </button>
+            أضف صلاحية </button>
         <!-- sample modal content -->
         <div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
             aria-hidden="true">
@@ -37,7 +20,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label" for="input2 ">اختر </label>
-                                    <select name="name" class="form-control"  id="">
+                                    <select name="name" class="form-control" id="">
                                         <option value="view">view</option>
                                         <option value="create">create</option>
                                         <option value="update">update</option>
@@ -53,10 +36,10 @@
 
                                 <div class="form-group">
                                     <label class="form-label" for="input2 ">الرئيسى</label>
-                                    <select name="perant_id" class="form-control" >
+                                    <select name="perant_id" class="form-control">
                                         @foreach ($data['permission'] as $item)
                                             <option value="{{ $item->id }}">
-                                                {{ $item->title_ar . " " . ($item->parent->title_ar ?? "") }}
+                                                {{ $item->title_ar . ' ' . ($item->parent->title_ar ?? '') }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -102,7 +85,7 @@
                                 {{ $item->title_ar }}
                             </td>
                             <td>
-                                {{ $item->parent->title_ar ?? 'لايوجد'  }}
+                                {{ $item->parent->title_ar ?? 'لايوجد' }}
                             </td>
                             <td>
                                 {{ $item->user->name_ar ?? 'لايوجد' }}
@@ -116,7 +99,8 @@
                                         data-bs-target="#bs-example-modal-edit" data-id ="{{ $item->id }}">
                                         <i class="ti ti-pencil fs-5"></i>
                                     </a> --}}
-                                    <a href="{{ route('permission.destroy', $item->id) }}" class="text-dark delete ms-2">
+                                    <a href="{{ route('permission.destroy', $item->id) }}"
+                                        class="text-dark delete ms-2">
                                         <i class="ti ti-trash fs-5"></i>
                                     </a>
                                     {{-- <div id="bs-example-modal-edit" class="modal fade" tabindex="-1"
@@ -201,5 +185,3 @@
         });
     });
 </> --}}
-
-
