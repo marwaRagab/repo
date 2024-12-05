@@ -18,6 +18,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        /*  Login::class => [
+    UpdateOnlineStatus::class,
+    ],
+    Logout::class => [
+    UpdateOfflineStatus::class,
+    ],
+     */
     ];
 
     /**

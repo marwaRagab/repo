@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Military_affairs\Military_affair;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Installment extends Model
 {
     use HasFactory,SoftDeletes;
@@ -78,11 +80,20 @@ class Installment extends Model
 
     }
 
+    // public function order()
+    // {
+    //     return Order::where(['client_id'=>$this->client_id])->get();
+    // }
+
+    // public function orders()
+    // {
+    //     // dd($this->belongsTo( Order::class, 'client_id', 'client_id'));
+    //     return $this->belongsTo( Order::class, 'client_id', 'client_id');
+    // }
 
     public function orders()
     {
-        // dd($this->belongsTo( Order::class, 'client_id', 'client_id'));
-        return $this->belongsTo( Order::class, 'client_id', 'client_id');
+        return $this->hasMany(Order::class, 'client_id', 'client_id');
     }
 
 

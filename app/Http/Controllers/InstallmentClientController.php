@@ -118,6 +118,8 @@ class InstallmentClientController extends Controller
         $data['government'] = Governorate::all();
         $data['region'] = Region::all();
         $data['ministry']= Ministry::where('type','working')->get();
+
+        // dd( $data['ministry']);
         $data['boker'] = InstallmentBroker::all();
 
         $data['counts'] = [
@@ -536,7 +538,7 @@ class InstallmentClientController extends Controller
 public function getNotesIssue($id)
 {
     $notesissue = InstallmentIssue::where('installment_clients_id', $id)->with('user')->get();
-    $issue_pdf = Installment_Client::find($id);
+    // $issue_pdf = Installment_Client::find($id);
      // Fetch related user data for each issue
      $formattedNotes = $notesissue->map(function ($note) {
         $createdByUser = User::find($note->created_by); // Fetch user by ID
@@ -557,7 +559,7 @@ public function getNotesIssue($id)
     $openissuecount = $notesissue->sum('opening_amount');
     $closeissuecount = $notesissue->sum('closing_amount');
     $totalissue = $openissuecount + $closeissuecount;
-    $pdf = $issue_pdf->issue_pdf;
+    // $pdf = $issue_pdf->issue_pdf;
 
 
 
@@ -568,7 +570,6 @@ public function getNotesIssue($id)
 
     }
     return response()->json(['notesissue' => $formattedNotes,
-        'pdf'=>$pdf,
         'openissuecount' => $openissuecount,
         'closeissuecount' => $closeissuecount,
         'totalissue' => $totalissue]);
@@ -1002,6 +1003,19 @@ public function getNotesCar($id)
     public function checkCivilNumber(Request $request)
     {
         $exists = Installment_Client::where('civil_number', $request->civil_number)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function checkCivilNumber_accept(Request $request)
+    {
+        $installmentClientId = $request->input('installment_clients');
+        $civilNumber = $request->input('civil_number');
+
+        // Check if a record exists with the given id and civil_number
+        $exists = Installment_Client::where('id', $installmentClientId)
+            ->where('civil_number', $civilNumber)
+            ->exists();
 
         return response()->json(['exists' => $exists]);
     }

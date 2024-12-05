@@ -562,8 +562,10 @@
                     <div class="form-row row py-3">
                         <div class="form-group mb-3 col-6">
                             <label class="form-label"> الرقم المدنى </label>
-                            <input class="form-input form-control " type="text" name="civil_number"
-                                value="" />
+                            <input class="form-input form-control " type="text" name="civil_number" id="civil_number"
+                                value="" required/>
+                                <small id="civil-number-error" class="text-danger" style="display: none;">الرقم
+                                       الذى تم ادخاله مختلف عن الرقم المسجل</small>
                         </div>
                         <div class="form-group mb-3 col-6">
                             <label class="form-label"> الاسم </label>
@@ -902,6 +904,39 @@
       </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    document.getElementById('civil_number').addEventListener('blur', function() {
+        const civilNumber = this.value;
+        const installmentClientId = document.querySelector('input[name="installment_clients"]').value;
+        const errorElement = document.getElementById('civil-number-error');
+
+        if (civilNumber && installmentClientId) {
+            fetch('{{ route('checkCivilNumber_accept') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        civil_number: civilNumber,
+                        installment_clients: installmentClientId // Send the client ID
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        console.log('exist');
+                        errorElement.style.display = 'none';
+                    } else {
+                        console.log('notexist');
+                        errorElement.style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {

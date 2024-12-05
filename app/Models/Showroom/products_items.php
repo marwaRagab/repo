@@ -14,6 +14,7 @@ class products_items extends Model
     use HasFactory;
     protected $guarded = [];
     public $timestamps = false;
+    protected $table ='products_items_new';
 
     public function ordersFiles()
     {

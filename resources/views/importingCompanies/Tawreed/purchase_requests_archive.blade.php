@@ -1,17 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 <div class="card mt-4 py-3">
     <form method="GET" action="{{ route('tawreed.purchaseOrdersArchive') }}" class="w-100">
         <!-- Ensure the correct route -->
@@ -76,7 +62,7 @@
                     @forelse ($purchaseOrders as $order)
                         <tr>
                             <td>{{ $order->id }} </td>
-                            <td>{{ $order->company->name_ar ?? ''}}</td>
+                            <td>{{ $order->company->name_ar ?? '' }}</td>
                             <td>
                                 @foreach ($order->purchase as $index => $item)
                                     {{ $item->product->model ?? '' }}@if (!$loop->last)
@@ -84,9 +70,10 @@
                                     @endif
                                 @endforeach
                             </td>
-                            <td> {{ "المعرض" }}</td>
+                            <td> {{ 'المعرض' }}</td>
                             <td> {{ $order->amount }}</td>
-                            <td> <a href="{{ route('tawreed.print_purchase',$order->id) }}" class="text-info">طباعة</a></td>
+                            <td> <a href="{{ route('tawreed.print_purchase', $order->id) }}" class="text-info">طباعة</a>
+                            </td>
                             <td> {{ $order->send_date }}</td>
                             <td class="text-success"> فعال</td>
                         </tr>

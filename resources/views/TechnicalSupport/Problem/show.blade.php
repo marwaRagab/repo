@@ -1,17 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> محتوي المشكلة
@@ -189,7 +175,7 @@
                 <div class="mb-3">
                     <label for="fileUpload" class="form-label">إرفاق صورة أو فيديو</label>
                     <input type="file" id="fileUpload" name="file" class="form-control"
-                        accept="image/*,video/*,application/pdf" required>
+                        accept="image/*,video/*,application/pdf">
                     <small class="form-text text-muted">يجب أن يكون حجم الملف أقل من 10 ميجا.</small>
                 </div>
 

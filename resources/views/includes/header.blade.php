@@ -60,14 +60,21 @@
                                 </form>
                             </a>
                         </li>
+                        @php
+                            $count = App\Models\Notification::orderBy('created_at', 'desc')
+                                ->where('user_id', Auth::user()->id)
+                                ->where('show', 0)
+                                ->whereDate('created_at', \Carbon\Carbon::today())
+                                ->count();
+                        @endphp
                         <li class="nav-item dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
                                 aria-expanded="false">
                                 <i class="ti ti-bell fs-7"></i>
                                 <span
                                     class="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger">
-                                    9
-                                    <span class="visually-hidden">unread messages</span>
+                                    {{ $count }}
+                                    <span class="visually-hidden">un read</span>
                                 </span>
                             </a>
                             <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
@@ -79,8 +86,11 @@
 
                                 </div>
                                 @php
+
                                     $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
                                         ->where('user_id', Auth::user()->id)
+                                        ->where('show', 0)
+                                        ->whereDate('created_at', \Carbon\Carbon::today())
                                         ->take(2)
                                         ->get();
 
@@ -119,18 +129,21 @@
                                 aria-expanded="false">
                                 <div class="d-flex align-items-center flex-shrink-0">
                                     <div class="user-profile me-sm-3 me-2">
-                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}" width="40"
+                                        <img src="{{ asset('user_profile/' . Auth::user()->img) }}" width="40"
                                             class="rounded-circle" alt="spike-img">
+
+
+
                                     </div>
                                     <span class="d-sm-none d-block"><iconify-icon
                                             icon="solar:alt-arrow-down-line-duotone"></iconify-icon></span>
 
                                     <div class="d-none d-sm-block">
                                         <h6 class="fs-4 mb-1 profile-name">
-                                            Mike Nielsen
+                                            {{ Auth::user()->name_ar }}
                                         </h6>
                                         <p class="fs-3 lh-base mb-0 profile-subtext">
-                                            Admin
+                                            {{ Auth::user()->roles ? Auth::user()->roles->name_ar : '' }}
                                         </p>
                                     </div>
                                 </div>
