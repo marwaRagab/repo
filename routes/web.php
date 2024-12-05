@@ -517,7 +517,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
 
-    Route::post('/update-tab', [NotificationController::class, 'updateTab']);
+    Route::get('/update-tab', [NotificationController::class, 'updateTab']);
 
     //transactions
     Route::get('/human-resources/transactions-done', [TransactionsCompletedController::class, 'index'])->name('transactions.done.index'); //->middleware('permission:view_transactions_completed');
