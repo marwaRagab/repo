@@ -2,44 +2,53 @@
 
 namespace App\Repositories\ImportingCompanies;
 
-use App\Models\ImportingCompanies\Product;
-use App\Models\ProductClass;
-use App\Models\Mark;
-use App\Models\Company;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use App\Interfaces\ImportingCompanies\PurchaseOrdersRepositoryInterface;
+use App\Models\Company;
 use App\Models\ImportingCompanies\Tawreed\OrdersFiles;
-use App\Models\Order;
-use App\Models\OrderItem;
-
-
-
 use App\Models\ImportingCompanies\Tawreed\purchase_items;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
 {
+
     public function index($request)
-    {        
-        $purchaseOrders = Order::with(['order_item','client'])
-                           ->where('status','finished')->where('archived', 0)->where('sending','no')
-                           ->groupBy('orders.id')
-                           ->orderBy('orders.id','asc');
+    {
+        if ($request->ajax()) {
+            // Fetch data for DataTable
+            $purchaseOrders = Order::with(['client', 'order_item'])
+                ->where('status', 'finished')
+                ->where('archived', 0)
+                ->where('sending', 'no')
+                ->when($request->order_id, function ($query) use ($request) {
+                    $query->where('id', $request->order_id);
+                })
+                ->when($request->company_id, function ($query) use ($request) {
+                    $query->where('company_id', $request->company_id);
+                });
 
+            return datatables()
+                ->eloquent($purchaseOrders)
+                ->addColumn('client_name', function ($order) {
+                    return $order->client->name_ar ?? '';
+                })
+                ->addColumn('products_count', function ($order) {
+                    return $order->order_item->count();
+                })
+                ->addColumn('invoice_value', function ($order) {
+                    return number_format($order->order_item->sum('price_qabila'), 3);
+                })
 
-        $companies = Company::all();
-        
-        if ($request->filled('order_id')) {
-            $purchaseOrders->where('id', $request->order_id);
+                ->addColumn('actions', function ($order) {
+                    return view('importingCompanies.orders.partials.actions', compact('order'))->render();
+                })
+                ->rawColumns(['actions'])
+                ->addIndexColumn()
+                ->make(true);
         }
-
-        if ($request->filled('company_id')) {
-            $purchaseOrders->where('company_id', $request->company_id);
-        }
-
-        $purchaseOrders = $purchaseOrders->get();
 
         $title = "طلبات الشراء";
+
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -48,10 +57,11 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
+        $companies = Company::all();
         $view = 'importingCompanies.Orders.index';
         return view(
             'layout',
-            compact('title', 'purchaseOrders', 'view', 'breadcrumb', 'companies')
+            compact('title', 'view', 'breadcrumb', 'companies')
         );
     }
 
@@ -111,8 +121,8 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
     public function print_invoice($order_id)
     {
         $order = Order::with('client')->findORFail($order_id);
-        
-    //    dd($order);
+
+        //    dd($order);
         $title = "المنتجات";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " ";
@@ -121,7 +131,7 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         $view = 'importingCompanies/Orders/print_invoice';
         return view(
             'layout',
-            compact('title', 'order', 'view', 'breadcrumb','order_id')
+            compact('title', 'order', 'view', 'breadcrumb', 'order_id')
         );
     }
 
