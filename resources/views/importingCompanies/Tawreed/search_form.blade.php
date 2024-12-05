@@ -56,7 +56,7 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="file-export" class="table table-bordered border text-nowrap align-middle">
+            <table id="all-student1" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <tr>
                         <th>#</th>

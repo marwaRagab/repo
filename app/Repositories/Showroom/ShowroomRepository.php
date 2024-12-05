@@ -148,6 +148,7 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
             ->get();
+           
             // dd($new_items);
         $title = 'استلام البضاعة  ';
         $view = 'showroom.add_serial';
@@ -166,25 +167,46 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         // $data = purchase_items::with('product','order_file')
         //                         ->where('purchase_orders_items.order_id', $request->order_id)
         //                         ->get();
-
-        $new_items = products_items::with('product', 'ordersFiles')
+        
+            $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
             ->get();
+            foreach ($new_items as $prod_item) {
+                $messages = [
+                    'serial_number_'.$prod_item->id.'.required' => 'السريال  مطلوب.',
+                    'serial_number_img_'.$prod_item->id.'.required' => 'الصورة مطلوبة.',
+                ];
+        
+                $validatedData = Validator::make($request->all(), [
+                    'serial_number_'.$prod_item->id => 'required',
+                    'serial_number_img_'.$prod_item->id => 'required',
+                    
+                ], $messages);
+        
+                if ($validatedData->fails()) {
+        
+                    return redirect()->back()->withErrors($validatedData)->withInput();
+                }
+                else
+                { 
+                    $serial = $request->input('serial_number_'.$prod_item->id);
+                    if ($request->hasFile('serial_number_img_'.$prod_item->id)) {
+                        // $file = $request->file('serial_number_img_'.$prod_item->id);
+                        // $filePath = $file->store('uploads/new_photos', 'public');
 
-        foreach ($new_items as $prod_item) {
-            $serial = $request->input('serial_number_' . $prod_item->id);
-            if ($request->hasFile('serial_number_img_' . $prod_item->id)) {
-                $file = $request->file('serial_number_img_' . $prod_item->id);
-                $filePath = $file->store('uploads/new_photos', 'public');
+                        $filename = time() . '-' . $request->file('serial_number_img_'.$prod_item->id)->getClientOriginalName();
+                        $path = $request->file('serial_number_img_'.$prod_item->id)->move(public_path('showroom'), $filename);
+                        $filePath = 'showroom' . '/' . $filename;
 
-                $prod_item->update([
-                    'available' => 1,
-                    'serial_number' => $serial,
-                    'serial_number_img' => $filePath
-                ]);
+                        $prod_item->update([
+                            'available' => 1,
+                            'serial_number' => $serial,
+                            'serial_number_img' => $filePath
+                        ]);
+                    }
+
+                    return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
+               }
             }
-        }
-
-        return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
     }
 }
