@@ -67,6 +67,7 @@ use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
+use App\Http\Controllers\old_dbController;
 use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\Stop_bankController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
@@ -109,7 +110,7 @@ Route::get('/', function () {
 
     return view('login');
 });
-
+Route::get('/db/{type}',[old_dbController::class,'index']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
