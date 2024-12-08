@@ -516,6 +516,13 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ route('military_affairs.delegates') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu"> المسؤولين
+                                </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ route('transactions.done.index') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> منجزين المعاملات </span>

@@ -169,7 +169,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stop_bank/{id?}', [Stop_bankController::class, 'index'])->name('stop_bank');
     Route::post('/stop_travel_convert', [Stop_travelController::class, 'stop_travel_convert']);
-
+    Route::get('military_affairs/stop_bank/archive/{id?}', [Stop_bankController::class, 'archive'])->name('stop_bank.archive');
     // Route::get('/checking/{id?}', [ CheckingController::class, 'index'])->name('checking');
     // Route::post('/update_actions_up/', [ CheckingController::class, 'update_actions_up']);
     // Route::post('/update_actions_reminder/', [ CheckingController::class, 'update_actions_reminder']);
