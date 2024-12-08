@@ -68,11 +68,16 @@ class SettlementRepository implements SettlementRepositoryInterface
         $this->data['settlement'] = Military_affairs_settlement::when($type_sellement, function ($q) use ($type_sellement) {
 
             return $q->where('type', $type_sellement);
-        })->with('military_affair')
-            ->get();
+          })->with('military_affair', function ($query) {
+             $query->where('status', '=', 'execute');
+            return $query->where('archived', '=', 0);
+           })->get();
         foreach ($this->data['settlement'] as $value) {
-            $Quotient = (int)($value->settle_amount / $value->installment_no);
-            $Remainder = $value->settle_amount % $value->installment_no;
+             if($value->installment_no>0)
+             $no_installment = $value->installment_no;
+              else $no_installment = 1 ;
+            $Quotient = (int)($value->settle_amount /$no_installment );
+            $Remainder = $value->settle_amount % $no_installment;
             $value->phone = ($value->military_affair->installment->client ? $value->military_affair->installment->client->client_phone->last() : '');
             $value->month_amount = $Quotient;
             $value->last_month_amount = $Quotient + $Remainder;
