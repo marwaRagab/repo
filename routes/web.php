@@ -67,6 +67,7 @@ use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
+use App\Http\Controllers\old_dbController;
 use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\Stop_bankController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
@@ -109,7 +110,7 @@ Route::get('/', function () {
 
     return view('login');
 });
-
+Route::get('/db/{type}',[old_dbController::class,'index']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
@@ -517,7 +518,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
 
-    Route::post('/update-tab', [NotificationController::class, 'updateTab']);
+    Route::get('/update-tab', [NotificationController::class, 'updateTab']);
 
     //transactions
     Route::get('/human-resources/transactions-done', [TransactionsCompletedController::class, 'index'])->name('transactions.done.index'); //->middleware('permission:view_transactions_completed');

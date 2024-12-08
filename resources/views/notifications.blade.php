@@ -1,3 +1,4 @@
+
 <div class="card">
     <div class="card-body">
         <div class="row">
@@ -101,6 +102,7 @@
 
         // Send AJAX request to update the column in the database
         $.ajax({
+
             url: '/update-tab', // Laravel route to handle the update
             method: 'POST',
             data: {

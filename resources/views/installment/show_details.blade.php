@@ -143,7 +143,7 @@
                                         </tr>
                                         <tr>
                                             <th>قسط الساينت</th>
-                                            <td>{{$Installment->installment_client->cinet_installment}}</td>
+                                            <td>{{$Installment->installment_client->cinet_installment ?? ''}}</td>
                                         </tr>
                                         <tr>
                                             <th>بنك العميل</th>
@@ -176,7 +176,7 @@
                                         <tr>
                                             <th>العنوان</th>
                                             <td>
-                                            المنطقة :- {{$data['regions']->name_ar}}
+                                            المنطقة {{$data['regions']->name_ar   ?? ''}}}
                                                    القطعة :- {{$Client->client_address->first()->block}}
                                                 شارع :- {{$Client->client_address->first()->street}}
                                             مبنى :- {{$Client->client_address->first()->building}}</td>
@@ -297,6 +297,7 @@
                                             <tbody>
                                                 <!-- start row -->
                                                 {{-- $data['InstallmentClientNote'] --}}
+                                                @if(isset($data['InstallmentClientNote']))
                                                 @foreach( $data['InstallmentClientNote'] as $item)
                                                 <tr>
                                                     <td>
@@ -309,6 +310,7 @@
         
                                                 </tr>
                                                 @endforeach
+                                                @endif
                                                 @foreach( $data['InstallmentNote'] as $item)
                                                 <tr>
                                                     <td>
@@ -342,7 +344,7 @@
                                             </thead>
                                             <tbody>
                                                 <!-- start row -->
-
+                                                 @if(isset($data['InstallmentClientNote']))
                                                 @foreach( $data['InstallmentClientNote'] as $item)
                                                 <tr>
                                                     <td>
@@ -356,6 +358,7 @@
         
                                                 </tr>
                                                 @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -443,6 +446,7 @@
                                             </thead>
                                             <tbody>
                                                 <!-- start row -->
+                                                  @if(isset($data['Installmentcar']))
                                                 @foreach( $data['Installmentcar'] as $item)
                                                 <tr>
                                                     <td>
@@ -455,6 +459,7 @@
         
                                                 </tr>
                                                 @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -479,6 +484,7 @@
                                             <tbody>
                                                 <!-- start row -->
 
+                                                 @if(isset($data['Installmentissue']))
                                                 @foreach( $data['Installmentissue'] as $item)
                                                 <tr>
                                                     <td>
@@ -496,6 +502,7 @@
         
                                                 </tr>
                                                 @endforeach
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -828,7 +835,67 @@
     </div>
 </div> --}}
 
-{{-- {{ dd($purchase_orders_array) }} --}}
+<!--<div class="card">-->
+<!--    <div class="card-body">-->
+<!--        <div class="table-responsive">-->
+<!--            <div class="accordion accordion-flush" id="accordionFlushExampleItems">-->
+<!--                <div class="accordion-item">-->
+<!--                    <h2 class="accordion-header" id="flush-headingFour">-->
+<!--                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                            data-bs-target="#flush-collapseFour" aria-expanded="false"-->
+<!--                            aria-controls="flush-collapseFour">-->
+<!--                            <i class="ti ti-sort-descending-2 fs-6 mx-1" style="color: rgb(245, 18, 18);"></i> عدد-->
+<!--                            الاصناف <span class="text-gray mx-1">( قم بالضغط هنا لاظهار عدد الاصناف)</span>-->
+<!--                        </button>-->
+<!--                    </h2>-->
+<!--                    <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"-->
+<!--                        data-bs-parent="#accordionFlushExampleItems">-->
+<!--                        <div class="accordion-body">-->
+<!--                            <div class="table-responsive pb-4">-->
+<!--                                <table id="all-student" class="table table-bordered border text-nowrap align-middle">-->
+<!--                                    <thead>-->
+                                        <!-- start row -->
+
+<!--                                        <tr>-->
+<!--                                            <th> الماركة </th>-->
+<!--                                            <th>الصنف </th>-->
+<!--                                            <th> الموديل </th>-->
+<!--                                            <th>سعر البيع </th>-->
+<!--                                            <th> سعر المعروض</th>-->
+<!--                                            <th> سعر تكلفة الوحدة</th>-->
+<!--                                            <th> العدد </th>-->
+<!--                                            <th> اجمالي التكلفة </th>-->
+<!--                                        </tr>-->
+                                        <!-- end row -->
+<!--                                    </thead>-->
+<!--                                    <tbody>-->
+                                        <!-- start row -->
+<!--                                        @foreach( $purchase_orders_items as $item)-->
+
+<!--                                        <tr>-->
+<!--                                            <td>-->
+<!--                                                {{$item->product->mark->name_ar}}-->
+<!--                                            </td>-->
+<!--                                            <td>{{$item->product->class->name_ar}} </td>-->
+<!--                                            <td>{{$item->product->model}}</td>-->
+<!--                                            <td>{{$item->product->price}}</td>-->
+<!--                                            <td>{{$item->product->price}}</td>-->
+<!--                                            <td>{{$item->product->net_price}}</td>-->
+<!--                                            <td>{{$item->count}}</td>-->
+<!--                                            <td>{{$item->count * $item->product->price}}</td>-->
+<!--                                        </tr>-->
+<!--                                        @endforeach-->
+
+<!--                                    </tbody>-->
+<!--                                </table>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
 <div class="card">
     <div class="card-body">
@@ -870,7 +937,7 @@
                                         
                                     
                                         <tr>
-                                            <td>
+                                             <td>
                                                 {{ $item['product_order']->first()?->mark->name_ar ?? '' }}
                                             </td>
                                             <td>{{$item['product_order']->first()?->class->name_ar}} </td>
@@ -898,6 +965,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- <div class="card">
     <div class="card-body">
@@ -943,8 +1011,506 @@
         </div>
     </div>
 </div> --}}
-{{-- {{ dd($Installment) }} --}}
-{{-- {{ dd($data['Client']) }} --}}
+
+<!--<div class="card">-->
+<!--    <div class="card-body">-->
+<!--        <div class="table-responsive">-->
+<!--            <div class="accordion accordion-flush" id="accordionFlushExampleFiles">-->
+<!--                <div class="accordion-item">-->
+<!--                    <h2 class="accordion-header" id="flush-headingFive">-->
+<!--                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"-->
+<!--                            data-bs-target="#flush-collapseFive" aria-expanded="false"-->
+<!--                            aria-controls="flush-collapseFive">-->
+<!--                            <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة-->
+<!--                            <span class="text-gray mx-1">( قم بالضغط هنا لاظهار الملفات المرفوعة)</span>-->
+<!--                        </button>-->
+<!--                    </h2>-->
+<!--                    <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"-->
+<!--                        data-bs-parent="#accordionFlushExampleFiles">-->
+<!--                        <div class="accordion-body">-->
+<!--                            <div class="scroll-container">-->
+                                <!--{{-- @foreach($installment_months as $item)-->
+                                <!--<div class="item" data-file="{{ $item->img_dir }}">-->
+                                <!--    <img src="{{ $item->img_dir }}" alt="{{ $item->notes ?? 'Image' }}">-->
+                                <!--</div>-->
+                                <!--@endforeach --}}-->
+
+<!--                                <div class="owl-carousel leadership-carousel owl-theme mt-lg-5 mb-lg-7">-->
+
+                                    
+<!--                                    @if ($Installment->contract_1 != Null)-->
+<!--                                        <div class="item">-->
+<!--                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                            <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                            <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                                {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_1 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_1 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button>-->
+<!--                                                 --}}-->
+<!--                                                 <p for="">العقد 1</p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_1 }}', 'https://electron-kw.com/test_vr/{{$Installment->contract_1 }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_1}}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                            </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    @endif-->
+<!--                                    @if ($Installment->contract_2 != Null)-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+                                            
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_2 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_2 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+<!--                                                <p for="">العقد 2</p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_2}}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_2 }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_2 }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+<!--                                    @if ($Installment->contract_cinet_1 != Null)-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"-->
+<!--                                           class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                           تحميل-->
+<!--                                           </button>-->
+<!--                                           <button type="button" -->
+<!--                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"-->
+<!--                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                           طباعة-->
+<!--                                           </button> --}}-->
+                                           
+<!--                                           <p for="">عقد الساينت 1</p>-->
+<!--                                           <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_cinet_1 }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_cinet_1 }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+<!--                                    @if ($Installment->contract_cinet_2 != Null)-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                            onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_1 }}');"-->
+<!--                                           class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                           تحميل-->
+<!--                                           </button>-->
+<!--                                           <button type="button" -->
+<!--                                            onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_1 }}');"-->
+<!--                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                           طباعة-->
+<!--                                           </button> --}}-->
+<!--                                           <p for="">عقد الساينت 2</p>-->
+<!--                                           <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_cinet_2  }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/test_vr/{{ $Installment->contract_cinet_2  }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+<!--                                    @if ($Installment->prods_recieved_img != Null)-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+                                           
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+<!--                                                <p for="">صورة استسلام المنتجات</p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/test_vr/{{ $Installment->prods_recieved_img   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/test_vr/{{ $Installment->prods_recieved_img   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+<!--                                    {{-- client --}}-->
+
+<!--                                    @foreach ($data['Client']->client_image as $img_Client)-->
+
+<!--                                    @if ($img_Client->type == "my_img")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <a -->
+<!--                                                id="downloadLink"-->
+<!--                                                href="https://electron-kw.net/{{ $img_Client->path }}" -->
+<!--                                                onclick="handleRedirect(event, 'https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                title="Download the file from the primary or fallback server.">-->
+<!--                                                تحميل-->
+<!--                                            </a>-->
+
+<!--                                            <a -->
+<!--                                                id="printLink"-->
+<!--                                                href="https://electron-kw.net/{{ $img_Client->path }}" -->
+<!--                                                onclick="handlePrint(event, 'https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                title="Print the file from the primary or fallback server.">-->
+<!--                                                طباعة-->
+<!--                                            </a> --}}-->
+
+<!--                                            <p for="">هويتى</p>-->
+<!--                                            {{-- <br> --}}-->
+<!--                                                <a -->
+<!--                                                    target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                    target="_blank" -->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+
+
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+
+<!--                                    @if ($img_Client->type == "work_img")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+
+<!--                                                <p for="">صورة هوية العمل</p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank" -->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+
+<!--                                    @if ($img_Client->type == "salary_img")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+
+<!--                                                <p for="">شهادة الراتب  </p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+<!--                                    @if ($img_Client->type == "cid_img1")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+
+<!--                                                <p for="">صورة  البطاقة المدنية وجه</p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+                                    
+<!--                                    @if ($img_Client->type == "cid_img_2")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+
+<!--                                                <p for=""> صورة البطاقة المدنية ضهر </p>-->
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+
+<!--                                    @if ($img_Client->type == "cinet_img")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+
+<!--                                                <p for="">عقد الساينت</p>-->
+<!--                                                <a -->
+<!--                                                    target="_blank" -->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                     target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+
+<!--                                    @if ($img_Client->type == "civil_img")-->
+<!--                                    <div class="item">-->
+<!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
+<!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
+<!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
+<!--                                            {{-- <button type="button" -->
+<!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
+<!--                                                تحميل-->
+<!--                                                </button>-->
+<!--                                                <button type="button" -->
+<!--                                                 onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"-->
+<!--                                                class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
+<!--                                                طباعة-->
+<!--                                                </button> --}}-->
+<!--                                                <p for="">الرقم المدنى  </p>-->
+<!--                                                <a -->
+                                                   
+<!--                                                   target="_blank"-->
+<!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
+<!--                                                    title="Download the file from the primary or fallback server.">-->
+<!--                                                    تحميل-->
+<!--                                                </a>-->
+
+<!--                                                <a -->
+<!--                                                    target="_blank"-->
+<!--                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{ $img_Client->path   }}'); return false;"-->
+<!--                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"-->
+<!--                                                    title="Print the file from the primary or fallback server.">-->
+<!--                                                    طباعة-->
+<!--                                                </a>-->
+<!--                                        </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    @endif-->
+
+                                        
+<!--                                    @endforeach-->
+                                                                      
+                                   
+
+                                    
+
+<!--                                  </div>-->
+
+<!--                            </div>-->
+
+                           
+<!--                        </div>-->
+<!--                    </div>-->
+                    
+
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -1490,7 +2056,7 @@
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                        @if($Installment->months == 24)
+                                        @if($Installment->months == 24  && $Installment->laws==1 )
                                         <tr>
                                             <td> {{$i+1}} </td>
                                             <td>{{ ($total_madionia1 )}}
@@ -2502,7 +3068,7 @@
         console.log("Checking primary URL:", primaryUrl);
 
         const primaryReachable = await checkImage(primaryUrl);
-        alert(primaryReachable);
+        // alert(primaryReachable);
         if (primaryReachable) {
             console.log("Primary URL exists, redirecting...");
             // window.location.href = primaryUrl; // Uncomment to enable redirection
@@ -2596,56 +3162,6 @@
 
 
 </script>
-
-{{-- <script>
-    async function checkFileAndRedirect(primaryUrl, fallbackUrl) {
-        const primaryReachable = await checkImage(primaryUrl);
-        var link = document.getElementById('downloadLink'); // Select the specific link
-        if (primaryReachable) {
-            console.log("Primary URL exists, updating href to primary URL.");
-            link.href = primaryUrl; // Update the href to the primary URL
-        } else {
-            console.log("Primary URL not found, updating href to fallback URL.");
-            link.href = fallbackUrl; // Update the href to the fallback URL
-        }
-    }
-
-    async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
-        const primaryReachable = await checkImage(primaryUrl);
-        const link = document.getElementById('printLink'); // Select the specific link
-        const targetUrl = primaryReachable ? primaryUrl : fallbackUrl;
-
-        console.log(`Opening URL for printing: ${targetUrl}`);
-        const newWindow = window.open(targetUrl, "_blank");
-
-        if (newWindow) {
-            newWindow.onload = () => {
-                try {
-                    newWindow.print();
-                } catch (error) {
-                    console.error("Error during printing:", error);
-                }
-            };
-        } else {
-            console.error("Failed to open the new window. Ensure this is triggered by a user action.");
-        }
-    }
-
-    function checkImage(url) {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-                console.log("Image is accessible:", url);
-                resolve(true);
-            };
-            img.onerror = () => {
-                console.log("Image is not accessible:", url);
-                resolve(false);
-            };
-            img.src = url;
-        });
-    }
-</script> --}}
 
 <script>
 $('#checkAll').click(function(event) {
