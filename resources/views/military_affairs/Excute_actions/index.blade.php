@@ -57,7 +57,7 @@
                                 <td>
                                     {{$item->installment->client->name_ar}}
                                     <br>
-                                     ({{$item->installment->id}})
+                                    ({{$item->installment->id}})
                                     <br>
                                     {{$item->installment->client->	civil_number}}
                                 </td>
@@ -83,9 +83,11 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                                   data-bs-target="#open-details">
-                                                    التفاصيل</a>
+
+
+                                                <a class="btn btn-warning rounded-0 w-100 mt-2" href="{{ route('installment.show-installment', ['id' => $item->id]) }}"
+                                                >
+                                                    التفاصيل<
                                             </li>
                                             <li>
                                                 <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
@@ -117,7 +119,7 @@
                                 <td>
                                     {{$item->installment->client->name_ar}}
                                     <br>
-                                   ({{$item->installment->id}})
+                                    ({{$item->installment->id}})
                                     <br>
                                     {{$item->installment->client->	civil_number}}
                                 </td>
@@ -143,7 +145,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="btn btn-warning rounded-0 w-100 mt-2" href=""
+                                                <a class="btn btn-warning rounded-0 w-100 mt-2" href="{{ route('installment.show-installment', ['id' => $item->id]) }}"
                                                 >
                                                     التفاصيل</a>
                                             </li>
@@ -159,12 +161,12 @@
                                                 </a>
                                             </li>
 
-                                             @if($item->excute_actions_amount)
-                                              <li>
-                                                 <a class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                                    data-bs-target="#add-check-{{$item->id}}"> استلام الشيكات
-                                                 </a>
-                                             </li>
+                                            @if($item->excute_actions_amount)
+                                                <li>
+                                                    <a class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                                       data-bs-target="#add-check-{{$item->id}}"> استلام الشيكات
+                                                    </a>
+                                                </li>
                                             @endif
 
 
@@ -289,17 +291,17 @@
                                                   action="{{url('add_check')}}" method="post"
                                                   enctype="multipart/form-data">
                                                 @csrf
-                                            <div class="modal-content">
-                                                <div class="modal-header d-flex align-items-center">
-                                                    <h4 class="modal-title" id="myModalLabel">
-                                                        الملاحظة</h4>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                      @php
-                                                        $check_amount = $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
-                                                         @endphp
-                                                    <input type="hidden"  name="military_affairs_id" value="{{$item->id}}"/>
+                                                <div class="modal-content">
+                                                    <div class="modal-header d-flex align-items-center">
+                                                        <h4 class="modal-title" id="myModalLabel">
+                                                            الملاحظة</h4>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @php
+                                                            $check_amount = $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
+                                                        @endphp
+                                                        <input type="hidden"  name="military_affairs_id" value="{{$item->id}}"/>
 
                                                         <div class="form-row">
                                                             <div class="form-group mb-3">
@@ -322,15 +324,15 @@
 
                                                         </div>
 
-                                                </div>
-                                                <div class="modal-footer d-flex ">
-                                                    <button type="submit" class="btn btn-primary">حفظ</button>
-                                                    <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
-                                                        الغاء
-                                                    </button>
-                                                </div>
+                                                    </div>
+                                                    <div class="modal-footer d-flex ">
+                                                        <button type="submit" class="btn btn-primary">حفظ</button>
+                                                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
+                                                            الغاء
+                                                        </button>
+                                                    </div>
 
-                                            </div>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -649,13 +651,13 @@
     function check(id) {
         var amount=id.value;
 
-      var  val = "<?php   echo $check_amount ;  ?>";
+        var  val = "<?php   echo $check_amount ;  ?>";
 
-      if(amount > val){
-          alert( val +'مبلغ الشيك لابد ان يكون اقل من ');
+        if(amount > val){
+            alert( val +'مبلغ الشيك لابد ان يكون اقل من ');
 
-      }
-      return false;
+        }
+        return false;
 
     }
 

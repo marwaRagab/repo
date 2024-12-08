@@ -3,6 +3,13 @@
         data-bs-target="#edit-example-modal-md-{{ $product->id }}">
         تعديل
     </button>
+    @php
+
+$user_id=Auth::user()->id;
+$user= \App\Models\User::findorfail($user_id);
+ $per= $user->hasPermission('delete_products');
+    @endphp
+    @if(auth()->user()->hasPermission('delete_products'))
     <form method="POST" action="{{ route('deleting', $product->id) }}"
         onsubmit="return confirm('هل أنت متأكد أنك تريد حذف هذا المنتج؟');">
         @csrf
@@ -11,6 +18,7 @@
             <i class="fas fa-trash-alt"></i>
         </button>
     </form>
+    @endif
 
     <div id="edit-example-modal-md-{{ $product->id }}" class="modal fade" tabindex="-1"
         aria-labelledby="edit-example-modal-md" aria-hidden="true">

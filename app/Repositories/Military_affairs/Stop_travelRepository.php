@@ -46,13 +46,16 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
 
         $governorate_id= $request->governorate_id;
         $message ="تم دخول صفحة فتح ملف" ;
-        $user_id = 1 ;
-        //$user_id =  Auth::user()->id,
-       // $this->log($user_id ,$message);
-       // $user_id =  Auth::user()->id;
+
+        $user_id =  Auth::user()->id;
+        log_move($user_id ,$message);
+
         $this->data['title']='   منع سفر';
         $this->data['items']= Military_affair::where('archived','=',0)
-            ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_travel' =>1  ])->with('installment')->with('status_all')->get();
+            ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_travel' =>1  ])->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })->with('status_all')->get();
+
         $title=' منع السفر';
 
         $breadcrumb = array();
