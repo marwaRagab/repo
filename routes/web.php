@@ -67,6 +67,7 @@ use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
+use App\Http\Controllers\old_dbController;
 use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\Stop_bankController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
@@ -109,7 +110,7 @@ Route::get('/', function () {
 
     return view('login');
 });
-
+Route::get('/db/{type}',[old_dbController::class,'index']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
@@ -410,6 +411,8 @@ Route::middleware('auth')->group(function () {
         return Excel::download(new ClientsExport, 'clients.xlsx');
     })->name('export.clients');
 
+    Route::get('payment/process/{id}', [InstallmentController::class, 'process'])->name('payment.process');
+
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
     Route::post('installment/pay_part/{id}', [InstallmentController::class, 'pay_part'])->name('installment.pay_part');
@@ -492,7 +495,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/transfer/available_products/delete/{id}', [TransferController::class, 'delete_available_product'])->name('products.items.delete'); //->middleware('permission:update_products_items');
     Route::get('/products/data', [ProductController::class, 'getProductsData'])->name('products.data');
 
-    Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
+    // Route::get('/transfer/get_product_by_nymber', [InstallmentApproveController::class, 'getProductDetailsByNumber'])->name('products.getByNumber');
     // Importing companies
     // Route::Resource('products', ProductController::class);
     Route::get('/products', [ProductController::class, 'index'])->name('products.index'); //->middleware('permission:view_products');
@@ -516,6 +519,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/human-resources/clients/{id}', [ClientController::class, 'update'])->name('clients.update'); //->middleware('permission:update_clients');
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
+
+    Route::get('/update-tab', [NotificationController::class, 'updateTab']);
 
     //transactions
     Route::get('/human-resources/transactions-done', [TransactionsCompletedController::class, 'index'])->name('transactions.done.index'); //->middleware('permission:view_transactions_completed');

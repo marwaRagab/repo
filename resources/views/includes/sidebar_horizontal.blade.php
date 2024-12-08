@@ -37,6 +37,14 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('supportRequest.index') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu"> التطوير
+
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
