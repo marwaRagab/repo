@@ -411,6 +411,8 @@ Route::middleware('auth')->group(function () {
         return Excel::download(new ClientsExport, 'clients.xlsx');
     })->name('export.clients');
 
+    Route::get('payment/process/{id}', [InstallmentController::class, 'process'])->name('payment.process');
+
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
     Route::post('installment/pay_part/{id}', [InstallmentController::class, 'pay_part'])->name('installment.pay_part');
