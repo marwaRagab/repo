@@ -2502,7 +2502,7 @@
         console.log("Checking primary URL:", primaryUrl);
 
         const primaryReachable = await checkImage(primaryUrl);
-        alert(primaryReachable);
+        // alert(primaryReachable);
         if (primaryReachable) {
             console.log("Primary URL exists, redirecting...");
             // window.location.href = primaryUrl; // Uncomment to enable redirection
