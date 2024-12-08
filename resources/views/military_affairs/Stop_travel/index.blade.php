@@ -110,8 +110,13 @@
 
                 <!-- start row -->
                 @if(isset($items))
+                    @php
+                        $x=1;
+                    @endphp
                     @foreach( $items as $item)
-                        @if($item->installment->finished==0)
+
+                        @if($item->installment)
+
                             @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->governorate_id)
                                 <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                     aria-controls="collapseExample">
@@ -235,7 +240,7 @@
                                         <td>{{$date_request}}</td>
                                         <td>   {{$date_command}}</td>
                                     @elseif(Request::get('stop_travel_type')=='stop_travel_cancel_request')
-                                        <td>ر
+                                        <td>
                                             @php
                                                 $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel_request')->first()->date;
                                               // $final_date=explode('',$date_request);
@@ -665,14 +670,14 @@
                                 <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                     aria-controls="collapseExample">
                                     <td>
-                                        {{ $loop->index + 1 }}
+                                        {{$x++ }}
                                     </td>
                                     <td>
                                         <a href=""> {{$item->installment->id}}</a>
 
                                     </td>
                                     <td>{{$item->installment->client->name_ar}}</td>
-                                    <td>{{$item->installment->client->court->name_ar}}
+                                    <td>{{--{{$item->installment->client->court->name_ar}}--}}
                                         <br>
                                         {{$item->type_papar}}
                                     </td>
@@ -688,12 +693,14 @@
 
                                     <td>
                                         {{$item->issue_id}}
+{{--
                                         {{$item->status_all->where('type_id','request')->first()->date}}
+--}}
                                     </td>
                                     @if(Request::get('stop_travel_type')=='command')
                                         <td>
                                             @php
-                                                $date_request=$item->status_all->where('type_id','request')->first()->date;
+                                               // $date_request=$item->status_all->where('type_id','request')->first()->date;
                                               // $final_date=explode('',$date_request);
                                             @endphp
                                             {{$date_request}}
@@ -1210,6 +1217,7 @@
                                 </tr>
 
                             @endif
+
                         @endif
                     @endforeach
 

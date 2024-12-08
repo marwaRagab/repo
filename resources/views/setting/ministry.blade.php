@@ -1,25 +1,9 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> الوزارات</h4>
         <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                href="{{ route('ministry_percentages.index') }}">
-                نسب الوزارات </a>
+            href="{{ route('ministry_percentages.index') }}">
+            نسب الوزارات </a>
         <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal"
             data-bs-target="#bs-example-modal-md">
             أضف الوزارة

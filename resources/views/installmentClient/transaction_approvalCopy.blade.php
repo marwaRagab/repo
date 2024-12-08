@@ -1288,6 +1288,8 @@
   </div>
 </div>
 </div>
+</div>
+
 </form>
 <div class="card">
 <div class="card-body">

@@ -1007,4 +1007,17 @@ public function getNotesCar($id)
         return response()->json(['exists' => $exists]);
     }
 
+    public function checkCivilNumber_accept(Request $request)
+    {
+        $installmentClientId = $request->input('installment_clients');
+        $civilNumber = $request->input('civil_number');
+
+        // Check if a record exists with the given id and civil_number
+        $exists = Installment_Client::where('id', $installmentClientId)
+            ->where('civil_number', $civilNumber)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
 }

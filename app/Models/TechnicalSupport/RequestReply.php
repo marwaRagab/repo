@@ -10,7 +10,7 @@ class RequestReply extends Model
 {
     use HasFactory;
 
-    protected $table = 'prev_table_request_replay';
+    protected $table = 'request_replay';
     const UPDATED_AT = null;
 
     protected $fillable = ['problem_id', 'descr', 'file', 'user_id'];

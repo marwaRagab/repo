@@ -130,6 +130,16 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
         $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
         $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
+
+       //
+        // $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL]);
+        $update_notes_date=Military_affairs_notes::where(['military_affairs_id' =>$request->military_affairs_id , 'type'=>'open_file','date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
+
+        if($update_notes_date){
+            $data['date_end']= date('Y-m-d');
+            $update_notes_date->update($data);
+        }
+
         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
         change_status($request,$request->military_affairs_id);
         $id=$request->military_affairs_id;
@@ -269,6 +279,12 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
             Add_note($old_time_type,$new_time_type4,$request->military_affairs_id);
 
+        }
+        $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL,'military_affairs_id' =>$request->military_affairs_id])->first();
+
+        if($update_notes_date){
+            $data['date_end']= date('Y-m-d');
+            $update_notes_date->update($data);
         }
 
         Add_note($old_time_type,$new_time_type1,$request->military_affairs_id);

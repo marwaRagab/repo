@@ -97,7 +97,4 @@ class Installment extends Model
     }
 
 
-   
-
-
 }

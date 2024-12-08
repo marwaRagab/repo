@@ -1,18 +1,3 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
         <a href="{{ route('supportProblem.index', ['status' => 'all']) }}"
@@ -42,9 +27,11 @@
         <h4 class="card-title mb-0">الدعم الفني
         </h4>
         <div class="button-group">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
-                data-bs-target="#add">
-                أضف مشكلة جديدة </button>
+            @if (Auth::user()->support != 1)
+                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+                    data-bs-target="#add">
+                    أضف مشكلة جديدة </button>
+            @endif
             <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 "
                 href="{{ route('supportRequest.index') }}">
                 التطوير</a>

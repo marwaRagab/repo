@@ -1,18 +1,21 @@
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+<style>
+    .avatar-option {
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+    }
 
+    .avatar-option img {
+        border: 2px solid transparent;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+
+    .avatar-option input[type="radio"]:checked+img {
+        border-color: #007bff;
+    }
+</style>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> المستخدمين</h4>
@@ -44,9 +47,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">العضو <span class="text-danger">*</span></label>
+                                            <label class="form-label">الموظف <span class="text-danger">*</span></label>
                                             <select name="name" class="form-select" required>
-                                                <option selected disabled>اختر العضو</option>
+                                                <option selected disabled>اختر الموظف</option>
                                                 @php
                                                     $roleUsers = 0; // Counter for users with role_id
                                                 @endphp
@@ -61,7 +64,7 @@
                                                     @endif
                                                 @endforeach
                                                 @if ($roleUsers > 0)
-                                                    <option disabled>لا يوجد اعضاء غير مسجلين</option>
+                                                    <option disabled>لا يوجد موظفين غير مسجلين</option>
                                                 @endif
                                             </select>
                                         </div>
@@ -127,17 +130,47 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+
+
+                                </div>
+                                <div class="row pt-3">
+                                    <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label"> صورة الملف الشخصي</label>
-                                            <div>
-                                                <input type="file" id="image" name="image" class="form-control"
-                                                    accept="image/*"><br><br>
+                                            <label class="form-label"> صورة الملف
+                                                الشخصي</label>
+                                            <div class="me-3">
+                                                @if ($user->img)
+                                                    <img src="{{ asset('user_profile/' . $user->img) }}" alt="spike-img"
+                                                        class="rounded-circle" width="45">
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
 
 
+                                    <div class="avatars">
+                                        <div class="row">
+                                            @foreach ($avatars as $index => $avatar)
+                                                <div class="col-md-2 text-center mb-3">
+                                                    <div class="avatar-option">
+                                                        <label>
+                                                            <input type="radio" name="avatar"
+                                                                value="{{ 'avatars/' . $avatar->getFilename() }}"
+                                                                required>
+                                                            <img src="{{ asset('avatars/' . $avatar->getFilename()) }}"
+                                                                alt="Avatar"
+                                                                style="width: 100px; height: 100px; border-radius: 50%;">
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                @if (($index + 1) % 6 === 0)
+                                        </div>
+                                        <div class="row">
+                                            @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
                         <div class="modal-footer d-flex ">
@@ -161,6 +194,7 @@
             <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <tr>
+                        <th>الصورة</th>
                         <th>الاسم</th>
                         <th>الوظيفة</th>
                         <th>الفرع</th>
@@ -171,9 +205,15 @@
                     @php
                         $noRoleUsers = 0; // Counter for users without role_id
                     @endphp
-                    @forelse ($users as $user)
+                    @foreach ($users as $user)
                         @if ($user->role_id)
                             <tr>
+                                <td>
+                                    <div class="me-3">
+                                        <img src="{{ isset($user->img) ? asset('user_profile/' . $user->img) : asset('user_profile/Screenshot 2024-12-03 112316.png') }}"
+                                            alt="spike-img" class="rounded-circle" width="45">
+                                    </div>
+                                </td>
                                 <td>{{ $user->name_ar }}</td>
                                 <td>{{ $user->roles ? $user->roles->name_ar : 'غير محدد' }}</td>
                                 <td>{{ $user->branches ? $user->branches->name_ar : 'غير محدد' }}</td>
@@ -286,51 +326,72 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6">
+
+                                                            </div>
+                                                            <div class="row pt-3">
+                                                                <div class="col-md-12">
                                                                     <div class="mb-3">
                                                                         <label class="form-label"> صورة الملف
                                                                             الشخصي</label>
-                                                                        <div>
-                                                                            <input type="file" id="image"
-                                                                                name="image" class="form-control"
-                                                                                accept="image/*"><br><br>
+                                                                        <div class="me-3">
+                                                                            @if ($user->img)
+                                                                                <img src="{{ asset('user_profile/' . $user->img) }}"
+                                                                                    alt="spike-img"
+                                                                                    class="rounded-circle"
+                                                                                    width="45">
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="modal-footer d-flex">
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">حفظ</button>
-                                                                <button type="button"
-                                                                    class="btn bg-danger-subtle text-danger"
-                                                                    data-bs-dismiss="modal">الغاء</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @else
-                            @php
-                                $noRoleUsers++;
-                            @endphp
-                        @endif
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">لا يوجد مستخدمين</td>
-                        </tr>
-                    @endforelse
 
-                    @if ($noRoleUsers > 0)
-                        <tr>
-                            <td colspan="4" class="text-center">يوجد {{ $noRoleUsers }} أعضاء غير مسجلين</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
+
+                                                                <div class="avatars">
+                                                                    <div class="row">
+                                                                        @foreach ($avatars as $index => $avatar)
+                                                                            <div class="col-md-2 text-center mb-3">
+                                                                                <div class="avatar-option">
+                                                                                    <label>
+                                                                                        <input type="radio"
+                                                                                            name="avatar"
+                                                                                            value="{{ 'avatars/' . $avatar->getFilename() }}"
+                                                                                            required>
+                                                                                        <img src="{{ asset('avatars/' . $avatar->getFilename()) }}"
+                                                                                            alt="Avatar"
+                                                                                            style="width: 100px; height: 100px; border-radius: 50%;">
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            @if (($index + 1) % 6 === 0)
+                                                                    </div>
+                                                                    <div class="row">
+                        @endif
+                    @endforeach
         </div>
     </div>
+</div>
+<div class="modal-footer d-flex">
+    <button type="submit" class="btn btn-primary">حفظ</button>
+    <button type="button" class="btn bg-danger-subtle text-danger" data-bs-dismiss="modal">الغاء</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</td>
+</tr>
+@else
+@php
+    $noRoleUsers++;
+@endphp
+@endif
+@endforeach
+
+
+</tbody>
+</table>
+</div>
+</div>
 </div>
