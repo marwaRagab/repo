@@ -65,6 +65,7 @@
                 <tbody>
                 <!-- start row -->
                 @foreach($settlement as $one)
+                    @if($one->military_affair->installment)
                     <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                         aria-controls="collapseExample">
                         <td>{{ $loop->iteration }}</td>
@@ -534,6 +535,7 @@
                             </div>
                         </td>
                     </tr>
+                    @endif
                 @endforeach
 
                 </tbody>

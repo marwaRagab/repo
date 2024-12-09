@@ -87,6 +87,9 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">حجز بنوك </h4>
+        <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 "
+                                href="{{ route('stop_bank.archive') }}">
+                             الإرشيف </a>
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
