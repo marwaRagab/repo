@@ -158,6 +158,7 @@
                                 @endswitch
                             </td>
 
+
                             @if (request()->route('status') === 'car_inquiry')
                                 <td>
                                     <div class="d-block">
@@ -165,7 +166,10 @@
                                             <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
                                                  href="{{ route('advanced.car', $item->id) }}">
                                                 استعلام سيارات
-                                                ({{ App\Models\InstallmentCar::where('installment_clients_id', $item->id)->count() }})</a>
+                                                {{-- ({{ App\Models\InstallmentCar::where('installment_clients_id', $item->id)->count() }}) --}}
+                                                ({{$item->installment_car_count}})
+
+                                            </a>
                                         </div>
 
                                         @if ($item->installment_car->isNotEmpty() || $item->installment_car->count() > 0)
@@ -202,7 +206,9 @@
                                             <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
                                                 href="{{ route('advanced.issue', $item->id) }}">
                                                 استعلام قضائي
-                                                ({{ App\Models\InstallmentIssue::where('installment_clients_id', $item->id)->count() }})</a>
+                                                {{-- ({{ App\Models\InstallmentIssue::where('installment_clients_id', $item->id)->count() }}) --}}
+                                                ({{$item->installment_issue_count}})
+                                            </a>
                                         </div>
                                         @if ($item->installment_issue->isNotEmpty() || $item->installment_issue->count() > 0)
                                             <div>
@@ -275,7 +281,7 @@
                                         <li>
                                             <a class="btn btn-info rounded-0 w-100 mt-2" href="{{ route('advanced.acceptCondation',  $item->id) }}">
                                                 مقبول بشرط </a>
-                                            
+
                                         </li>
                                         <li>
                                             <a class="btn btn-info rounded-0 w-100 mt-2" href="{{ route('advanced.accept',  $item->id) }}">
@@ -311,7 +317,7 @@
                                             </form>
                                     @endif
 
-                                    
+
                                     </li>
                             </td>
                             <td>
@@ -347,8 +353,8 @@
             </table>
         </div>
     </div>
-   
- 
+
+
     <!-- open file model  -->
     {{-- <div id="open-file" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -387,4 +393,4 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    
+

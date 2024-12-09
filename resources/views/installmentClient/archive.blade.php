@@ -3,11 +3,11 @@
         <div class="d-flex flex-wrap ">
             <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
 
-@if ( request()->route('status') === 'submit_archiveCount')
-العدد الكلي ({{ $data['counts']['submit_archiveCount']  }})
-@else
-العدد الكلي ({{ $data['counts']['accepted_archiveCount']  }})
-@endif
+                @if (request()->route('status') === 'submit_archiveCount')
+                    العدد الكلي ({{ $data['counts']['submit_archiveCount'] }})
+                @else
+                    العدد الكلي ({{ $data['counts']['accepted_archiveCount'] }})
+                @endif
 
             </a>
 
@@ -288,8 +288,7 @@
                                 <td>
                                     <div class="block">
                                         {{-- <h5>01022</h5> --}}
-                                        <a class="btn btn-secondary w-100 mt-2"data-bs-toggle="modal"
-                                            data-bs-target="#open-details">
+                                        <a class="btn btn-secondary w-100 mt-2"  href="{{ route('advanced.notes',  $item->id) }}">
 
                                             الملاحظات</a>
                                     </div>
@@ -313,140 +312,19 @@
 
 <!-- modals  -->
 
-@if ($data['Installment']->count() > 0)
-<!-- notes model  -->
-<div id="open-details" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">
-                    ملاحظات </h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <ul class="nav nav-pills" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#navpill-1" role="tab">
-                            <span>الملاحظات</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#navpill-2" role="tab">
-                            <span>الرد</span>
-                        </a>
-                    </li>
-
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content border mt-2">
-                    <div class="tab-pane active p-3" id="navpill-1" role="tabpanel">
-                        {{-- <h6 class="text-danger">عفوا ، لم يتم الاستعلام القضائي</h6>
-                        <h6 class="text-danger">عفوا ، لم يتم الاستعلام للتنفيذ</h6> --}}
-
-                        <h4 class="modal-title mt-2" id="myModalLabel">
-                            القضايا</h4>
-
-
-                        <table id="notes1" class="table table-bordered border text-wrap align-middle">
-                            <thead>
-                                <!-- start row -->
-                                <tr>
-                                    <th>اليوزر</th>
-                                    <th>الاتصال </th>
-                                    <th>الساعه</th>
-                                    <th>التاريخ</th>
-                                    <th> الملاحظة</th>
-                                </tr>
-                                <!-- end row -->
-                            </thead>
-                            <tbody>
-
-                                @foreach ($item->installment_note as $note)
-                                    <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                                        aria-expanded="false" aria-controls="collapseExample">
-                                        <td>
-                                            {{ $note->user->name_ar ?? 'لا يوجد' }}
-                                        </td>
-                                        <td>
-                                            {{ $note->connect ?? 'لا يوجد' }}
-                                        </td>
-                                        <td>
-                                            {{ $note->time ?? 'لا يوجد' }}
-                                        </td>
-
-                                        <td>
-                                            {{ $note->date }}
-                                        </td>
-
-                                        <td>
-                                            {{ $note->note ?? 'لا يوجد' }}
-                                        </td>
-
-                                    </tr>
-                                @endforeach
-                                <!-- start row -->
-
-                            </tbody>
-                        </table>
-                    </div>
 
 
 
-                    <div class="tab-pane p-3" id="navpill-2" role="tabpanel">
-                        <form action="{{ route('InstallmentClientNote.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="installment_clients_id" value="{{ $item->id }}">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label"> الاتصال</label>
-                                    <select class="form-select" name="reply">
-                                        <option value="reply">
-                                            رد </option>
-                                        <option value="no-reply">
-                                            لم يرد </option>
-                                        <option value="note">
-                                            ملاحظة </option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <div class="my-3">
-                                        <label class="form-label">الملاحظات</label>
-                                        <textarea class="form-control" rows="5" name="note"></textarea>
-                                    </div>
-                                </div>
+<script>
+    function toggleImage(imageUrl, link) {
+        // Find the expandable image container
+        const imageContainer = link.nextElementSibling;
 
-                            </div>
-                            <button type="submit" class="btn btn-primary">حفظ</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex ">
-
-                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
-                    data-bs-dismiss="modal">
-                    إغلاق
-                </button>
-            </div>
-
-
-        </div>
-    </div>
-</div>
-@endif
-
-
-
-    <script>
-        function toggleImage(imageUrl, link) {
-            // Find the expandable image container
-            const imageContainer = link.nextElementSibling;
-
-            // Toggle display of the image container
-            if (imageContainer.style.display === 'none') {
-                imageContainer.style.display = 'block';
-            } else {
-                imageContainer.style.display = 'none';
-            }
+        // Toggle display of the image container
+        if (imageContainer.style.display === 'none') {
+            imageContainer.style.display = 'block';
+        } else {
+            imageContainer.style.display = 'none';
         }
-    </script>
+    }
+</script>
