@@ -46,7 +46,6 @@ class InstallmentClientController extends Controller
         // dd($status);
         $ministry = Ministry::where('type', 'working')->get();
 
-        dd($ministry);
         $data = $this->InstallmentClientsRepository->index($status);
 
         if ($data) {
@@ -109,7 +108,7 @@ class InstallmentClientController extends Controller
         $data['government'] = Governorate::all();
         $data['region'] = Region::all();
 
-        $data['ministry']= Ministry::where('type','working')->get();
+        $data['ministry'] = Ministry::where('type', 'working')->get();
 
         // dd( $data['ministry']);
 
@@ -495,45 +494,8 @@ class InstallmentClientController extends Controller
     }
 
     public function getNotes($id)
-
-{
-    $notes = InstallmentClientNote::where('installment_clients_id', $id)->with('user')->get();
-
-    if($notes)
-    {      
-      
-            $user_id =  Auth::user()->id ?? null;
-            $message ="تم عرض   ملاحظات المعاملات" ;
-            $this->log($user_id ,$message);
-    }
-    return response()->json(['notes' => $notes]);
-}
-
-public function getNotesIssue($id)
-{
-    $notesissue = InstallmentIssue::where('installment_clients_id', $id)->with('user')->get();
-    // $issue_pdf = Installment_Client::find($id);
-     // Fetch related user data for each issue
-     $formattedNotes = $notesissue->map(function ($note) {
-        $createdByUser = User::find($note->created_by); // Fetch user by ID
-        return [
-            'id' => $note->id,
-            'created_by_name' => $createdByUser->name_ar ?? 'لا يوجد',
-            'number_issue' => $note->number_issue,
-            'status' => $note->status,
-            'working_company' => $note->working_company,
-            'opening_amount' => $note->opening_amount,
-            'closing_amount' => $note->closing_amount,
-            'date' => $note->date,
-            'image' => $note->image,
-        ];
-    });
-    // dd($issue_pdf);
-    // Calculate opening and closing amounts
-    $openissuecount = $notesissue->sum('opening_amount');
-    $closeissuecount = $notesissue->sum('closing_amount');
-    $totalissue = $openissuecount + $closeissuecount;
-    // $pdf = $issue_pdf->issue_pdf;
+    {
+        $notes = InstallmentClientNote::where('installment_clients_id', $id)->with('user')->get();
 
         if ($notes) {
 
@@ -582,13 +544,6 @@ public function getNotesIssue($id)
             'closeissuecount' => $closeissuecount,
             'totalissue' => $totalissue]);
     }
-
-
-    return response()->json(['notesissue' => $formattedNotes,
-        'openissuecount' => $openissuecount,
-        'closeissuecount' => $closeissuecount,
-        'totalissue' => $totalissue]);
-}
 
     public function getNotesCar($id)
     {

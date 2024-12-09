@@ -2,90 +2,91 @@
 require __DIR__ . '/auth.php';
 
 use App\Exports\ClientsExport;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BankController;
 // use App\Exports\ClientsExport;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BokerController;
-use App\Http\Controllers\CourtController;
 use App\Http\Controllers\BranchController;
-use App\Http\Controllers\RegionController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MinistryController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\CourtController;
 use App\Http\Controllers\GovernorateController;
-use App\Http\Controllers\NationalityController;
+use App\Http\Controllers\HumanResources\ClientController;
+use App\Http\Controllers\HumanResources\CommuncationMethodController;
+use App\Http\Controllers\HumanResources\MemberController;
+use App\Http\Controllers\HumanResources\TransactionsCompletedController;
+use App\Http\Controllers\HumanResources\UserController;
+use App\Http\Controllers\ImportingCompanies\ClassController;
+use App\Http\Controllers\ImportingCompanies\CompanyController;
 
 // use App\Exports\ClientsExport;
 //// use Maatwebsite\Excel\Facades\Excel;
 
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PoliceStationController;
+use App\Http\Controllers\ImportingCompanies\MarkController;
+use App\Http\Controllers\ImportingCompanies\ProductController;
 // use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\WorkingIncomeController;
-use App\Http\Controllers\InstallmentCarController;
-use App\Http\Controllers\InstallmentIssueController;
-use App\Http\Controllers\InstallmentClientController;
-use App\Http\Controllers\Payments\PaymentsController;
-use App\Http\Controllers\Showroom\ShowroomController;
-use App\Http\Controllers\Transfer\TransferController;
+use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
+use App\Http\Controllers\ImportingCompanies\TawreedController;
+use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\InstallmentApproveController;
-use App\Http\Controllers\MinistryPercentageController;
-use App\Http\Controllers\HumanResources\UserController;
-use App\Http\Controllers\HumanResources\ClientController;
-use App\Http\Controllers\HumanResources\MemberController;
+use App\Http\Controllers\InstallmentCarController;
+use App\Http\Controllers\InstallmentClientController;
 use App\Http\Controllers\InstallmentClientNoteController;
+use App\Http\Controllers\InstallmentIssueController;
 use App\Http\Controllers\InstallmentPercentageController;
 use App\Http\Controllers\InstallmentSubmissionController;
-use App\Http\Controllers\Military_affairs\ImageController;
-use App\Http\Controllers\ImportingCompanies\MarkController;
 use App\Http\Controllers\Installment\InstallmentController;
+use App\Http\Controllers\Military_affairs\CertificateController;
+use App\Http\Controllers\Military_affairs\CheckingController;
+use App\Http\Controllers\Military_affairs\DelegatesController;
+use App\Http\Controllers\Military_affairs\EqrardainController;
+use App\Http\Controllers\Military_affairs\Excute_actionsController;
+use App\Http\Controllers\Military_affairs\Execute_alertController;
+use App\Http\Controllers\Military_affairs\ImageController;
+use App\Http\Controllers\Military_affairs\Military_affairsController;
+use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\PapersController;
-use App\Http\Controllers\Military_affairs\SearchController;
 
 // use App\Http\Controllers\Showroom\ShowroomController;
-use App\Http\Controllers\ImportingCompanies\ClassController;
-use App\Http\Controllers\TechnicalSupport\ProblemController;
+use App\Http\Controllers\Military_affairs\SearchController;
+use App\Http\Controllers\Military_affairs\SettlementController;
 // use App\Http\Controllers\Military_affairs\CheckingController;
 
-use App\Http\Controllers\TechnicalSupport\RequestController;
-use App\Http\Controllers\Military_affairs\CheckingController;
+use App\Http\Controllers\Military_affairs\Stop_bankController;
+use App\Http\Controllers\Military_affairs\Stop_carController;
 
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
-use App\Http\Controllers\Military_affairs\Stop_carController;
-use App\Http\Controllers\ImportingCompanies\CompanyController;
+use App\Http\Controllers\Military_affairs\Stop_salaryController;
+use App\Http\Controllers\Military_affairs\Stop_travelController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Transfer\TransferController;
-use App\Http\Controllers\ImportingCompanies\ProductController;
-use App\Http\Controllers\ImportingCompanies\TawreedController;
+use App\Http\Controllers\MinistryController;
+use App\Http\Controllers\MinistryPercentageController;
 // use App\Http\Controllers\Military_affairs\Stop_bankController;
-use App\Http\Controllers\Military_affairs\DelegatesController;
-use App\Http\Controllers\Military_affairs\EqrardainController;
+use App\Http\Controllers\NationalityController;
+use App\Http\Controllers\NotificationController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
 use App\Http\Controllers\old_dbController;
-use App\Http\Controllers\Military_affairs\Open_fileController;
-use App\Http\Controllers\Military_affairs\Stop_bankController;
+use App\Http\Controllers\OttuPaymentController;
+use App\Http\Controllers\Payments\PaymentsController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
-use App\Http\Controllers\Military_affairs\SettlementController;
+use App\Http\Controllers\PermissionController;
 
 // use App\Http\Controllers\Military_affairs\Excute_actionsController;
 
-use App\Http\Controllers\Military_affairs\CertificateController;
-use App\Http\Controllers\Military_affairs\Stop_salaryController;
-use App\Http\Controllers\Military_affairs\Stop_travelController;
-use App\Http\Controllers\Military_affairs\Execute_alertController;
-use App\Http\Controllers\Military_affairs\Excute_actionsController;
-use App\Http\Controllers\HumanResources\CommuncationMethodController;
-use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
-use App\Http\Controllers\Military_affairs\Military_affairsController;
-use App\Http\Controllers\ImportingCompanies\TransferProductController;
-use App\Http\Controllers\HumanResources\TransactionsCompletedController;
+use App\Http\Controllers\PoliceStationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Showroom\ShowroomController;
+use App\Http\Controllers\TechnicalSupport\ProblemController;
+use App\Http\Controllers\TechnicalSupport\RequestController;
+use App\Http\Controllers\Transfer\TransferController;
+use App\Http\Controllers\WorkingIncomeController;
+use Illuminate\Support\Facades\Route;
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -110,7 +111,7 @@ Route::get('/', function () {
 
     return view('login');
 });
-Route::get('/db/{type}',[old_dbController::class,'index']);
+Route::get('/db/{type}', [old_dbController::class, 'index']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';
@@ -225,8 +226,8 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs/show_images/{id}', [DelegatesController::class, 'show_images'])->name('show_images');
     Route::get('military_affairs/admin/get_statistics_deligations/{user_id}', [DelegatesController::class, 'get_statistics_deligations'])->name('military_affairs.get_statistics_deligations');
     Route::get('military_affairs/admin/get_statistics_notes_details/{user_id}', [DelegatesController::class, 'get_statistics_notes_details'])->name('military_affairs.get_statistics_notes_details');
-    Route::get( 'military_affairs/admin/get_statistics_lawaffaires/{user_id}', [DelegatesController::class, 'get_statistics_lawaffaires'])->name('military_affairs.get_statistics_lawaffaires');
-    Route::get( 'military_affairs/admin/get_statistics_emp/{user_id}', [DelegatesController::class, 'get_statistics_emp'])->name('military_affairs.get_statistics_emp');
+    Route::get('military_affairs/admin/get_statistics_lawaffaires/{user_id}', [DelegatesController::class, 'get_statistics_lawaffaires'])->name('military_affairs.get_statistics_lawaffaires');
+    Route::get('military_affairs/admin/get_statistics_emp/{user_id}', [DelegatesController::class, 'get_statistics_emp'])->name('military_affairs.get_statistics_emp');
 
     // ghada military_affairs routes
     Route::get('/open_file/{id?}', [Open_fileController::class, 'index'])->name('open_file');
@@ -393,7 +394,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/check-civil-number', [InstallmentClientController::class, 'checkCivilNumber'])->name('checkCivilNumber');
     Route::post('/check-civil-number-accept', [InstallmentClientController::class, 'checkCivilNumber_accept'])->name('checkCivilNumber_accept');
 
-
     // فورم التقديم ف المعاملات المقدمة
     Route::get('Aksat/convert_approved/{id}', [InstallmentClientController::class, 'convert_approved'])->name('installment.convert_approved');
     Route::get('Aksat/convert_approvedCopy/{id}', [InstallmentClientController::class, 'convert_approvedCopy'])->name('installment.convert_approvedCopy');
@@ -411,8 +411,17 @@ Route::middleware('auth')->group(function () {
         return Excel::download(new ClientsExport, 'clients.xlsx');
     })->name('export.clients');
 
-    Route::get('payment/process/{id}', [InstallmentController::class, 'process'])->name('payment.process');
+    Route::get('payment/process/{id}', [OttuPaymentController::class, 'process'])->name('payment.process');
+    Route::post('/payment/webhook', [PaymentController::class, 'webhook']);
+    Route::get('/payment/cron-job', [PaymentController::class, 'cronJob']);
+    Route::get('/payment/success', [PaymentController::class, 'success']);
+    Route::post('/payment/auto-debit/{token}/{session}', [PaymentController::class, 'autoDebit']);
+    Route::post('/payment/get-card-details/{instClientId}', [PaymentController::class, 'getCardDetails']);
+    Route::post('/payment/process-initiating/{id}', [PaymentController::class, 'processInitiating']);
+    Route::post('/payment/pay-from-ottu/{installmentId}', [PaymentController::class, 'payFromOttu']);
 
+
+    
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
     Route::post('installment/pay_part/{id}', [InstallmentController::class, 'pay_part'])->name('installment.pay_part');
