@@ -195,12 +195,33 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        // $data['Installment'] = Installment::findOrFail($id);
 
-        $data['Installment'] = $installment = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
-        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
-        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
-        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image'])
+       
+        $data['orders'] = Installment::with('orders.order_item.product_order', 'orders.order_item')->findOrFail($id);
+
+        // Use a collection to gather the product orders and counters
+        $purchase_orders_array = $data['orders']->orders->flatMap(function ($order) {
+            return $order->order_item->map(function ($item) {
+                return [
+                    'product_order' => $item->product_order,
+                    'counter' => $item->counter,
+                ];
+            });
+        });
+
+        $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
+       // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
+
+        $data['Installment']->test = "";
+
+        if($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null)
+        {
+            $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
+        }
+
+//        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
+       $data['Client'] = Client::with(['user', 'client_address', 'client_phone','client_image'])
+
             ->where('id', $data['Installment']->client_id)
             ->first();
         // $data['phone'] = ClientPhone::where('client_id',$client->id);
@@ -336,8 +357,12 @@ class InstallmentController extends Controller
 
         }
 
+        // order items
+
+       
+
         $data['view'] = 'installment/show_details';
-        return view('layout', $data, compact('breadcrumb', 'data'));
+        return view('layout', $data, compact('breadcrumb', 'data','purchase_orders_array'));
 
         //  return $this->respondSuccess($data, 'Get Data successfully.');
 
@@ -1699,22 +1724,40 @@ class InstallmentController extends Controller
         $data['item'] = $installment_clients_id = Installment_Client::findorfail($data['installment']['installment_clients']);
 
         if ($request->hasFile('contract_1')) {
-            $add_data['contract_1'] = $request->file('contract_1')->store('installment', 'public'); // Store in the 'products' directory
+          
+            $filename = time() . '-' . $request->file('contract_1')->getClientOriginalName();
+            $path = $request->file('contract_1')->move(public_path('installment'), $filename);
+            $add_data['contract_1'] = 'installment' . '/' . $filename; 
         }
         if ($request->hasFile('contract_2')) {
-            $add_data['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_2')->getClientOriginalName();
+            $path = $request->file('contract_2')->move(public_path('installment'), $filename);
+            // $add_data['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
+            $add_data['contract_2'] = 'installment' . '/' . $filename; 
         }
         if ($request->hasFile('contract_cinet_1')) {
-            $add_data['contract_cinet_1'] = $request->file('contract_cinet_1')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_cinet_1')->getClientOriginalName();
+            $path = $request->file('contract_cinet_1')->move(public_path('installment'), $filename);
+            // $add_data['contract_cinet_1'] = $request->file('contract_cinet_1')->store('installment', 'public'); // Store in the 'products' directory
+            $add_data['contract_cinet_1'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_2')) {
-            $add_data['contract_cinet_2'] = $request->file('contract_cinet_2')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_cinet_2')->getClientOriginalName();
+            $path = $request->file('contract_cinet_2')->move(public_path('installment'), $filename);
+            // $add_data['contract_cinet_2'] = $request->file('contract_cinet_2')->store('installment', 'public'); // Store in the 'products' directory
+            $add_data['contract_cinet_2'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('prods_recieved_img')) {
-            $add_data['prods_recieved_img'] = $request->file('prods_recieved_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('prods_recieved_img')->getClientOriginalName();
+            $path = $request->file('prods_recieved_img')->move(public_path('installment'), $filename);
+            // $add_data['prods_recieved_img'] = $request->file('prods_recieved_img')->store('installment', 'public'); // Store in the 'products' directory
+            $add_data['prods_recieved_img'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('qard_paper_img')) {
-            $add_data['qard_paper_img'] = $request->file('qard_paper_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('qard_paper_img')->getClientOriginalName();
+            $path = $request->file('qard_paper_img')->move(public_path('installment'), $filename);
+            // $add_data['qard_paper_img'] = $request->file('qard_paper_img')->store('installment', 'public'); // Store in the 'products' directory
+            $add_data['qard_paper_img'] = 'installment' . '/' . $filename;
         }
 
         if (!empty($add_data)) {
@@ -1731,7 +1774,7 @@ class InstallmentController extends Controller
         $data->date = now()->format('Y-m-d');
         $data->time = now()->format('h:i:s');
         $data->installment_clients_id = $installment_clients_id;
-        $data->client_id = $data['installment']['client_id'];
+        $data->client_id = $installment->client_id;
         $data->note = $the_note;
         $data->created_by = Auth::user()->id ?? null;
         $data->updated_by = Auth::user()->id ?? null;

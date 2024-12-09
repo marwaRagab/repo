@@ -309,9 +309,13 @@ function log_move($user_id, $message)
 function change_status($array_status, $id)
 {
 
+
     //dd($array_status);
     if ($array_status->hasFile('img_dir')) {
-        $data_img_dir = $array_status->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
+        $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
+        $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
+        $data_img_dir = 'military_affairs' . '/' . $filename;
+//        $data_img_dir = $array_status->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
     } else {
         $data_img_dir = '';
     }

@@ -101,6 +101,7 @@ class LoginController extends Controller
             // return redirect()->to('/');
 
             //        $user = Auth::user();
+      Auth::user()->id;
 
             $role = Role::findOrFail($user->role_id);
 

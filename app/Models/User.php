@@ -115,6 +115,7 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
+
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -151,4 +152,5 @@ class User extends Authenticatable
 
 
     }
+
 }

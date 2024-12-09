@@ -86,18 +86,22 @@ class InstallmentIssueRepository implements InstallmentIssueRepositoryInterface
             // dd($savedIssues);
         }
         else{
+
+            // dd($request);
             $data = new InstallmentIssue;
             $data->installment_clients_id = $request->installment_clients_id;
             $data->exist1 = $request->exist1 ?? 'exist';
             $data->number_issue = null;
-                $data->opening_amount = null;
-                $data->closing_amount = null;
-                $data->date = null;
-                $data->status = 'close';
-                $data->working_company = null;
-                $data->created_by = Auth::user()->id ?? null;
-                $data->updated_by = Auth::user()->id ?? null;
-                $data->save();
+            $data->opening_amount = null;
+            $data->closing_amount = null;
+            $data->date = null;
+            $data->status = 'close';
+            $data->working_company = null;
+            $data->created_by = Auth::user()->id ?? null;
+            $data->updated_by = Auth::user()->id ?? null;
+            $data->image  = $Installment_Client->issue_pdf;
+            
+            $data->save();
 
         }
         
