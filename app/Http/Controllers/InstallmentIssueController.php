@@ -105,13 +105,13 @@ class InstallmentIssueController extends Controller
     //    dd($data);
     //    if($data)
     //    {
-      
+
             if($request->exist1 == "notexist")
             {
                 $message = "تم استعلام القضايا  ولا يوجد قضايا ";
                 // dd("dd");
-                
-                
+
+
             }
             else
             {
@@ -130,14 +130,14 @@ class InstallmentIssueController extends Controller
             $data->created_by = Auth::user()->id ?? null;
             $data->updated_by = Auth::user()->id ?? null;
             $data->save();
-        
+
 
 
     //    }
        // return response()->json($nationalities);
     //    return $this->respondSuccess(result: $data, message: 'Store Data successfully.');
-    // return redirect()->route('myinstall.index', ['status' => 'issue_inquiry']);
-    return redirect()->back();
+    return redirect()->route('myinstall.index', ['status' => 'under_inquiry']);
+    // return redirect()->back();
    }
 
 
