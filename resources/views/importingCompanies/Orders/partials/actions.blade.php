@@ -1,9 +1,4 @@
-<a href="{{ route('orders.products', $order->id) }}" class="text-info">منتجات طلب الشراء</a>
 <div class="btn-group dropup  me-6">
-
-
-
-
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
         aria-expanded="false">
         ارسال الي </button>

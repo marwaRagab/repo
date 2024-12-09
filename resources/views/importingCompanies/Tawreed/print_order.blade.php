@@ -5,7 +5,7 @@
         <p> رقم : {{ $order_id }}</p>
         <p>التاريخ : {{ now()->format('Y/m/d')}}</p>
         @php 
-        $item = \App\Models\importingCompanies\Tawreed\purchase_items::with('product')->where('order_id',$order_id)->first()->product->company;      
+        $item = \App\Models\ImportingCompanies\Tawreed\OrdersFiles::with('company')->where('id',$order_id)->first()->company;      
         
         @endphp
         <p class="print-text">السادة / {{ $item->name_ar}}   المحترمين</p>

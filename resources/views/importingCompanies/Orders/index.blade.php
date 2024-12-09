@@ -11,7 +11,7 @@
                     <select class="form-select" name="company_id" id="company_id">
                         <option selected disabled>اختر الشركة</option>
                         @foreach ($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->name_ar }}</option>
+                        <option value="{{ $company->id }}">{{ $company->name_ar }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -37,6 +37,7 @@
                         <th>رقم الفاتورة</th>
                         <th>عدد المنتجات</th>
                         <th>قيمة الفاتورة</th>
+                        <th>منتجات طلب الشراء </th>
                         <th> اجراءات </th>
                     </tr>
                 </thead>
@@ -49,58 +50,64 @@
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 
 <script>
-    $(document).ready(function() {
-        const table = $('#orders-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('orders.index') }}",
-                data: function(d) {
-                    d.order_id = $('#order_id').val();
-                    d.company_id = $('#company_id').val();
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex', // This field comes from addIndexColumn
-                    name: 'DT_RowIndex',
-                    orderable: false, // Optional: Prevent sorting
-                    searchable: false // Optional: Prevent searching
-                },
-                {
-                    data: 'client_name',
-                    name: 'client.name_ar'
-                },
-                {
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'products_count',
-                    name: 'order_item.count'
-                },
-                {
-                    data: 'invoice_value',
-                    name: 'order_item.price_qabila'
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"
+$(document).ready(function() {
+    const table = $('#orders-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('orders.index') }}",
+            data: function(d) {
+                d.order_id = $('#order_id').val();
+                d.company_id = $('#company_id').val();
             }
-        });
-
-        $('#filter-btn').on('click', function() {
-            table.ajax.reload();
-        });
-
-        $('#reset-btn').on('click', function() {
-            $('#filter-form')[0].reset();
-            table.ajax.reload();
-        });
+        },
+        columns: [{
+                data: 'DT_RowIndex', // This field comes from addIndexColumn
+                name: 'DT_RowIndex',
+                orderable: false, // Optional: Prevent sorting
+                searchable: false // Optional: Prevent searching
+            },
+            {
+                data: 'client_name',
+                name: 'client.name_ar'
+            },
+            {
+                data: 'id',
+                name: 'id'
+            },
+            {
+                data: 'products_count',
+                name: 'order_item.count'
+            },
+            {
+                data: 'invoice_value',
+                name: 'order_item.price_qabila'
+            },
+            {
+                data: 'order_products',
+                name: 'order_products',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'actions',
+                name: 'actions',
+                orderable: false,
+                searchable: false
+            }
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.10.25/i18n/Arabic.json"
+        }
     });
+
+    $('#filter-btn').on('click', function() {
+        table.ajax.reload();
+    });
+
+    $('#reset-btn').on('click', function() {
+        $('#filter-form')[0].reset();
+        table.ajax.reload();
+    });
+});
 </script>
