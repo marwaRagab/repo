@@ -143,53 +143,32 @@ class InstallmentClientController extends Controller
         if($status == 0)
         {
             $data['Installment'] = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
                 'bank',
                 'installmentBroker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
-                'installment_note'
+
             ])->withCount(['installment_car', 'installment_issue'])->get();
         }
         elseif($status == "refused")
         {
             $data['Installment'] = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
                 'bank',
                 'installmentBroker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
-                'installment_note'
-            ])->withCount(['installment_car', 'installment_issue'])->where('status',"rejected")->get();
-        }
-        else
-        {
+            ])->withCount(['installment_car', 'installment_issue'])->where('status', "rejected")->get();
+        } else {
+
             // dd($status);
             $data['Installment'] = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
                 'bank',
                 'installmentBroker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
-                'installment_note'
-            ])->withCount(['installment_car', 'installment_issue'])->where('status',$status)->get();
+            ])->withCount(['installment_car', 'installment_issue'])->where('status', $status)->get();
         }
-       if($data)
-       {      
-         
-               $user_id =  Auth::user()->id ?? null;
-               $message ="تم دخول صفحة عملاء الاقساط" ;
-               $this->log($user_id ,$message);
-       }
+        if ($data) {
+
+            $user_id = Auth::user()->id ?? null;
+            $message = "تم دخول صفحة عملاء الاقساط";
+            $this->log($user_id, $message);
+
+        }
 
        if ($status == "transaction_submited") {
 
@@ -537,57 +516,97 @@ class InstallmentClientController extends Controller
     return response()->json(['notes' => $notes]);
 }
 
-public function getNotesIssue($id)
-{
-    $notesissue = InstallmentIssue::where('installment_clients_id', $id)->with('user')->get();
-    $issue_pdf = Installment_Client::find($id);
-     // Fetch related user data for each issue
-     $formattedNotes = $notesissue->map(function ($note) {
-        $createdByUser = User::find($note->created_by); // Fetch user by ID
-        return [
-            'id' => $note->id,
-            'created_by_name' => $createdByUser->name_ar ?? 'لا يوجد',
-            'number_issue' => $note->number_issue,
-            'status' => $note->status,
-            'working_company' => $note->working_company,
-            'opening_amount' => $note->opening_amount,
-            'closing_amount' => $note->closing_amount,
-            'date' => $note->date,
-            'image' => $note->image,
-        ];
-    });
-    // dd($issue_pdf);
-    // Calculate opening and closing amounts
-    $openissuecount = $notesissue->sum('opening_amount');
-    $closeissuecount = $notesissue->sum('closing_amount');
-    $totalissue = $openissuecount + $closeissuecount;
-    $pdf = $issue_pdf->issue_pdf;
+
+// public function getNotesIssue($id)
+// {
+//     $notesissue = InstallmentIssue::where('installment_clients_id', $id)->with('user')->get();
+//     // $issue_pdf = Installment_Client::find($id);
+//      // Fetch related user data for each issue
+//      $formattedNotes = $notesissue->map(function ($note) {
+//         $createdByUser = User::find($note->created_by); // Fetch user by ID
+//         return [
+//             'id' => $note->id,
+//             'created_by_name' => $createdByUser->name_ar ?? 'لا يوجد',
+//             'number_issue' => $note->number_issue,
+//             'status' => $note->status,
+//             'working_company' => $note->working_company,
+//             'opening_amount' => $note->opening_amount,
+//             'closing_amount' => $note->closing_amount,
+//             'date' => $note->date,
+//             'image' => $note->image,
+//         ];
+//     });
+//     // dd($issue_pdf);
+//     // Calculate opening and closing amounts
+//     $openissuecount = $notesissue->sum('opening_amount');
+//     $closeissuecount = $notesissue->sum('closing_amount');
+//     $totalissue = $openissuecount + $closeissuecount;
+//     // $pdf = $issue_pdf->issue_pdf;
+
+//         if ($notes) {
+
+//             $user_id = Auth::user()->id ?? null;
+//             $message = "تم عرض   ملاحظات المعاملات";
+//             $this->log($user_id, $message);
+//         }
+//         return response()->json(['notes' => $notes]);
+//     }
 
 
 
-    if ($notesissue->isNotEmpty()) {
-        $user_id = Auth::user()->id ?? null;
-        $message = "تم عرض ملاحظات قضايا المعاملة";
-        $this->log($user_id, $message);
+   public function getNotesIssue($id)
+    {
+        $notesissue = InstallmentIssue::where('installment_clients_id', $id)->with('user')->get();
+        $issue_pdf = Installment_Client::find($id);
+        // Fetch related user data for each issue
+        $formattedNotes = $notesissue->map(function ($note) {
+            $createdByUser = User::find($note->created_by); // Fetch user by ID
+            return [
+                'id' => $note->id,
+                'created_by_name' => $createdByUser->name_ar ?? 'لا يوجد',
+                'number_issue' => $note->number_issue,
+                'status' => $note->status,
+                'working_company' => $note->working_company,
+                'opening_amount' => $note->opening_amount,
+                'closing_amount' => $note->closing_amount,
+                'date' => $note->date,
+                'image' => $note->image,
+            ];
+        });
+        // dd($issue_pdf);
+        // Calculate opening and closing amounts
+        $openissuecount = $notesissue->sum('opening_amount');
+        $closeissuecount = $notesissue->sum('closing_amount');
+        $totalissue = $openissuecount + $closeissuecount;
+        $pdf = $issue_pdf->issue_pdf;
 
+        if ($notesissue->isNotEmpty()) {
+            $user_id = Auth::user()->id ?? null;
+            $message = "تم عرض ملاحظات قضايا المعاملة";
+            $this->log($user_id, $message);
+
+        }
+        return response()->json(['notesissue' => $formattedNotes,
+            // 'pdf' => $pdf,
+            'openissuecount' => $openissuecount,
+            'closeissuecount' => $closeissuecount,
+            'totalissue' => $totalissue]);
     }
 
-public function getNotesCar($id)
-{
-    $notescar = InstallmentCar::where('installment_clients_id', $id)->with('user')->get();
 
+    public function getNotesCar($id)
+    {
+        $notescar = InstallmentCar::where('installment_clients_id', $id)->with('user')->get();
 
-    if($notescar)
-    {      
-      
-            $user_id =  Auth::user()->id ?? null;
-            $message ="تم عرض   ملاحظات قضايا المعاملة" ;
-            $this->log($user_id ,$message);
+        if ($notescar) {
+
+            $user_id = Auth::user()->id ?? null;
+            $message = "تم عرض   ملاحظات قضايا المعاملة";
+            $this->log($user_id, $message);
+        }
+        return response()->json(['notescar' => $notescar]);
     }
-    return response()->json(['notescar' => $notescar]);
-}
-
-       //   ->rawColumns(['action','inquery' ,'archive' ,'installment_issue_count'])
+     
 
     public function create()
      {
