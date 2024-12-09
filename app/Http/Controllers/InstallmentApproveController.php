@@ -299,6 +299,7 @@ class InstallmentApproveController extends Controller
         $address->building = $request->building;
         $address->floor = $request->floor;
         $address->flat = $request->flat;
+
         $address->area_id = $request->region;
         $address->house_id = $request->house_id;
         $address->created_by = Auth::user()->id ?? null;
@@ -670,6 +671,9 @@ class InstallmentApproveController extends Controller
 
 
             $product = products_items::where('available', 1)->where('serial_number', $request->serial)->with('product')->first();
+
+            // return response()->json($product);
+
             $id = $product->product->id;
             $model = $product->product->model;
             $cost = $product->product->net_price;
@@ -775,3 +779,4 @@ class InstallmentApproveController extends Controller
 
 
 }
+

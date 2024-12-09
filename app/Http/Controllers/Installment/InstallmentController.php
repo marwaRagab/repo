@@ -91,12 +91,7 @@ class InstallmentController extends Controller
 
         return redirect()->back()->with('success', 'Client information updated successfully.');
     }
-    public function process($id)
-    {
 
-        dd($id);
-
-    }
     public function getCoordinatesAttribute(Request $request)
     {
         $url = $request->input('loc');
@@ -195,8 +190,6 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-
-       
         $data['orders'] = Installment::with('orders.order_item.product_order', 'orders.order_item')->findOrFail($id);
 
         // Use a collection to gather the product orders and counters
@@ -209,18 +202,17 @@ class InstallmentController extends Controller
             });
         });
 
-        $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
-       // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
+        $data['Installment'] = $installment = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
+        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
 
         $data['Installment']->test = "";
 
-        if($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null)
-        {
+        if ($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null) {
             $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         }
 
 //        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
-       $data['Client'] = Client::with(['user', 'client_address', 'client_phone','client_image'])
+        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image'])
 
             ->where('id', $data['Installment']->client_id)
             ->first();
@@ -359,10 +351,8 @@ class InstallmentController extends Controller
 
         // order items
 
-       
-
         $data['view'] = 'installment/show_details';
-        return view('layout', $data, compact('breadcrumb', 'data','purchase_orders_array'));
+        return view('layout', $data, compact('breadcrumb', 'data', 'purchase_orders_array'));
 
         //  return $this->respondSuccess($data, 'Get Data successfully.');
 
@@ -1724,16 +1714,16 @@ class InstallmentController extends Controller
         $data['item'] = $installment_clients_id = Installment_Client::findorfail($data['installment']['installment_clients']);
 
         if ($request->hasFile('contract_1')) {
-          
+
             $filename = time() . '-' . $request->file('contract_1')->getClientOriginalName();
             $path = $request->file('contract_1')->move(public_path('installment'), $filename);
-            $add_data['contract_1'] = 'installment' . '/' . $filename; 
+            $add_data['contract_1'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_2')) {
             $filename = time() . '-' . $request->file('contract_2')->getClientOriginalName();
             $path = $request->file('contract_2')->move(public_path('installment'), $filename);
             // $add_data['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
-            $add_data['contract_2'] = 'installment' . '/' . $filename; 
+            $add_data['contract_2'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_1')) {
             $filename = time() . '-' . $request->file('contract_cinet_1')->getClientOriginalName();
@@ -1780,7 +1770,9 @@ class InstallmentController extends Controller
         $data->updated_by = Auth::user()->id ?? null;
         $data->save();
 
-        return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
+        return redirect()->route('payment.process', $id);
+
+        //return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
     }
 
     public function edit_images($id)

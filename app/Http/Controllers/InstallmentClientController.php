@@ -49,6 +49,7 @@ class InstallmentClientController extends Controller
         // dd($status);
          //
 
+
          $data = $this->InstallmentClientsRepository->index($status);
 
         if($data)
@@ -117,7 +118,9 @@ class InstallmentClientController extends Controller
         $data['bank'] = Bank::all();
         $data['government'] = Governorate::all();
         $data['region'] = Region::all();
-        $data['ministry']= Ministry::where('type','working')->get();
+
+        $data['ministry'] = Ministry::where('type', 'working')->get();
+
         $data['boker'] = InstallmentBroker::all();
 
         $data['counts'] = [
@@ -520,6 +523,7 @@ class InstallmentClientController extends Controller
     }
 
     public function getNotes($id)
+
 {
     $notes = InstallmentClientNote::where('installment_clients_id', $id)->with('user')->get();
 
@@ -567,16 +571,11 @@ public function getNotesIssue($id)
         $this->log($user_id, $message);
 
     }
-    return response()->json(['notesissue' => $formattedNotes,
-        'pdf'=>$pdf,
-        'openissuecount' => $openissuecount,
-        'closeissuecount' => $closeissuecount,
-        'totalissue' => $totalissue]);
-}
 
 public function getNotesCar($id)
 {
     $notescar = InstallmentCar::where('installment_clients_id', $id)->with('user')->get();
+
 
     if($notescar)
     {      
