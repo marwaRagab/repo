@@ -295,7 +295,7 @@ class InstallmentApproveController extends Controller
         $address->building = $request->building;
         $address->floor = $request->floor;
         $address->flat = $request->flat;
-        $address->branch_id = $request->branch_id;
+       // $address->branch_id = $request->branch_id;
         $address->area_id = $request->region;
         $address->house_id = $request->house_id;
         $address->created_by = Auth::user()->id ?? null;
@@ -664,7 +664,7 @@ class InstallmentApproveController extends Controller
             $product_number=$request->serial;*/
 
             $product = products_items::where('available', 1)->where('serial_number', $request->serial)->with('product')->first();
-     
+
             // return response()->json($product);
             $id = $product->product->id;
             $model = $product->product->model;
