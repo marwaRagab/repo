@@ -103,8 +103,8 @@
                 <h4 class="card-title mb-4"> بيانات الشركة</h4>
                 <div class="py-3 border-top">
                     @if ($items->isNotEmpty())
-                        <h6 class="mb-3"><span> الاسم: </span> {{ $items->first()->product->company->name_ar }}</h6>
-                        <h6 class="mb-3"><span> الهاتف: </span> {{ $items->first()->product->company->phone }}</h6>
+                        <h6 class="mb-3"><span> الاسم: </span> {{ $items->first()->company->name_ar }}</h6>
+                        <h6 class="mb-3"><span> الهاتف: </span> {{ $items->first()->company->phone }}</h6>
                     @else
                         <h6 class="mb-3">لا توجد بيانات للشركة.</h6>
                     @endif
