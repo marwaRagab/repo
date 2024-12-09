@@ -135,12 +135,13 @@ class TawreedRepository implements TawreedRepositoryInterface
         $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
-
         $product = Product::findOrFail($request->product_id);
 
         $cartItem = new Cart();
         $cartItem->product_id = $product->id;
-        $cartItem->company_id = $product->company_id;
+        // $cartItem->company_id = $product->company_id;
+        $cartItem->company_id = Session::get('company_data')->id;
+
         $cartItem->place = 'showroom';
         $cartItem->counter = 1;
         $cartItem->product_price = $product->price;
@@ -153,11 +154,11 @@ class TawreedRepository implements TawreedRepositoryInterface
 
     public function createCart($request)
     {
-        $items = Cart::select('product_id', DB::raw('COUNT(*) as total_count'), DB::raw('SUM(product_price) as total_price'))
+        $items = Cart::select('product_id','company_id', DB::raw('COUNT(*) as total_count'), DB::raw('SUM(product_price) as total_price'))
             ->groupBy('product_id')
-            ->with('product')
+            ->with('product','company')
             ->get();
-
+    
         $title = "سلة المشتريات";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
