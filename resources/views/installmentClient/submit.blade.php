@@ -1,69 +1,87 @@
-@extends('header.index')
-@section('content')
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
-
-    <main class="main-content w-full px-[var(--margin-x)] pb-8">
-        <div class="flex items-center justify-between space-x-4 space-x-reverse py-5 lg:py-6">
-            <ul class="hidden flex-wrap items-center space-x-2 space-x-reverse sm:flex">
-                <li class="flex items-center space-x-2 space-x-reverse">
-                    <a class="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                        href="#">المعاملات المقدمة</a>
-                    <svg x-ignore xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </li>
-                <li>المتقدمين</li>
-            </ul>
-
-        </div>
-
-
-        <div class=" filters ">
-            <button
-                class="btn border border-secondary font-medium text-secondary hover:bg-secondary hover:text-white focus:bg-secondary focus:text-white active:bg-secondary/90
-            dark:text-secondary-light dark:hover:bg-secondary dark:hover:text-white dark:focus:bg-secondary dark:focus:text-white dark:active:bg-secondary/90 ml-3 mt-3
-           ">
+<div class="card mt-4 py-3">
+    <div class="d-flex flex-wrap ">
+        @if (request()->route('status') === 'submit_archive')
+            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                href="{{ route('myinstall.index', ['status' => 'submit_archive']) }}">
+                العدد الكلي ({{ App\Models\Installment_Client::where('status', 'submit_archive')->count() }})
+            </a>
+        @else
+            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                href="{{ route('myinstall.index', ['status' => 'transaction_submited']) }}">
                 العدد الكلي ({{ $data['counts']['transaction_submitedCount'] }})
-            </button>
+            </a>
+        @endif
+    </div>
+</div>
 
+<div class="card">
+    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+        <h4 class="card-title mb-0"> المعاملات المقدمة</h4>
+        <div class="d-flex">
+            @if (request()->route('status') === 'submit_archive')
+            @else
+                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                    href="{{ route('myinstall.index', ['status' => 'submit_archive']) }}">
+                    الارشيف </a>
+            @endif
         </div>
-        <div class="card p-5">
-            <div class="">
-                <table id="users-table" class="users-table is-hoverable w-full text-center">
-                    <thead class="text-center">
-                        <tr class="text-center" style="text-align: center !important;">
-                            <th scope="col">#</th>
-                            <th scope="col"> اسم العميل</th>
-                            <th scope="col">الوسيط</th>
-                            <th scope="col">الراتب</th>
-                            <th scope="col">الوظيفة</th>
-                            <th scope="col">البنك</th>
-                            {{-- <th scope="col">استعلام</th> --}}
-                            {{-- <th scope="col">الارشيف</th> --}}
-                            <th scope="col">مجموع الاقساط</th>
-                            <th scope="col"> التاريخ</th>
-                            <th scope="col">انشأ بواسطة</th>
-                            <th scope="col">تقديم</th>
-                            {{-- <th scope="col">مبلغ القبول</th> --}}
-                            {{-- <th scope="col">الاجراءات</th> --}}
+    </div>
+    <div class="card-body">
+        <div class="table-responsive pb-4">
+            <table id="users-table" class="table table-bordered border text-nowrap align-middle">
+                <thead>
+                    <!-- start row -->
+
+                    <th scope="col">#</th>
+                        <th scope="col"> اسم العميل</th>
+                        <th scope="col"> رقم المدنى</th>
+                        <th scope="col"> رقم العميل</th>
+                        <th scope="col">الوسيط</th>
+                        <th scope="col">الراتب</th>
+                        <th scope="col">الوظيفة</th>
+                        <th scope="col">البنك</th>
+                        <th scope="col">مجموع الاقساط</th>
+                        <th scope="col"> التاريخ</th>
+                        <th scope="col">تقديم</th>
+                    </tr>
+
+                    <tr>
+                        <th>#</th>
+                        <th>اسم العميل</th>
+                        {{-- <th>الرقم المدنى</th> --}}
+                        <th>الهاتف</th>
+                        <th>الوسيط </th>
+                        <th>الراتب </th>
+                        <th>الوظيفة</th>
+                        @if (request()->route('status') === 'car_inquiry')
+                            <th>استعلام سيارات</th>
+                        @endif
+                        @if (request()->route('status') === 'auditing' || request()->route('status') === 'under_inquiry')
+                            <th>استعلام قضائي </th>
+                        @endif
+                        <th>استعلام</th>
+                        <th>البنك </th>
+                        <th> مجموع الاقساط </th>
+                        <th> التاريخ</th>
+                        @if (request()->route('status') === 'accepted')
+                            <th>مبلغ القبول</th>
+                        @endif
+                        @if (request()->route('status') === 'rejected')
+                            <th>سبب الرفض</th>
+                        @endif
                         </tr>
                     </thead>
                 </table>
             </div>
 
+                       
+
 
         </div>
 
-        </div>
-        </div>
-    </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
-<!-- Include Moment.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script> --}}
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -83,8 +101,24 @@
                         className: 'text-center'
                     },
                     {
-                        data: 'name_ar',
-                        name: 'name_ar',
+                        data: 'client',
+                        name: 'client',
+                       
+                        className: 'text-center'
+                        
+                        
+                    },
+                    // {
+                    //     data: 'civil_number',
+                    //     name: 'civil_number',
+                    //     className: 'text-center'
+                       
+                    // },
+
+                  
+                    {
+                        data: 'phone',
+                        name: 'phone',
                         className: 'text-center'
                     },
                     {
@@ -92,6 +126,7 @@
                         name: 'boker',
                         className: 'text-center'
                     },
+                    // installment_issue_count
                     {
                         data: 'salary',
                         name: 'salary',
@@ -102,44 +137,35 @@
                         name: 'ministry',
                         className: 'text-center'
                     },
+
+                   
+                    // bank
                     {
                         data: 'bank',
                         name: 'bank',
                         className: 'text-center'
                     },
+                    // installment_total
                     {
                         data: 'installment_total',
                         name: 'installment_total',
                         className: 'text-center'
                     },
-
-                    // inquery
+                    // created_at
                     {
                         data: 'created_at',
                         name: 'created_at',
-                        className: 'text-center',
-                        render: function (data, type, row) {
-                            return data ? moment(data).format('YYYY-MM-DD') : ''; // Adjust format as needed
-                        }
-                    },
-                    // created_by
-                    {
-                        data: 'created_by',
-                        name: 'created_by',
                         className: 'text-center'
                     },
-                    // transaction_submited
-
-                    {
-                        data: 'transaction_submited',
-                        name: 'transaction_submited',
-                        className: 'text-center'
-                    },
-
-
-
+                    @if (request()->route('status') === 'accepted')
+                    { data: 'accept', name: 'accept', orderable: false, searchable: false },
+                    @endif
+                    @if (request()->route('status') === 'rejected')
+                    { data: 'rejected', name: 'rejected', orderable: false, searchable: false },
+                    @endif
+                    
                 ],
-
+                
 
 
                 "oLanguage": {
@@ -177,15 +203,5 @@
                 }
             });
         });
-
-
-
-
-
-
+           
     </script>
-@endsection
-
-
-
-

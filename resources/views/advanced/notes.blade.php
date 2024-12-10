@@ -53,15 +53,22 @@
                             </thead>
                             <tbody>
 
-                                @foreach ($Installment_client->installment_note as $installment_note)
-                                <tr>
-                                    <td>{{ $installment_note->user->name_ar }}</td>
-                                    <td>{{ $installment_note->reply }}</td>
-                                    <td>{{ $installment_note->time }}</td>
-                                    <td>{{ $installment_note->date }}</td>
-                                    <td>{{ $installment_note->note }} </td>
-                                </tr>
-                                @endforeach
+                                @if ($Installment_client->installment_note->count() > 0 )
+                                    @foreach ($Installment_client->installment_note as $installment_note)
+                                        <tr>
+                                            <td>{{ $installment_note->user->name_ar }}</td>
+                                            <td>{{ $installment_note->reply }}</td>
+                                            <td>{{ $installment_note->time }}</td>
+                                            <td>{{ $installment_note->date }}</td>
+                                            <td>{{ $installment_note->note }} </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">لم يتم إدخال بيانات</td>
+                                    </tr>
+                                @endif
+                                
                                 
 
                             </tbody>
@@ -95,38 +102,44 @@
                             </thead>
                             <tbody>
                                 <!-- start row -->
-                                @foreach ($Installment_client->installment_issue as $installment_issue)
-                                    <tr>
-                                        <td>{{ $installment_issue->user->name_ar ?? ' لا يوجد' }}</td>
-                                        <td>{{ $installment_issue->number_issue ?? ' لا يوجد'  }}</td>
-                                        <td>{{ $installment_issue->status === 'open' ? 'مفتوح' : 'مغلق' }}</td>
-                                        <td>{{ $installment_issue->working_company ?? 'لا يوجد' }}</td>
-                                        <td>{{ $installment_issue->status === 'open' ? $installment_issue->opening_amount : $installment_issue->closing_amount }}</td>
-                                        <td>{{ $installment_issue->date ?? 'لا يوجد' }}</td>
-                                        
-                                        <td>
-                                            @if($installment_issue->image)
-                                                @php
-                                                    $fileExtension = pathinfo($installment_issue->image, PATHINFO_EXTENSION);
-                                                @endphp
-                                        
-                                                @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                                                    <a href="{{ asset($installment_issue->image) }}" target="_blank">
-                                                        <img src="{{ asset($installment_issue->image) }}" alt="الصورة" style="width: 50px; height: auto; cursor: pointer;">
-                                                    </a>
-                                                @elseif($fileExtension === 'pdf')
-                                                    <a href="{{ asset($installment_issue->image) }}" target="_blank">
-                                                        <embed src="{{ asset($installment_issue->image) }}" type="application/pdf" width="100" height="150" style="cursor: pointer;">
-                                                    </a>
+                                @if ($Installment_client->installment_issue->count() > 0 )
+                                    @foreach ($Installment_client->installment_issue as $installment_issue)
+                                        <tr>
+                                            <td>{{ $installment_issue->user->name_ar ?? ' لا يوجد' }}</td>
+                                            <td>{{ $installment_issue->number_issue ?? ' لا يوجد'  }}</td>
+                                            <td>{{ $installment_issue->status === 'open' ? 'مفتوح' : 'مغلق' }}</td>
+                                            <td>{{ $installment_issue->working_company ?? 'لا يوجد' }}</td>
+                                            <td>{{ $installment_issue->status === 'open' ? $installment_issue->opening_amount : $installment_issue->closing_amount }}</td>
+                                            <td>{{ $installment_issue->date ?? 'لا يوجد' }}</td>
+                                            
+                                            <td>
+                                                @if($installment_issue->image)
+                                                    @php
+                                                        $fileExtension = pathinfo($installment_issue->image, PATHINFO_EXTENSION);
+                                                    @endphp
+                                            
+                                                    @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
+                                                        <a href="{{ asset($installment_issue->image) }}" target="_blank">
+                                                            <img src="{{ asset($installment_issue->image) }}" alt="الصورة" style="width: 50px; height: auto; cursor: pointer;">
+                                                        </a>
+                                                    @elseif($fileExtension === 'pdf')
+                                                        <a href="{{ asset($installment_issue->image) }}" target="_blank">
+                                                            <embed src="{{ asset($installment_issue->image) }}" type="application/pdf" width="100" height="150" style="cursor: pointer;">
+                                                        </a>
+                                                    @else
+                                                        <span>نوع ملف غير مدعوم</span>
+                                                    @endif
                                                 @else
-                                                    <span>نوع ملف غير مدعوم</span>
+                                                    <span>لا توجد صورة</span>
                                                 @endif
-                                            @else
-                                                <span>لا توجد صورة</span>
-                                            @endif
-                                        </td>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">لم يتم إدخال بيانات</td>
                                     </tr>
-                                @endforeach
+                                @endif
 
                             </tbody>
                         </table>
@@ -146,23 +159,29 @@
                                 <!-- end row -->
                             </thead>
                             <tbody>
-                                @foreach ($Installment_client->installment_car as $installment_car)
-                                    <tr>
-                                        <td>{{ $installment_car->user->name_ar ?? 'لا يوجد' }}</td>
-                                        <td>{{ $installment_car->type_car  ?? 'لا يوجد' }}</td>
-                                        <td>{{ $installment_car->model_year ?? 'لا يوجد' }}</td>
-                                        <td>{{ $installment_car->average_price ?? 'لا يوجد' }}</td>
-                                        <td>
-                                            @if($installment_car->image)
-                                            
-                                                <img src="{{ asset($installment_car->image) }}" alt="الصورة" width="100">
-                                            @else
-                                                لا توجد صورة
+                                @if ($Installment_client->installment_car->count() > 0 )
+                                    @foreach ($Installment_client->installment_car as $installment_car)
+                                        <tr>
+                                            <td>{{ $installment_car->user->name_ar ?? 'لا يوجد' }}</td>
+                                            <td>{{ $installment_car->type_car  ?? 'لا يوجد' }}</td>
+                                            <td>{{ $installment_car->model_year ?? 'لا يوجد' }}</td>
+                                            <td>{{ $installment_car->average_price ?? 'لا يوجد' }}</td>
+                                            <td>
+                                                @if($installment_car->image)
                                                 
-                                            @endif
-                                        </td>
+                                                    <img src="{{ asset($installment_car->image) }}" alt="الصورة" width="100">
+                                                @else
+                                                    لا توجد صورة
+                                                    
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">لم يتم إدخال بيانات</td>
                                     </tr>
-                                @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
