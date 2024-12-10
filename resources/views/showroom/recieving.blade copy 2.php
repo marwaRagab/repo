@@ -1,4 +1,3 @@
-
 <!--<div class="card mt-4 py-3">
      <div class="d-flex flex-wrap ">
         <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
@@ -68,7 +67,7 @@
 
                         <td> <a class="btn btn-secondary " data-bs-toggle="modal"
                                 data-bs-target="#open-file{{$order->id}}">
-                                استلام المنتجات</a>
+                                استلام المنتجات </a>
                             <div id="open-file{{$order->id}}" class="modal fade" tabindex="-1"
                                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -83,9 +82,10 @@
                                         <div class="modal-body">
 
                                             <form action="{{ route('update_purchase_order',$order->id) }}" method="POST"
-                                                enctype="multipart/form-data">
+                                                enctype="multipart/form-data" onsubmit="return check()">
                                                 <input class="form-control" type="text" style="display:none;"
                                                     name="order_id" value="{{ $order->id }}">
+
                                                 @csrf
                                                 <div class="table-responsive pb-4">
                                                     <table id="file-export"
@@ -104,6 +104,7 @@
                                                             <!-- start row -->
                                                             @foreach ($purchase as $purch)
                                                             <tr>
+                                                                {{$purch->id}}
                                                                 <td> {{ $purch->product->mark->name_ar }}
                                                                 </td>
                                                                 <td> {{ $purch->product->class->name_ar}}</td>
@@ -112,12 +113,15 @@
                                                                     <input id="counter_{{$purch->id}}"
                                                                         name="counter_{{$purch->id}}"
                                                                         value="{{ $purch->count}}" type="hidden">
+                                                                    <input class="form-control" type="text"
+                                                                        style="display:none;" name="purchase_id"
+                                                                        value="{{ $purch->id }}">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control received"
+                                                                    <input type="text"
+                                                                        class="form-control test_{{ $purch->id }}"
                                                                         name="counter_received_{{$purch->id}}"
-                                                                        id="counter_received_{{$purch->id}}"
-                                                                       >
+                                                                        id="counter_received_{{$purch->id}}">
                                                                     @error('counter_received_{{$purch->id}}')
                                                                     <div style='color:red'>{{$message}}</div>
                                                                     @enderror
@@ -140,7 +144,7 @@
                                                     <div id="tableBody"></div>
                                                 </div>
                                                 <div class="modal-footer d-flex ">
-                                                    <button type="submit" class="btn btn-primary"  >حفظ </button>
+                                                    <button type="submit" class="btn btn-primary">حفظ </button>
                                                     <button type="button"
                                                         class="btn bg-danger-subtle text-danger  waves-effect"
                                                         data-bs-dismiss="modal">
@@ -170,30 +174,63 @@
 
 
 <script>
-// function check() {
+function check() {
 
-//     var recieved_counter = document.getElementById("counter_received_" + id).value;
-//     alert(recieved_counter);
-//     return false;
-//     var counter = document.getElementById("counter_" + id).value;
-//     if (recieved_counter == '' ) {
-//         alert('  العدد المستلم مطلوب ');
-//         return false;
-//     }
-//     if (document.getElementById("receiving_" + id).checked) {
-       
-//         if (recieved_counter > counter || recieved_counter < 1 ) {
-//             alert('   العدد غير صحيح');
-//             return false;
-//         } 
-       
-//     }
-//     if(!document.getElementById("receiving_" + id).checked)
-//     {
-//         alert('الاستلام غير صحيح');
-//         return false;
-//     }
-// }
+    var id = document.getElementById("purchase_id").value;
+    alert(id);
+    const inputs = document.querySelectorAll('.test_' + id);
+
+    // 
+    // Iterate through each input element
+    inputs.forEach((input) => {
+
+        var recieved_counter = input.value;
+        alert(input.id);
+        // Log the input type and value
+        console.log(`${input.id} (type: ${input.type}) has value: "${input.value}"`);
+
+        // You can also perform different actions based on input type
+        if (input.value == '') {
+            alert('  العدد المستلم مطلوب ');
+            return false;
+        }
+        if (input.type === 'checkbox' && input.checked) {
+            if (input.value > counter || input.value < 1) {
+                alert('   العدد غير صحيح');
+                return false;
+            }
+        }
+        if (!document.getElementById("receiving_" + id).checked) {
+            alert('الاستلام غير صحيح');
+            return false;
+        }
+
+        // Optionally, add event listeners to each input
+        input.addEventListener('change', function() {
+            console.log(`${input.id} changed to: ${input.value}`);
+        });
 
 
+    });
+    return false;
+    // var recieved_counter = document.getElementById("counter_received_" + id).value;
+    // alert(recieved_counter);
+    // var counter = document.getElementById("counter_" + id).value;
+    // if (recieved_counter == '') {
+    //     alert('  العدد المستلم مطلوب ');
+    //     return false;
+    // }
+    // if (document.getElementById("receiving_" + id).checked) {
+
+    //     if (recieved_counter > counter || recieved_counter < 1) {
+    //         alert('   العدد غير صحيح');
+    //         return false;
+    //     }
+
+    // }
+    // if (!document.getElementById("receiving_" + id).checked) {
+    //     alert('الاستلام غير صحيح');
+    //     return false;
+    // }
+}
 </script>
