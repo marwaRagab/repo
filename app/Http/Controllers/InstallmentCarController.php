@@ -52,15 +52,15 @@ class InstallmentCarController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-   
+
     public function create($id)
    {
     $Installment_Client = Installment_Client::where('id', $id)->first();
-    
+
                  $user_id =  Auth::user()->id ?? null;
                  $message ="تم فتح صفحة لانشاء اتعلام سيارات " ;
                  $this->log($user_id,$message);
-       
+
     return view('installmentClient.car',compact('Installment_Client'));
    }
 
@@ -68,7 +68,7 @@ class InstallmentCarController extends Controller
 {
 
     // dd("s");
-    
+
     // $messages = [
     //     'installment_clients_id.required' => 'رقم التعريف مطلوب.',
     //     'installment_car.*.type_car.required' => 'نوع السيارة مطلوب.',
@@ -103,9 +103,9 @@ class InstallmentCarController extends Controller
         $this->log(Auth::user()->id ?? null, $message);
         $this->installment_notes($request->installment_clients_id, $message);
 
-        // return redirect()->route('myinstall.index', ['status' => 'car_inquiry'])
+        return redirect()->route('myinstall.index', ['status' => 'car_inquiry']);
         // ->with('success', 'تم إضافة استعلام السيارات بنجاح.');
-        return redirect()->back();
+        // return redirect()->back();
         }
 
     return redirect()->back()->withErrors('فشل في إضافة استعلام السيارات.');
