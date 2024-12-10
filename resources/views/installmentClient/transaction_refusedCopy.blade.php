@@ -90,7 +90,7 @@
                               <form action="{{ route('myinstall.update', $item->id) }}" method="post" style="display:inline;">
                                   @csrf
                                   <input type="hidden" name="status" value="car_inquiry">
-                                  <button class="btn btn-success rounded-0 w-100 mt-2" type="submit"> استعلام سيارات 
+                                  <button class="btn btn-success rounded-0 w-100 mt-2" type="submit"> استعلام سيارات
                                     </button>
                           </form>
                           </li>
@@ -103,7 +103,7 @@
                           </form>
                           </li>
                           <li>
-                              
+
                             <form action="{{ route('myinstall.update', $item->id) }}" method="post" style="display:inline;">
                               @csrf
                               <input type="hidden" name="status" value="accepted_condition">
@@ -114,7 +114,7 @@
                             <a class="btn btn-info rounded-0 w-100 mt-2" data-bs-toggle="modal"
                             data-bs-target="#accept-modal-md" data-id="{{ $item->id }}" data-name="{{ $item->name_ar }}" type="submit">
                               مقبول </a>
-                              
+
                           </form>
                           </li>
                           <li>
@@ -122,7 +122,7 @@
                             data-bs-target="#reject-modal-md" data-id="{{ $item->id }}" data-name="{{ $item->name_ar }}" type="submit">
                               مرفوض</a>
                           </li>
-      
+
                         </ul>
                       </div>
                       <div>
@@ -136,9 +136,9 @@
                                       <input type="hidden" name="status" value="archive">
                                     {{-- <a class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#archive"> --}}
                                       <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
-              
+
                                   تحويل للارشيف</button> </form>
-                              @endif 
+                              @endif
                             </td>
                       <td>
                         {{$item->bank->name_ar  ?? 'لا يوجد'}}
@@ -149,11 +149,11 @@
                       <td>
                             <div class="block">
                             <h5>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y')}}</h5>
-                            <a class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#open-details" data-id="{{ $item->id }}" data-name="{{ $item->name_ar }}">
-            
+                            <a class="btn btn-secondary w-100 mt-2"  href="{{ route('advanced.notes',  $item->id) }}">
+
                               الملاحظات</a>
                             </div>
-        
+
                         </td>
                         <td>{{$item->reason}}</td>
                     </tr>
@@ -206,10 +206,10 @@
               </thead>
               <tbody>
                 <!-- start row -->
-                  
+
               </tbody>
             </table>
-            
+
             <h3>ملاحظات القضايا</h3>
             <table id="notesissue" class="table table-bordered border text-wrap align-middle">
                 <thead>
@@ -303,7 +303,7 @@
                    var modal = $(this);
                    // Set the installment_clients_id in the hidden input
                    modal.find('#installment_client_id').val(itemId);
-   
+
                    // Clear previous content to prevent duplication
                    var notesTableBody = modal.find('#notes1 tbody');
                    var notesIssueTableBody = modal.find('#notesissue tbody');
@@ -311,7 +311,7 @@
                    notesTableBody.empty();
                    notesIssueTableBody.empty();
                    notesCarTableBody.empty();
-   
+
                    // AJAX call to fetch notes for the specific item
                    $.ajax({
                        url: '/myinstall/notes/' + itemId,
@@ -376,7 +376,7 @@
                    );
                }
            });
-   
+
            // car
            $.ajax({
                url: '/myinstall/notescar/' + itemId,
@@ -409,7 +409,7 @@
            });
                });
            });
-   
+
            function submitNoteForm(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -439,5 +439,5 @@
                 }
             });
         }
-   
+
    </script>
