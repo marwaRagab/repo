@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\ImportingCompanies\Tawreed\OrdersFiles;
 use App\Models\ImportingCompanies\Tawreed\purchase_items;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
@@ -38,11 +39,13 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
                 ->addColumn('invoice_value', function ($order) {
                     return number_format($order->order_item->sum('price_qabila'), 3);
                 })
-
-                ->addColumn('actions', function ($order) {
-                    return view('importingCompanies.orders.partials.actions', compact('order'))->render();
+                ->addColumn('order_products', function ($order) {
+                    return '<a class="text-info" href="' . route('orders.products', $order->id) .'"> منتجات طلب الشراء</a>'; 
                 })
-                ->rawColumns(['actions'])
+                ->addColumn('actions', function ($order) {
+                    return view('importingCompanies.Orders.partials.actions', compact('order'))->render();
+                })
+                ->rawColumns(['order_products','actions'])
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -67,9 +70,9 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
 
     public function showOrderProducts($id)
     {
-        $items = purchase_items::with('product')->where('order_id', $id)->get();
-        $productsCount = purchase_items::where('order_id', $id)->sum('count');
-
+        $items = OrderItem::with('product_order_items')->where('order_id', $id)->groupBy('id')->get();
+        $productsCount = OrderItem::where('order_id', $id)->sum('counter');
+        
         $title = "منتجات طلب الشراء";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";

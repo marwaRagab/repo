@@ -21,12 +21,12 @@
                     <!-- start row -->
                     @foreach ($items as $item)
                         <tr>
-                            <td>{{ $item->product->mark->name_ar }}</td>
-                            <td>{{ $item->product->class->name_ar }}</td>
-                            <td>{{ $item->product->model }}</td>
-                            <td>{{ number_format($item->product->net_price, 2) }}</td>
-                            <td>{{ number_format($item->product->price, 2) }} K.D</td>
-                            <td>{{ $item->count }}</td>
+                            <td>{{ $item->product_order_items->mark->name_ar }}</td>
+                            <td>{{ $item->product_order_items->class->name_ar }}</td>
+                            <td>{{ $item->product_order_items->model }}</td>
+                            <td>{{ number_format($item->product_order_items->net_price, 2) }}</td>
+                            <td>{{ number_format($item->product_order_items->price, 2) }} K.D</td>
+                            <td>{{ $item->counter }}</td>
                         </tr>
                     @endforeach
                 </tbody>

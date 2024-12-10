@@ -18,7 +18,9 @@ class ProductRepository implements ProductRepositoryInterface
     protected $data;
     public function __construct()
     {
-        $this->data['companies'] = Company::where('active', 1)->get();
+        // $this->data['companies'] = Company::where('active', 1)->get();
+        $this->data['companies'] = Company::all();
+
         $this->data['classes'] = ProductClass::all();
         $this->data['marks'] = Mark::all();
     }
@@ -54,7 +56,7 @@ class ProductRepository implements ProductRepositoryInterface
     public function getProductsData()
     {
 
-        $products = Product::with('mark', 'class')->select(['id', 'mark_id', 'class_id', 'model', 'number', 'net_price', 'price']);
+        $products = Product::with('mark', 'class')->select(['id', 'mark_id', 'class_id', 'model', 'number', 'net_price', 'price','company_id']);
 
         return DataTables::of($products)
             ->addColumn('mark', function ($product) {
@@ -64,7 +66,7 @@ class ProductRepository implements ProductRepositoryInterface
                 return $product->class->name_ar ?? '';
             })
             ->addColumn('actions', function ($product) {
-                $Allcompany = $this->data['companies'];
+                $Allcompany = $this->data['companies']; 
                 $classes = $this->data['classes'];
                 $marks = $this->data['marks'];
 
