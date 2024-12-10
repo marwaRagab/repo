@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class OttuPaymentController extends Controller
 {
+
     public function process($id)
     {
         // Fetch client data from the database
