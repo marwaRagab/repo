@@ -114,10 +114,10 @@
                                                                         value="{{ $purch->count}}" type="hidden">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control received"
                                                                         name="counter_received_{{$purch->id}}"
                                                                         id="counter_received_{{$purch->id}}"
-                                                                        onchange="check({{ $purch->id}})">
+                                                                       >
                                                                     @error('counter_received_{{$purch->id}}')
                                                                     <div style='color:red'>{{$message}}</div>
                                                                     @enderror
@@ -140,7 +140,7 @@
                                                     <div id="tableBody"></div>
                                                 </div>
                                                 <div class="modal-footer d-flex ">
-                                                    <button type="submit" class="btn btn-primary">حفظ </button>
+                                                    <button type="submit" class="btn btn-primary"  onsubmit="return check()">حفظ </button>
                                                     <button type="button"
                                                         class="btn bg-danger-subtle text-danger  waves-effect"
                                                         data-bs-dismiss="modal">
@@ -170,27 +170,43 @@
 
 
 <script>
-function check(id) {
+function check() {
 
-    var recieved_counter = document.getElementById("counter_received_" + id).value;
-    var counter = document.getElementById("counter_" + id).value;
-    if (recieved_counter == '' || counter == '') {
-        alert('  العدد المستلم مطلوب ');
-        return false;
-    }
-    if (document.getElementById("receiving_" + id).checked) {
+    const checkboxes = document.querySelectorAll('.received');
+
+// Iterate through each checkbox
+checkboxes.forEach((checkbox) => {
+  // Perform some action, for example, checking if the checkbox is checked
+  console.log(`${checkbox.id} is ${checkbox.checked ? 'checked' : 'unchecked'}`);
+  
+  // You can also add an event listener if needed
+  checkbox.addEventListener('change', function() {
+    console.log(`${checkbox.id} state changed: ${checkbox.checked ? 'checked' : 'unchecked'}`);
+  });
+
+  
+});
+
+    // var recieved_counter = document.getElementById("counter_received_" + id).value;
+    // alert(recieved_counter);
+    // var counter = document.getElementById("counter_" + id).value;
+    // if (recieved_counter == '' ) {
+    //     alert('  العدد المستلم مطلوب ');
+    //     return false;
+    // }
+    // if (document.getElementById("receiving_" + id).checked) {
        
-        if (recieved_counter > counter || recieved_counter < 1 ) {
-            alert('   العدد غير صحيح');
-            return false;
-        } 
+    //     if (recieved_counter > counter || recieved_counter < 1 ) {
+    //         alert('   العدد غير صحيح');
+    //         return false;
+    //     } 
        
-    }
-    if(!document.getElementById("receiving_" + id).checked)
-    {
-        alert('الاستلام غير صحيح');
-        return false;
-    }
+    // }
+    // if(!document.getElementById("receiving_" + id).checked)
+    // {
+    //     alert('الاستلام غير صحيح');
+    //     return false;
+    // }
 }
 
 

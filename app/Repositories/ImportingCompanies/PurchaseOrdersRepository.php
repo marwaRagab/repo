@@ -99,7 +99,7 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         if ($request->hasFile('img')) {
             $file = $request->file('img');
             $filePath = $file->store('SentPurchaseRequests', 'public');
-            $data->img = '/storage/' . $filePath;
+            $data->img =  $filePath;
             $data->status = 'active';
             $data->send_status = 1;
             $data->sending_user_id = Auth::user()->id;
