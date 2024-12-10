@@ -3,12 +3,12 @@
 
 <div class="card">
             <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-              <h4 class="card-title mb-0"> عدد الملفات المغلقة
+              <h4 class="card-title mb-0"> عدد الملفات المغلقة ({{$data['users']->name_ar}})
             </h4>
             </div>
             <div class="card-body">
               <div class="table-responsive pb-4">
-                <table id="all" class="table table-bordered table-striped border text-nowrap align-middle">
+                <table id="all-student" class="table table-bordered table-striped border text-nowrap align-middle">
                     <thead class="thead-dark">
                         <tr>
                           <th>م</th>
@@ -22,7 +22,7 @@
                       @foreach ($data['delegates'] as $item)
                         <tr>
                           <td>{{ $loop->index + 1 }}</td>
-                          <td>{{$item->militaryAffair->installment->id}}</td>
+                          <td> <a href="{{url('installment/show-installment/'.$item->militaryAffair->installment->id)}}">{{$item->militaryAffair->installment->id}} </a></td>
                           <td>{{$item->militaryAffair->created_at }}</td>
                           <td>{{ \Carbon\Carbon::createFromTimestamp($item->end_date)->format('Y-m-d') }} </td>
                           @if ($item->open_file_date !== null && $item->execute_date === null && $item->image_date === null && $item->case_proof_date === null && $item->certificate_date === null)

@@ -17,6 +17,7 @@ use App\Http\Controllers\advancedController;
 use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\Auth\LoginController;
 
+
 // use App\Exports\ClientsExport;
 //// use Maatwebsite\Excel\Facades\Excel;
 
@@ -44,6 +45,7 @@ use App\Http\Controllers\InstallmentSubmissionController;
 use App\Http\Controllers\Military_affairs\ImageController;
 use App\Http\Controllers\ImportingCompanies\MarkController;
 
+
 // use App\Http\Controllers\Showroom\ShowroomController;
 use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\Military_affairs\PapersController;
@@ -59,6 +61,7 @@ use App\Http\Controllers\TechnicalSupport\RequestController;
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Transfer\TransferController;
+
 use App\Http\Controllers\Military_affairs\CheckingController;
 use App\Http\Controllers\Military_affairs\Stop_carController;
 // use App\Http\Controllers\Military_affairs\Stop_bankController;
@@ -183,6 +186,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/stop_bank/{id?}', [Stop_bankController::class, 'index'])->name('stop_bank');
     Route::post('/stop_travel_convert', [Stop_travelController::class, 'stop_travel_convert']);
     Route::get('military_affairs/stop_bank/archive/{id?}', [Stop_bankController::class, 'archive'])->name('stop_bank.archive');
+    Route::get('military_affairs/stop_bank/print_archive/{id?}', [Stop_bankController::class, 'print_archive'])->name('stop_bank.print_archive');
+
     // Route::get('/checking/{id?}', [ CheckingController::class, 'index'])->name('checking');
     // Route::post('/update_actions_up/', [ CheckingController::class, 'update_actions_up']);
     // Route::post('/update_actions_reminder/', [ CheckingController::class, 'update_actions_reminder']);
