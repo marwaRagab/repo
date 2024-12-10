@@ -1,17 +1,3 @@
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
 <div class="card mt-4 py-3">
     <div class="row pt-3 px-4">
         <form method="POST" action="{{ route('tawreed.searchResults', $companyId) }}" class="w-100">

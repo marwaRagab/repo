@@ -1,51 +1,42 @@
 <?php
 
 namespace App\Http\Controllers\Installment;
+
 ini_set('memory_limit', '600M');
 
-use App\Models\Nationality;
-use Carbon\Carbon;
-use App\Models\Client;
-use App\Models\Order;
-use App\Models\ClientImg;
-
-use App\Models\Installment;
-use Illuminate\Http\Request;
-use App\Models\InstallmentNote;
-use App\Models\InstallmentClientNote;
-use App\Models\Installment_month;
-use App\Models\InstallmentCar;
-use App\Models\InstallmentIssue;
-use App\Models\Prev_cols_clients;
-use App\Models\Installment_Client;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Support\Facades\Redirect;
-
-use Yajra\DataTables\Facades\DataTables;
-
-
-use Illuminate\Support\Facades\Validator;
-use App\Models\Military_affairs\Military_affair;
-
-
-use App\Models\ImportingCompanies\Tawreed\OrdersFiles;
+use App\Models\Client;
+use App\Models\ClientImg;
+use App\Models\Installment;
+use App\Models\InstallmentCar;
+use App\Models\InstallmentClientNote;
+use App\Models\InstallmentIssue;
+use App\Models\InstallmentNote;
+use App\Models\Installment_Client;
+use App\Models\Installment_month;
 use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_amount;
-use App\Models\Military_affairs\Military_affairs_settlement;
 use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_settlement;
 use App\Models\Military_affairs\Military_affairs_settlement_month;
+use App\Models\Nationality;
+use App\Models\Order;
 use App\Models\PurchaseOrderItem;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 
 class InstallmentController extends Controller
 {
     public function index()
     {
-       // dd($status);
+        // dd($status);
         //
-        $title='عملاء الاقساط';
+        $title = 'عملاء الاقساط';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -54,24 +45,22 @@ class InstallmentController extends Controller
         $breadcrumb[1]['title'] = $title;
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
-        $data['Installment'] = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->OrderBy('installment.id','desc')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->OrderBy('installment.id', 'desc')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
-       if($data)
-       {
+        if ($data) {
 //   $user_id = 1 ;
-             $user_id =  Auth::user()->id ?? null;
-               $message ="تم دخول صفحة عملاء الاقساط" ;
-               $this->log($user_id ,$message);
-       }
+            $user_id = Auth::user()->id ?? null;
+            $message = "تم دخول صفحة عملاء الاقساط";
+            $this->log($user_id, $message);
+        }
 
-
-       $data['view']='installment/index';
-       return view('layout',$data,compact('breadcrumb'));
+        $data['view'] = 'installment/index';
+        return view('layout', $data, compact('breadcrumb'));
 
         //    return view('installment.index',compact('data'));
 
-       //  return $this->respondSuccess($data, 'Get Data successfully.');
+        //  return $this->respondSuccess($data, 'Get Data successfully.');
 
     }
 
@@ -127,9 +116,9 @@ class InstallmentController extends Controller
 
     public function finished_installments()
     {
-       // dd($status);
+        // dd($status);
 
-        $title='ارشيف المعاملات';
+        $title = 'ارشيف المعاملات';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -139,35 +128,32 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-
 //         $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
 //
 
-        $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->where('finished','1')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->where('finished', '1')->get();
         // $data['preclient'] = Prev_cols_clients::with('client_old')->where('id', $data['Installment']->client_id)->first();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
-       if($data)
-       {       $user_id = 1 ;
-           //   $user_id =  Auth::user()->id,
-               $message ="تم دخول صفحة الارشيف فى عملاء الاقساط" ;
-               $this->log($user_id ,$message);
-       }
+        if ($data) {$user_id = 1;
+            //   $user_id =  Auth::user()->id,
+            $message = "تم دخول صفحة الارشيف فى عملاء الاقساط";
+            $this->log($user_id, $message);}
 
-       $data['view']='installment/archive';
-       return view('layout',$data,compact('breadcrumb'));
+        $data['view'] = 'installment/archive';
+        return view('layout', $data, compact('breadcrumb'));
 
         //    return view('installment.index',compact('data'));
 
-       //  return $this->respondSuccess($data, 'Get Data successfully.');
+        //  return $this->respondSuccess($data, 'Get Data successfully.');
 
     }
 
     public function getExcel()
     {
-       // dd($status);
+        // dd($status);
         //
-        $title='احصائيات العملاء';
+        $title = 'احصائيات العملاء';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -177,18 +163,16 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $data['Client']= Client::with(['user','client_address','client_phone'])->get();
+        $data['Client'] = Client::with(['user', 'client_address', 'client_phone'])->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
-       if($data)
-       {       $user_id = 1 ;
-           //   $user_id =  Auth::user()->id,
-               $message ="تم دخول صفحة احصائيات العملاء" ;
-               $this->log($user_id ,$message);
-       }
+        if ($data) {$user_id = 1;
+            //   $user_id =  Auth::user()->id,
+            $message = "تم دخول صفحة احصائيات العملاء";
+            $this->log($user_id, $message);}
 
-       $data['view']='installment/excel';
-       return view('layout',$data,compact('breadcrumb'));
+        $data['view'] = 'installment/excel';
+        return view('layout', $data, compact('breadcrumb'));
 
     }
 
@@ -206,7 +190,6 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-       
         $data['orders'] = Installment::with('orders.order_item.product_order', 'orders.order_item')->findOrFail($id);
 
         // Use a collection to gather the product orders and counters
@@ -219,18 +202,18 @@ class InstallmentController extends Controller
             });
         });
 
-        $data['Installment'] = $installment= Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
-       // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
+        $data['Installment'] = $installment = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
+        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
 
         $data['Installment']->test = "";
 
-        if($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null)
-        {
+        if ($data['Installment']->installment_clients > 0 || $data['Installment']->installment_clients != null) {
             $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         }
 
 //        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
-       $data['Client'] = Client::with(['user', 'client_address', 'client_phone','client_image'])
+        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image'])
+
             ->where('id', $data['Installment']->client_id)
             ->first();
         // $data['phone'] = ClientPhone::where('client_id',$client->id);
@@ -239,8 +222,7 @@ class InstallmentController extends Controller
 
         $data['installment_months'] = Installment_month::where('installment_id', $id)->orderBy('date')->get();
 
-
-        $data['count_installment_months'] = Installment_month::where('installment_id', $id)->where('status', 'done')->where('installment_type','!=','first_amount')->where('installment_type','!=','law_percent')->count();
+        $data['count_installment_months'] = Installment_month::where('installment_id', $id)->where('status', 'done')->where('installment_type', '!=', 'first_amount')->where('installment_type', '!=', 'law_percent')->count();
         $data['done_amount'] = Installment_month::where('installment_id', $id)->where('status', 'done')->sum('amount');
         $data['done_amount_settlement'] = DB::table('military_affairs_settlement_months')->where('installment_id', $id)->where('status', 'done')->sum('amout');
         $data["military_affairs_item"] = DB::table('military_affairs')->where('installment_id', $id)->first();
@@ -257,7 +239,7 @@ class InstallmentController extends Controller
         }
         $data['Installment_Client'] = Installment_Client::with(['user', 'ministry_working', 'bank'])->where('id', $data['Installment']->installment_clients)->first();
         $data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
-        $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type','income');
+        $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type', 'income');
         $data['not_done_count'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
         $current_date = now(); // Use Carbon to get the current date and time
         $data['not_done_count_lated'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('date', '<', $current_date)->count();
@@ -270,24 +252,24 @@ class InstallmentController extends Controller
         }
 
         $data['id'] = $id;
-        $data['client_ministries']=DB::table('client_ministries')->where('client_id',$data['Client']->id)->get();
+        $data['client_ministries'] = DB::table('client_ministries')->where('client_id', $data['Client']->id)->get();
         // Extract ministry IDs from the collection
         $ministryIds = $data['client_ministries']->pluck('ministry_id')->toArray();
 
         // Retrieve ministries based on the IDs
         $data['ministries'] = DB::table('ministries')->whereIn('id', $ministryIds)->get();
-        $data['client_addresses'] = DB::table('client_addresses')->where('client_id' , $data['Client']->id)->get();
+        $data['client_addresses'] = DB::table('client_addresses')->where('client_id', $data['Client']->id)->get();
 
         // Retrieve ministries based on the IDs
         $data['governorates'] = DB::table('governorates')
-        ->where('id',  $data['Client']->client_address->first()->governorate_id)
-        ->first();
+            ->where('id', $data['Client']->client_address->first()->governorate_id)
+            ->first();
         $data['regions'] = DB::table('regions')
-        ->where('id',  $data['Client']->client_address->first()->area_id)
-        ->first();
+            ->where('id', $data['Client']->client_address->first()->area_id)
+            ->first();
 
         // banks
-        $data['client_banks']=DB::table('client_banks')->where('client_id',$data['Client']->id)->first();
+        $data['client_banks'] = DB::table('client_banks')->where('client_id', $data['Client']->id)->first();
 
         // dd( $data['Installment']);
         // $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
@@ -304,7 +286,6 @@ class InstallmentController extends Controller
         $mil_item = Military_affair::with('installment')->get();
         $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->get();
 
-
         if ($installment->laws == 1) {
             $military_affair = Military_affair::where('installment_id', $id)->first();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
@@ -316,7 +297,6 @@ class InstallmentController extends Controller
             $data['sum'] = $not_done_amount;
         }
 
-
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();
         $data['install_amount'] = $first_month->amount ?? 0;
 
@@ -327,12 +307,10 @@ class InstallmentController extends Controller
 
         // $data['settle_item'] = Military_affairs_settlement::with('military_affair')->get();
 
-
         // if(count($data['settle_item']) > 0){
 
         //    $data['settle_month_item'] = Military_affairs_settlement_month::where('settle_id',$data['settle_item']['id'])->where('installment_type','!=','first_amount')->get();
         // }
-
 
         // dd($data['settle_item']);
         // if(count($data['settle_item']) > 0){
@@ -343,47 +321,38 @@ class InstallmentController extends Controller
         // dd($data['Installment_Client']);
         //notes
         $data['InstallmentNote'] = InstallmentNote::where('installment_clients_id', $id)->get();
-        if($data['Installment_Client'])
-        {
+        if ($data['Installment_Client']) {
             $data['Installmentcar'] = InstallmentCar::where('installment_clients_id', $data['Installment_Client']->id)->get();
             $data['Installmentissue'] = InstallmentIssue::where('installment_clients_id', $data['Installment_Client']->id)->get();
             $data['InstallmentClientNote'] = InstallmentClientNote::where('installment_clients_id', $data['Installment_Client']->id)->get();
             // $data['InstallmentClientNoteAccepted'] = InstallmentClientNote::where('installment_clients_id', $data['Installment_Client']->id)->where('')->get();
         }
 
-
         // dd()
-        if($data["military_affairs_item"])
-        {
+        if ($data["military_affairs_item"]) {
             $data['MilitaryAffairNote'] = Military_affairs_notes::where('military_affairs_id', $data["military_affairs_item"]->id)->get();
         }
-        $data['MilitaryAffairNote'] =null;
-
+        $data['MilitaryAffairNote'] = null;
 
         //notes
         $data['InstallmentNote'] = InstallmentNote::where('installment_clients_id', $id)->get();
-        if($data['Installment_Client'])
-        {
+        if ($data['Installment_Client']) {
             $data['Installmentcar'] = InstallmentCar::where('installment_clients_id', $data['Installment_Client']->id)->get();
             $data['Installmentissue'] = InstallmentIssue::where('installment_clients_id', $data['Installment_Client']->id)->get();
             $data['InstallmentClientNote'] = InstallmentClientNote::where('installment_clients_id', $data['Installment_Client']->id)->get();
         }
 
-
         // dd()
-        if($data["military_affairs_item"])
-        {
+        if ($data["military_affairs_item"]) {
             $data['MilitaryAffairNote'] = Military_affairs_notes::where('military_affairs_id', $data["military_affairs_item"]->id)->get();
-        // dd($data['MilitaryAffairNote']);
+            // dd($data['MilitaryAffairNote']);
 
         }
 
         // order items
 
-       
-
         $data['view'] = 'installment/show_details';
-        return view('layout', $data, compact('breadcrumb', 'data','purchase_orders_array'));
+        return view('layout', $data, compact('breadcrumb', 'data', 'purchase_orders_array'));
 
         //  return $this->respondSuccess($data, 'Get Data successfully.');
 
@@ -396,13 +365,13 @@ class InstallmentController extends Controller
             'knet' => 'required',
             'knet_code' => 'required',
         ],
-        [
-            'cash.required' => 'القيمة مطلوبة',
-            'knet.required' => 'القيمة مطلوبة',
-            'knet_code.required' => 'وصل الكى نت  مطلوب',
-        ]);
+            [
+                'cash.required' => 'القيمة مطلوبة',
+                'knet.required' => 'القيمة مطلوبة',
+                'knet_code.required' => 'وصل الكى نت  مطلوب',
+            ]);
 
-        $title='نظام الأقساط';
+        $title = 'نظام الأقساط';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -413,82 +382,81 @@ class InstallmentController extends Controller
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
         $installment_item = Installment::findOrFail($installment_id);
-        $data['item'] = $item2 = $month = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->orderBy('id', 'asc')->first();
-        $invoice =  new Invoices_installment();
+        $data['item'] = $item2 = $month = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->orderBy('id', 'asc')->first();
+        $invoice = new Invoices_installment();
 
+        if ($request->cash > 0 and $request->knet > 0) {
+            $month->payment_type = 'cash/knet';
+        } elseif ($request->cash > 0) {
+            $month->payment_type = "cash";
+        } else {
+            $month->payment_type = "knet";
+        }
 
-            if ($request->cash > 0 and $request->knet > 0) {
-                $month->payment_type = 'cash/knet';
-            } elseif ($request->cash > 0) {
-                $month->payment_type = "cash";
-            } else {
-                $month->payment_type = "knet";
-            }
+        $month->update([
+            'status' => "done",
+            'created_by' => Auth::user()->id ?? null,
+            'payment_date' => now()->format('Y-m-d'),
+            'hesab_file' => 1,
+        ]);
+
+        // if ($installment_item['laws'] == 1) {
+        //     $this->update_payment_law($installment_id, $item2['amout']);
+
+        //     $item = $this->db_get->get_where_r('laws', 'installment_id', $installment_id);
+
+        //     if (!empty($item)) {
+        //         $add_data2['payment_done'] = $month->amount + $item['payment_done'];
+
+        //         $this->db_get->update_tb('laws', $item['id'], $add_data2);
+
+        //     }
+        // }
+
+        // if ($month->installment_type == "first_amount") {
+        //     Orders::where('id',$installment_item->order_id)->update([
+        //         'status' => "finished"
+        //     ]);
+        // }
+
+        if ($request->cash > 0) {
+            $this->add_install_money($month->id, $request->cash, 'cash', '');
+        }
+
+        if ($request->knet > 0) {
+            $this->add_install_money($month->id, $request->knet, 'knet', $request->knet_code);
+        }
+        if ($request->hasFile('img_dir')) {
+            $file = $request->file('img_dir');
+            $filePath = $file->store('uploads/new_photos', 'public');
 
             $month->update([
-                'status' => "done",
                 'created_by' => Auth::user()->id ?? null,
-                'payment_date' => now()->format('Y-m-d'),
-                'hesab_file' => 1
+                'img_dir' => '/storage/' . $filePath,
+            ]);
+            // for($i =0 ; $i < 2 ; $i++){
+            $invoice::where('install_month_id', $month->id)->update([
+                'img' => '/storage/' . $filePath,
+                'created_by' => Auth::user()->id ?? null,
+            ]);
+            // }
+        }
+        if (empty($month)) {
+            $installment_item->update([
+                'finished' => 1,
             ]);
 
-            // if ($installment_item['laws'] == 1) {
-            //     $this->update_payment_law($installment_id, $item2['amout']);
+            $military_affairs_item = Military_affair::where('installment_id', $installment_id)->get();
 
-            //     $item = $this->db_get->get_where_r('laws', 'installment_id', $installment_id);
+            if (!empty($military_affairs_item)) {
 
-            //     if (!empty($item)) {
-            //         $add_data2['payment_done'] = $month->amount + $item['payment_done'];
-
-            //         $this->db_get->update_tb('laws', $item['id'], $add_data2);
-
-            //     }
-            // }
-
-            // if ($month->installment_type == "first_amount") {
-            //     Orders::where('id',$installment_item->order_id)->update([
-            //         'status' => "finished"
-            //     ]);
-            // }
-
-            if ($request->cash > 0) {
-                $this->add_install_money($month->id, $request->cash , 'cash', '');
-            }
-
-            if ($request->knet > 0) {
-                $this->add_install_money($month->id, $request->knet, 'knet', $request->knet_code);
-            }
-            if ($request->hasFile('img_dir')) {
-                $file = $request->file('img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
-
-                    $month->update([
-                        'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' .$filePath,
-                    ]);
-                // for($i =0 ; $i < 2 ; $i++){
-                    $invoice::where('install_month_id',$month->id)->update([
-                        'img' => '/storage/' .$filePath,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
-                // }
-            }
-            if (empty($month)) {
-                $installment_item->update([
-                    'finished' => 1,
+                $military_affairs_item->update([
+                    'checking' => 1,
                 ]);
-
-                $military_affairs_item = Military_affair::where('installment_id', $installment_id)->get();
-
-                if (!empty($military_affairs_item)) {
-
-                    $military_affairs_item->update([
-                        'checking' => 1
-                    ]);
-                }
             }
+        }
 
-            return redirect()->back()->with('message', 'تم الدفع بنجاح');
+        return redirect()->back()->with('message', 'تم الدفع بنجاح');
 
     }
 
@@ -502,32 +470,32 @@ class InstallmentController extends Controller
 
         if (!empty($installment->part_latif)) {
 
-            $invoice->description  = "عملية  دفع قسط (رابط  ) عن معاملة العميل "
-                //. $client['name']
-                . " رقم " . " " . $installment_month->installment_id;
+            $invoice->description = "عملية  دفع قسط (رابط  ) عن معاملة العميل "
+            //. $client['name']
+            . " رقم " . " " . $installment_month->installment_id;
         }
 
         if (!empty($installment->part_paper)) {
-              $invoice->description = "عملية  دفع قسط (رابط) عن معاملة العميل "
-               // . $client['name']
-                . " رقم " . " " . $installment_month->installment_id;
+            $invoice->description = "عملية  دفع قسط (رابط) عن معاملة العميل "
+            // . $client['name']
+            . " رقم " . " " . $installment_month->installment_id;
 
         }
 
-            $invoice->amount  =  $amount;
-            $invoice->description = "عملية  دفع قسط (رابط )عن المعاملة  رقم ". $installment_month->installment_id;
-            $invoice->type  = "income";
-            $invoice->payment_type   = 'part';
-            $invoice->date   = now();
-            $invoice->install_month_id  = $id;
-            $invoice->knet_code  = $knet_code ? $knet_code:'';
-            $invoice->installment_id  = $installment_month->installment_id;
-            $invoice->created_by  = Auth::user()->id ?? null;
-            $invoice->debtor = 1;
-            $invoice->branch_id  = Auth::user()->branch_id ?? null;
-            $invoice->balance =  $last_invoice->balance;
-            $invoice->install_pay_type = 'installment';
-            $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank + $amount;
+        $invoice->amount = $amount;
+        $invoice->description = "عملية  دفع قسط (رابط )عن المعاملة  رقم " . $installment_month->installment_id;
+        $invoice->type = "income";
+        $invoice->payment_type = 'part';
+        $invoice->date = now();
+        $invoice->install_month_id = $id;
+        $invoice->knet_code = $knet_code ? $knet_code : '';
+        $invoice->installment_id = $installment_month->installment_id;
+        $invoice->created_by = Auth::user()->id ?? null;
+        $invoice->debtor = 1;
+        $invoice->branch_id = Auth::user()->branch_id ?? null;
+        $invoice->balance = $last_invoice->balance;
+        $invoice->install_pay_type = 'installment';
+        $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank + $amount;
 
         $invoice->save();
 
@@ -549,34 +517,31 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-      else
-      {
-        $title='نظام الأقساط';
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route("dashboard");
-        $breadcrumb[1]['title'] = "عملاء الاقساط";
-        $breadcrumb[1]['url'] = route("installment.admin");
-        $breadcrumb[2]['title'] = $title;
-        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        } else {
+            $title = 'نظام الأقساط';
+            $breadcrumb = array();
+            $breadcrumb[0]['title'] = " الرئيسية";
+            $breadcrumb[0]['url'] = route("dashboard");
+            $breadcrumb[1]['title'] = "عملاء الاقساط";
+            $breadcrumb[1]['url'] = route("installment.admin");
+            $breadcrumb[2]['title'] = $title;
+            $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $installment_item = Installment::findOrFail($installment_id);
-        $data['item'] = $item2 = $month = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->orderBy('id', 'asc')->first();
-        $invoice =  new Invoices_installment();
-
+            $installment_item = Installment::findOrFail($installment_id);
+            $data['item'] = $item2 = $month = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->orderBy('id', 'asc')->first();
+            $invoice = new Invoices_installment();
 
             $month->update([
                 'status' => "done",
                 'created_by' => Auth::user()->id ?? null,
                 'payment_date' => now()->format('Y-m-d'),
                 'hesab_file' => 1,
-                'payment_type' => "part"
+                'payment_type' => "part",
             ]);
 
             $installment_item->update([
-                'finished' => 1
-              ]);
+                'finished' => 1,
+            ]);
 
             $this->add_install_money_part($month->id, $month->amount, $request->knet_code);
 
@@ -584,15 +549,15 @@ class InstallmentController extends Controller
                 $file = $request->file('img_dir');
                 $filePath = $file->store('uploads/new_photos', 'public');
 
-                    $month->update([
-                        'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' .$filePath,
-                    ]);
+                $month->update([
+                    'created_by' => Auth::user()->id ?? null,
+                    'img_dir' => '/storage/' . $filePath,
+                ]);
                 // for($i =0 ; $i < 2 ; $i++){
-                    $invoice::where('install_month_id',$month->id)->update([
-                        'img' => '/storage/' .$filePath,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
+                $invoice::where('install_month_id', $month->id)->update([
+                    'img' => '/storage/' . $filePath,
+                    'created_by' => Auth::user()->id ?? null,
+                ]);
                 // }
             }
 
@@ -617,22 +582,22 @@ class InstallmentController extends Controller
                     $sum = $last_invoice->balance + $sum;
                     break;
                 case "share_capital":
-                    $sum = $last_invoice->balance  + $sum;
+                    $sum = $last_invoice->balance + $sum;
                     break;
                 case "expenses":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "export":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "advance":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "income_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
                 case "expenses_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
 
                 default:
@@ -641,29 +606,29 @@ class InstallmentController extends Controller
         }
 
         if ($type == 'cash') {
-            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 :$last_invoice->balance_cash + $amount;
+            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_cash + $amount;
             $invoice->balance_knet = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_knet;
             // update_invoice_central_bank('cash', '+', $add_data['amount'], 'installment');
         } else {
-            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 :$last_invoice->balance_cash;
+            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_cash;
             $invoice->balance_knet = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_knet + $amount;
             // update_invoice_central_bank('knet', '+', $add_data['amount'], 'installment');
         }
 
-            $invoice->amount  =  $amount;
-            $invoice->description = "عملية  دفع قسط عن المعاملة  رقم ". $installment_month->installment_id;
-            $invoice->type  = "income";
-            $invoice->payment_type   = $type;
-            $invoice->date   = now();
-            $invoice->install_month_id  = $id;
-            $invoice->knet_code  = $knet_code ? $knet_code:'';
-            $invoice->installment_id  = $installment_month->installment_id;
-            $invoice->created_by  = Auth::user()->id ?? null;
-            $invoice->debtor = 1;
-            $invoice->branch_id  = Auth::user()->branch_id ?? null;
-            $invoice->balance = $sum;
-            $invoice->install_pay_type = 'installment';
-            $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
+        $invoice->amount = $amount;
+        $invoice->description = "عملية  دفع قسط عن المعاملة  رقم " . $installment_month->installment_id;
+        $invoice->type = "income";
+        $invoice->payment_type = $type;
+        $invoice->date = now();
+        $invoice->install_month_id = $id;
+        $invoice->knet_code = $knet_code ? $knet_code : '';
+        $invoice->installment_id = $installment_month->installment_id;
+        $invoice->created_by = Auth::user()->id ?? null;
+        $invoice->debtor = 1;
+        $invoice->branch_id = Auth::user()->branch_id ?? null;
+        $invoice->balance = $sum;
+        $invoice->install_pay_type = 'installment';
+        $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
 
         $invoice->save();
 
@@ -685,22 +650,22 @@ class InstallmentController extends Controller
                     $sum = $last_invoice->balance + $sum;
                     break;
                 case "share_capital":
-                    $sum = $last_invoice->balance  + $sum;
+                    $sum = $last_invoice->balance + $sum;
                     break;
                 case "expenses":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "export":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "advance":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "income_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
                 case "expenses_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
 
                 default:
@@ -709,29 +674,29 @@ class InstallmentController extends Controller
         }
 
         if ($type == 'cash') {
-            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 :$last_invoice->balance_cash + $amount;
+            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_cash + $amount;
             $invoice->balance_knet = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_knet;
             // update_invoice_central_bank('cash', '+', $add_data['amount'], 'installment');
         } else {
-            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 :$last_invoice->balance_cash;
+            $invoice->balance_cash = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_cash;
             $invoice->balance_knet = empty($last_invoice->balance_cash) ? 0 : $last_invoice->balance_knet + $amount;
             // update_invoice_central_bank('knet', '+', $add_data['amount'], 'installment');
         }
 
-            $invoice->amount  =  $amount;
-            $invoice->description = "عملية  دفع قسط عن المعاملة  رقم ". $installment_month->installment_id;
-            $invoice->type  = "income";
-            $invoice->payment_type   = $type;
-            $invoice->date   = now();
-            $invoice->install_month_id  = $id;
-            $invoice->knet_code  = $knet_code ? $knet_code:'';
-            $invoice->installment_id  = $installment_month->installment_id;
-            $invoice->created_by  = Auth::user()->id ?? null;
-            $invoice->debtor = 1;
-            $invoice->branch_id  = Auth::user()->branch_id ?? null;
-            $invoice->balance = $sum;
-            $invoice->install_pay_type = 'settlement';
-            $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
+        $invoice->amount = $amount;
+        $invoice->description = "عملية  دفع قسط عن المعاملة  رقم " . $installment_month->installment_id;
+        $invoice->type = "income";
+        $invoice->payment_type = $type;
+        $invoice->date = now();
+        $invoice->install_month_id = $id;
+        $invoice->knet_code = $knet_code ? $knet_code : '';
+        $invoice->installment_id = $installment_month->installment_id;
+        $invoice->created_by = Auth::user()->id ?? null;
+        $invoice->debtor = 1;
+        $invoice->branch_id = Auth::user()->branch_id ?? null;
+        $invoice->balance = $sum;
+        $invoice->install_pay_type = 'settlement';
+        $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
 
         $invoice->save();
 
@@ -745,7 +710,7 @@ class InstallmentController extends Controller
             'knet_code_settle' => 'required',
         ]);
 
-        $title='نظام الأقساط';
+        $title = 'نظام الأقساط';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -756,74 +721,72 @@ class InstallmentController extends Controller
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
         $installment_item = Installment::findOrFail($installment_id);
-        $data['item'] = $item2 = $month = Military_affairs_settlement_month::with('military_affair')->where('status','not_done')->orderBy('id', 'asc')->first();
-        $invoice =  new Invoices_installment();
+        $data['item'] = $item2 = $month = Military_affairs_settlement_month::with('military_affair')->where('status', 'not_done')->orderBy('id', 'asc')->first();
+        $invoice = new Invoices_installment();
 
+        if ($request->cash_settle > 0 and $request->knet_settle > 0) {
+            $month->payment_type = 'cash/knet';
+        } elseif ($request->cash_settle > 0) {
+            $month->payment_type = "cash";
+        } else {
+            $month->payment_type = "knet";
+        }
 
-            if ($request->cash_settle > 0 and $request->knet_settle > 0) {
-                $month->payment_type = 'cash/knet';
-            } elseif ($request->cash_settle > 0) {
-                $month->payment_type = "cash";
-            } else {
-                $month->payment_type = "knet";
-            }
+        $month->update([
+            'status' => "done",
+            'created_by' => Auth::user()->id ?? null,
+            'payment_date' => now()->format('Y-m-d'),
+        ]);
+
+        // if ($installment_item['laws'] == 1) {
+        //     $this->update_payment_law($installment_id, $item2['amout']);
+        // }
+        if ($item2['installment_type'] == "first_amount") {
+            $inst_item = Installment::findOrFail($item2->installment_id);
+            $order = new Order();
+            $order::where('id', $inst_item->order_id)->update([
+                'status' => 'finished',
+            ]);
+        }
+
+        if ($request->cash_settle > 0) {
+            $this->add_install_money_settle($month->id, $request->cash_settle, 'cash', '');
+        }
+
+        if ($request->knet_settle > 0) {
+            $this->add_install_money_settle($month->id, $request->knet_settle, 'knet', $request->knet_code_settle);
+        }
+        if ($request->hasFile('img_dir')) {
+            $file = $request->file('img_dir');
+            $filePath = $file->store('uploads/new_photos', 'public');
 
             $month->update([
-                'status' => "done",
                 'created_by' => Auth::user()->id ?? null,
-                'payment_date' => now()->format('Y-m-d'),
+                'img_dir' => '/storage/' . $filePath,
+            ]);
+            // for($i =0 ; $i < 2 ; $i++){
+            $invoice::where('install_month_id', $month->id)->update([
+                'img' => '/storage/' . $filePath,
+                'created_by' => Auth::user()->id ?? null,
+            ]);
+            // }
+        }
+        if (empty($month)) {
+            $installment_item->update([
+                'finished' => 1,
             ]);
 
-            // if ($installment_item['laws'] == 1) {
-            //     $this->update_payment_law($installment_id, $item2['amout']);
-            // }
-            if ($item2['installment_type'] == "first_amount") {
-                $inst_item = Installment::findOrFail($item2->installment_id);
-                $order = new Order();
-                $order::where('id',$inst_item->order_id)->update([
-                    'status' => 'finished'
+            $military_affairs_item = Military_affair::where('installment_id', $installment_id)->get();
+
+            if (!empty($military_affairs_item)) {
+
+                $military_affairs_item->update([
+                    'checking' => 1,
                 ]);
             }
+        }
 
-
-            if ($request->cash_settle > 0) {
-                $this->add_install_money_settle($month->id, $request->cash_settle , 'cash', '');
-            }
-
-            if ($request->knet_settle > 0) {
-                $this->add_install_money_settle($month->id, $request->knet_settle, 'knet', $request->knet_code_settle);
-            }
-            if ($request->hasFile('img_dir')) {
-                $file = $request->file('img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
-
-                    $month->update([
-                        'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' .$filePath,
-                    ]);
-                // for($i =0 ; $i < 2 ; $i++){
-                    $invoice::where('install_month_id',$month->id)->update([
-                        'img' => '/storage/' .$filePath,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
-                // }
-            }
-            if (empty($month)) {
-                $installment_item->update([
-                    'finished' => 1,
-                ]);
-
-                $military_affairs_item = Military_affair::where('installment_id', $installment_id)->get();
-
-                if (!empty($military_affairs_item)) {
-
-                    $military_affairs_item->update([
-                        'checking' => 1
-                    ]);
-                }
-            }
-
-            return redirect()->back()->with('message', 'تم الدفع بنجاح');
+        return redirect()->back()->with('message', 'تم الدفع بنجاح');
 
     }
 
@@ -849,106 +812,103 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-      else
-      {
-        $installment = Installment::findOrFail($installment_id);
-        $client = Client::where('id',$installment->client_id);
-        $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->count();
-        $data['not_done_amount'] =  Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->get();
-
-        $not_done_amount = $data['not_done_amount']->sum('amount');
-
-        $military_affair = Military_affair::where('installment_id', $installment_id)->get();
-
-        if ($installment->laws == 1) {
-
-            $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
         } else {
+            $installment = Installment::findOrFail($installment_id);
+            $client = Client::where('id', $installment->client_id);
+            $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
+            $data['not_done_amount'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->get();
 
-            $data['sum'] = $not_done_amount;
-        }
+            $not_done_amount = $data['not_done_amount']->sum('amount');
 
+            $military_affair = Military_affair::where('installment_id', $installment_id)->get();
 
-        $installments = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->get();
-        $counter = count($installments);
+            if ($installment->laws == 1) {
 
-        $months_id =array();
-        for ($j = 0; $j < count($installments); $j++) {
-            $months = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->first();
-
-            $months_id[] = $installments[$j]->id ;
-            if ($request->cash > 0 and $request->knet > 0) {
-                $months->payment_type = 'cash/knet';
-            } elseif ($request->cash > 0) {
-                $months->payment_type = "cash";
+                $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
             } else {
-                $months->payment_type = "knet";
+
+                $data['sum'] = $not_done_amount;
             }
 
-            $months->update([
-                'status' => "done",
-                'payment_date' => now(),
-                'created_by' => Auth::user()->id ?? null
-            ]);
+            $installments = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->get();
+            $counter = count($installments);
 
-            // if ($installments[$j]['installment_type'] == 'law_percent' or $installments[$j]['installment_type'] == '2_._5_percent') {
-            //     $installment_type = $installments[$j]['installment_type'];
+            $months_id = array();
+            for ($j = 0; $j < count($installments); $j++) {
+                $months = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->first();
 
-            //     $this->do_payment_to_tahseel($installments[$j]['installment_id'], $installments[$j]['amout'], $installment_type);
-            // }
-        }
+                $months_id[] = $installments[$j]->id;
+                if ($request->cash > 0 and $request->knet > 0) {
+                    $months->payment_type = 'cash/knet';
+                } elseif ($request->cash > 0) {
+                    $months->payment_type = "cash";
+                } else {
+                    $months->payment_type = "knet";
+                }
 
-        if ($request->cash > 0) {
-            $this->add_install_money_all($installment_id, $counter, $request->cash, 'cash', '', '');
-        }
-        if ($request->knet > 0) {
-            $this->add_install_money_all($installment_id, $counter, $request->knet, 'knet', $request->knet_code, '');
-        }
-
-        $installments_2 = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->get();
-        if (empty($installments_2)) {
-            $installment->finished = 1;
-
-            $installments_item_eqrar_dain = $this->all_eqrardeain_sql($installment_id);
-
-            if (!empty($installments_item_eqrar_dain)) {
-                $installment->please_cancel_eqrar_dain = 1;
-            }
-
-         $installment->update();
-         $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
-
-         }
-
-        $ids = '';
-        for ($j = 1; $j < count($months_id); $j++) {
-            $ids = $months_id[$j] ;
-        }
-
-        $months = new Installment_month;
-        $invoice =  Invoices_installment::where('install_month_id', 0)->where('installment_id',$installment_id)->get();
-
-        if ($request->hasFile('paper_img_dir')) {
-            $file = $request->file('paper_img_dir');
-            $filePath = $file->store('uploads/new_photos', 'public');
-
-            for ($j = 1; $j < count($months_id); $j++) {
-                $months::where('id',$j)->update([
+                $months->update([
+                    'status' => "done",
+                    'payment_date' => now(),
                     'created_by' => Auth::user()->id ?? null,
-                    'img_dir' => '/storage/' .$filePath,
                 ]);
+
+                // if ($installments[$j]['installment_type'] == 'law_percent' or $installments[$j]['installment_type'] == '2_._5_percent') {
+                //     $installment_type = $installments[$j]['installment_type'];
+
+                //     $this->do_payment_to_tahseel($installments[$j]['installment_id'], $installments[$j]['amout'], $installment_type);
+                // }
             }
+
+            if ($request->cash > 0) {
+                $this->add_install_money_all($installment_id, $counter, $request->cash, 'cash', '', '');
+            }
+            if ($request->knet > 0) {
+                $this->add_install_money_all($installment_id, $counter, $request->knet, 'knet', $request->knet_code, '');
+            }
+
+            $installments_2 = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->get();
+            if (empty($installments_2)) {
+                $installment->finished = 1;
+
+                $installments_item_eqrar_dain = $this->all_eqrardeain_sql($installment_id);
+
+                if (!empty($installments_item_eqrar_dain)) {
+                    $installment->please_cancel_eqrar_dain = 1;
+                }
+
+                $installment->update();
+                $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
+
+            }
+
+            $ids = '';
+            for ($j = 1; $j < count($months_id); $j++) {
+                $ids = $months_id[$j];
+            }
+
+            $months = new Installment_month;
+            $invoice = Invoices_installment::where('install_month_id', 0)->where('installment_id', $installment_id)->get();
+
+            if ($request->hasFile('paper_img_dir')) {
+                $file = $request->file('paper_img_dir');
+                $filePath = $file->store('uploads/new_photos', 'public');
+
+                for ($j = 1; $j < count($months_id); $j++) {
+                    $months::where('id', $j)->update([
+                        'created_by' => Auth::user()->id ?? null,
+                        'img_dir' => '/storage/' . $filePath,
+                    ]);
+                }
 
                 $invoice->update([
-                    'img' => '/storage/' .$filePath,
+                    'img' => '/storage/' . $filePath,
                     'created_by' => Auth::user()->id ?? null,
                 ]);
 
+            }
         }
-      }
 
-        $title='نظام الأقساط';
+        $title = 'نظام الأقساط';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -995,22 +955,22 @@ class InstallmentController extends Controller
                     $sum = $last_invoice->balance + $sum;
                     break;
                 case "share_capital":
-                    $sum = $last_invoice->balance  + $sum;
+                    $sum = $last_invoice->balance + $sum;
                     break;
                 case "expenses":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "export":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "advance":
-                    $sum = $last_invoice->balance  - $sum;
+                    $sum = $last_invoice->balance - $sum;
                     break;
                 case "income_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
                 case "expenses_pending":
-                    $sum = $last_invoice->balance ;
+                    $sum = $last_invoice->balance;
                     break;
 
                 default:
@@ -1044,125 +1004,123 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-      else
-         {
-
-        $installment = Installment::findOrFail($installment_id);
-        $client = Client::where('id',$installment->client_id);
-        $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->count();
-        $data['not_done_amount'] =  Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->get();
-
-        $not_done_amount = $data['not_done_amount']->sum('amount');
-
-        $military_affair = Military_affair::where('installment_id', $installment_id)->get();
-
-        if ($installment->laws == 1 && ($not_done_amount != 0)) {
-
-            $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
-
         } else {
 
-            $data['sum'] = $not_done_amount;
-        }
+            $installment = Installment::findOrFail($installment_id);
+            $client = Client::where('id', $installment->client_id);
+            $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
+            $data['not_done_amount'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->get();
 
-        $data['id'] = $installment_id;
-        $installments = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->get();
-        $counter = count($installments);
-        $months_id =array();
-        for ($j = 0; $j < count($installments); $j++) {
-            $months = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->first();
+            $not_done_amount = $data['not_done_amount']->sum('amount');
 
-            $months_id[] = $installments[$j]->id ;
-            $months->payment_type = 'cash/knet/finish';
+            $military_affair = Military_affair::where('installment_id', $installment_id)->get();
 
-            $months->update([
-                'status' => "done",
-                'payment_date' => now(),
-                'created_by' => Auth::user()->id ?? null
-            ]);
+            if ($installment->laws == 1 && ($not_done_amount != 0)) {
 
-            // $lawsaffairs = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
-            // if (!empty($lawsaffairs)) {
-            //     $installment_type = $installments[$j]['installment_type'];
-            //     $this->do_payment_to_tahseel($installments[$j]['installment_id'], $installments[$j]['amout'], $installment_type);
-            // }
-        }
-        if ($request->discount_cash > 0) {
+                $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
 
-            $description = "عملية  دفع($counter) قسط إجمالي"
+            } else {
+
+                $data['sum'] = $not_done_amount;
+            }
+
+            $data['id'] = $installment_id;
+            $installments = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->get();
+            $counter = count($installments);
+            $months_id = array();
+            for ($j = 0; $j < count($installments); $j++) {
+                $months = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->first();
+
+                $months_id[] = $installments[$j]->id;
+                $months->payment_type = 'cash/knet/finish';
+
+                $months->update([
+                    'status' => "done",
+                    'payment_date' => now(),
+                    'created_by' => Auth::user()->id ?? null,
+                ]);
+
+                // $lawsaffairs = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
+                // if (!empty($lawsaffairs)) {
+                //     $installment_type = $installments[$j]['installment_type'];
+                //     $this->do_payment_to_tahseel($installments[$j]['installment_id'], $installments[$j]['amout'], $installment_type);
+                // }
+            }
+            if ($request->discount_cash > 0) {
+
+                $description = "عملية  دفع($counter) قسط إجمالي"
                 . "مع خصم"
                 . " بقيمة"
                 . $$request->discount
-                . " د.ك"
-                . " "
-                . "  عن المعاملة  رقم " . " " . $installment_id;
+                    . " د.ك"
+                    . " "
+                    . "  عن المعاملة  رقم " . " " . $installment_id;
 
-            $this->add_install_money_all($installment_id, $counter, $request->discount_cash, 'cash', '', $description);
-            $this->add_install_money_all($installment_id, $counter, $request->cash, 'cash', '', '');
-        }
-        if ($request->discount_knet > 0) {
-            $this->add_install_money_all($installment_id, $counter, $request->discount_knet, 'knet', $request->knet_code, '');
-        }
-        $installments_all = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->get();
-        if (empty($installments_all)) {
-            $installment->finished = 1;
-            $installment->created_by = Auth::user()->id ?? null;
-
-            $installments_item_eqrar_dain = $this->all_eqrardeain_sql($installment_id);
-
-            if (!empty($installments_item_eqrar_dain)) {
-                $installment->please_cancel_eqrar_dain = 1;
+                $this->add_install_money_all($installment_id, $counter, $request->discount_cash, 'cash', '', $description);
+                $this->add_install_money_all($installment_id, $counter, $request->cash, 'cash', '', '');
             }
-
-            $installment->update();
-            $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
-            if (!empty($military_affairs_item_1)) {
-
-                $military_affairs_item_1::where('id',$military_affairs_item_1->id)->update([
-                    'checking' => 1
-                ]);
+            if ($request->discount_knet > 0) {
+                $this->add_install_money_all($installment_id, $counter, $request->discount_knet, 'knet', $request->knet_code, '');
             }
+            $installments_all = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->get();
+            if (empty($installments_all)) {
+                $installment->finished = 1;
+                $installment->created_by = Auth::user()->id ?? null;
 
-               // $lawsaffair = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
+                $installments_item_eqrar_dain = $this->all_eqrardeain_sql($installment_id);
 
-            // if (!empty($lawsaffair)) {
-            //     $add_data67['finished'] = 1;
+                if (!empty($installments_item_eqrar_dain)) {
+                    $installment->please_cancel_eqrar_dain = 1;
+                }
 
-            //     $add_data67['tahseel'] = 1;
+                $installment->update();
+                $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
+                if (!empty($military_affairs_item_1)) {
 
-            //     $add_data67['tahseel_archive'] = 1;
+                    $military_affairs_item_1::where('id', $military_affairs_item_1->id)->update([
+                        'checking' => 1,
+                    ]);
+                }
 
-            //     $add_data67['finished_date'] = time();
+                // $lawsaffair = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
 
-            //     $this->db_get->update_tb('lawsaffairs', $lawsaffair['id'], $add_data67);
+                // if (!empty($lawsaffair)) {
+                //     $add_data67['finished'] = 1;
 
-            //     $total_amount_lawyer_tahseel = $this->total_amount_lawsaffairs_tahseel_invoices_sql('amount_lawyer', '');
+                //     $add_data67['tahseel'] = 1;
 
-            //     $total_amount_lawyer_received = $this->total_amount_lawsaffairs_tahseel_invoices_sql('amount_lawyer', '1');
+                //     $add_data67['tahseel_archive'] = 1;
 
-            //     $lawyer_reminder_amount = $total_amount_lawyer_tahseel - $total_amount_lawyer_received;
+                //     $add_data67['finished_date'] = time();
 
-            //     $message = 'لديك رصيد عمولة بمبلغ وقدره'
-            //         . ' : '
-            //         . $lawyer_reminder_amount
-            //         . ' KD ';
+                //     $this->db_get->update_tb('lawsaffairs', $lawsaffair['id'], $add_data67);
 
-            //     $phones = '60680264,55544445';
+                //     $total_amount_lawyer_tahseel = $this->total_amount_lawsaffairs_tahseel_invoices_sql('amount_lawyer', '');
 
-            //     if (strpos(base_url(), 'electronkw.com') !== false) {
+                //     $total_amount_lawyer_received = $this->total_amount_lawsaffairs_tahseel_invoices_sql('amount_lawyer', '1');
 
-            //         send_sms_helper($message, $phones);
+                //     $lawyer_reminder_amount = $total_amount_lawyer_tahseel - $total_amount_lawyer_received;
 
-            //     }
+                //     $message = 'لديك رصيد عمولة بمبلغ وقدره'
+                //         . ' : '
+                //         . $lawyer_reminder_amount
+                //         . ' KD ';
 
-            //     // $this->send_sms($message, $phones);
-            //     // echo '<pre>';  print_r($message );  exit;
-            // }
+                //     $phones = '60680264,55544445';
 
-         }
-            $months= new Installment_month();
-            $invoice =  Invoices_installment::where('install_month_id', 0)->where('installment_id',$installment_id)->get();
+                //     if (strpos(base_url(), 'electronkw.com') !== false) {
+
+                //         send_sms_helper($message, $phones);
+
+                //     }
+
+                //     // $this->send_sms($message, $phones);
+                //     // echo '<pre>';  print_r($message );  exit;
+                // }
+
+            }
+            $months = new Installment_month();
+            $invoice = Invoices_installment::where('install_month_id', 0)->where('installment_id', $installment_id)->get();
 
             $months->installment_id = $installment_id;
             $months->amount = $request->discount;
@@ -1186,21 +1144,21 @@ class InstallmentController extends Controller
                 $filePath = $file->store('uploads/new_photos', 'public');
 
                 for ($j = 1; $j < count($months_id); $j++) {
-                    $months::where('id',$j)->update([
+                    $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' .$filePath,
+                        'img_dir' => '/storage/' . $filePath,
                     ]);
                 }
-                foreach($invoice as $one){
+                foreach ($invoice as $one) {
                     $one->update([
-                        'img' => '/storage/' .$filePath,
+                        'img' => '/storage/' . $filePath,
                         'created_by' => Auth::user()->id ?? null,
                     ]);
                 }
             }
 
-       }
-        $title='نظام الأقساط';
+        }
+        $title = 'نظام الأقساط';
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -1233,141 +1191,136 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-      else
-         {
+        } else {
 
-        $installment = Installment::findOrFail($installment_id);
-        $installments = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->get();
-        $first = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type','installment')->first();
+            $installment = Installment::findOrFail($installment_id);
+            $installments = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->get();
+            $first = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->where('installment_type', 'installment')->first();
 
+            // if ($first['installment_type'] == 'law_percent' or $first['installment_type'] == '2_._5_percent') {
+            //     $installment_type = $installments[0]['installment_type'];
+            //     $this->do_payment_to_tahseel($first['installment_id'], $first['amount'], $installment_type);
 
-        // if ($first['installment_type'] == 'law_percent' or $first['installment_type'] == '2_._5_percent') {
-        //     $installment_type = $installments[0]['installment_type'];
-        //     $this->do_payment_to_tahseel($first['installment_id'], $first['amount'], $installment_type);
+            // }
 
-        // }
+            $this->do_pay_to_bank($first->id, $request->some_amount, $request->pay_way);
+            //  dd( );
 
+            $months_id = array();
+            $months = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->first();
 
-        $this->do_pay_to_bank($first->id, $request->some_amount, $request->pay_way);
-        //  dd( );
+            for ($i = 0; $i < count($installments); $i++)
 
-        $months_id =array();
-        $months = Installment_month::where('installment_id',$installment_id)->where('status','not_done')->first();
+            // foreach($installments as $one)
+            {
 
-        for($i =0; $i < count($installments) ;$i++)
+                if ($request->some_amount >= $installments[$i]['amount']) {
 
-        // foreach($installments as $one)
-        {
+                    $months_id[] = $installments[$i]['id'];
+                    $request->some_amount = $request->some_amount - $installments[$i]['amount'];
 
-            if ($request->some_amount >= $installments[$i]['amount']) {
-
-                $months_id[] = $installments[$i]['id'] ;
-                $request->some_amount = $request->some_amount - $installments[$i]['amount'];
-
-                $months->update([
-                    'status' => "done",
-                    'payment_date' => now(),
-                    'created_by' => Auth::user()->id ?? null,
-                    'payment_type' =>$request->pay_way,
-                    'hesab_file' => 1
-                ]);
-            }
-            else {
-                if ($request->some_amount > 0) {
-                    if($installments[$i]['installment_type'] == 'law_percent'){
+                    $months->update([
+                        'status' => "done",
+                        'payment_date' => now(),
+                        'created_by' => Auth::user()->id ?? null,
+                        'payment_type' => $request->pay_way,
+                        'hesab_file' => 1,
+                    ]);
+                } else {
+                    if ($request->some_amount > 0) {
+                        if ($installments[$i]['installment_type'] == 'law_percent') {
                             $old_law_percent = $installments[$i]['amount'];
                         }
 
-                    $reminder = $installments[$i]['amount'] - $request->some_amount;
-                    $months_id[] = $installments[$i]['id'] ;
+                        $reminder = $installments[$i]['amount'] - $request->some_amount;
+                        $months_id[] = $installments[$i]['id'];
 
-                    if ($request->some_amount > 0) {
+                        if ($request->some_amount > 0) {
 
-                        $months->update([
-                            'amount' => $installments[$i]['amount'],
-                            'notes' => $reminder . "تم ترحيل جزء من القسط للشهر التالي وقدره :  ",
-                            'created_by' => Auth::user()->id ?? null,
-                        ]);
+                            $months->update([
+                                'amount' => $installments[$i]['amount'],
+                                'notes' => $reminder . "تم ترحيل جزء من القسط للشهر التالي وقدره :  ",
+                                'created_by' => Auth::user()->id ?? null,
+                            ]);
 
-                        if($installments[$i]['installment_type'] =='law_percent') {
-                            $months->amount = $old_law_percent - $request->some_amount;
-                            $months->status = "not_done";
-                            $months->installment_id = $installment_id;
-                            $months->installment_type = "law_percent";
-                            $months->date = now();
-                            $months->notes = $reminder . "تم ترحيل جزء من  اتعاب المحامى  وقدره :  ";
-                            $months->created_by = Auth::user()->id ?? null;
+                            if ($installments[$i]['installment_type'] == 'law_percent') {
+                                $months->amount = $old_law_percent - $request->some_amount;
+                                $months->status = "not_done";
+                                $months->installment_id = $installment_id;
+                                $months->installment_type = "law_percent";
+                                $months->date = now();
+                                $months->notes = $reminder . "تم ترحيل جزء من  اتعاب المحامى  وقدره :  ";
+                                $months->created_by = Auth::user()->id ?? null;
 
-                            $months->save();
+                                $months->save();
+                            }
+                        }
+                        // $last_month = Installment_month::latest()->first();
+
+                        $months = new Installment_month();
+                        if (!empty($installments[$i + 1])) {
+
+                            $months::where('id', $installments[$i + 1]['id'])->update([
+                                'amount' => $installments[$i + 1]['amount'] + $reminder,
+                                'notes' => $reminder . "تم إضافة جزء من القسط السابق وقدره :  ",
+                                'created_by' => Auth::user()->id ?? null,
+                            ]);
                         }
                     }
-                    // $last_month = Installment_month::latest()->first();
-
-                    $months = new Installment_month();
-                    if (!empty($installments[$i + 1])) {
-
-                        $months::where('id',$installments[$i + 1]['id'])->update([
-                            'amount' => $installments[$i + 1]['amount'] + $reminder,
-                            'notes' =>  $reminder . "تم إضافة جزء من القسط السابق وقدره :  ",
-                            'created_by' => Auth::user()->id ?? null,
-                        ]);
-                    }
+                    $request->some_amount = $request->some_amount - $installments[$i]['amout'];
                 }
-                $request->some_amount = $request->some_amount - $installments[$i]['amout'];
+
             }
 
+            if (empty($months)) {
+
+                $installment->update([
+                    'finished' => 1,
+                    'finished_user_id' => Auth::user()->id ?? null,
+                ]);
+
+                $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
+                if (!empty($military_affairs_item_1)) {
+
+                    $military_affairs_item_1::where('id', $military_affairs_item_1->id)->update([
+                        'checking' => 1,
+                    ]);
+                }
+            }
+
+            $months = new Installment_month;
+            $invoice = Invoices_installment::where('install_month_id', $installments[0]['id'])->where('installment_id', $installment_id)->get();
+
+            if ($request->hasFile('img_dir')) {
+                $file = $request->file('img_dir');
+                $filePath = $file->store('uploads/new_photos', 'public');
+
+                for ($j = 1; $j < count($months_id); $j++) {
+                    $months::where('id', $j)->update([
+                        'created_by' => Auth::user()->id ?? null,
+                        'img_dir' => '/storage/' . $filePath,
+                    ]);
+                }
+                foreach ($invoice as $one) {
+                    $one->update([
+                        'img' => '/storage/' . $filePath,
+                        'created_by' => Auth::user()->id ?? null,
+                    ]);
+                }
+            }
         }
 
-                if (empty($months)) {
+        $title = 'نظام الأقساط';
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "عملاء الاقساط";
+        $breadcrumb[1]['url'] = route("installment.admin");
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        $data['id'] = $installment_id;
 
-                    $installment->update([
-                        'finished' => 1,
-                        'finished_user_id' => Auth::user()->id ?? null,
-                    ]);
-
-                    $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->get();
-                    if (!empty($military_affairs_item_1)) {
-
-                        $military_affairs_item_1::where('id',$military_affairs_item_1->id)->update([
-                            'checking' => 1
-                        ]);
-                    }
-                }
-
-                $months = new Installment_month;
-                $invoice =  Invoices_installment::where('install_month_id', $installments[0]['id'])->where('installment_id',$installment_id)->get();
-
-                if ($request->hasFile('img_dir')) {
-                    $file = $request->file('img_dir');
-                    $filePath = $file->store('uploads/new_photos', 'public');
-
-                    for ($j = 1; $j < count($months_id); $j++) {
-                        $months::where('id',$j)->update([
-                            'created_by' => Auth::user()->id ?? null,
-                            'img_dir' => '/storage/' .$filePath,
-                        ]);
-                    }
-                    foreach($invoice as $one){
-                        $one->update([
-                            'img' => '/storage/' .$filePath,
-                            'created_by' => Auth::user()->id ?? null,
-                        ]);
-                    }
-                }
-         }
-
-         $title='نظام الأقساط';
-         $breadcrumb = array();
-         $breadcrumb[0]['title'] = " الرئيسية";
-         $breadcrumb[0]['url'] = route("dashboard");
-         $breadcrumb[1]['title'] = "عملاء الاقساط";
-         $breadcrumb[1]['url'] = route("installment.admin");
-         $breadcrumb[2]['title'] = $title;
-         $breadcrumb[2]['url'] = 'javascript:void(0);';
-         $data['id'] = $installment_id;
-
-         return redirect()->back()->with('message', 'تم الدفع بنجاح');
+        return redirect()->back()->with('message', 'تم الدفع بنجاح');
     }
 
     public function do_pay_to_bank($installment_month_id, $amount, $payment_type)
@@ -1392,17 +1345,17 @@ class InstallmentController extends Controller
             $invoice->balance_knet = $last_invoice->balance_knet + $sum;
             $invoice->balance_cash = $last_invoice->balance_cash;
             $invoice->balance_bank = $last_invoice->balance_bank;
-           // update_invoice_central_bank('knet', '+', $invoice->amount, 'installment');
+            // update_invoice_central_bank('knet', '+', $invoice->amount, 'installment');
 
         } else {
-            $invoice->balance_cash = $last_invoice->balance_cash ?? + $sum ;
+            $invoice->balance_cash = $last_invoice->balance_cash ?? +$sum;
             $invoice->balance_knet = $last_invoice->balance_knet ?? 0;
             $invoice->balance_bank = $last_invoice->balance_bank ?? 0;
             //update_invoice_central_bank('cash', '+', $invoice->amount, 'installment');
 
         }
 
-        $sum = $last_invoice->balance ?? + $sum;
+        $sum = $last_invoice->balance ?? +$sum;
         $invoice->balance = $sum;
         $invoice->branch_id = Auth::user()->branch_id ?? null;
         $invoice->created_by = Auth::user()->id ?? null;
@@ -1411,7 +1364,6 @@ class InstallmentController extends Controller
     }
     public function get_sum_installments($installment_id, Request $request)
     {
-
 
         $messages = [
             'cash.required' => 'القيمة مطلوبة',
@@ -1422,55 +1374,51 @@ class InstallmentController extends Controller
         $validatedData = Validator::make($request->all(), [
             'cash' => 'required',
             'knet' => 'required',
-            'knet_code' => 'required'
+            'knet_code' => 'required',
 
         ], $messages);
         if ($validatedData->fails()) {
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-      else
-         {
+        } else {
 
             $insall_ids = $request->payment_order_id;
-            $installments = Installment_month::where('status','not_done')->where('installment_id',$installment_id)->get();
-            $invoice =  new Invoices_installment();
+            $installments = Installment_month::where('status', 'not_done')->where('installment_id', $installment_id)->get();
+            $invoice = new Invoices_installment();
 
             $sum = 0.000;
-
 
             if ($request->hasFile('paper_img_dir')) {
                 $file = $request->file('paper_img_dir');
                 $filePath = $file->store('uploads/new_photos', 'public');
-                 $months = new Installment_month();
+                $months = new Installment_month();
                 for ($j = 1; $j < count($insall_ids); $j++) {
 
-
-                    $months::where('id',$j)->update([
+                    $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' .$filePath,
+                        'img_dir' => '/storage/' . $filePath,
                     ]);
                 }
-                    $invoice->update([
-                        'img' => '/storage/' .$filePath,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
+                $invoice->update([
+                    'img' => '/storage/' . $filePath,
+                    'created_by' => Auth::user()->id ?? null,
+                ]);
 
             }
 
             for ($j = 0; $j < count($insall_ids); $j++) {
-                $months = Installment_month::where('id',$insall_ids[$j])->where('status','not_done')->first();
+                $months = Installment_month::where('id', $insall_ids[$j])->where('status', 'not_done')->first();
                 $sum = $sum + $installments[$j]['amount'];
-                    if ($request->cash > 0 and $request->knet > 0) {
-                        $months->payment_type = "cash/knet";
-                    } elseif ($request->cash > 0) {
-                        $months->payment_type  = "cash";
-                    } else {
-                        $months->payment_type  = "knet";
-                    }
+                if ($request->cash > 0 and $request->knet > 0) {
+                    $months->payment_type = "cash/knet";
+                } elseif ($request->cash > 0) {
+                    $months->payment_type = "cash";
+                } else {
+                    $months->payment_type = "knet";
+                }
 
-                $months::where('id',$insall_ids[$j])->update([
+                $months::where('id', $insall_ids[$j])->update([
                     'status' => "done",
                     'payment_date' => now(),
                     'created_by' => Auth::user()->id ?? null,
@@ -1485,13 +1433,13 @@ class InstallmentController extends Controller
             }
 
             if (empty($installments)) {
-                 $inst =  Installment::findORFail($installment_id);
+                $inst = Installment::findORFail($installment_id);
 
-               $installments_item_eqrar_dain = Installment::where([
-                'cancel_eqrar_dain'=> 0,
-                'qard_paper' => 'LIKE %uploads/%',
-                'id' => $installment_id
-               ])->first();
+                $installments_item_eqrar_dain = Installment::where([
+                    'cancel_eqrar_dain' => 0,
+                    'qard_paper' => 'LIKE %uploads/%',
+                    'id' => $installment_id,
+                ])->first();
 
                 if (!empty($installments_item_eqrar_dain)) {
                     $inst->please_cancel_eqrar_dain = 1;
@@ -1501,10 +1449,9 @@ class InstallmentController extends Controller
                 ]);
             }
 
-      return redirect()->back()->with('message', 'تم الدفع بنجاح',$data);
-     }
+            return redirect()->back()->with('message', 'تم الدفع بنجاح', $data);
+        }
     }
-
 
     public function lated_installments()
     {
@@ -1528,7 +1475,7 @@ class InstallmentController extends Controller
             'eqrar_not_recieve',
             'installment_months',
             'militay_affairs',
-            'installment_client'
+            'installment_client',
         ])
             ->where('installment.type', 'installment')
             ->where('installment.status', 'finished')
@@ -1536,14 +1483,14 @@ class InstallmentController extends Controller
             ->where('installment.finished', '0')
             ->whereHas('installment_months', function ($query) use ($current_time) {
                 $query->where('status', 'not_done') // Only select 'not_done' status
-                ->where(function ($subQuery) use ($current_time) {
-                    $subQuery->where('date', '<', $current_time)
-                             ->where(function ($q) use ($current_time) {
-                                 $q->where('late_date', '<', $current_time)
-                                   ->orWhere('late_date', '=', 0); // Only overdue dates or no late date
-                             });
-                });
-                     // Apply status directly on the query
+                    ->where(function ($subQuery) use ($current_time) {
+                        $subQuery->where('date', '<', $current_time)
+                            ->where(function ($q) use ($current_time) {
+                                $q->where('late_date', '<', $current_time)
+                                    ->orWhere('late_date', '=', 0); // Only overdue dates or no late date
+                            });
+                    });
+                // Apply status directly on the query
             })
             ->whereHas('installment_months', function ($query) {
                 $query->where('date', '!=', 131313); // Exclude specific date in the has query
@@ -1552,21 +1499,20 @@ class InstallmentController extends Controller
 
         if ($data) {
             // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
+            $user_id = Auth::user()->id ?? null;
             $message = "تم دخول صفحة العملاء المتأخرين";
             $this->log($user_id, $message);
         }
         // dd($data);
 
         $data['view'] = 'installment/lated_installments';
-        return view('layout', $data, compact('breadcrumb','data'));
+        return view('layout', $data, compact('breadcrumb', 'data'));
 
         //    return view('installment.index',compact('data'));
 
         //  return $this->respondSuccess($data, 'Get Data successfully.');
 
     }
-
 
     public function lated_installments_update($id)
     {
@@ -1590,7 +1536,7 @@ class InstallmentController extends Controller
 
         if ($data) {
             // $user_id = 1;
-            $user_id =  Auth::user()->id;
+            $user_id = Auth::user()->id;
             $message = "تم تحويل هدة المعاملة الى الشءون القانونية ";
             $this->log($user_id, $message);
         }
@@ -1608,35 +1554,29 @@ class InstallmentController extends Controller
 
     }
 
-
     public function warning_print_paper($id)
     {
 
-        $data["item"] =$installment =Installment::findorfail($id);
-      //  dd($data["item"]['client_id']);
+        $data["item"] = $installment = Installment::findorfail($id);
+        //  dd($data["item"]['client_id']);
 
         $client = Client::findorfail($data["item"]['client_id']);
 
-        $not_done_count= $installment->getCountAttribute('not_done');
+        $not_done_count = $installment->getCountAttribute('not_done');
 
         $not_done_count_lated = $installment->count_installment_lated();
-
 
         $add_data["warning_print_user_id"] = Auth::user()->id ?? null;
 
         $add_data["warning_print_date"] = date('Y-m-d H:i:s');
 
-       $installment->update($add_data);
+        $installment->update($add_data);
 
-
-
-        return view('installment.warning_print_paper', compact('installment','client','not_done_count' ,'not_done_count_lated' ));
-
+        return view('installment.warning_print_paper', compact('installment', 'client', 'not_done_count', 'not_done_count_lated'));
 
     }
 
-
-   public function print_contrct($id)
+    public function print_contrct($id)
     {
 
         $args = func_get_args();
@@ -1656,30 +1596,22 @@ class InstallmentController extends Controller
             $start_date = $args[2];
         }
 
-
         $installment = Installment::findorfail($id);
-
 
         $client = Client::findorfail($installment->client_id);
 
-
         $nationality = Nationality::findorfail($client['nationality_id'])->name_ar;
-
 
         if ($start_date != 0) {
             $data["item"]['start_date'] = strtotime($start_date);
         }
 
-
         $not_done_count = $installment->getCountAttribute('not_done');
-
 
         //  $data["items"] = $this->db_get->get_where_conditions('installment_months', $conditions);
         $items = Installment_month::where('installment_id', '=', $installment->id)->get();
 
-
         return view('installment.print_contrct', compact('installment', 'client', 'not_done_count', 'items', 'nationality'));
-
 
     }
 
@@ -1691,27 +1623,26 @@ class InstallmentController extends Controller
         return view('installment.print_finished_installments', compact(('clients')));
     }
 
-
-    public function print_recive_ins_money($installment_id, $id){
-        $installment = Installment::findOrFail($installment_id);
-        $months = Installment_month::where('id',$id)->first();
-        // dd( $clients);
-        return view('installment.print_recive_ins_money', compact('installment','months'));
-    }
-
-    public function madionia_certificate($installment_id){
-        $installment = Installment::findOrFail($installment_id);
-        $Military_affair = Military_affair::where('installment_id',$installment_id)->first();
-        $invoices_installment = Invoices_installment::where('installment_id',$installment_id)->first();
-        $months = Installment_month::where('installment_id', $installment_id)->where('status','done')->orderBy('id', 'desc')->first();
-        // dd( $clients);
-        return view('installment.madionia_certificate', compact('installment','Military_affair','invoices_installment','months'));
-    }
-
-
-      public function print_install_paper_info($id)
+    public function print_recive_ins_money($installment_id, $id)
     {
+        $installment = Installment::findOrFail($installment_id);
+        $months = Installment_month::where('id', $id)->first();
+        // dd( $clients);
+        return view('installment.print_recive_ins_money', compact('installment', 'months'));
+    }
 
+    public function madionia_certificate($installment_id)
+    {
+        $installment = Installment::findOrFail($installment_id);
+        $Military_affair = Military_affair::where('installment_id', $installment_id)->first();
+        $invoices_installment = Invoices_installment::where('installment_id', $installment_id)->first();
+        $months = Installment_month::where('installment_id', $installment_id)->where('status', 'done')->orderBy('id', 'desc')->first();
+        // dd( $clients);
+        return view('installment.madionia_certificate', compact('installment', 'Military_affair', 'invoices_installment', 'months'));
+    }
+
+    public function print_install_paper_info($id)
+    {
 
         $item = Installment::findorfail($id);
 
@@ -1719,52 +1650,42 @@ class InstallmentController extends Controller
 
         $client = Client::findorfail($item->client_id);
 
+        $rec_name = Auth::user()->name_ar;
 
-
-       $rec_name = Auth::user()->name_ar;
-
-
-
-        return view('installment.print_install_paper_info', compact('item', 'client','rec_name'));
+        return view('installment.print_install_paper_info', compact('item', 'client', 'rec_name'));
 
     }
 
     public function recive_install_paper($id)
     {
 
-
         $item = Installment::findorfail($id);
-
 
         $client = Client::findorfail($item->client_id);
 
-
         $rec_name = Auth::user()->name_ar;
-
 
         return view('installment.recive_install_paper', compact('item', 'client', 'rec_name'));
     }
 
-
     public function print_invoice($id)
     {
 
-          $data['order_id'] = $id;
+        $data['order_id'] = $id;
 
-           $order =Order::findorfail($id);
-           $client = Client::findorfail($order->client_id);
+        $order = Order::findorfail($id);
+        $client = Client::findorfail($order->client_id);
         $user_name = Auth::user()->name_ar;
-       //    dd($order->order_items);
+        //    dd($order->order_items);
 
-          /* $data["items"] = $this->order_prods_details_sql($id);
-           // echo '<pre>';print_r($data); //exit;
-           for ($i = 0; $i < count($data["items"]); $i++) {
+        /* $data["items"] = $this->order_prods_details_sql($id);
+        // echo '<pre>';print_r($data); //exit;
+        for ($i = 0; $i < count($data["items"]); $i++) {
 
-               $data["items"][$i]['items_serial_numbers'] = $this->get_serial_numbers_by_prod_sql($id, $data["items"][$i]['product_id']);
-           }*/
+        $data["items"][$i]['items_serial_numbers'] = $this->get_serial_numbers_by_prod_sql($id, $data["items"][$i]['product_id']);
+        }*/
 
-
-        return view('installment.print_invoice',compact('order','client','user_name'));
+        return view('installment.print_invoice', compact('order', 'client', 'user_name'));
 
     }
 
@@ -1780,33 +1701,29 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $data['view'] = 'installment/upload_papers';
-        $item= Installment::findorfail($id);
+        $item = Installment::findorfail($id);
         return view('layout', $data, compact('breadcrumb', 'item'));
 
-
     }
-
 
     public function upload_papers(Request $request)
     {
         $id = $request->installment_id;
 
-
         $data['installment'] = $installment = Installment::findorfail($id);
         $data['item'] = $installment_clients_id = Installment_Client::findorfail($data['installment']['installment_clients']);
 
-
         if ($request->hasFile('contract_1')) {
-          
+
             $filename = time() . '-' . $request->file('contract_1')->getClientOriginalName();
             $path = $request->file('contract_1')->move(public_path('installment'), $filename);
-            $add_data['contract_1'] = 'installment' . '/' . $filename; 
+            $add_data['contract_1'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_2')) {
             $filename = time() . '-' . $request->file('contract_2')->getClientOriginalName();
             $path = $request->file('contract_2')->move(public_path('installment'), $filename);
             // $add_data['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
-            $add_data['contract_2'] = 'installment' . '/' . $filename; 
+            $add_data['contract_2'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_1')) {
             $filename = time() . '-' . $request->file('contract_cinet_1')->getClientOriginalName();
@@ -1853,7 +1770,9 @@ class InstallmentController extends Controller
         $data->updated_by = Auth::user()->id ?? null;
         $data->save();
 
-        return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
+        return redirect()->route('payment.process', $id);
+
+        //return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
     }
 
     public function edit_images($id)
@@ -1872,22 +1791,18 @@ class InstallmentController extends Controller
 
         return view('layout', $data, compact('breadcrumb', 'id'));
 
-
     }
 
     public function upload_edit_images(Request $request)
     {
         // dd($request->installment_id);
 
-
         $id = $request->installment_id;
-
 
         $data['installment'] = $installment = Installment::findorfail($id);
         $data['client'] = $clients = Client::findorfail($data['installment']['client_id']);
         $client_data_image = [];
         $installment_data_image = [];
-
 
         if ($request->hasFile('civil_img')) {
             $client_data_image['civil_img'] = $request->file('civil_img')->store('clients', 'public'); // Store in the 'products' directory
@@ -1974,7 +1889,6 @@ class InstallmentController extends Controller
 
             return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
         }
-
 
     }
 

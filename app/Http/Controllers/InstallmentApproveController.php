@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use Carbon\Carbon;
 use App\Models\Bank;
 use App\Models\Order;
@@ -23,12 +22,14 @@ use App\Models\Installment_Client;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\InstallmentClientNote;
 use App\Models\Showroom\products_items;
 use App\Models\Installment_Client_Cinet;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ImportingCompanies\Product;
 use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Branch;
+use App\Models\InstallmentClientNote;
+
 
 class InstallmentApproveController extends Controller
 {
@@ -50,9 +51,9 @@ class InstallmentApproveController extends Controller
         $bank = Bank::all();
         $total_cient = Installment_Client_Cinet::where('installment_clients_id', $data->id)->sum('file_debit_amount_1');
 
-        $user_id = Auth::user()->id ?? null;
-        $message = "تم الدخول الى صقحة المعاملات المقبولة ";
-        $this->log($user_id, $message);
+          $user_id =  Auth::user()->id ?? null;
+        $message = "تم الدخول الى صقحة المعاملات المقبولة " ;
+        $this->log($user_id,$message);
 
         return view('installmentClient.transaction_approval', compact('data', 'working', 'cinetCount', 'ministry', 'nationality', 'region', 'bank', 'total_cient'));
     }
@@ -66,7 +67,7 @@ class InstallmentApproveController extends Controller
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
         $breadcrumb[1]['title'] = "عملاء الاقساط";
-        $breadcrumb[1]['url'] = route("installmentApprove.indexCopy", $id);
+        $breadcrumb[1]['url'] = route("installmentApprove.indexCopy",$id);
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
@@ -78,14 +79,13 @@ class InstallmentApproveController extends Controller
         $nationality = Nationality::all();
         $region = Regions::all();
         $bank = Bank::all();
+        $total_cient = Installment_Client_Cinet::where('installment_clients_id', $data->id)->sum('file_debit_amount_1');
         $branches = Branch::all();
 
-        $total_cient = Installment_Client_Cinet::where('installment_clients_id', $data->id)->sum('file_debit_amount_1');
 
-
-        $user_id = Auth::user()->id ?? null;
-        $message = "تم الدخول الى صقحة المعاملات المقبولة ";
-        $this->log($user_id, $message);
+        $user_id =  Auth::user()->id ?? null;
+        $message = "تم الدخول الى صقحة المعاملات المقبولة " ;
+        $this->log($user_id,$message);
 
         $d = [
             'Installment' => '',
@@ -94,7 +94,7 @@ class InstallmentApproveController extends Controller
 
 
         // $data['view'] = 'installment/convert_approvedCopy';
-        return view('layout', $d, compact('breadcrumb', 'd', 'data', 'working', 'cinetCount', 'ministry', 'nationality', 'region', 'bank', 'total_cient', 'branches'));
+        return view('layout', $d, compact('breadcrumb','d','data', 'working', 'cinetCount', 'ministry', 'nationality', 'region', 'bank', 'total_cient','branches'));
     }
 
     /**
@@ -110,10 +110,10 @@ class InstallmentApproveController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
 //         dd($request);
         $messages = [
@@ -237,8 +237,7 @@ class InstallmentApproveController extends Controller
             "personal_image" => "required",
             "work_image" => "required",
             "qard_paper" => "required",
-            "branch_id" => "required",
-
+             "branch_id" => "required",
 
         ], $messages);
 
@@ -269,11 +268,10 @@ class InstallmentApproveController extends Controller
         $client->ipan = $request->ipan;
         $client->location = $request->location;
         $client->kwfinder = $request->kwfinder;
-        $client->branch_id = $request->branch_id;
-
         // $client->email = $request->email;
         $client->check_on_identity = $request->has('checkbox') ? 1 : 0;
         $client->salary = $request->salary;
+        $client->branch_id = $request->branch_id;
         $client->house_id = $request->house_id;
         $client->created_by = Auth::user()->id ?? null;
         $client->updated_by = Auth::user()->id ?? null;
@@ -301,7 +299,7 @@ class InstallmentApproveController extends Controller
         $address->building = $request->building;
         $address->floor = $request->floor;
         $address->flat = $request->flat;
-        $address->branch_id = $request->branch_id;
+
         $address->area_id = $request->region;
         $address->house_id = $request->house_id;
         $address->created_by = Auth::user()->id ?? null;
@@ -452,12 +450,10 @@ class InstallmentApproveController extends Controller
         $item = Invoices_installment::latest()->first();
 
 
-       
-
         $invoice_installment = new Invoices_installment;
         $invoice_installment->amount = $request->total_first_amount;
         $invoice_installment->installment_id = $installment->id;
-        $invoice_installment->description = "عملية  دفع مقدم عن المعاملة  رقم " . " " . $installment->id;
+        $invoice_installment->description = "عملية  دفع مقدم عن المعاملة  رقم " . " " .$installment->id;
         $invoice_installment->type = "income";
         $invoice_installment->payment_type = $request->first_amount_pay_type;
         $invoice_installment->date = date('Y-m-d');
@@ -572,7 +568,6 @@ class InstallmentApproveController extends Controller
         // dd($user_id);
         $message = "تم اعتماد المعاملة رقم {$installment->id}";
         $this->log($user_id, $message);
-
         $data = new InstallmentClientNote;
         $data->reply = "note";
         $data->date = now()->format('Y-m-d');
@@ -586,12 +581,12 @@ class InstallmentApproveController extends Controller
         // $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
         // return redirect()->route('installment.admin');
         return redirect()->route('installment.show_upload_papers', ['id' => $installment->id ]);
-    }
 
+    }
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -602,7 +597,7 @@ class InstallmentApproveController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -613,8 +608,8 @@ class InstallmentApproveController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -625,7 +620,7 @@ class InstallmentApproveController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -633,7 +628,7 @@ class InstallmentApproveController extends Controller
         //
     }
 
-    public function getProductDetailsByNumber(Request $request)
+       public function getProductDetailsByNumber(Request $request)
     {
         // return response()->json($request);
         // return Product::with(['productsItems' => function ($query) {
@@ -662,7 +657,6 @@ class InstallmentApproveController extends Controller
             $product = Product::where('number', $request->barcode)->with(['productsItems' => function ($query) {
                 $query->where('available', 1);
             }])->first();
-            // dd($product);
             $id = $product->id;
             $number = $request->barcode;
             $model = $product->model;
@@ -677,8 +671,9 @@ class InstallmentApproveController extends Controller
 
 
             $product = products_items::where('available', 1)->where('serial_number', $request->serial)->with('product')->first();
-     
+
             // return response()->json($product);
+
             $id = $product->product->id;
             $model = $product->product->model;
             $cost = $product->product->net_price;
@@ -688,13 +683,14 @@ class InstallmentApproveController extends Controller
 
         }
 
+        //  dd($product);
 
         // Check if product was found
         if ($product) {
             return response()->json([
                 'success' => true,
                 'product' => [
-                    'id' => $id,
+                      'id'=> $id,
                     'model' => $model,
                     'number' => $number,
                     'product_item_id' => $product_item_id,
@@ -714,31 +710,35 @@ class InstallmentApproveController extends Controller
     }
 
 
+
+
+
     public function print_eqrardain_mothaq($amount)
     {
 
         $data['title'] = 'نظام الأقساط';
         $data['add_title'] = 'الأقساط';
         $data["amount"] = $amount;
-        return view('installmentClient.print-debt-mothaq', compact('data'));
+        return view('installmentClient.print-debt-mothaq', compact('data' ));
 
     }
-
-    public function print_eqrardain($id, $amount)
+    public function print_eqrardain($id,$amount)
     {
 
         $data["item"] = Installment_Client::findorfail($id);
 
         $data['amount'] = $amount;
 
-        $data["client"] = Client::findorfail($data["item"]['client_id']);
+        $data["client"] =Client::findorfail($data["item"]['client_id']);
 
-        return view('installmentClient.print_eqrardain', compact('data'));
+        return view('installmentClient.print_eqrardain', compact('data' ));
+
+
 
 
     }
-
-    public function insert_to_invoice()
+    
+     public function insert_to_invoice()
     {
         $installment = Installment::whereBetween('id', [1410, 1424])->get();
         
@@ -779,3 +779,4 @@ class InstallmentApproveController extends Controller
 
 
 }
+
