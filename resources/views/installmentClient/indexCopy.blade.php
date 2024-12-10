@@ -318,7 +318,7 @@
                                     @endif
 
 
-                                    </li>
+                                </div>
                             </td>
                             <td>
                                 {{ $item->bank->name_ar ?? 'لا يوجد' }}

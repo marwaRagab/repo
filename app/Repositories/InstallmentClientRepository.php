@@ -13,7 +13,7 @@ class InstallmentClientRepository implements InstallmentClientsRepositoryInterfa
     public function index($status)
     {
 
-        $counts = [
+        $counts= [
             'advancedCount' => Installment_Client::where('status', 'advanced')->count(),
             'under_inquiryCount' => Installment_Client::where('status', 'under_inquiry')->count(),
             'auditingCount' => Installment_Client::where('status', 'auditing')->count(),
@@ -25,47 +25,32 @@ class InstallmentClientRepository implements InstallmentClientsRepositoryInterfa
             'total' => Installment_Client::count(),
             'transaction_submitedCount' => Installment_Client::where('status', 'transaction_submited')->count(),
             'transaction_acceptedCount' => Installment_Client::where('status', 'transaction_accepted')->count(),
+            'submit_archiveCount' => Installment_Client::where('status', 'submit_archive')->count(),
             // 'transaction_refusedCount' => Installment_Client::where('status', 'transaction_refused')->count(),
+            'accepted_archiveCount' => Installment_Client::where('status', 'accepted_archive')->count(),
         ];
 
         if ($status == 0) {
-            $data = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
-                'bank',
-                'Boker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
+            $Installment= Installment_Client::with([
+              'bank',
+                'installmentBroker',
             ])->withCount(['installment_car', 'installment_issue'])->orderBy('created_at', 'asc')->get();
         } elseif ($status == "refused") {
-            $data = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
-                'bank',
-                'Boker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
+            $Installment = Installment_Client::with([
+               'bank',
+                'installmentBroker',
             ])->withCount(['installment_car', 'installment_issue'])->orderBy('created_at', 'asc')->where('status', "rejected")->get();
         } else {
-            $data = Installment_Client::with([
-                'user',
-                'region',
-                'ministry_working',
+            $Installment = Installment_Client::with([
                 'bank',
-                'Boker',
-                'governorate',
-                'installment_issue',
-                'installment_car',
+                'installmentBroker',
             ])->withCount(['installment_car', 'installment_issue'])->orderBy('created_at', 'asc')->where('status', $status)->get();
         }
 
+        
         // Retrieving the main data with eager loading and count of relationships
 
-        return compact('counts', 'data');
+        return compact( 'Installment','counts');
     }
 
     public function show($id)

@@ -136,7 +136,7 @@ class InstallmentIssueController extends Controller
     //    }
        // return response()->json($nationalities);
     //    return $this->respondSuccess(result: $data, message: 'Store Data successfully.');
-    return redirect()->route('myinstall.index', ['status' => 'under_inquiry']);
+    return redirect()->route('installmentClient.index', ['status' => 'under_inquiry']);
     // return redirect()->back();
    }
 

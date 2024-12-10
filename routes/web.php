@@ -386,7 +386,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('/myinstall/broker', [BokerController::class, 'getbroker'])->name('myinstall.broker');
 
     // installmentClient
-    Route::redirect('/installmentClient', '/installmentClient/0');
+    Route::redirect('/installmentClient', '/installmentClient/advanced');
     Route::get('/installmentClient/{status}', [InstallmentClientController::class, 'index'])->name('installmentClient.index');
     Route::get('installmentClient/getall/{status}', [InstallmentClientController::class, 'getAll'])->name('installmentClient.getall');
     Route::any('/installmentClient/delete/{id}', [InstallmentClientController::class, 'destroy'])->name('installmentClient.delete');
