@@ -1,11 +1,11 @@
 @include('includes/head')
 
 <body>
-    <!-- Preloader -->
+    {{-- <!-- Preloader -->
     <div class="preloader">
         <img src="{{ asset('assets/images/logos/logo.jpg') }}" alt="loader" class="load-img" />
         <img src="{{ asset('assets/images/Spinner@1x-1.4s-200px-200px.svg') }}" alt="loader" class="load-svg" />
-    </div>
+    </div> --}}
     <div id="main-wrapper">
         <div class="page-wrapper">
             @include('includes.sidebar_horizontal')
