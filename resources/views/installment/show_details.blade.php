@@ -2052,9 +2052,7 @@
                                             <td>{{ number_format ($total_madionia1 ,3)}}
                                             </td>
                                             <td>-</td>
-                                            <td>
-                                                {{ $Installment->created_at ? $Installment->created_at->format('Y-m-d') : 'N/A' }}
-                                            </td>
+                                            <td>{{$Installment->created_at->format('Y-m-d')}}</td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -2100,7 +2098,7 @@
                                             @endif
                                             <td>
                                                 <h6>{{ $one->payment_date }}</h6>
-                                                <h6><a href="{{   $one->img ?? '/' }}" target=" _blank">
+                                                <h6><a href="{{ asset($one->img ?? '/') }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
                                             </td>
@@ -2158,7 +2156,8 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ $military_affairs_amount->img_dir ?? '/' }}"
+                                                
+                                                <a href="{{ asset( $military_affairs_amount->img_dir ?? '/') }}"
                                                     target=" _blank">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
@@ -2778,7 +2777,7 @@
                                                 <td>
 
                                                     <h6>{{ $month->payment_date }}</h6>
-                                                    <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
+                                                    <h6><a href="{{ asset($month->img_dir ?? '/') }}" target=" _blank">
                                                             <span class="btn btn-info"> صورة
                                                                 الايصال </span>
                                                         </a></h6>
@@ -3034,7 +3033,8 @@
 
 
                                                 <h6>{{ $month->payment_date }}</h6>
-                                                <h6><a href="{{ $month->img_dir ?? '/' }}" target=" _blank">
+                                                
+                                                <h6><a href="{{ asset($month->img_dir ?? '/')}}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
 

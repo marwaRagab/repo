@@ -427,16 +427,22 @@ class InstallmentController extends Controller
             $this->add_install_money($month->id, $request->knet, 'knet', $request->knet_code);
         }
         if ($request->hasFile('img_dir')) {
-            $file = $request->file('img_dir');
-            $filePath = $file->store('uploads/new_photos', 'public');
+
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
+          
+
+            // $file = $request->file('img_dir');
+
+            // $filePath = $file->store('uploads/new_photos', 'public');
 
             $month->update([
                 'created_by' => Auth::user()->id ?? null,
-                'img_dir' => '/storage/' . $filePath,
+                'img_dir' => 'uploads/new_photos' . '/' . $filename,
             ]);
             // for($i =0 ; $i < 2 ; $i++){
             $invoice::where('install_month_id', $month->id)->update([
-                'img' => '/storage/' . $filePath,
+                'img' => 'uploads/new_photos' . '/' . $filename,
                 'created_by' => Auth::user()->id ?? null,
             ]);
             // }
@@ -546,16 +552,18 @@ class InstallmentController extends Controller
             $this->add_install_money_part($month->id, $month->amount, $request->knet_code);
 
             if ($request->hasFile('img_dir')) {
-                $file = $request->file('img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
+                // $file = $request->file('img_dir');
+                // $filePath = $file->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+                $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
 
                 $month->update([
                     'created_by' => Auth::user()->id ?? null,
-                    'img_dir' => '/storage/' . $filePath,
+                    'img_dir' =>'uploads/new_photos' . '/' . $filename,
                 ]);
                 // for($i =0 ; $i < 2 ; $i++){
                 $invoice::where('install_month_id', $month->id)->update([
-                    'img' => '/storage/' . $filePath,
+                    'img' => 'uploads/new_photos' . '/' . $filename,
                     'created_by' => Auth::user()->id ?? null,
                 ]);
                 // }
@@ -757,16 +765,18 @@ class InstallmentController extends Controller
             $this->add_install_money_settle($month->id, $request->knet_settle, 'knet', $request->knet_code_settle);
         }
         if ($request->hasFile('img_dir')) {
-            $file = $request->file('img_dir');
-            $filePath = $file->store('uploads/new_photos', 'public');
+            // $file = $request->file('img_dir');
+            // $filePath = $file->store('uploads/new_photos', 'public');
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
 
             $month->update([
                 'created_by' => Auth::user()->id ?? null,
-                'img_dir' => '/storage/' . $filePath,
+                'img_dir' => 'uploads/new_photos' . '/' . $filename,
             ]);
             // for($i =0 ; $i < 2 ; $i++){
             $invoice::where('install_month_id', $month->id)->update([
-                'img' => '/storage/' . $filePath,
+                'img' => 'uploads/new_photos' . '/' . $filename,
                 'created_by' => Auth::user()->id ?? null,
             ]);
             // }
@@ -890,18 +900,20 @@ class InstallmentController extends Controller
             $invoice = Invoices_installment::where('install_month_id', 0)->where('installment_id', $installment_id)->get();
 
             if ($request->hasFile('paper_img_dir')) {
-                $file = $request->file('paper_img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
+                // $file = $request->file('paper_img_dir');
+                // $filePath = $file->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('paper_img_dir')->getClientOriginalName();
+                $path = $request->file('paper_img_dir')->move(public_path('uploads/new_photos'), $filename);
 
                 for ($j = 1; $j < count($months_id); $j++) {
                     $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' . $filePath,
+                        'img_dir' => 'uploads/new_photos' . '/' . $filename,
                     ]);
                 }
 
                 $invoice->update([
-                    'img' => '/storage/' . $filePath,
+                    'img' => 'uploads/new_photos' . '/' . $filename,
                     'created_by' => Auth::user()->id ?? null,
                 ]);
 
@@ -1140,18 +1152,20 @@ class InstallmentController extends Controller
             $months_id[] = Installment_month::latest()->first();
 
             if ($request->hasFile('paper_img_dir')) {
-                $file = $request->file('paper_img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
+                // $file = $request->file('paper_img_dir');
+                // $filePath = $file->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('paper_img_dir')->getClientOriginalName();
+                $path = $request->file('paper_img_dir')->move(public_path('uploads/new_photos'), $filename);
 
                 for ($j = 1; $j < count($months_id); $j++) {
                     $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' . $filePath,
+                        'img_dir' => 'uploads/new_photos' . '/' . $filename,
                     ]);
                 }
                 foreach ($invoice as $one) {
                     $one->update([
-                        'img' => '/storage/' . $filePath,
+                        'img' => 'uploads/new_photos' . '/' . $filename,
                         'created_by' => Auth::user()->id ?? null,
                     ]);
                 }
@@ -1292,18 +1306,20 @@ class InstallmentController extends Controller
             $invoice = Invoices_installment::where('install_month_id', $installments[0]['id'])->where('installment_id', $installment_id)->get();
 
             if ($request->hasFile('img_dir')) {
-                $file = $request->file('img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
+                // $file = $request->file('img_dir');
+                // $filePath = $file->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+                $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
 
                 for ($j = 1; $j < count($months_id); $j++) {
                     $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' . $filePath,
+                        'img_dir' => 'uploads/new_photos' . '/' . $filename,
                     ]);
                 }
                 foreach ($invoice as $one) {
                     $one->update([
-                        'img' => '/storage/' . $filePath,
+                        'img' => 'uploads/new_photos' . '/' . $filename,
                         'created_by' => Auth::user()->id ?? null,
                     ]);
                 }
@@ -1390,18 +1406,20 @@ class InstallmentController extends Controller
             $sum = 0.000;
 
             if ($request->hasFile('paper_img_dir')) {
-                $file = $request->file('paper_img_dir');
-                $filePath = $file->store('uploads/new_photos', 'public');
+                // $file = $request->file('paper_img_dir');
+                // $filePath = $file->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('paper_img_dir')->getClientOriginalName();
+                $path = $request->file('paper_img_dir')->move(public_path('uploads/new_photos'), $filename);
                 $months = new Installment_month();
                 for ($j = 1; $j < count($insall_ids); $j++) {
 
                     $months::where('id', $j)->update([
                         'created_by' => Auth::user()->id ?? null,
-                        'img_dir' => '/storage/' . $filePath,
+                        'img_dir' => 'uploads/new_photos' . '/' . $filename,
                     ]);
                 }
                 $invoice->update([
-                    'img' => '/storage/' . $filePath,
+                    'img' => 'uploads/new_photos' . '/' . $filename,
                     'created_by' => Auth::user()->id ?? null,
                 ]);
 
@@ -1805,71 +1823,127 @@ class InstallmentController extends Controller
         $installment_data_image = [];
 
         if ($request->hasFile('civil_img')) {
-            $client_data_image['civil_img'] = $request->file('civil_img')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('civil_img')->getClientOriginalName();
+            $path = $request->file('civil_img')->move(public_path('clients'), $filename);
+
+            // $client_data_image['civil_img'] = $request->file('civil_img')->store('clients', 'public'); // Store in the 'products' directory
+
             $data_add['type'] = 'civil_img';
-            $data_add['path'] = $client_data_image['civil_img'];
+            // $data_add['path'] = $client_data_image['civil_img'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('salary_img')) {
-            $client_data_image['salary_img'] = $request->file('salary_img')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('salary_img')->getClientOriginalName();
+            $path = $request->file('salary_img')->move(public_path('clients'), $filename);
+            // $client_data_image['salary_img'] = $request->file('salary_img')->store('clients', 'public'); // Store in the 'products' directory
             $data_add['type'] = 'salary_img';
-            $data_add['path'] = $client_data_image['salary_img'];
+            // $data_add['path'] = $client_data_image['salary_img'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('cid_img1')) {
-            $client_data_image['cid_img1'] = $request->file('cid_img1')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('cid_img1')->getClientOriginalName();
+            $path = $request->file('cid_img1')->move(public_path('clients'), $filename);
+            // $client_data_image['cid_img1'] = $request->file('cid_img1')->store('clients', 'public'); // Store in the 'products' directory
             $data_add['type'] = 'cid_img1';
-            $data_add['path'] = $client_data_image['cid_img1'];
+            // $data_add['path'] = $client_data_image['cid_img1'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('cid_img_2')) {
-            $client_data_image['cid_img_2'] = $request->file('cid_img_2')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('cid_img_2')->getClientOriginalName();
+            $path = $request->file('cid_img_2')->move(public_path('clients'), $filename);
+            // $client_data_image['cid_img_2'] = $request->file('cid_img_2')->store('clients', 'public'); // Store in the 'products' directory
             $data_add['type'] = 'cid_img_2';
-            $data_add['path'] = $client_data_image['cid_img_2'];
+            // $data_add['path'] = $client_data_image['cid_img_2'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('cinet_img')) {
-            $client_data_image['cinet_img'] = $request->file('cinet_img')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('cinet_img')->getClientOriginalName();
+            $path = $request->file('cinet_img')->move(public_path('clients'), $filename);
+            // $client_data_image['cinet_img'] = $request->file('cinet_img')->store('clients', 'public'); // Store in the 'products' directory
             $data_add['type'] = 'cinet_img';
-            $data_add['path'] = $client_data_image['cinet_img'];
+            // $data_add['path'] = $client_data_image['cinet_img'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('work_img')) {
-            $client_data_image['work_img'] = $request->file('work_img')->store('clients', 'public');
+            // $client_data_image['work_img'] = $request->file('work_img')->store('clients', 'public');
+            $filename = time() . '-' . $request->file('work_img')->getClientOriginalName();
+            $path = $request->file('work_img')->move(public_path('clients'), $filename);
             $data_add['type'] = 'work_img';
-            $data_add['path'] = $client_data_image['work_img'];
+            // $data_add['path'] = $client_data_image['work_img'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('my_img')) {
-            $client_data_image['my_img'] = $request->file('my_img')->store('clients', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('my_img')->getClientOriginalName();
+            $path = $request->file('my_img')->move(public_path('clients'), $filename);
+            // $client_data_image['my_img'] = $request->file('my_img')->store('clients', 'public'); // Store in the 'products' directory
             $data_add['type'] = 'my_img';
-            $data_add['path'] = $client_data_image['my_img'];
+            // $data_add['path'] = $client_data_image['my_img'];
+            $data_add['path'] = 'clients' . '/' . $filename;
         }
         /////installment_images
 
         if ($request->hasFile('contract_1')) {
-            $installment_data_image['contract_1'] = $request->file('contract_1')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_1')->getClientOriginalName();
+            $path = $request->file('contract_1')->move(public_path('installment'), $filename);
+            // $installment_data_image['contract_1'] = $request->file('contract_1')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['contract_1'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_2')) {
-            $installment_data_image['contract_2'] = $request->file('salary_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_2')->getClientOriginalName();
+            $path = $request->file('contract_2')->move(public_path('installment'), $filename);
+            
+            // $installment_data_image['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['contract_2'] =  'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_2')) {
-            $installment_data_image['contract_cinet_2'] = $request->file('contract_cinet_2')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_cinet_2')->getClientOriginalName();
+            $path = $request->file('contract_cinet_2')->move(public_path('installment'), $filename);
+            // $installment_data_image['contract_cinet_2'] = $request->file('contract_cinet_2')->store('installment', 'public'); // Store in the 'products' directory
+             $installment_data_image['contract_cinet_2'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_1')) {
-            $installment_data_image['contract_cinet_1'] = $request->file('contract_cinet_1')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('contract_cinet_1')->getClientOriginalName();
+            $path = $request->file('contract_cinet_1')->move(public_path('installment'), $filename);
+            // $installment_data_image['contract_cinet_1'] = $request->file('contract_cinet_1')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['contract_cinet_1'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('qard_paper_img')) {
-            $installment_data_image['qard_paper_img'] = $request->file('qard_paper_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('qard_paper_img')->getClientOriginalName();
+            $path = $request->file('qard_paper_img')->move(public_path('installment'), $filename);
+            // $installment_data_image['qard_paper_img'] = $request->file('qard_paper_img')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['qard_paper_img'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('prods_recieved_img')) {
-            $installment_data_image['prods_recieved_img'] = $request->file('prods_recieved_img')->store('installment', 'public');
+            $filename = time() . '-' . $request->file('prods_recieved_img')->getClientOriginalName();
+            $path = $request->file('prods_recieved_img')->move(public_path('installment'), $filename);
+            // $installment_data_image['prods_recieved_img'] = $request->file('prods_recieved_img')->store('installment', 'public');
+            $installment_data_image['prods_recieved_img'] = 'installment' . '/' . $filename;
         }
+        
         if ($request->hasFile('part_10_dinar_img')) {
-            $installment_data_image['part_10_dinar_img'] = $request->file('part_10_dinar_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('part_10_dinar_img')->getClientOriginalName();
+            $path = $request->file('part_10_dinar_img')->move(public_path('installment'), $filename);
+            // $installment_data_image['part_10_dinar_img'] = $request->file('part_10_dinar_img')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['part_10_dinar_img'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('part_paper')) {
-            $installment_data_image['part_paper'] = $request->file('part_paper')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('part_paper')->getClientOriginalName();
+            $path = $request->file('part_paper')->move(public_path('installment'), $filename);
+            // $installment_data_image['part_paper'] = $request->file('part_paper')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['part_paper'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('laws_paper_print_img')) {
-            $installment_data_image['laws_paper_print_img'] = $request->file('laws_paper_print_img')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('laws_paper_print_img')->getClientOriginalName();
+            $path = $request->file('laws_paper_print_img')->move(public_path('installment'), $filename);
+            // $installment_data_image['laws_paper_print_img'] = $request->file('laws_paper_print_img')->store('installment', 'public'); // Store in the 'products' directory
+            $installment_data_image['laws_paper_print_img'] =  'installment' . '/' . $filename;
         }
         if ($request->hasFile('kafil_amana')) {
-            $installment_data_image['kafil_amana'] = $request->file('kafil_amana')->store('installment', 'public'); // Store in the 'products' directory
+            $filename = time() . '-' . $request->file('kafil_amana')->getClientOriginalName();
+            $path = $request->file('kafil_amana')->move(public_path('installment'), $filename);
+            // $installment_data_image['kafil_amana'] = $request->file('kafil_amana')->store('installment', 'public'); // Store in the 'products' directory
+
+            $installment_data_image['kafil_amana'] = 'installment' . '/' . $filename;
         }
 
         for ($i = 1; $i <= count($client_data_image); $i++) {

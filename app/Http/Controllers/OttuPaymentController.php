@@ -17,7 +17,7 @@ class OttuPaymentController extends Controller
     {
         // Fetch client data from the database
         $clientData = DB::table('installment_clients')->find($id);
-
+        dd($clientData);
         if (!$clientData) {
             return redirect()->back()->with('error', 'Client not found');
         }
@@ -30,7 +30,9 @@ class OttuPaymentController extends Controller
 
         $payload = [
             "amount" => "1",
+
             "pg_codes" => ["live-pg"],
+
             "type" => "e_commerce",
             "currency_code" => "KWD",
             "order_no" => $orderNum,
