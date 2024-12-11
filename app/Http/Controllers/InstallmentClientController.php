@@ -4,27 +4,30 @@ namespace App\Http\Controllers;
 
 ini_set('memory_limit', '600M');
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\InstallmentClientsRepositoryInterface;
+
+use App\Models\Log;
 use App\Models\Bank;
+use App\Models\User;
+
 use App\Models\Boker;
 use App\Models\Client;
+use App\Models\Region;
+use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
-use App\Models\InstallmentBroker;
-use App\Models\InstallmentCar;
-use App\Models\InstallmentClientNote;
-use App\Models\InstallmentIssue;
-use App\Models\Installment_Client;
-use App\Models\Installment_Client_Cinet;
-use App\Models\Log;
-use App\Models\Ministry;
-use App\Models\Region;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\InstallmentCar;
+use App\Models\InstallmentIssue;
+use App\Models\InstallmentBroker;
+use App\Models\Installment_Client;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
+use App\Models\InstallmentClientNote;
+use App\Models\Installment_Client_Cinet;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\StoreInstallment_ClientRequest;
+use App\Interfaces\InstallmentClientsRepositoryInterface;
 
 class InstallmentClientController extends Controller
 {
@@ -41,6 +44,7 @@ class InstallmentClientController extends Controller
         $this->InstallmentClientsRepository = $InstallmentClientsRepository;
     }
 
+
     public function index($status)
     {
         $title = 'المعاملات';
@@ -53,12 +57,13 @@ class InstallmentClientController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
+
         $data = $this->InstallmentClientsRepository->index($status);
         //  dd($data);
 
         if ($data) {
             //  $user_id = 1 ;
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم دخول صفحة المتقدمين";
             $this->log($user_id, $message);
         }
@@ -85,7 +90,7 @@ class InstallmentClientController extends Controller
         } else {
             $data['view'] = 'installmentClient/index';
             // dd($data);
-
+           
         }
         return view('layout', $data, compact('breadcrumb', 'data'));
     }
@@ -95,7 +100,8 @@ class InstallmentClientController extends Controller
         // dd($status);
         //
 
-        $user_id = Auth::user()->id ?? null;
+
+        $user_id =  Auth::user()->id ?? null;
         $message = "تم دخول صفحة المتقدمين";
         $this->log($user_id, $message);
 
@@ -194,6 +200,7 @@ class InstallmentClientController extends Controller
         } else {
             $data['view'] = 'installmentClient/indexCopy';
 
+
             // return view('installmentClient.index',compact('data','bank','government','region','ministry','boker'));
         }
         return view('layout', $data, compact('breadcrumb', 'data'));
@@ -226,7 +233,7 @@ class InstallmentClientController extends Controller
             'governorate',
             'installment_issue',
             'installment_car',
-            'installment_note',
+            'installment_note'
         ]);
 
         $searchPerformed = false;
@@ -253,6 +260,8 @@ class InstallmentClientController extends Controller
         return view('layout', $data, compact('breadcrumb', 'data', 'searchPerformed'));
     }
 
+
+
     public function getAll($status)
     {
         $data = $this->InstallmentClientsRepository->index($status);
@@ -262,6 +271,7 @@ class InstallmentClientController extends Controller
         $dataTable->addColumn('client', function ($row) {
             return $row->name_ar . '<br>' . $row->civil_number;
         });
+
 
         // Add 'ministry' column
         $dataTable->addColumn('ministry', function ($row) {
@@ -305,8 +315,8 @@ class InstallmentClientController extends Controller
                 if ($row->installment_car->isNotEmpty() || $row->installment_car->count() > 0) {
                     // Check if the first car record has an image
                     if ($row->installment_car->first()->image != null) {
-                        $carImageButton = '<a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4"
-                                       href="' . asset($row->installment_car->first()->image) . '"
+                        $carImageButton = '<a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" 
+                                       href="' . asset($row->installment_car->first()->image) . '" 
                                        download="car.jpg">
                                        صوره الاستعلام
                                        </a>';
@@ -359,7 +369,7 @@ class InstallmentClientController extends Controller
             return '
         <div class="btn-group mb-6 me-6 d-block">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                نتيجة الاستعلام
+                نتيجة الاستعلام 
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li>
@@ -426,6 +436,8 @@ class InstallmentClientController extends Controller
         ';
         });
 
+
+
         // Add 'boker' column
         $dataTable->addColumn('boker', function ($row) {
             return $row->installmentBroker ? $row->installmentBroker->name : 'لا يوجد';
@@ -434,6 +446,8 @@ class InstallmentClientController extends Controller
         $dataTable->addColumn('bank', function ($row) {
             return $row->bank ? $row->bank->name_ar : 'لا يوجد';
         });
+
+
 
         $dataTable->addColumn('created_at', function ($row) {
             $formattedDate = \Carbon\Carbon::parse($row->created_at)->format('d/m/Y');
@@ -464,21 +478,26 @@ class InstallmentClientController extends Controller
             });
         }
 
+
+
         return $dataTable->rawColumns(['car', 'issue', 'inquery', 'created_at', 'client', 'accept'])->make(true);
     }
 
+
     public function getNotes($id)
+
     {
         $notes = InstallmentClientNote::where('installment_clients_id', $id)->with('user')->get();
 
         if ($notes) {
 
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم عرض   ملاحظات المعاملات";
             $this->log($user_id, $message);
         }
         return response()->json(['notes' => $notes]);
     }
+
 
     // public function getNotesIssue($id)
     // {
@@ -514,6 +533,8 @@ class InstallmentClientController extends Controller
     //         }
     //         return response()->json(['notes' => $notes]);
     //     }
+
+
 
     public function getNotesIssue($id)
     {
@@ -551,9 +572,10 @@ class InstallmentClientController extends Controller
             // 'pdf' => $pdf,
             'openissuecount' => $openissuecount,
             'closeissuecount' => $closeissuecount,
-            'totalissue' => $totalissue,
+            'totalissue' => $totalissue
         ]);
     }
+
 
     public function getNotesCar($id)
     {
@@ -568,6 +590,7 @@ class InstallmentClientController extends Controller
         return response()->json(['notescar' => $notescar]);
     }
 
+
     public function create()
     {
         $data['bank'] = Bank::all();
@@ -578,7 +601,7 @@ class InstallmentClientController extends Controller
 
         if ($data) {
 
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "  تم دخول صفحة انشاء  معاملة جديدة";
             $this->log($user_id, $message);
         }
@@ -594,15 +617,19 @@ class InstallmentClientController extends Controller
         $Installment_Client_issue = InstallmentIssue::where('installment_clients_id', $id)->get();
         $Installment_Client_note = InstallmentClientNote::where('installment_clients_id', $id)->get();
 
-        $user_id = Auth::user()->id ?? null;
+
+
+        $user_id =  Auth::user()->id ?? null;
         $message = "  تم دخول صفحة تقديم فى صفحة  المعاملات المقدمة";
         $this->log($user_id, $message);
+
 
         return view('installment.Aksat_approved', compact('Installment_Client', 'Installment', 'Installment_Client_note', 'Installment_Client_issue', 'Installment_Client_car', 'Installment_Client_cinet'));
     }
 
     public function convert_approvedCopy($id)
     {
+
 
         $title = 'نظام الاقساط';
 
@@ -614,6 +641,7 @@ class InstallmentClientController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
+
         $Installment_Client = Installment_Client::where('id', $id)->first();
         $Installment = Installment::where('installment_clients', $id)->first();
         $ministry = Ministry::where('id', $Installment_Client->ministry_id)->first();
@@ -622,14 +650,16 @@ class InstallmentClientController extends Controller
         $Installment_Client_issue = InstallmentIssue::where('installment_clients_id', $id)->get();
         $Installment_Client_note = InstallmentClientNote::where('installment_clients_id', $id)->get();
 
-        $user_id = Auth::user()->id ?? null;
+
+        $user_id =  Auth::user()->id ?? null;
         $message = " فى المعاملات المقدمة تم دخول صفحة فورم نظام الاقساط";
         $this->log($user_id, $message);
 
         $data = [
             'Installment' => '',
-            'view' => 'installment/Aksat_approvedCopy',
+            'view' => 'installment/Aksat_approvedCopy'
         ];
+
 
         // $data['view'] = 'installment/convert_approvedCopy';
         return view('layout', $data, compact('breadcrumb', 'ministry', 'data', 'Installment_Client', 'Installment', 'Installment_Client_note', 'Installment_Client_issue', 'Installment_Client_car', 'Installment_Client_cinet'));
@@ -702,7 +732,7 @@ class InstallmentClientController extends Controller
             ]);
         }
         // $user_id = 1 ;
-        $user_id = Auth::user()->id ?? null;
+        $user_id =  Auth::user()->id ?? null;
         $message = "تم تحويل المعاملة رقم {$installment->name_ar} الى المعاملات المقبولة";
         $this->log($user_id, $message);
 
@@ -715,7 +745,7 @@ class InstallmentClientController extends Controller
     {
         $Installment_Client = Installment_Client::where('id', $id)->get();
 
-        $user_id = Auth::user()->id ?? null;
+        $user_id =  Auth::user()->id ?? null;
         $message = "تم عرض استعلام السيارات";
         $this->log($user_id, $message);
 
@@ -751,23 +781,24 @@ class InstallmentClientController extends Controller
                 'required',
                 'string',
                 'unique:installment_clients,civil_number',
-                'regex:/^\d{12}$/',
+                'regex:/^\d{12}$/'
             ],
             'salary' => 'required',
             'bank_id' => 'required',
             'area_id' => 'required',
             'ministry_id' => 'required',
             'boker_id' => 'required',
-            'installment_total' => 'required',
+            'installment_total' => 'required'
 
         ], $messages);
+
 
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         $data = $this->InstallmentClientsRepository->store($request);
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم اضافة عميل جديد  فى صفحة عملاء الاقساط";
             $this->log($user_id, $message);
 
@@ -780,6 +811,9 @@ class InstallmentClientController extends Controller
         return redirect()->route('installmentClient.index', ['status' => 'advanced']);
     }
 
+
+
+
     /**
      * Display the specified resource.
      *
@@ -790,8 +824,9 @@ class InstallmentClientController extends Controller
     {
         $data = $this->InstallmentClientsRepository->show($id);
 
+
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم عرض  عميل  {$data->name_ar} من صفحة عملاء الاقساط";
             $this->log($user_id, $message);
             $this->installment_notes($data->id, $message);
@@ -809,10 +844,12 @@ class InstallmentClientController extends Controller
     public function edit($id)
     {
 
+
         $data = $this->InstallmentClientsRepository->show($id);
 
+
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم الدخول  لتعديل  عملاء الاقساط  {$data->name_ar}";
             $this->log($user_id, $message);
             $this->installment_notes($data->id, $message);
@@ -821,6 +858,7 @@ class InstallmentClientController extends Controller
         return $this->respondSuccess($data, message: 'Get Data successfully.');
     }
 
+
     public function update($id, Request $request)
     {
         // dd($request);
@@ -828,7 +866,7 @@ class InstallmentClientController extends Controller
             'status.required' => 'نتيجة الاستعلام   مطلوب.',
         ];
         $validatedData = Validator::make($request->all(), [
-            'status' => 'required',
+            'status' => 'required'
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -838,7 +876,7 @@ class InstallmentClientController extends Controller
 
         $data = $this->InstallmentClientsRepository->update($id, $request);
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $status = $this->status_installment_clients($request->status);
             $message = "تم  تحويل العميل  {$data->name_ar} الى {$status['status_ar']}";
             $this->log($user_id, $message);
@@ -859,7 +897,7 @@ class InstallmentClientController extends Controller
             'status.required' => 'نتيجة الاستعلام   مطلوب.',
         ];
         $validatedData = Validator::make($request->all(), [
-            'status' => 'required',
+            'status' => 'required'
         ], $messages);
 
         if ($validatedData->fails()) {
@@ -870,12 +908,13 @@ class InstallmentClientController extends Controller
         $data = $this->InstallmentClientsRepository->update($id, $request);
 
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $status = $this->status_installment_clients($request->status);
             $message = "تم  تحويل العميل  {$data->name_ar} الى {$status['status_ar']}";
             $this->log($user_id, $message);
             $this->installment_notes($data->id, $message);
         }
+
 
         // return redirect()->route('myinstall.index', ['status' => $data->status]);
         return redirect()->route('installmentClient.index', ['status' => $data->status]);
@@ -887,7 +926,7 @@ class InstallmentClientController extends Controller
         $data = $this->InstallmentClientsRepository->destroy($id);
 
         if ($data) {
-            $user_id = Auth::user()->id ?? null;
+            $user_id =  Auth::user()->id ?? null;
             $message = "تم   مسح  عميل  {$data->name_ar}";
             $this->log($user_id, $message);
         }
@@ -905,7 +944,7 @@ class InstallmentClientController extends Controller
         $validatedData = Validator::make($request->all(), [
             'civil_number' => [
                 'required',
-                'regex:/^\d{12}$/',
+                'regex:/^\d{12}$/'
             ],
         ], $messages);
 
@@ -928,7 +967,7 @@ class InstallmentClientController extends Controller
             'status.required' => 'نتيجة الاستعلام   مطلوب.',
         ];
         $validatedData = Validator::make($request->all(), [
-            'status' => 'required',
+            'status' => 'required'
         ], $messages);
 
         if ($validatedData->fails()) {

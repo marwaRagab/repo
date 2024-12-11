@@ -38,6 +38,22 @@ class Stop_bankController extends Controller
 
     }
 
+    public function print_archive(Request $request)
+    {
+        // dd("dd");
+        return $this->stop_bankRepository->print_archive($request);
+
+
+    }
+    
+    public function check_info_in_banks( $id)
+    {
+        // dd("dd");
+        return $this->stop_bankRepository->check_info_in_banks($id);
+
+
+    }
+
     public function change_states(Request $request)
     {
         // dd("dd");

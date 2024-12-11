@@ -2052,7 +2052,9 @@
                                             <td>{{ number_format ($total_madionia1 ,3)}}
                                             </td>
                                             <td>-</td>
-                                            <td>{{$Installment->created_at->format('Y-m-d')}}</td>
+                                            <td>
+                                                {{ $Installment->created_at ? $Installment->created_at->format('Y-m-d') : 'N/A' }}
+                                            </td>
                                             <td></td>
                                             <td></td>
                                         </tr>

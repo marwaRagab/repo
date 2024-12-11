@@ -1,3 +1,5 @@
+
+
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
@@ -38,7 +40,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء المتقدمين</h4>
         <div class="d-flex">
-            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 ">
+            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " >
                 أضف جديد </a>
 
             <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
@@ -77,15 +79,15 @@
                         @if (request()->route('status') === 'rejected')
                             <th>سبب الرفض</th>
                         @endif
-                    </tr>
-                </thead>
-            </table>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+                       
+
+
         </div>
-
-
-
-
-    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -111,19 +113,19 @@
                     {
                         data: 'client',
                         name: 'client',
-
+                       
                         className: 'text-center'
-
-
+                        
+                        
                     },
                     // {
                     //     data: 'civil_number',
                     //     name: 'civil_number',
                     //     className: 'text-center'
-
+                       
                     // },
 
-
+                  
                     {
                         data: 'phone',
                         name: 'phone',
@@ -147,21 +149,11 @@
                     },
 
                     @if (request()->route('status') === 'car_inquiry')
-                        {
-                            data: 'car',
-                            name: 'car',
-                            orderable: false,
-                            searchable: false
-                        },
+                    { data: 'car', name: 'car', orderable: false, searchable: false },
                     @endif
                     // issue
                     @if (request()->route('status') === 'auditing' || request()->route('status') === 'under_inquiry')
-                        {
-                            data: 'issue',
-                            name: 'issue',
-                            orderable: false,
-                            searchable: false
-                        },
+                    { data: 'issue', name: 'issue', orderable: false, searchable: false },
                     @endif
                     // inquery
                     {
@@ -188,24 +180,14 @@
                         className: 'text-center'
                     },
                     @if (request()->route('status') === 'accepted')
-                        {
-                            data: 'accept',
-                            name: 'accept',
-                            orderable: false,
-                            searchable: false
-                        },
+                    { data: 'accept', name: 'accept', orderable: false, searchable: false },
                     @endif
                     @if (request()->route('status') === 'rejected')
-                        {
-                            data: 'rejected',
-                            name: 'rejected',
-                            orderable: false,
-                            searchable: false
-                        },
+                    { data: 'rejected', name: 'rejected', orderable: false, searchable: false },
                     @endif
-
+                    
                 ],
-
+                
 
 
                 "oLanguage": {
@@ -243,4 +225,5 @@
                 }
             });
         });
+           
     </script>
