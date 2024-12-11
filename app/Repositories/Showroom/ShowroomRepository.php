@@ -39,7 +39,7 @@ class ShowroomRepository implements ShowroomRepositoryInterface
             ->where('orders_files.order_id', 0)
             // ->select('orders_files.id', 'name_ar', 'place')
             ->get();
-
+            
         // dd($all_orders);
 
         $view = 'showroom.recieving'; 
@@ -77,10 +77,23 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         $data = purchase_items::with('product','order_file')
                                 ->where('purchase_orders_items.order_id', $request->order_id)
                                 ->get();
-        // $new_items = products_items::with('product','ordersFiles')
-        //                             ->where('purchase_id', $id)
-        //                             ->get(); 
+        foreach ($data as $one) {
             
+             $messages = [
+                    'counter_received_'.$one->id.'.required' => 'العدد  مطلوب.',
+                    'receiving_'.$one->id.'.required' => 'الاستلام مطلوب.',
+                    ];
+                            
+            $validatedData = Validator::make($request->all(), [
+                    'counter_received_'.$one->id => 'required',
+                    'receiving_'.$one->id => 'required',
+                                        
+                    ], $messages);
+                            
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+                }
+            }        
         $purchase = OrdersFiles::findORFail($id); 
 
         if ($purchase->received == 1) {
@@ -95,10 +108,12 @@ class ShowroomRepository implements ShowroomRepositoryInterface
                 'received' => 1,
                 'amount' =>  $total
             ]);
+
+        
         foreach ($data as $one) {
            
             // $receiving = $request->input('receiving_'.$one['id']);
-            $one->counter_received = $request->input('counter_received_'.$one['id']);
+               $one->counter_received = $request->input('counter_received_'.$one['id']);
             // dd($one->test);
            
                 $mmm['counter_received'] = $request->input('counter_received_'.$one['id']);
@@ -163,14 +178,11 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         return view('layout', compact('title', 'view', 'breadcrumb', 'id', 'new_items'));
     }
     public function add_serial($request, $id)
-    {
-        // $data = purchase_items::with('product','order_file')
-        //                         ->where('purchase_orders_items.order_id', $request->order_id)
-        //                         ->get();
-        
+    {   
             $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
             ->get();
+           
             foreach ($new_items as $prod_item) {
                 $messages = [
                     'serial_number_'.$prod_item->id.'.required' => 'السريال  مطلوب.',
@@ -187,8 +199,10 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         
                     return redirect()->back()->withErrors($validatedData)->withInput();
                 }
-                else
-                { 
+               
+            }
+            foreach ($new_items as $prod_item) {
+                
                     $serial = $request->input('serial_number_'.$prod_item->id);
                     if ($request->hasFile('serial_number_img_'.$prod_item->id)) {
                         // $file = $request->file('serial_number_img_'.$prod_item->id);
@@ -203,10 +217,9 @@ class ShowroomRepository implements ShowroomRepositoryInterface
                             'serial_number' => $serial,
                             'serial_number_img' => $filePath
                         ]);
-                    }
-
-                    return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
-               }
+                    }          
             }
+            return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح'); 
+
     }
 }

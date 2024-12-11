@@ -2,7 +2,8 @@
     <div class="d-flex align-items-center justify-content-between px-4  ">
         <h4 class="card-title mb-0"> الصنف</h4>
         <div class="d-flex">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 ">طباعة</button>
+            <a href=" {{ route('products.print_all') }}"
+                    class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "> طباعه </a>
             <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
                 data-bs-target="#bs-example-modal-md">
                 أضف صنف جديد </button>
