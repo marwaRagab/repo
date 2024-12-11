@@ -12,7 +12,15 @@ use Illuminate\Support\Facades\Redirect;
 
 class OttuPaymentController extends Controller
 {
+    public function pro($id)
+    {
+        // Fetch client data from the database
+        $clientData = DB::table('installment_clients')->find($id);
 
+        if (!$clientData) {
+            return redirect()->back()->with('error', 'Client not found');
+        }
+    }
     public function process($id)
     {
         // Fetch client data from the database
