@@ -224,7 +224,7 @@ class TawreedRepository implements TawreedRepositoryInterface
         $order->save();
 
         $orderId = $order->id;
-
+       
         foreach ($groupedItems as $groupedItem) {
             $productItem = new purchase_items();
             $productItem->product_id = $groupedItem['product_id'];
@@ -355,5 +355,10 @@ class TawreedRepository implements TawreedRepositoryInterface
             'layout',
             compact('title', 'order', 'view', 'breadcrumb','order_id')
         );
+    }
+
+    public function print_purchase($id)
+    {
+
     }
 }

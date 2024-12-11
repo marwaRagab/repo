@@ -14,7 +14,7 @@
     <div class="card-body">
 
         <div class="table-responsive pb-4">
-            <table id="file-export" class="table w-100 table-bordered display text-nowrap">
+            <table id="file-export" class="table w-100  table-bordered display text-nowrap">
                 <thead>
                     <!-- start row -->
                     <tr>
@@ -114,10 +114,10 @@
                                                                         value="{{ $purch->count}}" type="hidden">
                                                                 </td>
                                                                 <td>
-                                                                    <input type="text" class="form-control received"
+                                                                    <input type="text" class="form-control"
                                                                         name="counter_received_{{$purch->id}}"
                                                                         id="counter_received_{{$purch->id}}"
-                                                                       >
+                                                                        onchange="check({{ $purch->id}})">
                                                                     @error('counter_received_{{$purch->id}}')
                                                                     <div style='color:red'>{{$message}}</div>
                                                                     @enderror
@@ -140,7 +140,7 @@
                                                     <div id="tableBody"></div>
                                                 </div>
                                                 <div class="modal-footer d-flex ">
-                                                    <button type="submit" class="btn btn-primary"  >حفظ </button>
+                                                    <button type="submit" class="btn btn-primary">حفظ </button>
                                                     <button type="button"
                                                         class="btn bg-danger-subtle text-danger  waves-effect"
                                                         data-bs-dismiss="modal">
@@ -170,30 +170,28 @@
 
 
 <script>
-// function check() {
+function check(id) {
 
-//     var recieved_counter = document.getElementById("counter_received_" + id).value;
-//     alert(recieved_counter);
-//     return false;
-//     var counter = document.getElementById("counter_" + id).value;
-//     if (recieved_counter == '' ) {
-//         alert('  العدد المستلم مطلوب ');
-//         return false;
-//     }
-//     if (document.getElementById("receiving_" + id).checked) {
+    var recieved_counter = document.getElementById("counter_received_" + id).value;
+    var counter = document.getElementById("counter_" + id).value;
+    if (recieved_counter == '' || counter == '') {
+        alert('  العدد المستلم مطلوب ');
+        return false;
+    }
+    if (document.getElementById("receiving_" + id).checked) {
        
-//         if (recieved_counter > counter || recieved_counter < 1 ) {
-//             alert('   العدد غير صحيح');
-//             return false;
-//         } 
+        if (recieved_counter > counter || recieved_counter < 1) {
+            alert('   العدد غير صحيح');
+            return false;
+        } 
        
-//     }
-//     if(!document.getElementById("receiving_" + id).checked)
-//     {
-//         alert('الاستلام غير صحيح');
-//         return false;
-//     }
-// }
+    }
+    if(!document.getElementById("receiving_" + id).checked)
+    {
+        alert('الاستلام غير صحيح');
+        return false;
+    }
+}
 
 
 </script>

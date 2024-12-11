@@ -64,24 +64,3 @@
 </div>
 
 
-
-<script>
-function check(id) {
-
-    var recieved_counter = document.getElementById("counter_received_" + id).value;
-    var counter = document.getElementById("counter_" + id).value;
-    if (recieved_counter == '' || counter == '') {
-        alert('  العدد المستلم مطلوب ');
-        return false;
-    }
-
-    if (document.getElementById("receiving_" + id).checked) {
-        if (recieved_counter > counter || recieved_counter < 1) {
-            alert('   العدد غير صحيح');
-            return false;
-        }
-    }
-}
-
-</script>
-

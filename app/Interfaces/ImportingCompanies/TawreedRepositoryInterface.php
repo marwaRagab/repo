@@ -20,6 +20,6 @@ interface TawreedRepositoryInterface
     public function deletePurchaseOrder($id);
     public function PurchaseOrdersArchive($request);
     public function print_order_company($order_id);
-    // public function print_purchase($order_id);
+    public function print_purchase($order_id);
 
 }

@@ -77,48 +77,45 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         $data = purchase_items::with('product','order_file')
                                 ->where('purchase_orders_items.order_id', $request->order_id)
                                 ->get();
-        // $new_items = products_items::with('product','ordersFiles')
-        //                             ->where('purchase_id', $id)
-        //                             ->get(); 
+        foreach ($data as $one) {
             
+             $messages = [
+                    'counter_received_'.$one->id.'.required' => 'العدد  مطلوب.',
+                    'receiving_'.$one->id.'.required' => 'الاستلام مطلوب.',
+                    ];
+                            
+            $validatedData = Validator::make($request->all(), [
+                    'counter_received_'.$one->id => 'required',
+                    'receiving_'.$one->id => 'required',
+                                        
+                    ], $messages);
+                            
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+                }
+            }        
         $purchase = OrdersFiles::findORFail($id); 
 
         if ($purchase->received == 1) {
             return redirect()->back()->with('message', 'تم الاستلام من قبل');
         }
-       
+        $price = products_items::where('purchase_id', $request->order_id)->get();
+        $total = $price->sum('final_price');
+
+        OrdersFiles::where('id', $request->order_id)
+            ->update([
+                'received_user_id' => Auth::user()->id ?? 0,
+                'received' => 1,
+                'amount' =>  $total
+            ]);
+
+        
         foreach ($data as $one) {
            
-            $messages = [
-                'counter_received_'.$one->id.'.required' => 'العدد  مطلوب.',
-                'receiving_'.$one->id.'.required' => 'الاستلام مطلوبة.',
-            ];
-    
-            $validatedData = Validator::make($request->all(), [
-                'counter_received_'.$one->id => 'required',
-                'receiving_'.$one->id => 'required',
-                
-            ], $messages);
-    
-            if ($validatedData->fails()) {
-    
-                return redirect()->back()->withErrors($validatedData)->withInput();
-            }
-            else
-            { 
-               
-                // $receiving = $request->input('receiving_'.$one['id']);
-                $price = products_items::where('purchase_id', $request->order_id)->get();
-                $total = $price->sum('final_price');
-        
-                OrdersFiles::where('id', $request->order_id)
-                    ->update([
-                        'received_user_id' => Auth::user()->id ?? 0,
-                        'received' => 1,
-                        'amount' =>  $total
-                    ]);
-                 $one->counter_received = $request->input('counter_received_'.$one['id']);
-                
+            // $receiving = $request->input('receiving_'.$one['id']);
+               $one->counter_received = $request->input('counter_received_'.$one['id']);
+            // dd($one->test);
+           
                 $mmm['counter_received'] = $request->input('counter_received_'.$one['id']);
                 $mmm['cancel'] = 0;
 
@@ -141,23 +138,23 @@ class ShowroomRepository implements ShowroomRepositoryInterface
                     }
                     $items->save();
                 } 
-                return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
-
-            }     
+               
         }
 
         foreach($data as $prod)
-                {
-                    if ($prod->product->class_id == 63) { //the class id of iphone
-                        //    return  $this->add_serial($request, $id); 
-                        return redirect()->to('showroom/show_serial/' . $id);
-                    } else {
-                        $prod->update([
-                            'counter_received' => 0,
-                            'cancel' => 1,
-                        ]);
-                    }
-                }
+        {
+            if ($prod->product->class_id == 63) { //the class id of iphone
+                //    return  $this->add_serial($request, $id); 
+                return redirect()->to('showroom/show_serial/' . $id);
+            } else {
+                $prod->update([
+                    'counter_received' => 0,
+                    'cancel' => 1,
+                ]);
+            }
+        }
+
+        return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
     }
 
     public function show_serial($id)
@@ -181,14 +178,11 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         return view('layout', compact('title', 'view', 'breadcrumb', 'id', 'new_items'));
     }
     public function add_serial($request, $id)
-    {
-        // $data = purchase_items::with('product','order_file')
-        //                         ->where('purchase_orders_items.order_id', $request->order_id)
-        //                         ->get();
-        
+    {   
             $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
             ->get();
+           
             foreach ($new_items as $prod_item) {
                 $messages = [
                     'serial_number_'.$prod_item->id.'.required' => 'السريال  مطلوب.',
@@ -205,8 +199,10 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         
                     return redirect()->back()->withErrors($validatedData)->withInput();
                 }
-                else
-                { 
+               
+            }
+            foreach ($new_items as $prod_item) {
+                
                     $serial = $request->input('serial_number_'.$prod_item->id);
                     if ($request->hasFile('serial_number_img_'.$prod_item->id)) {
                         // $file = $request->file('serial_number_img_'.$prod_item->id);
@@ -221,10 +217,9 @@ class ShowroomRepository implements ShowroomRepositoryInterface
                             'serial_number' => $serial,
                             'serial_number_img' => $filePath
                         ]);
-                    }
-
-                    return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح');
-               }
+                    }          
             }
+            return redirect()->route('shoowroom.index')->with('message', 'تم الاستلام بنجاح'); 
+
     }
 }
