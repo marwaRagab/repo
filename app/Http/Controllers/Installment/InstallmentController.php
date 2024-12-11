@@ -427,7 +427,13 @@ class InstallmentController extends Controller
             $this->add_install_money($month->id, $request->knet, 'knet', $request->knet_code);
         }
         if ($request->hasFile('img_dir')) {
+
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
+          
+
             $file = $request->file('img_dir');
+
             $filePath = $file->store('uploads/new_photos', 'public');
 
             $month->update([
