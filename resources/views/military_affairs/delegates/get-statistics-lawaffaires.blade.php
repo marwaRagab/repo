@@ -1,6 +1,6 @@
 <div class="card">
             <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-              <h4 class="card-title mb-0"> عدد استعلام رصيد التنفيذ
+              <h4 class="card-title mb-0"> عدد استعلام رصيد التنفيذ ({{$data['users']->name_ar}})
             </h4>
             </div>
             <div class="card-body">
