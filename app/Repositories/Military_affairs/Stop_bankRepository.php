@@ -262,6 +262,46 @@ public function print_archive(Request $request)
     return view('military_affairs/Stop_bank/print_archive',$this->data);
 
 }
+
+public function check_info_in_banks( $id)
+{
+    $message ="تم دخول صفحة استعلام بنوك  " ;
+    $user_id = 1 ;
+    //$user_id =  Auth::user()->id,
+   // $this->log($user_id ,$message);
+   // $user_id =  Auth::user()->id;
+    $this->data['title']='    حجز بنوك';
+    $this->data['items'] = DB::table('military_affairs_bank_info')
+    ->join('banks', 'military_affairs_bank_info.bank_id', '=', 'banks.id')
+    ->where('military_affairs_bank_info.military_affairs_id', $id)
+    ->select('banks.*', 'military_affairs_bank_info.found', 'military_affairs_bank_info.note')
+    ->get();
+    // dd($this->data['items']);
+
+    $this->data['Military_affair'] = Military_affair::where('id', '=')
+    ->where([
+        'military_affairs.status' => 'execute',
+        'military_affairs.stop_bank' => 1,
+    ])
+    ->with('installment')
+    ->with('status_all')
+    ->get();
+    
+    $title=' حجز بنوك';
+
+    $breadcrumb = array();
+    $breadcrumb[0]['title'] = " الرئيسية";
+    $breadcrumb[0]['url'] = route("dashboard");
+    $breadcrumb[1]['title'] = "الشئون القانونية";
+    $breadcrumb[1]['url'] = route("military_affairs");
+    $breadcrumb[2]['title'] = $title;
+    $breadcrumb[2]['url'] = 'javascript:void(0);';
+    
+
+    $this->data['view']='military_affairs/Stop_bank/check-bank';
+    return view('layout',$this->data,compact('breadcrumb'));
+
+}
     public function change_states_bank($id,$value)
     {
 

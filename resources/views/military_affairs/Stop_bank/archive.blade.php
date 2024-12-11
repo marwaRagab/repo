@@ -195,6 +195,10 @@
                                        href="">
                                         تفاصيل
                                     </a>
+                                    <a class="btn btn-success me-6 my-2"
+                                       href="{{ route('stop_bank.check_info_in_banks', ['id' => $item->id]) }}">
+                                        استعلام بنك
+                                    </a>
                                     <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
                                          aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
