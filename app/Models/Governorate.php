@@ -19,6 +19,12 @@ class Governorate extends Model
         return $this->hasMany(related: Court::class );
     }
 
+    public function government()
+    {
+        return $this->hasMany(Court::class,'governorate_id');
+    }
+
+
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -35,6 +41,7 @@ class Governorate extends Model
     {
         return $this->hasManyThrough(Installment::class, Client::class);
     }
+
 
 
 }

@@ -36,7 +36,7 @@ class old_dbController extends Controller
         $array = [];
 
 
-        $items = DB::table('military_affairs_old')
+        $items = DB::table('military_affairs_old')->select('military_affairs_old.*')
             ->where('military_affairs_old.status', 'execute')
             ->where('archived', 0)
             ->join('installment', 'installment.id', '=', 'military_affairs_old.installment_id')
@@ -320,7 +320,7 @@ class old_dbController extends Controller
 //                'stop_car_cancel'=>$stop_car_cancel,
             ];
 
-//            dd($array);
+        //   dd($array);
 
             foreach ($array as $key => $value) {
 
@@ -339,12 +339,23 @@ class old_dbController extends Controller
                         $obj->date = null;
                         $obj->note = null;
                     } elseif ($key == "command") {
-
                         $obj->img_dir = $item->command_img;
                         $obj->date = date("Y-m-d H:i:s", $item->command_date);
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_travel_finished") {
+                        $obj1 = new Military_affairs_status;
+                        $obj1->type = $type;
+                        $obj1->type_id = 'command';
+                        $obj1->military_affairs_id = $item->id;
+                        $obj1->created_by = Auth::user()->id ?? null;
+                        $obj1->updated_by = Auth::user()->id ?? null;
+                        $obj1->img_dir = $item->command_img;
+                        $obj1->flag =1;
+                        $obj1->date = date("Y-m-d H:i:s", $item->command_date);
+                        $obj1->note = null;
+                        $obj1->save();
+
                         $obj->img_dir = $item->stop_travel_finished_img;
                         $obj->date = date("Y-m-d H:i:s", $item->stop_travel_finished_date);
                         $obj->note = null;
@@ -430,7 +441,7 @@ class old_dbController extends Controller
 
             ];
 
-//            dd($array);
+
 
             foreach ($array as $key => $value) {
 

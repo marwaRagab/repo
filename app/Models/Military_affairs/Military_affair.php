@@ -35,8 +35,10 @@ class Military_affair extends Model
 
 
     public function status_all()
+
     {
-        return $this->hasMany(Military_affairs_status::class, 'military_affairs_id');
+       // dd( $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->where('type_id','=','request')->get());
+        return $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->latest();
     }
 
     public function jalasaat_all()
