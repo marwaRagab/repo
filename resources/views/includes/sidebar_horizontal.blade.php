@@ -143,7 +143,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a href="{{ route('myinstall.index', 'advanced') }}" class="sidebar-link">
+                            <a href="{{ route('installmentClient.index', 'advanced') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> المتقدمين
 
@@ -151,20 +151,23 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('myinstall.index', 'transaction_submited') }}" class="sidebar-link">
+                            <a href="{{ route('installmentClient.index', 'transaction_submited') }}"
+                                class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> المعاملات المقدمة
                                 </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('myinstall.index', 'transaction_accepted') }}" class="sidebar-link">
+                            <a href="{{ route('installmentClient.index', 'transaction_accepted') }}"
+                                class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> المعاملات المقبولة </span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ route('myinstall.index', ['status' => 'refused']) }}" class="sidebar-link">
+                            <a href="{{ route('installmentClient.index', ['status' => 'refused']) }}"
+                                class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> المعاملات المرفوضة </span>
                             </a>
