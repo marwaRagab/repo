@@ -93,9 +93,28 @@ class InstallmentClientRepository implements InstallmentClientsRepositoryInterfa
 
     public function update($id, Request $request)
     {
+        // if($status =)
+        // dd($request);
+        // $mesaage = 
         $data = Installment_Client::findOrFail($id);
         $data->status = $request->status ?? null;
-        $data->reason = $request->reason ?? null;
+        if($request->status == "accepted_condition")
+        {
+            $data->accept_condtion = $request->reason ?? null;
+        }
+        elseif($request->status == "accepted")
+        {
+            $data->reason = $request->reason ?? null;
+        }
+        elseif($request->status == "rejected")
+        {
+            $data->refuse_reason = $request->reason ?? null;
+        }
+        elseif($request->status == "archive")
+        {
+            $data->archive_reason = $request->reason ?? null;
+        }
+       
         $data->accept_cost = $request->accept_cost ?? null;
         $data->updated_by = Auth::user()->id ?? null;
         $data->save();

@@ -116,18 +116,15 @@
                                                 @if($installment_issue->image)
                                                     @php
                                                         $fileExtension = pathinfo($installment_issue->image, PATHINFO_EXTENSION);
-                                                    @endphp
-                                            
-                                                    @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
-                                                        <a href="{{ asset($installment_issue->image) }}" target="_blank">
-                                                            <img src="{{ asset($installment_issue->image) }}" alt="الصورة" style="width: 50px; height: auto; cursor: pointer;">
-                                                        </a>
-                                                    @elseif($fileExtension === 'pdf')
+                                                    @endphp                                                       
+                                                    @if($fileExtension === 'pdf')
                                                         <a href="{{ asset($installment_issue->image) }}" target="_blank">
                                                             <embed src="{{ asset($installment_issue->image) }}" type="application/pdf" width="100" height="150" style="cursor: pointer;">
                                                         </a>
                                                     @else
-                                                        <span>نوع ملف غير مدعوم</span>
+                                                    <a href="{{ asset($installment_issue->image) }}" target="_blank">
+                                                        <img src="{{ asset($installment_issue->image) }}" alt="الصورة" style="width: 50px; height: auto; cursor: pointer;">
+                                                    </a>
                                                     @endif
                                                 @else
                                                     <span>لا توجد صورة</span>

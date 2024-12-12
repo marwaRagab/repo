@@ -153,6 +153,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/myinstall/accept-condition/{id}', [advancedController::class, 'acceptCondationindex'])->name('advanced.acceptCondation');
     Route::get('/myinstall/accept/{id}', [advancedController::class, 'acceptindex'])->name('advanced.accept');
     Route::get('/myinstall/reject/{id}', [advancedController::class, 'rejectindex'])->name('advanced.reject');
+    Route::get('/myinstall/archive/{id}', [advancedController::class, 'archiveindex'])->name('advanced.archive');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

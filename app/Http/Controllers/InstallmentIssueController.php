@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreInstallmentIssueRequest;
 use App\Http\Requests\UpdateInstallmentIssueRequest;
 use App\Interfaces\InstallmentIssueRepositoryInterface;
+use App\Models\Installment_Client;
 
 class InstallmentIssueController extends Controller
 {
@@ -136,8 +137,12 @@ class InstallmentIssueController extends Controller
     //    }
        // return response()->json($nationalities);
     //    return $this->respondSuccess(result: $data, message: 'Store Data successfully.');
-    return redirect()->route('installmentClient.index', ['status' => 'under_inquiry']);
-    // return redirect()->back();
+    $status = Installment_Client::where('id', $request->installment_clients_id)
+    ->select('status')
+    ->first();
+    // dd($status);
+    return redirect()->route('installmentClient.index', ['status' => $status->status]);
+    // return back();
    }
 
 

@@ -79,6 +79,10 @@
                         @if (request()->route('status') === 'rejected')
                             <th>سبب الرفض</th>
                         @endif
+                       
+                        @if (request()->route('status') === 'accepted_condition')
+                            <th>شرط القبول</th>
+                        @endif
                         </tr>
                     </thead>
                 </table>
@@ -183,6 +187,10 @@
                     @endif
                     @if (request()->route('status') === 'rejected')
                     { data: 'rejected', name: 'rejected', orderable: false, searchable: false },
+                    @endif
+                  
+                    @if (request()->route('status') === 'accepted_condition')
+                    { data: 'accepted_condition', name: 'accepted_condition', orderable: false, searchable: false },
                     @endif
                     
                 ],

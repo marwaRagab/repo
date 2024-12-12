@@ -10,7 +10,7 @@
     <div class="card-body">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">  اضف سبب رفض</h4>
+                <h4 class="modal-title" id="myModalLabel">  اضف سبب الارشفة</h4>
             </div>
             <form  action="{{ route('myinstall.update', $Installment_client ) }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -23,12 +23,12 @@
                                     <label class="form-label block mx-1">
                                         الحالة</label>
                                     <input class="form-control" placeholder="الحالة" type="text"
-                                        name="status" value="rejected" readonly />
+                                        name="status" value="archive" readonly />
                                 </div>
                                 <div class="form-group mb-3">
 
                                     <label class="form-label block mx-1">
-                                        سبب الرفض</label>
+                                        سبب الارشفة</label>
                                     <input class="form-control" placeholder="" type="text"
                                         name="reason" />
                                 </div>

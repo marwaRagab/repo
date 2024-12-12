@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\military_affairs_deligation;
+use App\Models\User;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -885,3 +887,59 @@ function allInvoicesLimit($start_id, $end_id, $type, $payment_type)
 
     return $result;
 }
+
+
+
+function get_responsible()
+{
+    $users = User::where('set_delegate',1)->get();
+    return $users;
+}
+
+function update_responsible($user_id, $military_id, $status)
+{
+    $dateFields = [
+        'open_file' => 'open_file_date',
+        'execute' => 'execute_date',
+        'image' => 'image_date',
+        'case_proof' => 'case_proof_date',
+        'travel' => 'travel_date',
+        'certificate' => 'certificate_date',
+        'salary' => 'salary_date',
+        'car' => 'car_date',
+        'bank' => 'bank_date',
+    ];
+
+    $check = military_affairs_deligation::where([
+        'military_affairs_id' => $military_id,
+        'emp_id' => $user_id,
+        'end_date' => NULL,
+    ])->first();
+
+    if ($check) {
+        if (array_key_exists($status, $dateFields)) {
+            $check->{$dateFields[$status]} = Carbon::now();
+            $check->save();
+        }
+        return true;
+    } else {
+        $lastRecord = military_affairs_deligation::where('military_affairs_id', $military_id)
+            ->orderBy('id', 'desc')
+            ->first();
+        if ($lastRecord) {
+            $lastRecord->end_date = Carbon::now();
+            $lastRecord->save();
+        }
+        $newRecord = new military_affairs_deligation();
+        $newRecord->military_affairs_id = $military_id;
+        $newRecord->assign_date = Carbon::now();
+        $newRecord->emp_id = $user_id;
+        if (array_key_exists($status, $dateFields)) {
+            $newRecord->{$dateFields[$status]} = Carbon::now();
+        }
+        $newRecord->save();
+        return true;
+    }
+   
+}
+
