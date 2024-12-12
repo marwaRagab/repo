@@ -4,7 +4,7 @@
         <a href="{{route('stop_travel')}}"
 
            class="btn border border-info font-medium text-info hover:bg-info hover:text-white focus:bg-info focus:text-white active:bg-info/90 ml-3 mt-3">
-            العدد الكلي ({{count($items)}})
+            الكلي
         </a>
         @php
             if(Request::has('governorate_id')){
@@ -124,13 +124,10 @@
 
 
                                  if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
-                                     if( Request::get('stop_travel_type')=='command'){
 
-                                           $array=count($item->status_all->where('flag',2));
-                                        }else{
-                                      //   echo Request::get('stop_travel_type')
-                                        $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))) ;
-                                        }
+
+                                        $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
+
                                     }else{
                                      $array= count($items);
                                     }

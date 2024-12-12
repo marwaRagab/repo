@@ -65,10 +65,8 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         $this->data['items'] = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_travel' => 1])->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
-            })->with('status_all', function ($query)use($stop_travel_type) {
-                return $query->where('type_id', '=', $stop_travel_type);
-            })->get();
-        // dd(  $this->data['items']);
+            })->with('status_all')->get();
+        //dd(  $this->data['items']);
 
         $title = ' منع السفر';
 
@@ -91,7 +89,7 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
 
             $value->different_date_tranfer = get_different_dates($value->date, date('Y-m-d'));
             if ($stop_travel_type == 'command') {
-                $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 2)->first();
+                $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 0)->first();
 
                     $date_command =$value->item_command   ?  $value->item_command->date : '';
                     $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
@@ -114,6 +112,7 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
             }
 
 
+
         }
         $this->data['view'] = 'military_affairs/Stop_travel/index';
         return view('layout', $this->data, compact('breadcrumb'));
@@ -128,12 +127,20 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
             'date' => 'required| date',
             'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
         ]);
-              // dd($request->all());
+
         $array_old = Stop_travel_types::findorfail($request->item_type_old);
         $array_new = Stop_travel_types::findorfail($request->item_type_new);
 
+
        // $array_old->update($data);
         $item_time=Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->first();
+        $item_status=Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->first();
+        if($item_status){
+            $data_status['flag']=1;
+
+            $item_status->update($data_status);
+        }
+       // dd($item_status);
         if($item_time){
             $data['date_end']=date('Y-m-d H:i:s');
 

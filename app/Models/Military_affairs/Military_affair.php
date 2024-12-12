@@ -38,7 +38,7 @@ class Military_affair extends Model
 
     {
        // dd( $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->where('type_id','=','request')->get());
-        return $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->latest();
+        return $this->hasMany(Military_affairs_status::class, 'military_affairs_id');
     }
 
     public function jalasaat_all()

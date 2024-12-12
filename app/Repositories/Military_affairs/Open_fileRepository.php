@@ -91,10 +91,12 @@ class Open_fileRepository implements Open_fileRepositoryInterface
             }
             if($value->installment->eqrardain_date != NULL){
                 $value->type_papar= 'وصل امانة';
-            }elseif ($value->installment->qard_paper != NULL){
+            }if ($value->installment->qard_paper != NULL){
                 $value->type_papar  ='اقرار دين';
-            }else
+            }if ($value->installment->eqrardain_date == null && $value->installment->qard_paper == null) {
                 $value->type_papar='لايوجد';
+            }
+
         }
 
             //dd($this->data['items']);
