@@ -30,9 +30,7 @@ class OttuPaymentController extends Controller
 
         $payload = [
             "amount" => "1",
-
             "pg_codes" => ["live-pg"],
-
             "type" => "e_commerce",
             "currency_code" => "KWD",
             "order_no" => $orderNum,
