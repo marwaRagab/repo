@@ -37,7 +37,9 @@
                         <th>رقم الفاتورة</th>
                         <th>عدد المنتجات</th>
                         <th>قيمة الفاتورة</th>
+                        <th> طباعة الفاتورة </th>
                         <th>منتجات طلب الشراء </th>
+                        <th> طباعة طلب الشراء</th>
                         <th> اجراءات </th>
                     </tr>
                 </thead>
@@ -84,8 +86,20 @@ $(document).ready(function() {
                 name: 'order_item.price_qabila'
             },
             {
+                data: 'invoice_print',
+                name: 'invoice_print',
+                orderable: false,
+                searchable: false
+            },
+            {
                 data: 'order_products',
                 name: 'order_products',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'order_print',
+                name: 'order_print',
                 orderable: false,
                 searchable: false
             },

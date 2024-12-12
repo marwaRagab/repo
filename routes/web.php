@@ -581,6 +581,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/sending/{id}', [PurchaseOrdersController::class, 'sending'])->name('orders.sending');
     Route::get('/orders/order-products/{id}', [PurchaseOrdersController::class, 'showOrderProducts'])->name('orders.products');
     Route::get('/orders/print_invoice/{id}', [PurchaseOrdersController::class, 'print_invoice'])->name('orders.print_invoice');
+    Route::get('/orders/print_order_company/{id}', [PurchaseOrdersController::class, 'print_order_company'])->name('orders.print_order_company');
+
 
     //marks
     Route::get('/marks', [MarkController::class, 'index'])->name('mark.index');

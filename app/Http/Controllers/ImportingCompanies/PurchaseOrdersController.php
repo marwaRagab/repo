@@ -68,4 +68,8 @@ class PurchaseOrdersController extends Controller
     {
         return $this->purchaseOrdersRepository->print_invoice($order_id);
     }
+    public function print_order_company($order_id)
+    {
+        return $this->purchaseOrdersRepository->print_order_company($order_id);
+    }
 }
