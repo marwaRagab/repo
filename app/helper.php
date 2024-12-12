@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Military_affairs\Military_affairs_times;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Governorate;
@@ -266,14 +267,35 @@ function Add_note($array_old, $array_new, $id)
         'date' => date('Y-m-d H:i:s'),
         'military_affairs_id' => $id,
         'times_type_id' => $array_new->id,
+        'cat2' => $array_new->slug,
         'created_at' => date('Y-m-d H:i:s'),
         'created_by' => Auth::user() ? Auth::user()->id : null,
-        'updated_at' => Auth::user() ? Auth::user()->id : null,
-        'date_start' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
+
 
     ];
 
     $res = Military_affairs_notes::create($notesData);
+    // dd($res);
+}
+
+function Add_note_time($array_new, $id)
+{
+
+    $notesData = [
+
+        'date_start' => date('Y-m-d H:i:s'),
+        'military_affairs_id' => $id,
+        'times_type_id' => $array_new->id,
+        'created_at' => date('Y-m-d H:i:s'),
+        'created_by' =>Auth::user() ? Auth::user()->id : null,
+        'updated_at' => date('Y-m-d H:i:s'),
+        'updated_by' => Auth::user() ? Auth::user()->id : null,
+
+
+    ];
+
+    $res = Military_affairs_times::create($notesData);
     // dd($res);
 }
 
@@ -342,6 +364,59 @@ function get_all_notes($type, $military_affairs_id)
     return $notes;
 
 }
+
+function get_all_actions($military_affairs_id)
+{
+
+
+    $notes = Military_affairs_times::where(['military_affairs_id' => $military_affairs_id])->get();
+
+    //dd($notes);
+    return $notes;
+
+}
+
+
+function get_modal_name($id)
+{
+    $item_bank = new \App\Models\Military_affairs\Military_affairs_stop_bank_type();
+    $item_car = new \App\Models\Military_affairs\Military_affairs_stop_car_type();
+    $item_salary = new \App\Models\Military_affairs\Military_affairs_stop_salary_type();
+    $item_travel = new \App\Models\Military_affairs\Stop_travel_types();
+    $item_settlement = new \App\Models\Military_affairs\Military_affairs_settlement_type();
+    $item_certificate = new \App\Models\Military_affairs\Military_affairs_certificate_type();
+    $item_types = new \App\Models\Military_affairs\Military_affairs_times_type();
+
+    // Array of all item models
+    $array_types = [
+        'bank' => $item_bank,
+        'car' => $item_car,
+        'salary' => $item_salary,
+        'travel' => $item_travel,
+        'settlement' => $item_settlement,
+        'certificate' => $item_certificate,
+        'times' => $item_types
+    ];
+
+    // Iterate over the array and check if the ID exists
+    foreach ($array_types as $key => $item) {
+        try {
+            $item_time = $item::findOrFail($id);
+            return $item_time;  // Return the key (model type) as the modal name
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // If the model is not found, continue to the next one
+            continue;
+        }
+    }
+
+    // If no model was found, return null or an error message
+    return null;
+}
+
+
+
+
+
 
 function count_client($array_data)
 {
