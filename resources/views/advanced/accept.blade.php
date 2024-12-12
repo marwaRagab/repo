@@ -19,26 +19,26 @@
                         <div id="formRows">
                             <div class="px-4 py-4 sm:px-5">
                                 <div class="flex mt-4">
-                                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3" style="display: none;">
                                         <label class="block mx-1">
                                             الحالة</label>
                                         <input
                                             class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                             placeholder="الحالة" type="text" name="status" style=""
-                                            value="accepted" readonly />
+                                            value="accepted"  />
                                         </label>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="block mx-1">سبب القبول </label>
                                         <input
                                             class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            placeholder="السبب" type="text" name="reason" />
+                                            placeholder="" type="text" name="reason" />
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="block mx-1">مبلغ القبول </label>
                                         <input
                                             class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            placeholder="مبلغ القبول" type="text" name="accept_cost" />
+                                            placeholder="" type="text" name="accept_cost" />
                                     </div>
                                 </div>
                                

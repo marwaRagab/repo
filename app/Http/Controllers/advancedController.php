@@ -188,4 +188,22 @@ class advancedController extends Controller
         $data['view'] = 'advanced/reject';
         return view('layout', $data, compact('breadcrumb','data'));
     }
+
+    public function archiveindex($id)
+    {  
+        $title='اضافة سبب الارشفة'  ;
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+   
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+
+     
+     $data['Installment_client'] = $id;
+     
+        $data['view'] = 'advanced/archive';
+        return view('layout', $data, compact('breadcrumb','data'));
+    }
 }
