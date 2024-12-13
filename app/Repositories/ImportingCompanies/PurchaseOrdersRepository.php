@@ -147,9 +147,34 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
 
     public function print_order_company($order_id)
     {
-        $order = Order::with('order_item')->findORFail($order_id);
+
+        $Order = Order::with('order_item','client')
+            ->whereHas('order_item.product_order_items', function ($query) {
+                $query->groupBy('company_id');
+            })
+        ->findORFail($order_id);
+        $order = $Order->order_item->groupBy(function ($item) {
+            return $item->product_order_items->company->name_ar; 
+        });
         $totalCount = OrderItem::where('order_id', $order_id)->count();
-  
+        foreach($order as $comp => $ord)
+        {
+            foreach($ord as $one)
+            {
+                $one->order_price += $one->final_price;
+                
+            }
+           
+        }
+        // dd($one);
+
+        $totalamount = OrderItem::with('product_order_items')
+                            ->whereHas('product_order_items', function ($query) {
+                                $query->groupBy('company_id');
+                            })
+                           ->where('order_id', $order_id)->sum('final_price');
+
+    //    dd($order);
         $title = "المنتجات";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " ";
@@ -158,7 +183,7 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         $view = 'importingCompanies/Orders/print_order';
         return view(
             'layout',
-            compact('title', 'order', 'view', 'breadcrumb','order_id','totalCount')
+            compact('title', 'order', 'view', 'breadcrumb','order_id','totalCount','Order','one')
         );
     }
 

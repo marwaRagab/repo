@@ -1,15 +1,14 @@
-@foreach($order->order_item as $one)
+@foreach($order as $comp => $ord)
+
 <div class="container-fluid print py-5">
     <h4 class="text-center py-3">طلب شراء
     </h4>
     <div class="side-content">
-        
-        <p> رقم : {{$totalCount}}  / {{ $order_id }}</p>
-        <p>التاريخ : {{ $order->created_at->format('d-m-Y')}}</p>
-        @php 
-        $item = \App\Models\ImportingCompanies\Tawreed\OrdersFiles::with('company')->where('id',$order_id)->first()->company;      
-        @endphp
-        <p class="print-text">السادة / {{ $item->name_ar}}   المحترمين</p>
+
+        <p> رقم : {{$one->product_order_items->company->id}} / {{ $order_id }}</p>
+        <p>التاريخ : {{ $Order->created_at->format('d-m-Y') }}</p>
+
+        <p class="print-text">السادة / {{ $comp }} المحترمين</p>
         <p class="print-text">يرجى التكرم بتزويدنا بالأجهزة الإلكترونية التالية :-
         </p>
     </div>
@@ -26,29 +25,38 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($order->order_item as $one)
+            @foreach($ord as $one)
+            @php
+            $one->order_price = $one->final_price;
+            @endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td> {{ $one->product_order_items->mark->name_ar }}</td>
                 <td> {{ $one->product_order_items->class->name_ar }}</td>
                 <td> {{ $one->product_order_items->model }} </td>
-                <td> {{ $one->count }} </td>
-                <td> {{ number_format($one->product_order_items->price , 3) }}</td>
-                <td> {{ number_format($one->product_order_items->price * $one->count , 3) }}</td>
+                <td> {{ $one->counter }} </td>
+                <td> {{ number_format($one->order_price , 3) }}</td>
+                <td> {{ number_format($one->final_price * $one->counter , 3) }}</td>
             </tr>
-            
+
             @endforeach
             <tr class="font-weight-bold">
                 <td colspan="3" class="text-center">الإجمالي</td>
-                <td colspan="3">    </td>
-                <td > </td>
+                <td colspan="3"> </td>
+                <td> {{ number_format($ord->sum('final_price') , 3) }} </td>
             </tr>
         </tbody>
     </table>
+
     <div class="border-top mt-4">
-        <p class="print-text"> اسم العميل : شركة توب إلكترون للأجهزة الكهربائية </p>
-        <p class="print-text">العنوان : الجهراء - قطعة 2 - شارع عين جالوت - مركز علياء - الدور الأول</p>
-        <p class="print-text">الهاتف : :65704010</p>
+        <p class="print-text"> اسم العميل : {{ $Order->client->name_ar}} </p>
+        <p class="print-text">الهاتف : {{ $Order->client->client_phone->first()?->phone}}</p>
+    </div>
+    <div class="d-flex justify-content-between">
+        <p class="print-text">المنطقة : {{ $Order->client->area?->first()->name_ar }}</p>
+        <p class="print-text">قطعة : {{ $Order->client->client_address?->first()->block }}</p>
+        <p class="print-text"> شارع : {{ $Order->client->client_address?->first()->street }}</p>
+        <p class="print-text"> مبنى : {{ $Order->client->client_address?->first()->building }}</p>
     </div>
     <div class="d-flex justify-content-between">
         <div>
