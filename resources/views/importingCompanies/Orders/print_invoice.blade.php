@@ -57,7 +57,7 @@
             </tr>
             <tr>
                 
-                <th colspan="7">إجمالي المبلغ ( مائتان واثنان دينار )</th>
+                <th colspan="7">إجمالي المبلغ </th>
                 <th>{{explode('.',number_format( $totalCount - ($totalCount - $qabilaCount ) , 3))[1]}}</th>
                 <th> {{explode('.',number_format( $totalCount - ($totalCount - $qabilaCount ) , 3))[0]}} </th>
                 
