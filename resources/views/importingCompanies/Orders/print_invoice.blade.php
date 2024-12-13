@@ -5,7 +5,7 @@
     <div class="side-content">
         <p>التاريخ : {{ $order->created_at->format('d-m-Y') }}</p>
         <p class="print-text">المطلوب من السيد   : {{ $order->client->name_ar}}  </p>
-        <p class="print-text">هاتف  : {{ $order->client->phone ?? ''}}
+        <p class="print-text">هاتف  : {{ $order->client->client_phone->first()?->phone}}
 
 
         </p>
@@ -30,66 +30,47 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($order->order_item as $one)
             <tr>
-                <td>1</td>
-                <td>Orca اوركا</td>
-                <td>تلفزيون</td>
-                <td>OR-39EX20</td>
-                <td>1</td>
-                <td>000</td>
-                <td>70</td>
-                <td>000</td>
-                <td>70</td>
+                <td> {{ $loop->iteration }}</td>
+                <td>{{ $one->product_order_items->mark->name_ar }} </td>
+                <td>{{ $one->product_order_items->class->name_ar }}</td>
+                <td>{{ $one->product_order_items->model }}</td>
+                <td>{{ $one->counter }}</td>
+                <td>{{ explode('.',number_format(($one->price) , 3))[1] ?? 000}}</td>
+                <td>{{ explode('.',number_format(($one->price) , 3))[0] }}</td>
+                <td>{{ explode('.',number_format(($one->price) , 3))[1] ?? 000}}</td>
+                <td>{{ explode('.',number_format(($one->price) , 3))[0] }}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>ميديا Midea</td>
-                <td>غسالة حوض</td>
-                <td>MAC-120FMPS</td>
-                <td>1</td>
-                <td>000</td>
-                <td>85</td>
-                <td>000</td>
-                <td>85</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>فيرري Ferre</td>
-                <td>طباخ</td>
-                <td>FGC66BW</td>
-                <td>1</td>
-                <td>900</td>
-                <td>62</td>
-                <td>900</td>
-                <td>62</td>
-            </tr>
+           @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <th colspan="7">إجمالي المبيعات</th>
-                <th>900</th>
-                <th>217</th>
+                <th>{{  explode('.',number_format(($totalCount) , 3))[1] }}</th>
+                <th>{{ explode('.',number_format(($totalCount) , 3))[0] }}</th>
             </tr>
             <tr>
                 <th colspan="7">خصم</th>
-                <th>000</th>
-                <th>15</th>
+                <th>{{  explode('.',number_format(($totalCount - $qabilaCount) , 3))[1] }}</th>
+                <th>{{ explode('.',number_format(($totalCount - $qabilaCount) , 3))[0] }}</th>
             </tr>
             <tr>
+                
                 <th colspan="7">إجمالي المبلغ ( مائتان واثنان دينار )</th>
-                <th>900</th>
-                <th>202</th>
+                <th>{{explode('.',number_format( $totalCount - ($totalCount - $qabilaCount ) , 3))[1]}}</th>
+                <th> {{explode('.',number_format( $totalCount - ($totalCount - $qabilaCount ) , 3))[0]}} </th>
+                
             </tr>
         </tfoot>
     </table>
     <div class="side-content">
         <p>العنوان :-</p>
         <div class="d-flex justify-content-between">
-            <p class="print-text">المنطقة : النعيم</p>
-            <p class="print-text">قطعة : 2</p>
-            <p class="print-text"> شارع : 17
-            </p>
-
+            <p class="print-text">المنطقة : {{ $order->client->area?->first()->name_ar }}</p>
+            <p class="print-text">قطعة : {{ $order->client->client_address?->first()->block }}</p>
+            <p class="print-text"> شارع : {{ $order->client->client_address?->first()->street }}</p>
+            <br><br><p class="print-text"> مبنى : {{ $order->client->client_address?->first()->building }}</p>
         </div>
 
 

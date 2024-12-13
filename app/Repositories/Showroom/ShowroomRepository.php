@@ -113,9 +113,7 @@ class ShowroomRepository implements ShowroomRepositoryInterface
         foreach ($data as $one) {
            
             // $receiving = $request->input('receiving_'.$one['id']);
-               $one->counter_received = $request->input('counter_received_'.$one['id']);
-            // dd($one->test);
-           
+                $one->counter_received = $request->input('counter_received_'.$one['id']);           
                 $mmm['counter_received'] = $request->input('counter_received_'.$one['id']);
                 $mmm['cancel'] = 0;
 
@@ -137,15 +135,14 @@ class ShowroomRepository implements ShowroomRepositoryInterface
                         $items->available = 1;
                     }
                     $items->save();
-                } 
-               
+                }       
         }
 
         foreach($data as $prod)
         {
             if ($prod->product->class_id == 63) { //the class id of iphone
                 //    return  $this->add_serial($request, $id); 
-                return redirect()->to('showroom/show_serial/' . $id);
+                return redirect()->to('showroom/show_serial/' . $prod->order_id);
             } else {
                 $prod->update([
                     'counter_received' => 0,
@@ -159,12 +156,14 @@ class ShowroomRepository implements ShowroomRepositoryInterface
 
     public function show_serial($id)
     {
-       
         $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
+            ->whereHas('product', function ($query) {
+                $query->where('class_id',63);
+            })
             ->get();
            
-            // dd($new_items);
+           // dd($new_items);
         $title = 'استلام البضاعة  ';
         $view = 'showroom.add_serial';
         $breadcrumb = array();
@@ -181,6 +180,9 @@ class ShowroomRepository implements ShowroomRepositoryInterface
     {   
             $new_items = products_items::with('product', 'ordersFiles')
             ->where('purchase_id', $id)
+            ->whereHas('product', function ($query) {
+                $query->where('class_id',63);
+            })
             ->get();
            
             foreach ($new_items as $prod_item) {
