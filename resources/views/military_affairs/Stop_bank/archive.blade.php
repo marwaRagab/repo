@@ -253,7 +253,7 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link" data-bs-toggle="tab"
-                                                                   href="#navpill-{{$item->id}}" role="tab">
+                                                                   href="#actions-{{$item->id}}" role="tab">
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
@@ -265,6 +265,7 @@
                                                             @php
 
                                                                 $all_notes=get_all_notes('stop_bank',$item->id);
+                                                                $all_actions = get_all_actions($item->id);
                                                             @endphp
                                                             <div class="tab-pane active p-3" id="notes-{{$item->id}}"
                                                                  role="tabpanel">
@@ -436,6 +437,69 @@
                                                                             </tr>
 
                                                                         @endif
+
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="tab-pane p-3" id="actions-{{$item->id}}"
+                                                                 role="tabpanel">
+                                                                <table id="notes2"
+                                                                       class="table table-bordered border text-wrap align-middle">
+                                                                    <thead>
+                                                                    <!-- start row -->
+                                                                    <tr>
+                                                                        <th>القسم</th>
+                                                                        <th>المسئول</th>
+                                                                        <th>تاريخ البدء</th>
+                                                                        <th>تاريخ الانتهاء</th>
+                                                                        <th> عدد الايام</th>
+                                                                    </tr>
+                                                                    <!-- end row -->
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <!-- start row -->
+                                                                    @foreach($all_actions as $value)
+                                                                       
+                                                                            <tr data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapseExample"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseExample">
+                                                                                @php
+                                                                                $created_by = DB::table('users')->where('id', $value->created_by)->first();
+                                                                                $type = DB::table('military_affairs_stop_bank_type')->where('id', $value->times_type_id)->first();
+                                                                                @endphp
+                                                                                <td>
+                                                                                    {{$type->name_ar ?? 'لا يوجد'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                  {{$created_by->name_ar ?? 'لا يوجد'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    @php
+
+                                                                                        $day_start= explode(' ', $value->date_start)[0];
+                                                                                        if ($value->date_end && $value->date_end != '0000-00-00 00:00:00') {
+                                                                                            $day_end = explode(' ', $value->date_end)[0];
+                                                                                            $different_day = get_different_dates($day_start, $day_end);
+                                                                                        } else {
+                                                                                            $day_end = 'لم تنتهى';
+                                                                                            $different_day = get_different_dates($day_start, now());
+                                                                                        }
+                                                                                       
+
+                                                                                    @endphp
+                                                                                    {{$day_start}}
+                                                                                    
+                                                                                </td>
+                                                                                <td>{{$day_end}}</td>
+
+                                                                                <td>
+                                                                                    {{$different_day}}
+                                                                                </td>
+
+                                                                            </tr>
 
                                                                     @endforeach
 
