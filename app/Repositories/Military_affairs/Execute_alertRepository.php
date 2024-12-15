@@ -63,7 +63,9 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
         $items= Military_affair::where('archived','=',0)
             ->where(['military_affairs.status' =>'execute_alert'])
-            ->with('installment')->with('status_all')->with('jalasaat_all')->get();
+            ->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })->with('status_all')->with('jalasaat_all')->get();
         foreach ( $items as $value) {
 
 
@@ -128,8 +130,9 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
               'military_affairs_id'=>'required|exists:marks,id',
               'type'=>'required'
           ]);
-          $jalasat_dd=Military_affairs_jalasaat::where(['type'=> 'execute_alert','military_affairs_id'=>$request->military_affairs_id,'status'=> "NULL" ])->first();
 
+       //   dd($request->all());
+          $jalasat_dd=Military_affairs_jalasaat::where(['type'=> 'execute_alert','military_affairs_id'=>$request->military_affairs_id,'status'=> "NULL" ])->first();
 
             if(!$jalasat_dd && !$request->status){
                 $data['a3lan_paper_date'] =$request->a3lan_paper_date;
@@ -179,6 +182,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
                     $data['type'] =$request->type;
                     $data['status'] =$request->status;
+                   // dd($jalasat_dd);
                     if($jalasat_id){
 
                         $jalasat_dd->update($data);
