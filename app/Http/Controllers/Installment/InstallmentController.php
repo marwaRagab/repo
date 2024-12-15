@@ -364,11 +364,13 @@ class InstallmentController extends Controller
             'cash' => 'required',
             'knet' => 'required',
             'knet_code' => 'required',
+            'img_dir' => 'required',
         ],
             [
                 'cash.required' => 'القيمة مطلوبة',
                 'knet.required' => 'القيمة مطلوبة',
                 'knet_code.required' => 'وصل الكى نت  مطلوب',
+                'img_dir.required' => 'الصورة مطلوبة',
             ]);
 
         $title = 'نظام الأقساط';
@@ -716,6 +718,13 @@ class InstallmentController extends Controller
             'cash_settle' => 'required',
             'knet_settle' => 'required',
             'knet_code_settle' => 'required',
+            'img_dir' => 'required',
+        ],
+        [
+                'cash_settle.required' => 'القيمة مطلوبة',
+                'knet_settle.required' => 'القيمة مطلوبة',
+                'knet_code_settle.required' => 'وصل الكى نت  مطلوب',
+                'img_dir.required' => 'الصورة مطلوبة',
         ]);
 
         $title = 'نظام الأقساط';
@@ -1385,12 +1394,15 @@ class InstallmentController extends Controller
             'cash.required' => 'القيمة مطلوبة',
             'knet.required' => 'القيمة مطلوبة',
             'knet_code.required' => 'الوصل  مطلوب',
+            'paper_img_dir.required' => 'الصورة مطلوبة'
         ];
 
         $validatedData = Validator::make($request->all(), [
             'cash' => 'required',
             'knet' => 'required',
             'knet_code' => 'required',
+            'paper_img_dir' => 'required',
+
 
         ], $messages);
         if ($validatedData->fails()) {
