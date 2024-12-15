@@ -253,11 +253,16 @@ function UploadImage($path, $image, $model, $file)
 
 function formatTime($time)
 {
+
     $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
     $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
     return $toDay;
 }
+   function expolde_date($date){
+   $new_date= explode(' ',$date);
+     return  $new_date;
 
+   }
 function Add_note($array_old, $array_new, $id)
 {
 
