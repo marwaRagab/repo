@@ -170,7 +170,7 @@
 
                                 </td>
                                 <td>
-                                    {{$item->installment->client->court->name_ar}}
+                                    {{$item->installment->client->court->name_ar ?? 'لا يوجد'}}
                                     <br>
                                     {{$item->issue_id}}
                                 </td>
@@ -180,7 +180,7 @@
 
                                 </td>
                                 <td>
-                                    {{$item->installment->client->court->name_ar}}
+                                    {{$item->installment->client->court->name_ar ?? 'لا يوجد'}}
                                     <br>
                                     {{$item->issue_id}}
                                 </td>

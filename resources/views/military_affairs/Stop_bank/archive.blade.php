@@ -186,23 +186,43 @@
         </td>
 
         <td>
+        <div class="btn-group dropup mb-6 me-6 d-block ">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        الإجراءات <span class="badge ms-auto text-bg-primary">5</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu rounded-0"
+                                                        aria-labelledby="dropdownMenuButton">
+                                                        <li>
+                                                            <a class="btn btn-success rounded-0 w-100 mt-2"
+                                                            href="{{ route('stop_bank.check_info_in_banks', ['id' => $item->id]) }}">
+                                                                استعلام بنك
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-primary rounded-0 w-100 mt-2"
+                                                            href="{{ route('stop_bank.check_info_in_job', ['id' => $item->id]) }}">
+                                                                استعلام عمل </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-warning text-white rounded-0 w-100 mt-2"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#open-details-{{$item->id}}">
+                                                                التفاصيل
+                                                            </a>
+                                                        </li>
+                                                        
+                                                    </ul>
+
+
+                                                </div>
                                     <button class="btn btn-secondary me-6 my-2 d-block" data-bs-toggle="modal"
                                             data-bs-target="#open-details-{{$item->id}}">
                                         الملاحظات
                                     </button>
 
-                                    <a class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                                       href="">
-                                        تفاصيل
-                                    </a>
-                                    <a class="btn btn-success me-6 my-2"
-                                       href="{{ route('stop_bank.check_info_in_banks', ['id' => $item->id]) }}">
-                                        استعلام بنك
-                                    </a>
-                                    <a class="btn btn-success me-6 my-2"
-                                       href="{{ route('stop_bank.check_info_in_job', ['id' => $item->id]) }}">
-                                        استعلام عمل
-                                    </a>
+                                   
                                     <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
                                          aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -229,6 +249,12 @@
                                                                 <a class="nav-link" data-bs-toggle="tab"
                                                                    href="#navpill-{{$item->id}}" role="tab">
                                                                     <span>الإجراءات</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab"
+                                                                   href="#navpill-{{$item->id}}" role="tab">
+                                                                    <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
 
