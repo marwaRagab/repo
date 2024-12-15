@@ -359,6 +359,17 @@ class TawreedRepository implements TawreedRepositoryInterface
 
     public function print_purchase($id)
     {
+        $order = OrdersFiles::findOrFail($id);
 
+        $title = "طلب شراء";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " ";
+        $breadcrumb[0]['url'] = route("dashboard");
+
+        $view = 'importingCompanies/Tawreed/print_purchase';
+        return view(
+            'layout',
+            compact('title', 'order', 'view', 'breadcrumb','id')
+        );
     }
 }
