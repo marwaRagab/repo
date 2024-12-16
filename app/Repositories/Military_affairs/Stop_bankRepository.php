@@ -151,7 +151,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     $breadcrumb[1]['url'] = route("military_affairs");
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
-    
+
     $stop_type= $request->stop_bank_type;
     if(!$stop_type){
         $stop_type='stop_bank_request';
@@ -220,7 +220,7 @@ public function print_archive(Request $request)
     $breadcrumb[1]['url'] = route("military_affairs");
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
-    
+
     $stop_type= $request->stop_bank_type;
     if(!$stop_type){
         $stop_type='stop_bank_request';
@@ -286,7 +286,7 @@ public function check_info_in_banks( $id)
     ->with('installment')
     ->with('status_all')
     ->get();
-    
+
     $title=' حجز بنوك';
 
     $breadcrumb = array();
@@ -296,7 +296,7 @@ public function check_info_in_banks( $id)
     $breadcrumb[1]['url'] = route("military_affairs");
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
-    
+
 
     $this->data['view']='military_affairs/Stop_bank/check-bank';
     return view('layout',$this->data,compact('breadcrumb'));
