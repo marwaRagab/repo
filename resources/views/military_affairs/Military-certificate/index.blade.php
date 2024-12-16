@@ -433,10 +433,21 @@
                                                                                 aria-controls="collapseExample">
                                                                                 @php
                                                                                 $created_by = DB::table('users')->where('id', $value->created_by)->first();
-                                                                                $type = DB::table('military_affairs_times_type')->where('id', $value->times_type_id)->first();
                                                                                 @endphp
                                                                                 <td>
-                                                                                    {{$type->name_ar ?? 'لا يوجد'}}
+                                                                                    @if ($value->timesType)
+                                                                                            {{ $value->timesType->name_ar }}
+                                                                                        @elseif ($value->bankType)
+                                                                                            {{ $value->bankType->name_ar }}
+                                                                                        @elseif ($value->carType)
+                                                                                            {{ $value->carType->name_ar }}
+                                                                                        @elseif ($value->salaryType)
+                                                                                            {{ $value->salaryType->name_ar }}
+                                                                                            @elseif ($value->travelType)
+                                                                                            {{ $value->travelType->name_ar }}
+                                                                                        @else
+                                                                                            لا يوجد
+                                                                                        @endif
                                                                                 </td>
                                                                                 <td>
                                                                                   {{$created_by->name_ar ?? 'لا يوجد'}}
