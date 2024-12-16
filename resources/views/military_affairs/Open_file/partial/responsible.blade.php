@@ -20,51 +20,14 @@
 
 <script>
     document.querySelectorAll('.form-select').forEach(select => {
-        select.addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            const userId = selectedOption.getAttribute('data-user-id');
-            const militaryId = selectedOption.getAttribute('data-military-id');
-            const status = selectedOption.getAttribute('data-status');
-            console.log(selectedOption);
-            console.log(userId);
-            console.log(militaryId);
-            console.log(status);
+    select.addEventListener('change', function () {
+        const form = this.closest('form');
+        form.querySelector('.submit-button').click();
 
-            if (userId && militaryId && status) {
-                fetch('/update-responsible', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for security
-                        },
-                        body: JSON.stringify({
-                            user_id: userId,
-                            military_id: militaryId,
-                            status: status,
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            const successModal = new bootstrap.Modal(document.getElementById(
-                                'successModal'));
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                             successModal.show();
-                            // Reload the page after the modal is closed
-                            document.getElementById('successModal').addEventListener(
-                                'hidden.bs.modal', () => {
-                                    window.location.reload();
-                                });
-
-                        } else {
-                            alert('حدث خطأ أثناء التحديث!');
-                        }
-                    })
-                    .catch(error => {
-                        alert('فشل في إرسال الطلب!');
-                    });
-            } else {
-                alert('يرجى تحديد خيار صالح.');
-            }
-        });
+                            
     });
+});
+
 </script>

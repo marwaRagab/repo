@@ -157,16 +157,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/myinstall/archive/{id}', [advancedController::class, 'archiveindex'])->name('advanced.archive');
 
     // update_responsible
-    Route::post('/update-responsible', function (Request $request) {
-        $user_id = $request->input('user_id');
-        $military_id = $request->input('military_id');
-        $status = $request->input('status');
-        if (function_exists('update_responsible')) {
-            $result = update_responsible($user_id, $military_id, $status);
-            return response()->json(['success' => $result]);
-        }
-        return response()->json(['success' => false, 'message' => 'Function not found.']);
-    });
+    // Route::post('/update-responsible', function (Request $request) {
+    //     dd($request);
+    //     $user_id = $request->input('user_id');
+    //     $military_id = $request->input('military_id');
+    //     $status = $request->input('status');
+    //     if (function_exists('update_responsible')) {
+    //         $result = update_responsible($user_id, $military_id, $status);
+    //         return response()->json(['success' => $result]);
+    //     }
+    //     return response()->json(['success' => false, 'message' => 'Function not found.']);
+    // });
+    Route::post('/update-responsible', [Open_fileController::class, 'update_responsible'])->name('update-responsible');
 
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
