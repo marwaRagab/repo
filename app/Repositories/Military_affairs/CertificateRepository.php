@@ -105,12 +105,13 @@ class CertificateRepository implements CertificateRepositoryInterface
 
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-        $this->data['item_type_time'] = Military_affairs_certificate_type::where(['type' => 'Military_certificate', 'slug' => 'info_request'])->first();
-        $this->data['item_type_time_info'] = Military_affairs_certificate_type::where(['type' => 'Military_certificate', 'slug' => 'info_request'])->first();
-        $this->data['item_type_time_book'] = Military_affairs_certificate_type::where(['type' => 'Military_certificate', 'slug' => 'info_book'])->first();
-        $this->data['item_type_time_export'] = Military_affairs_certificate_type::where(['type' => 'Military_certificate', 'slug' => 'export'])->first();
-        $this->data['item_type_time_money'] = Military_affairs_certificate_type::where(['type' => 'Military_certificate', 'slug' => 'money'])->first();
+        $this->data['item_type_time'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'info_request'])->first();
+        $this->data['item_type_time_info'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'info_request'])->first();
+        $this->data['item_type_time_book'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'info_book'])->first();
+        $this->data['item_type_time_export'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'export'])->first();
+        $this->data['item_type_time_money'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'money'])->first();
 
+      
         $this->data['view'] = 'military_affairs/Military-certificate/index';
 
         // dd($this->data['items']);

@@ -271,21 +271,16 @@ public function check_info_in_banks( $id)
    // $this->log($user_id ,$message);
    // $user_id =  Auth::user()->id;
     $this->data['title']='    حجز بنوك';
-    $this->data['items'] = DB::table('military_affairs_bank_info')
-    ->join('banks', 'military_affairs_bank_info.bank_id', '=', 'banks.id')
-    ->where('military_affairs_bank_info.military_affairs_id', $id)
-    ->select('banks.*', 'military_affairs_bank_info.found', 'military_affairs_bank_info.note')
+    $this->data['items'] = DB::table('banks')
+    ->where('active', '1')
     ->get();
-    // dd($this->data['items']);
 
-    $this->data['Military_affair'] = Military_affair::where('id', '=')
-    ->where([
-        'military_affairs.status' => 'execute',
-        'military_affairs.stop_bank' => 1,
-    ])
+    $Military = Military_affair::where('id', $id)
     ->with('installment')
     ->with('status_all')
-    ->get();
+
+    ->first();
+   
 
     $title=' حجز بنوك';
 
@@ -299,8 +294,108 @@ public function check_info_in_banks( $id)
 
 
     $this->data['view']='military_affairs/Stop_bank/check-bank';
-    return view('layout',$this->data,compact('breadcrumb'));
+    return view('layout',$this->data,compact('breadcrumb','Military'));
 
+}
+
+public function check_info_in_job  ( $id)
+{
+    $message ="تم دخول صفحة استعلام عمل  " ;
+    $user_id = 1 ;
+    //$user_id =  Auth::user()->id,
+   // $this->log($user_id ,$message);
+   // $user_id =  Auth::user()->id;
+    $this->data['title']='    حجز بنوك';
+    
+    $this->data['items'] = array(
+        0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
+        1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
+        2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
+        3 => array('id' => '46', 'name' => 'التأمينات'),
+        4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
+    );
+
+    $ids = [5, 27, 14, 46, 47];
+
+    $Military = Military_affair::where('id', $id)
+    ->with('installment')
+    ->with('status_all')
+    ->first();
+   
+    $title=' حجز بنوك';
+
+    $breadcrumb = array();
+    $breadcrumb[0]['title'] = " الرئيسية";
+    $breadcrumb[0]['url'] = route("dashboard");
+    $breadcrumb[1]['title'] = "الشئون القانونية";
+    $breadcrumb[1]['url'] = route("military_affairs");
+    $breadcrumb[2]['title'] = $title;
+    $breadcrumb[2]['url'] = 'javascript:void(0);';
+    
+
+    $this->data['view']='military_affairs/Stop_bank/check-job';
+    return view('layout',$this->data,compact('breadcrumb','Military'));
+
+}
+public function saveBanksInfo(Request $request)
+{
+    $banksData = $request->input('banks');
+
+    // Check if the user is authenticated
+    $userId = Auth::check() ? Auth::user()->id : null;
+
+    foreach ($banksData as $bankInfo) {
+
+        if (isset($bankInfo['found']) ) {
+
+            DB::table('military_affairs_bank_info')->updateOrInsert(
+                [
+                    'bank_id' => $bankInfo['bank_id'], 
+                    'military_affairs_id' => $bankInfo['military_affairs_id'],
+                ],
+                [
+                    'found' => $bankInfo['found'] ?? null,
+                    'bank_status' => $bankInfo['bank_status'] ?? null,
+                    'note' => $bankInfo['note'] ?? null,
+                    'created_by' => $userId,
+                    'updated_by' => $userId,
+                    'date' => now()->format('Y-m-d H:i:s'),
+                ]
+            );
+        }
+    }
+
+    return redirect()->route('stop_bank.archive')->with('success', 'تم حفظ البيانات بنجاح');
+}
+
+public function save_jobs_info(Request $request)
+{
+    $banksData = $request->input('banks');
+
+    // Check if the user is authenticated
+    $userId = Auth::check() ? Auth::user()->id : null;
+
+    foreach ($banksData as $bankInfo) {
+
+        if (isset($bankInfo['found']) ) {
+
+            DB::table('military_affairs_job_info')->updateOrInsert(
+                [
+                    'ministry_id' => $bankInfo['ministry_id'], 
+                    'military_affairs_id' => $bankInfo['military_affairs_id'],
+                ],
+                [
+                    'found' => $bankInfo['found'] ?? null,
+                    'note' => $bankInfo['note'] ?? null,
+                    'created_by' => $userId,
+                    'updated_by' => $userId,
+                    'date' => now()->format('Y-m-d H:i:s'),
+                ]
+            );
+        }
+    }
+
+    return redirect()->route('stop_bank.archive')->with('success', 'تم حفظ البيانات بنجاح');
 }
     public function change_states_bank($id,$value)
     {

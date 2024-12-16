@@ -224,7 +224,7 @@ class TawreedRepository implements TawreedRepositoryInterface
         $order->save();
 
         $orderId = $order->id;
-
+       
         foreach ($groupedItems as $groupedItem) {
             $productItem = new purchase_items();
             $productItem->product_id = $groupedItem['product_id'];
@@ -282,7 +282,7 @@ class TawreedRepository implements TawreedRepositoryInterface
         if ($request->hasFile('img')) {
             $file = $request->file('img');
             $filePath = $file->store('SentPurchaseRequests', 'public');
-            $data->img = '/storage/' . $filePath;
+            $data->img =  $filePath;
             $data->status = 'active';
             $data->send_status = 1;
             $data->sending_user_id = Auth::user()->id;
@@ -354,6 +354,22 @@ class TawreedRepository implements TawreedRepositoryInterface
         return view(
             'layout',
             compact('title', 'order', 'view', 'breadcrumb','order_id')
+        );
+    }
+
+    public function print_purchase($id)
+    {
+        $order = OrdersFiles::findOrFail($id);
+
+        $title = "طلب شراء";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " ";
+        $breadcrumb[0]['url'] = route("dashboard");
+
+        $view = 'importingCompanies/Tawreed/print_purchase';
+        return view(
+            'layout',
+            compact('title', 'order', 'view', 'breadcrumb','id')
         );
     }
 }

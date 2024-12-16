@@ -314,9 +314,9 @@ class InstallmentClientController extends Controller
                 // Check if there are cars related to the row
                 if ($row->installment_car->isNotEmpty() || $row->installment_car->count() > 0) {
                     // Check if the first car record has an image
-                    if ($row->installment_car->first()->image != null) {
+                    if ($row->installment_car->last()->image != null) {
                         $carImageButton = '<a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" 
-                                       href="' . asset($row->installment_car->first()->image) . '" 
+                                       href="' . asset($row->installment_car->last()->image) . '" 
                                        download="car.jpg">
                                        صوره الاستعلام
                                        </a>';
@@ -365,6 +365,7 @@ class InstallmentClientController extends Controller
             $acceptCondationRoute = route('advanced.acceptCondation', $row->id);
             $acceptRoute = route('advanced.accept', $row->id);
             $rejectRoute = route('advanced.reject', $row->id);
+            $archiveRoute = route('advanced.archive', $row->id);
 
             return '
         <div class="btn-group mb-6 me-6 d-block">
@@ -426,16 +427,17 @@ class InstallmentClientController extends Controller
                     <button class="btn btn-danger">الغاء الارشفة</button>
                 </form>
             ' : '
-                <form action="' . $updateRoute . '" method="post" style="display:inline;">
-                    ' . csrf_field() . '
-                    <input type="hidden" name="status" value="archive">
-                    <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">تحويل للارشيف</button>
-                </form>
+               <a class="btn btn-warning rounded-0 w-100 mt-2" href="' . $archiveRoute . '">تحويل للارشيف</a>
+              
             ') . '
         </div>
         ';
         });
-
+        //   <form action="' . $updateRoute . '" method="post" style="display:inline;">
+        // ' . csrf_field() . '
+        // <input type="hidden" name="status" value="archive">
+        // <button class="btn btn-success rounded-0 w-100 mt-2" type="submit"></button>
+        // </form>
 
 
         // Add 'boker' column
@@ -472,9 +474,16 @@ class InstallmentClientController extends Controller
             </div>';
             });
         }
+
         if ($status == "rejected") {
             $dataTable->addColumn('rejected', function ($row) {
-                return $row->reason;
+                return $row->refuse_reason;
+            });
+        }
+
+        if ($status == "accepted_condition") {
+            $dataTable->addColumn('accepted_condition', function ($row) {
+                return $row->accept_condtion;
             });
         }
 
@@ -905,12 +914,25 @@ class InstallmentClientController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
 
+
+        
+
         $data = $this->InstallmentClientsRepository->update($id, $request);
+        
 
         if ($data) {
+            // dd($data);
             $user_id =  Auth::user()->id ?? null;
             $status = $this->status_installment_clients($request->status);
-            $message = "تم  تحويل العميل  {$data->name_ar} الى {$status['status_ar']}";
+            if($request->status == "accepted" || $request->status == "archive")
+            {
+                $message = "تم تحويل العميل {$data->name_ar} الى {$status['status_ar']}" ."السبب {$request->reason}";
+
+            }
+            else{
+                $message = "تم  تحويل العميل  {$data->name_ar} الى {$status['status_ar']}";
+            }
+            
             $this->log($user_id, $message);
             $this->installment_notes($data->id, $message);
         }

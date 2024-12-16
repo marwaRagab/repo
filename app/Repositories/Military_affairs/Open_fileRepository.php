@@ -91,13 +91,17 @@ class Open_fileRepository implements Open_fileRepositoryInterface
             }
             if($value->installment->eqrardain_date != NULL){
                 $value->type_papar= 'وصل امانة';
-            }elseif ($value->installment->qard_paper != NULL){
+            }if ($value->installment->qard_paper != NULL){
                 $value->type_papar  ='اقرار دين';
-            }else
+            }if ($value->installment->eqrardain_date == null && $value->installment->qard_paper == null) {
                 $value->type_papar='لايوجد';
+            }
+
         }
 
+
             //dd($this->data['items']);
+        $this->data['get_responsible'] = get_responsible();
 
         $this->data['view']='military_affairs/Open_file/index';
         return view('layout',$this->data,compact('breadcrumb'));
@@ -294,6 +298,19 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
     }
 
+
+
+    public function update_responsible(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $military_id = $request->input('military_id');
+        $status = $request->input('status');
+        if (function_exists('update_responsible')) {
+            $result = update_responsible($user_id, $military_id, $status);
+            return back();
+        }
+        return response()->json(['success' => false, 'message' => 'Function not found.']);
+    }
 
 
 

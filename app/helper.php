@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Military_affairs\Military_affairs_times;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Governorate;
@@ -9,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\military_affairs_deligation;
+use App\Models\User;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -252,11 +256,16 @@ function UploadImage($path, $image, $model, $file)
 
 function formatTime($time)
 {
+
     $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
     $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
     return $toDay;
 }
+   function expolde_date($date){
+   $new_date= explode(' ',$date);
+     return  $new_date;
 
+   }
 function Add_note($array_old, $array_new, $id)
 {
 
@@ -266,14 +275,35 @@ function Add_note($array_old, $array_new, $id)
         'date' => date('Y-m-d H:i:s'),
         'military_affairs_id' => $id,
         'times_type_id' => $array_new->id,
+        'cat2' => $array_new->slug,
         'created_at' => date('Y-m-d H:i:s'),
         'created_by' => Auth::user() ? Auth::user()->id : null,
-        'updated_at' => Auth::user() ? Auth::user()->id : null,
-        'date_start' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
+
 
     ];
 
     $res = Military_affairs_notes::create($notesData);
+    // dd($res);
+}
+
+function Add_note_time($array_new, $id)
+{
+
+    $notesData = [
+
+        'date_start' => date('Y-m-d H:i:s'),
+        'military_affairs_id' => $id,
+        'times_type_id' => $array_new->id,
+        'created_at' => date('Y-m-d H:i:s'),
+        'created_by' =>Auth::user() ? Auth::user()->id : null,
+        'updated_at' => date('Y-m-d H:i:s'),
+        'updated_by' => Auth::user() ? Auth::user()->id : null,
+
+
+    ];
+
+    $res = Military_affairs_times::create($notesData);
     // dd($res);
 }
 
@@ -342,6 +372,59 @@ function get_all_notes($type, $military_affairs_id)
     return $notes;
 
 }
+
+function get_all_actions($military_affairs_id)
+{
+
+
+    $notes = Military_affairs_times::where(['military_affairs_id' => $military_affairs_id])->get();
+
+    //dd($notes);
+    return $notes;
+
+}
+
+
+function get_modal_name($id)
+{
+    $item_bank = new \App\Models\Military_affairs\Military_affairs_stop_bank_type();
+    $item_car = new \App\Models\Military_affairs\Military_affairs_stop_car_type();
+    $item_salary = new \App\Models\Military_affairs\Military_affairs_stop_salary_type();
+    $item_travel = new \App\Models\Military_affairs\Stop_travel_types();
+    $item_settlement = new \App\Models\Military_affairs\Military_affairs_settlement_type();
+    $item_certificate = new \App\Models\Military_affairs\Military_affairs_certificate_type();
+    $item_types = new \App\Models\Military_affairs\Military_affairs_times_type();
+
+    // Array of all item models
+    $array_types = [
+        'bank' => $item_bank,
+        'car' => $item_car,
+        'salary' => $item_salary,
+        'travel' => $item_travel,
+        'settlement' => $item_settlement,
+        'certificate' => $item_certificate,
+        'times' => $item_types
+    ];
+
+    // Iterate over the array and check if the ID exists
+    foreach ($array_types as $key => $item) {
+        try {
+            $item_time = $item::findOrFail($id);
+            return $item_time;  // Return the key (model type) as the modal name
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // If the model is not found, continue to the next one
+            continue;
+        }
+    }
+
+    // If no model was found, return null or an error message
+    return null;
+}
+
+
+
+
+
 
 function count_client($array_data)
 {
@@ -885,3 +968,65 @@ function allInvoicesLimit($start_id, $end_id, $type, $payment_type)
 
     return $result;
 }
+
+
+
+function get_responsible()
+{
+    $users = User::where('set_delegate',1)->get();
+    return $users;
+}
+
+function update_responsible($user_id, $military_id, $status)
+{
+    
+
+    $dateFields = [
+        'open_file' => 'open_file_date',
+        'execute' => 'execute_date',
+        'image' => 'image_date',
+        'case_proof' => 'case_proof_date',
+        'travel' => 'travel_date',
+        'certificate' => 'certificate_date',
+        'salary' => 'salary_date',
+        'car' => 'car_date',
+        'bank' => 'bank_date',
+    ];
+
+    $up = Military_affair::where('installment_id',$military_id)->first();
+    $up->emp_id = $user_id;
+    $up->save();
+
+    $check = military_affairs_deligation::where([
+        'military_affairs_id' => $military_id,
+        'emp_id' => $user_id,
+        'end_date' => NULL,
+    ])->first();
+
+    if ($check) {
+        if (array_key_exists($status, $dateFields)) {
+            $check->{$dateFields[$status]} = Carbon::now();
+            $check->save();
+        }
+        return true;
+    } else {
+        $lastRecord = military_affairs_deligation::where('military_affairs_id', $military_id)
+            ->orderBy('id', 'desc')
+            ->first();
+        if ($lastRecord) {
+            $lastRecord->end_date = Carbon::now();
+            $lastRecord->save();
+        }
+        $newRecord = new military_affairs_deligation();
+        $newRecord->military_affairs_id = $military_id;
+        $newRecord->assign_date = Carbon::now();
+        $newRecord->emp_id = $user_id;
+        if (array_key_exists($status, $dateFields)) {
+            $newRecord->{$dateFields[$status]} = Carbon::now();
+        }
+        $newRecord->save();
+        return true;
+    }
+   
+}
+
