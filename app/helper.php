@@ -1030,3 +1030,9 @@ function update_responsible($user_id, $military_id, $status)
    
 }
 
+
+// function actions_responsible($id)
+// {
+//     $data =     
+// }
+

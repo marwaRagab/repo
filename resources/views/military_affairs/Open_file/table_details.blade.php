@@ -190,31 +190,7 @@
     </td>
     {{-- تحديد مسئول --}}
     <td>
-        <form method="POST" action="{{ route('update-responsible') }}" class="update-form">
-            @csrf
-            @if ($item->emp_id != 0 || $item->emp_id != null)
-                <select class="form-select" name="user_id" id="responsibleSelect">
-                    @foreach ($get_responsible as $res)
-                        <option value="{{ $res->id }}" {{ $item->emp_id == $res->id ? 'selected' : '' }}
-                            data-military-id="{{ $item->installment_id }}" data-user-id="{{ $res->id }}"
-                            data-status="open_file">{{ $res->name_ar }}</option>
-                    @endforeach
-                </select>
-            @else
-                <p>يرجى تحديد مسئول</p>
-
-                <select class="form-select" name="user_id" id="responsibleSelect">
-                    <option selected>اختر</option>
-                    @foreach ($get_responsible as $res)
-                        <option value="{{ $res->id }}" data-military-id="{{ $item->installment_id }}"
-                            data-user-id="{{ $res->id }}" data-status="open_file">{{ $res->name_ar }}</option>
-                    @endforeach
-                </select>
-            @endif
-            <input type="hidden" name="military_id" value="{{ $item->installment_id }}">
-            <input type="hidden" name="status" value="open_file">
-            <button type="submit" class="d-none submit-button"></button>
-            @include('military_affairs.Open_file.partial.responsible')
+        @include('military_affairs.Open_file.partial.column_responsible')
     </td>
     <td>
         {{ $item->installment->client->court ? \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->name_ar : '' }}
@@ -285,6 +261,7 @@
                                         @php
 
                                             $all_notes = get_all_notes('open_file', $item->id);
+                                            // dd();
                                             $all_actions = get_all_actions($item->id);
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
@@ -399,6 +376,17 @@
                                                     <!-- end row -->
                                                 </thead>
                                                 <tbody>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        <td>1</td>
+                                                        
+
+                                                    </tr>
+
+
                                                     <!-- start row -->
                                                     @foreach ($all_notes as $value)
                                                         @php

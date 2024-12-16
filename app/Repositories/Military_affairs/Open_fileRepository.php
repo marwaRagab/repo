@@ -239,6 +239,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         }
 
         //dd($this->data['items']);
+        $this->data['get_responsible'] = get_responsible();
 
         $this->data['view']='military_affairs/Case_proof/index';
         return view('layout',$this->data,compact('breadcrumb'));

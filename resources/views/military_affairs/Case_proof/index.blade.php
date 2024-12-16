@@ -65,6 +65,9 @@
                         المحكمة
                     </th>
 
+                    <th>
+                        تحديد مسئول
+                    </th>
 
                     <th
                         class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
@@ -79,8 +82,6 @@
                     @if($item->installment->finished==0)
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->court->id)
                             <tr>
-
-
                                 <td>
                                     {{ $loop->index + 1 }}
                                 </td>
@@ -115,6 +116,9 @@
 
                                 <td>
                                     {{\App\Models\Court::findorfail($item->installment->client->court->id)->name_ar}}
+                                </td>
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
                                 </td>
                                 <td>
                                     @php
@@ -513,6 +517,9 @@
                                     {{\App\Models\Court::findorfail($item->installment->client->court->id)->name_ar}}
                                 </td>
                                 <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
+                                <td>
                                     @php
 
                                         $all_notes=get_all_notes('case_proof',$item->id);
@@ -528,7 +535,7 @@
                                         الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
 
-                                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
+                                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                         تحويل الطلب
                                         للتنفيذ</button>
                                     <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
