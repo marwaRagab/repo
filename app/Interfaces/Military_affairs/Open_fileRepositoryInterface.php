@@ -14,5 +14,7 @@ interface Open_fileRepositoryInterface
    public function convert_to_execute(Request $request);
    public function convert_ex_alert(Request $request);
 
+   public function update_responsible(Request $request);
+
 
 }
