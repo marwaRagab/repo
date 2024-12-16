@@ -390,10 +390,16 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" data-bs-toggle="tab"
-                                               href="#actions-{{$item->id}}" role="tab">
+                                               href="#notes-{{$item->id}}" role="tab">
                                                 <span>الإجراءات</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab"
+                                                                   href="#actions-{{$item->id}}" role="tab">
+                                                                    <span>تتبع المعاملة</span>
+                                                                </a>
+                                                            </li>
 
                                     </ul>
                                     <!-- Tab panes -->
@@ -514,7 +520,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="tab-pane p-3" id="actions-{{$item->id}}"
+                                            <div class="tab-pane p-3" id="notes-{{$item->id}}"
                                                  role="tabpanel">
                                                 <table id="notes2"
                                                        class="table table-bordered border text-wrap align-middle">
@@ -577,6 +583,80 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            <div class="tab-pane p-3" id="actions-{{$item->id}}"
+                                                                 role="tabpanel">
+                                                                <table id="notes2"
+                                                                       class="table table-bordered border text-wrap align-middle">
+                                                                    <thead>
+                                                                    <!-- start row -->
+                                                                    <tr>
+                                                                        <th>القسم</th>
+                                                                        <th>المسئول</th>
+                                                                        <th>تاريخ البدء</th>
+                                                                        <th>تاريخ الانتهاء</th>
+                                                                        <th> عدد الايام</th>
+                                                                    </tr>
+                                                                    <!-- end row -->
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <!-- start row -->
+                                                                    @foreach($all_actions as $value)
+                                                                       
+                                                                            <tr data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapseExample"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseExample">
+                                                                                @php
+                                                                                $created_by = DB::table('users')->where('id', $value->created_by)->first();
+                                                                                @endphp
+                                                                                <td>
+                                                                                @if ($value->timesType)
+                                                                                        {{ $value->timesType->name_ar }}
+                                                                                    @elseif ($value->bankType)
+                                                                                        {{ $value->bankType->name_ar }}
+                                                                                    @elseif ($value->carType)
+                                                                                        {{ $value->carType->name_ar }}
+                                                                                    @elseif ($value->salaryType)
+                                                                                        {{ $value->salaryType->name_ar }}
+                                                                                        @elseif ($value->travelType)
+                                                                                        {{ $value->travelType->name_ar }}
+                                                                                    @else
+                                                                                        لا يوجد
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                  {{$created_by->name_ar ?? 'لا يوجد'}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    @php
+
+                                                                                        $day_start= explode(' ', $value->date_start)[0];
+                                                                                        if ($value->date_end && $value->date_end != '0000-00-00 00:00:00') {
+                                                                                            $day_end = explode(' ', $value->date_end)[0];
+                                                                                            $different_day = get_different_dates($day_start, $day_end);
+                                                                                        } else {
+                                                                                            $day_end = 'لم تنتهى';
+                                                                                            $different_day = get_different_dates($day_start, now());
+                                                                                        }
+                                                                                       
+
+                                                                                    @endphp
+                                                                                    {{$day_start}}
+                                                                                    
+                                                                                </td>
+                                                                                <td>{{$day_end}}</td>
+
+                                                                                <td>
+                                                                                    {{$different_day}}
+                                                                                </td>
+
+                                                                            </tr>
+
+                                                                    @endforeach
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                         </div>
                                 </div>
                                 <div class="modal-footer d-flex ">
