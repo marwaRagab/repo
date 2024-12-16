@@ -59,6 +59,18 @@ class Open_fileController extends Controller
     }
 
 
+    public function update_responsible(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $military_id = $request->input('military_id');
+        $status = $request->input('status');
+        if (function_exists('update_responsible')) {
+            $result = update_responsible($user_id, $military_id, $status);
+            return back();
+        }
+        return response()->json(['success' => false, 'message' => 'Function not found.']);
+    }
+
 
 
 
