@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Military_affairs\Military_affair;
 use App\Models\military_affairs_deligation;
 use App\Models\User;
 
@@ -978,6 +979,8 @@ function get_responsible()
 
 function update_responsible($user_id, $military_id, $status)
 {
+    
+
     $dateFields = [
         'open_file' => 'open_file_date',
         'execute' => 'execute_date',
@@ -989,6 +992,10 @@ function update_responsible($user_id, $military_id, $status)
         'car' => 'car_date',
         'bank' => 'bank_date',
     ];
+
+    $up = Military_affair::where('installment_id',$military_id)->first();
+    $up->emp_id = $user_id;
+    $up->save();
 
     $check = military_affairs_deligation::where([
         'military_affairs_id' => $military_id,
