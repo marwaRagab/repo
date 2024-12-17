@@ -1,7 +1,5 @@
 
-    <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
-        aria-expanded="false"
-        aria-controls="collapseExample">
+    <tr >
         <!--    <td>
         {{ $loop->index + 1 }}
 
@@ -443,10 +441,7 @@
                                                     <!-- start row -->
                                                     @foreach($all_notes as $all_note)
 
-                                                        <tr data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseExample"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseExample">
+                                                        <tr >
                                                             <td>
                                                                 {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
                                                             </td>
