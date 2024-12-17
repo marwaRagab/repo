@@ -875,7 +875,7 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}}}<span
+                                                                            <td>{{formatTime($time)}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
@@ -889,6 +889,7 @@
 
                                                                     <input type="hidden" name="military_affairs_id"
                                                                            value="{{ $item->id }}">
+
 
 
                                                                     <input type="hidden" name="type"
@@ -1180,6 +1181,7 @@
 
                                                                     <input type="hidden" name="military_affairs_id"
                                                                            value="{{ $item->id }}">
+
 
 
                                                                     <input type="hidden" name="type"

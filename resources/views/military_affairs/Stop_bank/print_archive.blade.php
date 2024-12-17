@@ -40,7 +40,6 @@
                         </th>
                       </tr>
                       @foreach($items as $item)
-                      @if($item->installment->finished==0)
 
                         @php
                             $item_statues=   $item->notes->where('type','=','stop_bank')->where('times_type_id',$item_type_time_old->id)->where('date_end',NULL);
@@ -68,7 +67,6 @@
                       <td>{{$phone->phone}}</td>
                       </tr>
                       
-                      @endif
                       @endforeach
 
                     </tbody>

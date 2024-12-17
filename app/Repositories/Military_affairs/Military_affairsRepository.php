@@ -2,16 +2,16 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\Military_affairsRepositoryInterface;
 use App\Models\Client;
 use App\Models\Installment;
 use App\Models\Installment_month;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_times_type;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Interfaces\Military_affairs\Military_affairsRepositoryInterface;
 
 class Military_affairsRepository implements Military_affairsRepositoryInterface
 {
@@ -217,6 +217,8 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
             $new_time_type = Military_affairs_times_type::findOrFail($new_one->id);
 
             Add_note($old_time_type, $new_time_type, $military_affairs_id); //eqrart not recieved
+            Add_note_time($new_time_type, $military_affairs_id);
+
             //   Add_note($old_time_type,3,$military_affairs_id);    // open file
 
             $add_data = new Installment_month;
