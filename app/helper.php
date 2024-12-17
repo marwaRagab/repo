@@ -1,18 +1,19 @@
 <?php
 
-use App\Models\Military_affairs\Military_affairs_times;
 use Carbon\Carbon;
 use App\Models\Log;
+use App\Models\User;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\InvoicesInstallment;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\InvoicesInstallment\Invoices_installment;
-use App\Models\Military_affairs\Military_affair;
 use App\Models\military_affairs_deligation;
-use App\Models\User;
+use App\Models\military_affairs_deligations;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -378,6 +379,17 @@ function get_all_actions($military_affairs_id)
 
 
     $notes = Military_affairs_times::where(['military_affairs_id' => $military_affairs_id])->get();
+
+    //dd($notes);
+    return $notes;
+
+}
+
+function get_all_delegations($military_affairs_id)
+{
+
+
+    $notes = military_affairs_deligation::where(['military_affairs_id' => $military_affairs_id])->get();
 
     //dd($notes);
     return $notes;

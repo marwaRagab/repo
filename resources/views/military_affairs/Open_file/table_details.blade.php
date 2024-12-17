@@ -263,6 +263,7 @@
                                             $all_notes = get_all_notes('open_file', $item->id);
                                             // dd();
                                             $all_actions = get_all_actions($item->id);
+                                            $get_all_delegations = get_all_delegations($item->id);
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                             role="tabpanel">
@@ -376,66 +377,60 @@
                                                     <!-- end row -->
                                                 </thead>
                                                 <tbody>
-
+                                                @foreach ($all_actions as $value)
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>1</td>
-                                                        <td>1</td>
-                                                        <td>1</td>
+                                                    @php
+                                                                $created_by = DB::table('users')
+                                                                    ->where('id', $value->created_by)
+                                                                    ->first();
+                                                                
+                                                            @endphp
+                                                        <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
+                                                        <td> @if ($value->timesType)
+                                                                                        {{ $value->timesType->name_ar }}
+                                                                                    @elseif ($value->bankType)
+                                                                                        {{ $value->bankType->name_ar }}
+                                                                                    @elseif ($value->carType)
+                                                                                        {{ $value->carType->name_ar }}
+                                                                                    @elseif ($value->salaryType)
+                                                                                        {{ $value->salaryType->name_ar }}
+                                                                                        @elseif ($value->travelType)
+                                                                                        {{ $value->travelType->name_ar }}
+                                                                                    @else
+                                                                                        لا يوجد
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                             @php
+
+                                                                $day_start = explode(' ', $value->date_start)[0];
+                                                                if (
+                                                                    $value->date_end &&
+                                                                    $value->date_end != '0000-00-00 00:00:00'
+                                                                ) {
+                                                                    $day_end = explode(' ', $value->date_end)[0];
+                                                                    $different_day = get_different_dates(
+                                                                        $day_start,
+                                                                        $day_end,
+                                                                    );
+                                                                } else {
+                                                                    $day_end = 'لم تنتهى';
+                                                                    $different_day = get_different_dates(
+                                                                        $day_start,
+                                                                        now(),
+                                                                    );
+                                                                }
+
+                                                                @endphp
+                                                                {{ $day_start }}
+                                                            </br>
+                                                            {{ $day_end }}
+                                                        </td>
+                                                        <td>{{ $different_day }}</td>
                                                         
 
                                                     </tr>
-
-
-                                                    <!-- start row -->
-                                                    @foreach ($all_notes as $value)
-                                                        @php
-                                                            $types = ['answered', 'note', 'refused'];
-                                                        @endphp
-
-                                                        @if (!in_array($value->notes_type, $types))
-                                                            <tr data-bs-toggle="collapse"
-                                                                data-bs-target="#collapseExample"
-                                                                aria-expanded="false" aria-controls="collapseExample">
-                                                                <td>
-                                                                    {{ $value->created_by }}
-                                                                </td>
-                                                                <td>
-
-                                                                </td>
-                                                                <td>
-                                                                    @php
-
-                                                                        $day_start = explode(
-                                                                            ' ',
-                                                                            $value->date_start,
-                                                                        )[0];
-                                                                        if ($value->date_end) {
-                                                                            $day_end = explode(
-                                                                                ' ',
-                                                                                $value->date_end,
-                                                                            )[0];
-                                                                        } else {
-                                                                            $day_end = date('Y-m-d');
-                                                                        }
-                                                                        $different_day = get_different_dates(
-                                                                            $day_start,
-                                                                            $day_end,
-                                                                        );
-
-                                                                    @endphp
-                                                                    {{ $day_start }}
-                                                                    {{ $day_end }}
-                                                                </td>
-
-                                                                <td>
-                                                                    {{ $different_day }}
-                                                                </td>
-
-                                                            </tr>
-                                                        @endif
                                                     @endforeach
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -455,7 +450,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <!-- start row -->
-                                                    @foreach ($all_actions as $value)
+                                                    @foreach ($get_all_delegations as $value)
                                                         <tr data-bs-toggle="collapse"
                                                             data-bs-target="#collapseExample" aria-expanded="false"
                                                             aria-controls="collapseExample">
@@ -465,20 +460,17 @@
                                                                     ->first();
                                                                 
                                                             @endphp
-                                                            <td>
-                                                            @if ($value->timesType)
-                                                                                        {{ $value->timesType->name_ar }}
-                                                                                    @elseif ($value->bankType)
-                                                                                        {{ $value->bankType->name_ar }}
-                                                                                    @elseif ($value->carType)
-                                                                                        {{ $value->carType->name_ar }}
-                                                                                    @elseif ($value->salaryType)
-                                                                                        {{ $value->salaryType->name_ar }}
-                                                                                        @elseif ($value->travelType)
-                                                                                        {{ $value->travelType->name_ar }}
-                                                                                    @else
-                                                                                        لا يوجد
-                                                                                    @endif
+                                                           <td>
+                                                                {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                    $value['image_date'] ? 'الايمج' : (
+                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
+                                                                    $value['travel_date'] ? 'منع السفر' : (
+                                                                    $value['car_date'] ? 'حجز السيارات' : (
+                                                                    $value['bank_date'] ? 'حجز بنوك' : (
+                                                                    $value['salary_date'] ? 'حجز راتب' : (
+                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
+                                                                    )))))))
+                                                                }}
                                                             </td>
                                                             <td>
                                                                 {{ $created_by->name_ar ?? 'لا يوجد' }}
