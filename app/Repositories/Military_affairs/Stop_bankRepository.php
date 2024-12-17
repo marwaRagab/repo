@@ -29,6 +29,10 @@ use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
 use App\Interfaces\Military_affairs\Stop_bankRepositoryInterface;
 use App\Models\Military_affairs\Military_affairs_certificate_type;
 use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
+use Carbon\Carbon;
+use App\Models\Military_affairs\Military_affairs_times;
+use App\Models\Client;
+
 
 class Stop_bankRepository implements Stop_bankRepositoryInterface
 {
@@ -71,8 +75,27 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
        // $this->log($user_id ,$message);
        // $user_id =  Auth::user()->id;
         $this->data['title']='    حجز بنوك';
-        $this->data['items']= Military_affair::where('archived','=',0)
-            ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])->with('installment')->with('status_all')->get();
+        $this->data['items'] = Military_affair::where('archived','=',0)
+            ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])->with('installment')->with('status_all')
+            // ->when(request()->has('stop_bank_type')   , function($q){
+            //     $type_id = Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=> request()->get('stop_bank_type')])->first();
+                // 
+                // ->whereHas('installment.client', function ($query) {
+                   
+                //   return $query->client->ministry_last;
+                //     // return $query->whereDay('date',request()->get('day'));
+                // });
+              
+            //  return   Military_affairs_times::where('times_type_id',$type_id)->whereYear('date_start',now()->year)
+            //     ->whereMonth('date_start', now()->month) 
+            //     ->selectRaw('DAY(date_start) as day, count(*) as count') 
+            //     ->groupBy(DB::raw('DAY(date_start)'));
+            //     // dd($type_id->id);
+            // })
+
+            ->get();
+            // dd($this->data['items']->first());
+
         $title=' حجز بنوك';
 
         $breadcrumb = array();
@@ -83,6 +106,8 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $stop_type= $request->stop_bank_type;
+        $date = $request->day;
+
         if(!$stop_type){
             $stop_type='stop_bank_request';
         }
@@ -100,11 +125,23 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         }
 
+        if($date)
+        {
+            $date_sel = '';
+        }
+
         $this->data['item_type_time_old']=Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=> $stop_type])->first();
         $this->data['item_type_time_new']=Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=>$new_type])->first();
+        $mins = array();
+        $this->data['ministries'] = Ministry::get()->groupBy('date');
 
+        // dd($this->data['items']);
         foreach ( $this->data['items'] as $value){
+            
+            $mins[$value->id] = $value->installment->client->ministry_last;
+            // $mins[$value->id]['client_id'] = $value->installment->client->id;
 
+            // dd($mins);
             $value->item_old_data=Prev_cols_military_affairs::where('military_affairs_id',$value->id) ->first();
 
             $value->different_date = get_different_dates($value->date,date('Y-m-d'));
@@ -117,8 +154,36 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             }else
                 $value->type_papar='لايوجد';
         }
-           // dd($this->data['items']);
 
+        $ministries = array_unique($mins);
+        // dd(($ministries));
+
+        // $mines = Ministry::whereIn('id', $ministries)->groupBy('date')->get();
+        // dd($ministries);
+        foreach($ministries as $one)
+        {
+           
+            $dates[$one] = Ministry::where('id', $one)->first()->date;
+            // $dates[$one]['count'] = Ministry::where('id', $one)->count();
+           
+            // $client_count[$one] = Client::with('get_ministry')
+            // //->whereIn('ministry_last', $ministries)
+            // // ->whereHas('get_ministry' , function ($q){
+            // //     $q->selectRaw('DAY(date) as day, count(*) as count') 
+            // //      ->groupBy(DB::raw('DAY(date)'));
+                                
+            // // })
+            // ->where('ministry_last',$one)
+            // // ->whereYear('date',now()->year)
+            // // ->whereMonth('date', now()->month) 
+            // // ->whereDay('date', now()->day) 
+           
+            // // ->groupBy('ministry_last')
+            // ->count();
+        }
+        // dd($dates);
+        $this->data['ministries'] = array_unique($dates);
+        // dd( $this->data['ministries']);
         $this->data['view']='military_affairs/Stop_bank/index';
         return view('layout',$this->data,compact('breadcrumb'));
 

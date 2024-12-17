@@ -433,9 +433,16 @@ function get_modal_name($id)
     return null;
 }
 
-
-
-
+ function get_by_dates($type_id)
+    {
+        $date_arr = Military_affairs_times::where(['times_type_id' => $type_id])->whereYear('date_start',now()->year)
+                                        ->whereMonth('date_start', now()->month) 
+                                        ->selectRaw('DAY(date_start) as day, count(*) as count') 
+                                        ->groupBy(DB::raw('DAY(date_start)'))
+                                        ->get();
+        // dd($date_arr);
+        return $date_arr;
+    }
 
 
 function count_client($array_data)

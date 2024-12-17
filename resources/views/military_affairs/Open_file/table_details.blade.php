@@ -509,6 +509,9 @@
                                                         </tr>
                                                     @endforeach
 
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                 </tbody>
                                             </table>
                                         </div>
