@@ -125,6 +125,10 @@
                     @endif
                     <th
                         class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        تحديد مسئول
+                    </th>
+                    <th
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الإجراءات
                     </th>
                 </tr>
@@ -180,6 +184,9 @@
                                     <th> المالية</th>
                                 @endif
 
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
                                 <td>
 
                                     @php
@@ -549,13 +556,13 @@
 
                                                 <li>
                                                     <a class="btn-static bg-secondary-subtle text-secondary rounded-0 w-100 mt-2"
-                                                       href="">
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة شهادة الراتب</a>
                                                 </li>
 
                                                 <li>
                                                     <a class="btn-static bg-danger-subtle text-danger rounded-0 w-100 mt-2"
-                                                       href="">
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة الرقم العسكرى </a>
                                                 </li>
 
@@ -572,7 +579,7 @@
                                     <td>
 
                                         <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                                                data-bs-target="#add-note-{{$item->id}}">
+                                                data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                             كتاب الاستعلام
                                         </button>
 
@@ -767,6 +774,9 @@
 
                                     </td>
                                 @endif
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
 
                                 <td>
 
@@ -1056,6 +1066,9 @@
                                 @if(Request::get('certificate_type')=='export')
                                     <td> الصادر والوارد</td>
                                 @endif
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
 
                                 <td>
 
