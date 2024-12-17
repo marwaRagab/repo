@@ -310,13 +310,10 @@
                                                                            value="{{ $item->id }}">
 
 
-                                                                           @if($item_type_time->type)
-                                                                                <input type="hidden" name="type" value="{{$item_type_time->type}}">
-                                                                            @else
-                                                                                <input type="hidden" name="type" value="">
-                                                                            @endif
+                                                                    <input type="hidden" name="type"
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -894,13 +891,11 @@
                                                                            value="{{ $item->id }}">
 
 
-                                                                           @if($item_type_time->type)
-                                                                                <input type="hidden" name="type" value="{{$item_type_time->type}}">
-                                                                            @else
-                                                                                <input type="hidden" name="type" value="">
-                                                                            @endif
+
+                                                                    <input type="hidden" name="type"
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -1188,17 +1183,11 @@
                                                                            value="{{ $item->id }}">
 
 
-                                                                           @if($item_type_time && $item_type_time->type)
-                                                                                <input type="hidden" name="type" value="{{ $item_type_time->type }}">
-                                                                            @else
-                                                                                <input type="hidden" name="type" value="">
-                                                                            @endif
-                                                                            @if($item_type_time && $item_type_time->id)
-                                                                                <input type="hidden" name="type_id" value="{{ $item_type_time->id }}">
-                                                                            @else
-                                                                                <input type="hidden" name="type_id" value="">
-                                                                            @endif
-                                                                    
+
+                                                                    <input type="hidden" name="type"
+                                                                           value="{{$item_type_time->type ?? ''}}">
+                                                                    <input type="hidden" name="type_id"
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
