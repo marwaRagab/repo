@@ -78,6 +78,11 @@
 
     @endif
 
+
+    <td>
+        @include('military_affairs.Open_file.partial.column_responsible')
+    </td>
+
     <td>
         @php
 
@@ -100,10 +105,10 @@
 
 
         @if(isset($new_a3lan))
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
+        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
             إيداع  النتيجة</button>
         @else
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
+        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
             إيداع الإعلان أولا</button>
         @endif
 
@@ -315,14 +320,14 @@
                                                                     <tbody>
                                                                     <!-- start row -->
                                                                     @foreach($all_actions as $value)
-                                                                       
+
                                                                             <tr data-bs-toggle="collapse"
                                                                                 data-bs-target="#collapseExample"
                                                                                 aria-expanded="false"
                                                                                 aria-controls="collapseExample">
                                                                                 @php
                                                                                 $created_by = DB::table('users')->where('id', $value->created_by)->first();
-                                                                                
+
                                                                                 @endphp
                                                                                 <td>
                                                                                 @if ($value->timesType)
@@ -353,11 +358,11 @@
                                                                                             $day_end = 'لم تنتهى';
                                                                                             $different_day = get_different_dates($day_start, now());
                                                                                         }
-                                                                                       
+
 
                                                                                     @endphp
                                                                                     {{$day_start}}
-                                                                                    
+
                                                                                 </td>
                                                                                 <td>{{$day_end}}</td>
 
