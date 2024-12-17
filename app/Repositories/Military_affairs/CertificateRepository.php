@@ -112,6 +112,7 @@ class CertificateRepository implements CertificateRepositoryInterface
         $this->data['item_type_time_money'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'money'])->first();
 
       
+        $this->data['get_responsible'] = get_responsible();
         $this->data['view'] = 'military_affairs/Military-certificate/index';
 
         // dd($this->data['items']);
