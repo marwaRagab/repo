@@ -2,17 +2,17 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\PapersRepositoryInterface;
-use App\Models\Installment;
-use App\Models\Installment_Client;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_times_type;
 use App\Models\User;
+use App\Models\Installment;
 use Illuminate\Http\Request;
+use App\Models\Installment_Client;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Interfaces\Military_affairs\PapersRepositoryInterface;
 
 class PapersRepository implements PapersRepositoryInterface
 {
@@ -119,6 +119,7 @@ class PapersRepository implements PapersRepositoryInterface
             $old_time_type = Military_affairs_times_type::findOrFail($old_one->id);
             $new_time_type = Military_affairs_times_type::findOrFail($new_one->id);
             Add_note($old_time_type, $new_time_type, $military_affairs_id); //to open file
+            Add_note_time($new_time_type, $request->military_affairs_id);
 
             return redirect()->route('papers.eqrar_dain_received')->with('message', 'تم التحويل بنجاح');
 
@@ -188,6 +189,8 @@ class PapersRepository implements PapersRepositoryInterface
             //  dd($new_time_type);
 
             Add_note($old_time_type, $new_time_type, $military_affairs_id); //eqrart not recieved
+            Add_note_time($new_time_type, $request->military_affairs_id);
+
             return redirect()->route('papers.eqrar_dain')->with('message', 'تم التحويل بنجاح');
 
         }

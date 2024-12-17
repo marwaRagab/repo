@@ -434,6 +434,7 @@ public function save_jobs_info(Request $request)
 
         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
 
+        Add_note_time($new_time_type, $request->military_affairs_id);
 
 
         return redirect()->route('stop_bank');
