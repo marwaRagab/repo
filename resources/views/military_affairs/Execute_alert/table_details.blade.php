@@ -99,6 +99,19 @@
             الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
         </button>
 
+        <div class="dropdown">
+            <!-- Dropdown button -->
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                طباعة
+            </button>
+            <!-- Dropdown links -->
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="{{ route('print_case_proof') }}" target="_blank">اثبات حالة</a></li>
+                <li><a class="dropdown-item" href="{{ route('print_sticker') }}" target="_blank">ستيكر ملف التنفيذ</a></li>
+                <li><a class="dropdown-item" href="https://www.example.com/contact" target="_blank">Link 3</a></li>
+            </ul>
+        </div>
+
         @php
         $new_a3lan= $item->jalasaat_all->where('status',NULL)->first();
         @endphp
