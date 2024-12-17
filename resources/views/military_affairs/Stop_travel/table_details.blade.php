@@ -66,11 +66,8 @@
 
             </td>
             <td>
-                @include('military_affairs.Open_file.partial.column_responsible')
-            </td>
-            <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#convert_command-{{$item->id}}">
+                        data-bs-target="#convert_command-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
@@ -176,11 +173,8 @@
 
             </td>
             <td>
-                @include('military_affairs.Open_file.partial.column_responsible')
-            </td>
-            <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#cancel_stop_travel-{{$item->id}}">
+                        data-bs-target="#cancel_stop_travel-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
@@ -274,7 +268,7 @@
         
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#convert_resuest-{{$item->id}}">
+                        data-bs-target="#convert_resuest-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
