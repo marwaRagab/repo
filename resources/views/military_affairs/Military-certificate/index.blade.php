@@ -125,6 +125,10 @@
                     @endif
                     <th
                         class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        تحديد مسئول
+                    </th>
+                    <th
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الإجراءات
                     </th>
                 </tr>
@@ -180,6 +184,9 @@
                                     <th> المالية</th>
                                 @endif
 
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
                                 <td>
 
                                     @php
@@ -311,9 +318,9 @@
 
 
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -433,10 +440,21 @@
                                                                                 aria-controls="collapseExample">
                                                                                 @php
                                                                                 $created_by = DB::table('users')->where('id', $value->created_by)->first();
-                                                                                $type = DB::table('military_affairs_times_type')->where('id', $value->times_type_id)->first();
                                                                                 @endphp
                                                                                 <td>
-                                                                                    {{$type->name_ar ?? 'لا يوجد'}}
+                                                                                    @if ($value->timesType)
+                                                                                            {{ $value->timesType->name_ar }}
+                                                                                        @elseif ($value->bankType)
+                                                                                            {{ $value->bankType->name_ar }}
+                                                                                        @elseif ($value->carType)
+                                                                                            {{ $value->carType->name_ar }}
+                                                                                        @elseif ($value->salaryType)
+                                                                                            {{ $value->salaryType->name_ar }}
+                                                                                            @elseif ($value->travelType)
+                                                                                            {{ $value->travelType->name_ar }}
+                                                                                        @else
+                                                                                            لا يوجد
+                                                                                        @endif
                                                                                 </td>
                                                                                 <td>
                                                                                   {{$created_by->name_ar ?? 'لا يوجد'}}
@@ -538,13 +556,13 @@
 
                                                 <li>
                                                     <a class="btn-static bg-secondary-subtle text-secondary rounded-0 w-100 mt-2"
-                                                       href="">
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة شهادة الراتب</a>
                                                 </li>
 
                                                 <li>
                                                     <a class="btn-static bg-danger-subtle text-danger rounded-0 w-100 mt-2"
-                                                       href="">
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة الرقم العسكرى </a>
                                                 </li>
 
@@ -561,7 +579,7 @@
                                     <td>
 
                                         <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                                                data-bs-target="#add-note-{{$item->id}}">
+                                                data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                             كتاب الاستعلام
                                         </button>
 
@@ -756,6 +774,9 @@
 
                                     </td>
                                 @endif
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
 
                                 <td>
 
@@ -864,7 +885,7 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}}}<span
+                                                                            <td>{{formatTime($time)}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
@@ -880,10 +901,11 @@
                                                                            value="{{ $item->id }}">
 
 
+
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -1045,6 +1067,9 @@
                                 @if(Request::get('certificate_type')=='export')
                                     <td> الصادر والوارد</td>
                                 @endif
+                                <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
 
                                 <td>
 
@@ -1171,10 +1196,11 @@
                                                                            value="{{ $item->id }}">
 
 
+
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>

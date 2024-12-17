@@ -2,31 +2,31 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
+use App\Models\Log;
+use Inertia\Inertia;
 use App\Models\Court;
+use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
+use Illuminate\Http\Request;
 use App\Models\InstallmentNote;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_certificate_type;
-use App\Models\Military_affairs\Military_affairs_jalasaat;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\Military_affairs\Military_affairs_status;
-use App\Models\Military_affairs\Military_affairs_stop_bank_type;
-use App\Models\Military_affairs\Military_affairs_stop_car_type;
-use App\Models\Military_affairs\Military_affairs_stop_salary_type;
-use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Models\Military_affairs\Stop_travel_types;
-use App\Models\Ministry;
+use Yajra\DataTables\DataTables;
 use App\Models\Prev_cols_clients;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Log;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Stop_travel_types;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_status;
+use App\Models\Military_affairs\Military_affairs_jalasaat;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Models\Military_affairs\Military_affairs_stop_car_type;
+use App\Models\Military_affairs\Military_affairs_stop_bank_type;
+use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
+use App\Models\Military_affairs\Military_affairs_certificate_type;
+use App\Models\Military_affairs\Military_affairs_stop_salary_type;
 
 class Open_fileRepository implements Open_fileRepositoryInterface
 {
@@ -99,7 +99,9 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
         }
 
+
             //dd($this->data['items']);
+        $this->data['get_responsible'] = get_responsible();
 
         $this->data['view']='military_affairs/Open_file/index';
         return view('layout',$this->data,compact('breadcrumb'));
@@ -143,6 +145,8 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         }
 
         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
+        Add_note_time($new_time_type, $request->military_affairs_id);
+
         change_status($request,$request->military_affairs_id);
         $id=$request->military_affairs_id;
 
@@ -237,6 +241,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         }
 
         //dd($this->data['items']);
+        $this->data['get_responsible'] = get_responsible();
 
         $this->data['view']='military_affairs/Case_proof/index';
         return view('layout',$this->data,compact('breadcrumb'));
@@ -280,6 +285,8 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         if($request->client_job=='military'){
 
             Add_note($old_time_type,$new_time_type4,$request->military_affairs_id);
+            Add_note_time($new_time_type4, $request->military_affairs_id);
+
 
         }
         $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL,'military_affairs_id' =>$request->military_affairs_id])->first();
@@ -290,12 +297,31 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         }
 
         Add_note($old_time_type,$new_time_type1,$request->military_affairs_id);
+        Add_note_time($new_time_type1, $request->military_affairs_id);
+
         Add_note($old_time_type,$new_time_type2,$request->military_affairs_id);
+        Add_note_time($new_time_type2, $request->military_affairs_id);
+
         Add_note($old_time_type,$new_time_type3,$request->military_affairs_id);
+        Add_note_time($new_time_type3, $request->military_affairs_id);
+
         return redirect()->route('case_proof');
 
     }
 
+
+
+    public function update_responsible(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $military_id = $request->input('military_id');
+        $status = $request->input('status');
+        if (function_exists('update_responsible')) {
+            $result = update_responsible($user_id, $military_id, $status);
+            return back();
+        }
+        return response()->json(['success' => false, 'message' => 'Function not found.']);
+    }
 
 
 

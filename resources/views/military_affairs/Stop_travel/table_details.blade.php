@@ -65,7 +65,7 @@
             </td>
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#convert_command-{{$item->id}}">
+                        data-bs-target="#convert_command-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
@@ -172,7 +172,7 @@
             </td>
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#cancel_stop_travel-{{$item->id}}">
+                        data-bs-target="#cancel_stop_travel-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
@@ -261,10 +261,12 @@
 
             <td>{{$final_date_request ?   $final_date_request[0] : ''}}</td>
             <td>{{$final_date[0]}}</td>
+           
         @else
+        
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                        data-bs-target="#convert_resuest-{{$item->id}}">
+                        data-bs-target="#convert_resuest-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
 
                     منع السفر
                 </button>
@@ -340,7 +342,9 @@
             </td>
 
         @endif
-
+        <td>
+            @include('military_affairs.Open_file.partial.column_responsible')
+        </td>
 
         <td>
             <div class="btn-group dropup mb-6 me-6">

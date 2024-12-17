@@ -59,7 +59,9 @@ class Open_fileController extends Controller
     }
 
 
-
-
+    public function update_responsible(Request $request)
+    {
+        return $this->OpenFileRepository->update_responsible($request);
+    }
 
 }
