@@ -34,8 +34,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $this->data['item_type_time'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => 'stop_car'])->first();
         $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => 'stop_car'])->first();
 
-//SELECT GROUP_CONCAT(name_en SEPARATOR ',') AS all_names FROM military_affairs_stop_car_type WHERE id > 1;
-
+           //SELECT GROUP_CONCAT(name_en SEPARATOR ',') AS all_names FROM military_affairs_stop_car_type WHERE id > 1;
         //    stop_car_request,stop_car_info,stop_car_police,stop_car_catch,stop_car_police_station,stop_car_doing,stop_car_finished,stop_car_cancel_request,stop_car_cancel
 
         $stop_type = $stop_car_type;
@@ -111,7 +110,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             } else {
                 $value->type_papar = 'لايوجد';
             }
-
+         
         }
 
         $breadcrumb = array();
