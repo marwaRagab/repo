@@ -81,21 +81,22 @@
     </div>
     @endif
 </div>
-@php
-$dates = get_by_dates($item_type_time_old->id);
-@endphp
-@if(count($dates) > 0 || request()->has('day'))
+
+
+@if(count($ministries) > 0 || request()->has('day'))
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        @foreach($dates as $one)
-        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'day' => $one->day))}}"
+        @foreach($ministries as $one)
+      
+        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'day' => $one))}}"
             class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            {{now()->format('Y').'/'.now()->format('m').'/'.$one->day}} ({{ $one->count}})
+            {{now()->format('Y').'/'.now()->format('m').'/'.$one->format('d')}} ({{ $one}})
         </a>
         @endforeach
     </div>
 </div>
 @endif
+
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">حجز بنوك </h4>
