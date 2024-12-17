@@ -311,9 +311,9 @@
 
 
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -892,9 +892,9 @@
 
 
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
@@ -1183,9 +1183,9 @@
 
 
                                                                     <input type="hidden" name="type"
-                                                                           value="{{$item_type_time->type}}">
+                                                                           value="{{$item_type_time->type ?? ''}}">
                                                                     <input type="hidden" name="type_id"
-                                                                           value="{{$item_type_time->id}}">
+                                                                           value="{{$item_type_time->id ?? ''}}">
                                                                     <div class="form-row">
                                                                         <div class="form-group">
                                                                             <label class="form-label"> الاتصال</label>
