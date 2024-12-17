@@ -78,6 +78,11 @@
 
     @endif
 
+
+    <td>
+        @include('military_affairs.Open_file.partial.column_responsible')
+    </td>
+
     <td>
         @php
 
@@ -94,16 +99,29 @@
             الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
         </button>
 
+        <div class="dropdown">
+            <!-- Dropdown button -->
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                طباعة
+            </button>
+            <!-- Dropdown links -->
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="{{ route('print_case_proof') }}" target="_blank">اثبات حالة</a></li>
+                <li><a class="dropdown-item" href="{{ route('print_sticker') }}" target="_blank">ستيكر ملف التنفيذ</a></li>
+                <li><a class="dropdown-item" href="https://www.example.com/contact" target="_blank">Link 3</a></li>
+            </ul>
+        </div>
+
         @php
         $new_a3lan= $item->jalasaat_all->where('status',NULL)->first();
         @endphp
 
 
         @if(isset($new_a3lan))
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
+        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
             إيداع  النتيجة</button>
         @else
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
+        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
             إيداع الإعلان أولا</button>
         @endif
 
@@ -315,14 +333,14 @@
                                                                     <tbody>
                                                                     <!-- start row -->
                                                                     @foreach($all_actions as $value)
-                                                                       
+
                                                                             <tr data-bs-toggle="collapse"
                                                                                 data-bs-target="#collapseExample"
                                                                                 aria-expanded="false"
                                                                                 aria-controls="collapseExample">
                                                                                 @php
                                                                                 $created_by = DB::table('users')->where('id', $value->created_by)->first();
-                                                                                
+
                                                                                 @endphp
                                                                                 <td>
                                                                                 @if ($value->timesType)
@@ -353,11 +371,11 @@
                                                                                             $day_end = 'لم تنتهى';
                                                                                             $different_day = get_different_dates($day_start, now());
                                                                                         }
-                                                                                       
+
 
                                                                                     @endphp
                                                                                     {{$day_start}}
-                                                                                    
+
                                                                                 </td>
                                                                                 <td>{{$day_end}}</td>
 
