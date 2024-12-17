@@ -458,6 +458,31 @@ function get_different_dates($first_end_date, $second_end_date)
 
 }
 
+function get_different_date($first_end_date, $second_end_date)
+    {
+        // Convert timestamps to DateTime strings if necessary
+        if (is_numeric($first_end_date)) {
+            $first_end_date = date('Y-m-d', $first_end_date);
+        }
+        if (is_numeric($second_end_date)) {
+            $second_end_date = date('Y-m-d', $second_end_date);
+        }
+
+        // Ensure both dates are valid
+        $datetime1 = date_create($first_end_date);
+        $datetime2 = date_create($second_end_date);
+
+        if (!$datetime1 || !$datetime2) {
+            return 'تاريخ غير صالح';
+        }
+
+        // Calculate the difference
+        $interval = date_diff($datetime1, $datetime2);
+
+        // Format the output
+        return $interval->days . ' يوم';
+    }
+
 function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $description, $process_type, $payment_type)
 {
 
