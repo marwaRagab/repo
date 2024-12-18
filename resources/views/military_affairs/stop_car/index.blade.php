@@ -119,7 +119,7 @@
                                         <div class="tab-content border mt-2">
                                             @php
 
-                                                $all_notes = get_all_notes('stop_car', $one->id);
+                                                $all_notes = get_all_notes('stop_car', $one->military_affairs_id);
                                             @endphp
                                             <div class="tab-pane active p-3" id="navpill-1" role="tabpanel">
                                                 <form class="mega-vertical" action="{{ url('add_notes') }}"

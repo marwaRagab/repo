@@ -268,12 +268,10 @@
 
                                     <div class="tab-content border mt-2">
                                         @php
-
                                             $all_notes = get_all_notes('open_file',$item->installment_id);
-
                                             // dd();
-                                            $all_actions = get_all_actions($item->id);
-                                            $get_all_delegations = get_all_delegations($item->id);
+                                            $all_actions = get_all_actions($item->installment_id);
+                                            $get_all_delegations = get_all_delegations($item->installment_id);
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                             role="tabpanel">
