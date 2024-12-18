@@ -20,9 +20,9 @@ class Stop_salaryController extends Controller
     {
         $this->Stop_salaryRepository = $Stop_salaryRepository;
     }
-    public function index()
+    public function index(Request $request)
     {
-        return   $this->Stop_salaryRepository->index();
+        return   $this->Stop_salaryRepository->index($request);
 
     }
    

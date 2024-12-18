@@ -6,6 +6,6 @@ use Illuminate\Http\Request;
 
 interface Stop_salaryRepositoryInterface
 {
-    public function index();
+    public function index(Request $request);
    
 }
