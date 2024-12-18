@@ -20,6 +20,8 @@ use App\Models\Court;
 use App\Models\Ministry;
 use Illuminate\Http\Request;
 use App\Models\Military_affairs\Military_affairs_stop_salary_type;
+use App\Models\Military_affairs\Military_affairs_times;
+use App\Models\Military_affairs\Military_affairs_status;
 
 class Stop_salaryRepository implements Stop_salaryRepositoryInterface
 {
@@ -32,7 +34,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $this->data['title']='حجز راتب';
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
-        $this->data['ministries'] = Ministry::get();
+        // $this->data['ministries'] = Ministry::get();
         $this->data['stop_travel_types'] = Military_affairs_stop_salary_type::all();
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
                         'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
@@ -54,7 +56,8 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $this->data['items'] = Military_affair::with('status_all')->with('mil_times.salaryType')
                                                 ->with('installment','installment.client.court')
                                                 ->when(request()->has('court'), function ($query)  {
-                                                    return $query->with('installment.client.court')->whereHas('installment.client.court', function ($q)  {
+                                                    return $query->with('installment.client.court')
+                                                             ->whereHas('installment.client.court', function ($q)  {
                                                               $q->where('governorate_id', request()->get('court'));
                                                             });
                                                 })
@@ -65,7 +68,10 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 })
                                                 ->when(request()->has('type'), function ($query) {
                                                     $query->whereHas('mil_times.salaryType', function ($q)  {
-                                                        $q->where('slug', request()->get('type'));
+                                                        $q->where('id', request()->get('type'))
+                                                        //    ->where('mins_id',request()->get('minsitry_id'))
+                                                        //    ->orwhere('mins_id','=','all')
+                                                        ;
                                                         });
                                                 })
                                                 ->whereHas('installment', function ($q){
@@ -77,13 +83,25 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 ->where('archived',0)
                                                 ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_salary' => 1  ])
                                                 ->orderBy('installment_id','asc')
+                                                ->withCount('installment')
                                                 ->get();
+                                
         $this->data['item_type_time1'] = Military_affairs_stop_salary_type::where(['type'=> 'stop_salary','slug'=> $stop_type])->first();
-        $this->data['item_type_time'] = Military_affairs_stop_salary_type::all();
+        if(request()->has('minsitry_id') &&  request()->get('minsitry_id') == 5)
+        {
+            $this->data['item_type_time'] = Military_affairs_stop_salary_type::where('mins_id','!=',27)->orderBy('id','asc')->get();
+        }
+        else if(request()->has('minsitry_id') &&  request()->get('minsitry_id') == 27)
+        {
+            $this->data['item_type_time'] = Military_affairs_stop_salary_type::where('mins_id','!=',5)->orderBy('id','asc')->get();
+        }
+        else{
+            $this->data['item_type_time'] = Military_affairs_stop_salary_type::where('mins_id','!=',5)->where('mins_id','!=',27)->orderBy('id','asc')->get();
+        }
 
         $this->data['ministries'] = Ministry::whereIN('id',[5,14,27])->get();
-
-// dd($this->data['item_type_time']);
+        // $this->data['count'] = count($this->data['items']);
+        // dd($this->data['item_type_time']);
         $this->data['stop_salary_type'] = '';                                        
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -95,6 +113,152 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $view='military_affairs/stop_salary/index';
         $title=$this->title;
         return view('layout',compact(['title','view','breadcrumb']),$this->data);
+    }
+
+    public function stop_salary_convert(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'date' => 'required| date',
+            'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ]);
+        $all_types = Military_affairs_stop_salary_type::all();
+        for($i=0 ; $i < count($all_types ); $i++)
+         {
+            if($all_types[$i]['id'] == $request->item_type_old)
+            {
+                $array_new = Military_affairs_stop_salary_type::findorfail($all_types[$i]['id'] + 1);
+            }
+              
+         }
+        $array_old = Military_affairs_stop_salary_type::findorfail($request->item_type_old);
+       
+        // if($request->minist_id == 5 && $request->item_type_old == 10)
+        //  {
+        //     $array_new = Military_affairs_stop_salary_type::findorfail(11);
+        //  }
+        //  if($request->minist_id == 14 && $request->item_type_old == 12)
+        //  {
+        //     $array_new = Military_affairs_stop_salary_type::findorfail(13);
+        //  }
+        //  else
+        //  {
+        //     $array_new = Military_affairs_stop_salary_type::findorfail($array_old->id +1);
+        //  }
+        //  dd($array_new);
+
+        $item_time = Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->first();
+        $item_status = Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->first();
+        
+        if($item_status){
+            $data_status['flag']=1;
+            $item_status->update($data_status);
+        }
+       // dd($item_status);
+        if($item_time){
+            $data['date_end'] = date('Y-m-d H:i:s');
+            $item_time->update($data);
+        }
+        Add_note($array_old, $array_new, $request->military_affairs_id);
+        Add_note_time($array_new, $request->military_affairs_id);
+        change_status($request, $request->military_affairs_id);
+
+        return redirect()->route('stop_salary')->with('success', 'تم حفظ البيانات بنجاح');
+
+    }
+
+
+    public function stop_salary_request_update($id)
+    {
+
+        $data['slug_page'] = $this->slug_page;
+
+        $data["item"] = $this->db_get->get_by_id('military_affairs', $id);
+
+        $data["client"] = $this->client_install_sql($data["item"]['installment_id']);
+
+        //echo '<pre>';  print_r($data); exit;
+
+        if (isset($_POST['btn_save'])) {
+
+            $HTTP_REFERER = $this->request->getPost('HTTP_REFERER');
+            $add_data["stop_salary_request"] = 1;
+
+            $add_data['stop_car_request_date'] = strtotime($this->request->getPost('stop_car_request_date'));
+
+            //echo '<pre>';  print_r($add_data); exit;
+
+            $fieldname = 'img_dir';
+
+            if ($_FILES[$fieldname]['name'] != "") {
+
+                $upload_data = $this->upload_many_photos($fieldname);
+
+                $add_data["stop_salary_request_img"] = "/uploads/new_photos/" . $upload_data;
+
+            } else {
+                set_msg('<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                <strong>
+                عفوا يوجد خطأ فى رفع الصورة.
+
+               </strong>
+              </div>');
+                return redirect()->back()->withInput()->with('errors', 'هذا الحقل مطلوب');
+            }
+
+            helper(['form']);
+            $rules = [
+                'stop_car_request_date' => 'required|date',
+
+            ];
+
+            if (!$this->validate($rules)) {
+                set_msg('<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                <strong>
+                عفوا التاريخ مطلوب
+               </strong>
+              </div>');
+
+            } else {
+                $this->db_get->update_tb('military_affairs', $id, $add_data);
+
+                //$this->load->library('military_affairs/military_affairs_times');
+
+                $this->update_time_with_date(9, $id, $add_data['stop_car_request_date']);
+                $this->add_time_with_date(10, $id, $add_data['stop_car_request_date']);
+                $this->add_note_time(9, 10, $id, $add_data["stop_salary_request_img"]);
+
+                set_msg('<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                <strong>
+                تمت العملية بنجاح .
+               </strong>
+              </div>');
+                set_moving('move', 'تم  طلب حجز راتب ', $this->session->get('admin')['id']);
+                return redirect()->to($HTTP_REFERER);
+            }
+
+            set_msg('<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
+                <strong>
+                عفوا يوجد خطأ
+               </strong>
+              </div>');
+
+        }
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " الشئون القانونية";
+        $breadcrumb[1]['url'] = route("military_affairs");
+        $breadcrumb[2]['title'] = $this->data['title'];
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        $view='military_affairs/stop_salary/index';
+        $title=$this->title;
+        return view('layout',compact(['title','view','breadcrumb']),$this->data);
+
     }
     public function index_old($governate_id=null,$stop_salary_type=null,$ministry=null)
     {

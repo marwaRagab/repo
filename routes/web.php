@@ -239,6 +239,7 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs/stop_car/{governorate_id?}/{stop_car_type?}/{police_station_id?}', [Stop_carController::class, 'index'])->name('stop_car');
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');
+    Route::post('military_affairs/stop_salary/request_update/{id}', [Stop_salaryController::class, 'stop_salary_convert'])->name('stop_salary_convert');
 
     Route::get('military_affairs/image/{governorate_id?}', [ImageController::class, 'index'])->name('image');
     Route::post('military_affairs/image/to_a3lan_eda3', [ImageController::class, 'to_a3lan_eda3'])->name('image.to_a3lan_eda3');

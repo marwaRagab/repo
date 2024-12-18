@@ -25,5 +25,10 @@ class Stop_salaryController extends Controller
         return   $this->Stop_salaryRepository->index($request);
 
     }
+    public function stop_salary_convert(Request $request)
+    {
+        return   $this->Stop_salaryRepository->stop_salary_convert($request);
+    }
+
    
 }

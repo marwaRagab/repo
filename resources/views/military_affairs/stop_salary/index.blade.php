@@ -31,13 +31,10 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
 
-        @foreach($item_type_time as $type)
-        @if(request()->has('minsitry_id') == 5 && ($type->slug == 'stop_salary_sabah_salem' ) )
-        @continue
-        @endif
-        <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $type->slug ))}}"
+        @foreach($item_type_time as $item_type)
+        <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->id ))}}"
             class="btn-filter bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
-            {{$type->name_ar}}
+            {{$item_type->name_ar}}
         </a>
         @endforeach
     </div>
@@ -52,6 +49,11 @@
             <table id="all-student" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <!-- start row -->
+                    @php
+                    $type_name =
+                    \App\Models\Military_affairs\Military_affairs_stop_salary_type::where('id',request()->get('type'))?->first()?->name_ar;
+
+                    @endphp
                     <tr>
                         <th>م</th>
                         <th> رقم المعاملة</th>
@@ -64,7 +66,7 @@
                             الرقم الآلي
                         </th>
                         @if(request()->has('type'))
-                        <th>{{request()->get('type') }}</th>
+                        <th>{{ $type_name }}</th>
                         @endif
                         <th> الاجراءات</th>
 
@@ -94,8 +96,79 @@
                         <td>{{ $item->open_file_date}}</td>
                         <td>{{$item->issue_id}}</td>
                         @if(request()->has('type'))
-                        <td> <a class="btn btn-primary rounded-0 w-100 mt-2" href="">
-                            {{ $item->mil_times ?? $item->mil_times->salaryType->name_ar }}</a></td>
+
+                        <!-- <td> <a class="btn btn-primary rounded-0 w-100 mt-2"
+                                href="{{ route('stop_salary_convert', $item->id) }}">
+                                {{ request()->get('type')}}</a></td> -->
+
+                        <td>
+                            <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                                data-bs-target="#convert_command-{{$item->id}}"> {{ $type_name }}
+                            </button>
+                            <div id="convert_command-{{$item->id}}" class="modal fade" tabindex="-1"
+                                aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content">
+                                        <form class="mega-vertical" action="{{route('stop_salary_convert', $item->id)}}"
+                                            method="post" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="military_affairs_id" value="{{$item->id}}">
+                                            <input type="hidden" name="minist_id"
+                                                value="{{$item->installment->client->get_ministry->id}}">
+                                            <input type="hidden" name="type" value="{{$item_type_time1->type}}">
+                                            <input type="hidden" name="type_id" value="{{$item_type_time1->slug}}">
+                                            <input type="hidden" name="item_type_new"
+                                                value="{{request()->get('type')}}">
+                                            <input type="hidden" name="item_type_old" value="{{$item_type_time1->id}}">
+
+                                            <div class="modal-header d-flex align-items-center">
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    حجز راتب </h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="form-row">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="input1 ">
+                                                            تاريخ </label>
+                                                        <input type="date" name="date" class="form-control mb-2"
+                                                            id="input1">
+                                                        @error('date')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="formFile" class="form-label">اختر
+                                                            صورة </label>
+                                                        <input class="form-control" name="img_dir" accept="image/*"
+                                                            type="file" id="formFile" />
+                                                        @error('img_dir')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer d-flex ">
+                                                <button type="submit" class="btn btn-primary">حفظ
+                                                </button>
+                                                <button type="button"
+                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                    data-bs-dismiss="modal">
+                                                    الغاء
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+
+                        </td>
                         @endif
                         <td>
                             <div class="btn-group dropup mb-6 me-6 d-block ">
