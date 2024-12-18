@@ -155,8 +155,6 @@
 
                 @foreach($items as $item)
                     
-
-                    @foreach($items as $item)
                     
                     @if($item->installment->finished==0)
                    

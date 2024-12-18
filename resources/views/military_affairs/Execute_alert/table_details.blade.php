@@ -86,9 +86,9 @@
     <td>
         @php
 
-        $all_notes=get_all_notes('execute_alert',$item->id);
-        $all_actions=get_all_actions($item->id);
-        $get_all_delegations = get_all_delegations($item->id);
+        $all_notes=get_all_notes('execute_alert',$item->installment_id);
+        $all_actions=get_all_actions($item->installment_id);
+        $get_all_delegations = get_all_delegations($item->installment_id);
 
         @endphp
         <a class="btn btn-success me-6 my-2"
@@ -101,18 +101,9 @@
             الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
         </button>
 
-        <div class="dropdown">
-            <!-- Dropdown button -->
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                طباعة
-            </button>
-            <!-- Dropdown links -->
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="{{ route('print_case_proof') }}" target="_blank">اثبات حالة</a></li>
-                <li><a class="dropdown-item" href="{{ route('print_sticker') }}" target="_blank">ستيكر ملف التنفيذ</a></li>
-                <li><a class="dropdown-item" href="https://www.example.com/contact" target="_blank">Link 3</a></li>
-            </ul>
-        </div>
+
+        @include('military_affairs.Execute_alert.print.print')
+        
 
         @php
         $new_a3lan= $item->jalasaat_all->where('status',NULL)->first();

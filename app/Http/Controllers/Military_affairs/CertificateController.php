@@ -70,6 +70,10 @@ class CertificateController extends Controller
     {
         return view('military_affairs.Execute_alert.print.sticker');
     }
+    public function print_issue()
+    {
+        return view('military_affairs.Execute_alert.print.issue');
+    }
 
 
 }

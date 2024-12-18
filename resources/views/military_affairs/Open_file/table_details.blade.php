@@ -1,4 +1,4 @@
-<tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+<tr >
     <td>
         {{ $loop->index + 1 }}
     </td>
@@ -34,7 +34,7 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
-                    <form class="mega-vertical" action="{{ route('to_ex_alert') }}" method="post"
+                    <form class="mega-vertical_open" action="{{ route('to_ex_alert') }}" method="post"
                         enctype="multipart/form-data">
                         <div class="modal-header d-flex align-items-center">
                             <h4 class="modal-title" id="myModalLabel">
@@ -199,13 +199,17 @@
     </td>
 
 
+   
 
     <td>
+        @include('military_affairs.Execute_alert.print.print')
         <div class="btn-group dropup mb-6 me-6">
+            
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 الإجراءات
             </button>
+            
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li>
                     <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
@@ -218,7 +222,12 @@
                         الملاحظات</a>
                 </li>
 
+            
+                
+
             </ul>
+
+            
             <div id="open-details-{{ $item->id }}" class="modal fade" tabindex="-1"
                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -259,11 +268,10 @@
 
                                     <div class="tab-content border mt-2">
                                         @php
-
-                                            $all_notes = get_all_notes('open_file', $item->id);
+                                            $all_notes = get_all_notes('open_file',$item->installment_id);
                                             // dd();
-                                            $all_actions = get_all_actions($item->id);
-                                            $get_all_delegations = get_all_delegations($item->id);
+                                            $all_actions = get_all_actions($item->installment_id);
+                                            $get_all_delegations = get_all_delegations($item->installment_id);
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                             role="tabpanel">
@@ -284,8 +292,9 @@
                                                 <tbody>
 
 
-                                                    <!-- start row -->
-                                                    @foreach ($all_notes as $all_note)
+                                                    @if (count($all_notes) > 0 )
+                                                        <!-- start row -->
+                                                        @foreach ($all_notes as $all_note)
                                                         <tr data-bs-toggle="collapse"
                                                             data-bs-target="#collapseExample" aria-expanded="false"
                                                             aria-controls="collapseExample">
@@ -320,13 +329,20 @@
                                                             <td>{{ $day }}</td>
 
                                                         </tr>
-                                                    @endforeach
+                                                        @endforeach
+                                                    @else
+                                                    <tr>
+                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                    </tr>
+                                                        
+                                                    @endif
+                                                   
                                                 </tbody>
                                             </table>
                                             <div class="add-note">
                                                 <h4 class="mb-3">اضف ملاحظة</h4>
                                                 <input type="hidden" name="military_affairs_id"
-                                                    value="{{ $item->id }}">
+                                                    value="{{ $item->installment_id}}">
                                                 <input type="hidden" name="id_time_type_old"
                                                     value="{{ $item_type_time->id }}">
                                                 <input type="hidden" name="id_time_type_new"
@@ -535,5 +551,55 @@
             </div>
 
         </div>
+        
     </td>
 </tr>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector('.mega-vertical_open');
+
+    form.addEventListener("submit", function (event) {
+        let isValid = true;
+
+        // Clear previous error messages
+        form.querySelectorAll(".error-message").forEach(e => e.remove());
+
+        // Validate date
+        const dateInput = form.querySelector("input[name='date']");
+        if (!dateInput.value) {
+            showError(dateInput, "تاريخ فتح الملف مطلوب");
+            isValid = false;
+        }
+
+        // Validate issue_id
+        const issueIdInput = form.querySelector("input[name='issue_id']");
+        if (!issueIdInput.value.trim()) {
+            showError(issueIdInput, "الرقم الآلي للقضية مطلوب");
+            isValid = false;
+        } else if (!/^\d+$/.test(issueIdInput.value)) {
+            showError(issueIdInput, "يجب أن يحتوي الرقم الآلي للقضية على أرقام فقط");
+            isValid = false;
+        }
+
+        // Validate place
+        const placeSelect = form.querySelector("select[name='place']");
+        if (!placeSelect.value) {
+            showError(placeSelect, "يرجى اختيار الجهة");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+        }
+    });
+
+    function showError(input, message) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error-message text-danger";
+        errorDiv.textContent = message;
+        input.closest(".form-group").appendChild(errorDiv);
+    }
+});
+</script>

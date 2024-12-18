@@ -105,8 +105,8 @@
                                                                         'eqrar_dain',
                                                                         $one->m_a_id,
                                                                     );
-                                                                    $all_actions=get_all_actions($item->id);
-                                                                    $get_all_delegations = get_all_delegations($item->id);
+                                                                    $all_actions=get_all_actions($item->installment_id);
+                                                                    $get_all_delegations = get_all_delegations($item->installment_id);
                                                                     //   dd($all_notes);
                                                                 @endphp
                                                                 <div class="tab-pane active p-3" id="navpill-1"

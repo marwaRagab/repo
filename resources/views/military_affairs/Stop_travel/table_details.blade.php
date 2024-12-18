@@ -345,6 +345,7 @@
         <td>
             @include('military_affairs.Open_file.partial.column_responsible')
         </td>
+        
 
         <td>
             <div class="btn-group dropup mb-6 me-6">
@@ -407,16 +408,19 @@
 
                                     </ul>
                                     <!-- Tab panes -->
+                                     
                                     @if(count($items)>=1)
 
                                         <div class="tab-content border mt-2">
                                             @php
 
-                                                $all_notes=get_all_notes('stop_travel',$item->id);
-                                                $all_actions=get_all_actions($item->id);
-                                                $get_all_delegations = get_all_delegations($item->id);
+                                                $all_notes=get_all_notes('stop_travel',$item->installment_id);
+                                                $all_actions=get_all_actions($item->installment_id);
+                                                $get_all_delegations = get_all_delegations($item->installment_id);
 
                                             @endphp
+                                            <!-- <pre>{{ print_r($get_all_delegations, return: true) }}</pre> -->
+
                                             <div class="tab-pane active p-3"
                                                  id="navpill-{{$item->id}}"
                                                  role="tabpanel">
