@@ -9,7 +9,7 @@
         </a>
 
         @for ($i = 0; $i < count($governorates); $i++)
-            <a href="{{ route('image', $governorates[$i]->id) }}"
+            <a href="{{ url('military_affairs/stop_car/' . ($governate_id ?? '') . '/' . ($stop_car_type ?? '')) }}"
                 class="btn-filter  bg-{{ $arr[$i] }}-subtle text-{{ $arr[$i] }} px-4 fs-4 mx-1 mb-2">
                 محكمة {{ $governorates[$i]->name_ar }} ({{ $count['govern_counter_' . $governorates[$i]->id] }})
             </a>
@@ -22,35 +22,14 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
 
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            طلب الحجز ({{ $stop_car_request_counter }})
-        </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            المرور
-            ({{ $stop_car_info_counter }}) </a>
+        @foreach (collect($types)->zip($classes) as [$type, $class])
+            <a class="btn-filter  {{ $class }} px-4 fs-4 mx-1 mb-2"
+                href="{{ url('military_affairs/stop_car/' . ($governate_id ?? '') . '/' . ($stop_car_type ?? '')) }}">
+                {{ $type->name_ar }} ( )
+            </a>
+        @endforeach
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
 
-            المديرية
-            ({{ $stop_car_catch_counter }}) </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
-            القيادة ({{ $stop_car_police_counter }})
-        </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
-            مغفر ({{ $stop_car_police_station }})
-        </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
-            بانتظار الحجز ({{ $stop_car_doing_counter }})
-        </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
-            تم الحجز ({{ $stop_car_finished_counter }})
-        </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
-            طلب رفع الحجز ({{ $stop_car_cancel_request_counter }})
-        </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
-            رفع الحجز ({{ $stop_car_cancel_counter }})
-        </a>
     </div>
 </div>
 <div class="card">
@@ -210,8 +189,8 @@
                                                         <!-- start row -->
                                                         @foreach ($all_notes as $all_note)
                                                             <tr data-bs-toggle="collapse"
-                                                                data-bs-target="#collapseExample"
-                                                                aria-expanded="false" aria-controls="collapseExample">
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
                                                                 <td>
                                                                     {{ $all_note->created_by }}
                                                                 </td>

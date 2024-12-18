@@ -12,32 +12,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Military_affair extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $guarded = [];
 
     public function installment()
     {
-        return $this->belongsTo(Installment::class,'installment_id')->with('client');
+        return $this->belongsTo(Installment::class, 'installment_id')->with('client');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
-     }
+    }
 
     public function notes()
     {
         return $this->hasMany(Military_affairs_notes::class, 'military_affairs_id');
     }
 
-
-
-
-
     public function status_all()
-
     {
-       // dd( $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->where('type_id','=','request')->get());
+        // dd( $this->hasMany(Military_affairs_status::class, 'military_affairs_id')->where('type_id','=','request')->get());
         return $this->hasMany(Military_affairs_status::class, 'military_affairs_id');
     }
 
