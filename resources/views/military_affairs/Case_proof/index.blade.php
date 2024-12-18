@@ -553,6 +553,7 @@
                                             data-bs-target="#open-details-{{$item->id}}">
                                         الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
+                                    
 
                                     <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                         تحويل الطلب
@@ -859,6 +860,8 @@
                                     </div>
 
                                 </td>
+
+                                
                                 <div id="add-note-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                         <div class="modal-content">

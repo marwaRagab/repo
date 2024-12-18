@@ -1843,6 +1843,7 @@ class InstallmentController extends Controller
             $data_add['type'] = 'civil_img';
             // $data_add['path'] = $client_data_image['civil_img'];
             $data_add['path'] = 'clients' . '/' . $filename;
+            $client_data_image['civil_img'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('salary_img')) {
             $filename = time() . '-' . $request->file('salary_img')->getClientOriginalName();
@@ -1851,6 +1852,7 @@ class InstallmentController extends Controller
             $data_add['type'] = 'salary_img';
             // $data_add['path'] = $client_data_image['salary_img'];
             $data_add['path'] = 'clients' . '/' . $filename;
+            $client_data_image['salary_img']  = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('cid_img1')) {
             $filename = time() . '-' . $request->file('cid_img1')->getClientOriginalName();
@@ -1867,6 +1869,7 @@ class InstallmentController extends Controller
             $data_add['type'] = 'cid_img_2';
             // $data_add['path'] = $client_data_image['cid_img_2'];
             $data_add['path'] = 'clients' . '/' . $filename;
+            $client_data_image['cid_img_2'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('cinet_img')) {
             $filename = time() . '-' . $request->file('cinet_img')->getClientOriginalName();
@@ -1875,6 +1878,8 @@ class InstallmentController extends Controller
             $data_add['type'] = 'cinet_img';
             // $data_add['path'] = $client_data_image['cinet_img'];
             $data_add['path'] = 'clients' . '/' . $filename;
+
+            $client_data_image['cinet_img'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('work_img')) {
             // $client_data_image['work_img'] = $request->file('work_img')->store('clients', 'public');
@@ -1883,6 +1888,8 @@ class InstallmentController extends Controller
             $data_add['type'] = 'work_img';
             // $data_add['path'] = $client_data_image['work_img'];
             $data_add['path'] = 'clients' . '/' . $filename;
+
+            $client_data_image['work_img'] = 'clients' . '/' . $filename;
         }
         if ($request->hasFile('my_img')) {
             $filename = time() . '-' . $request->file('my_img')->getClientOriginalName();
@@ -1891,6 +1898,7 @@ class InstallmentController extends Controller
             $data_add['type'] = 'my_img';
             // $data_add['path'] = $client_data_image['my_img'];
             $data_add['path'] = 'clients' . '/' . $filename;
+            $client_data_image['my_img'] = 'clients' . '/' . $filename;
         }
         /////installment_images
 
@@ -1957,15 +1965,32 @@ class InstallmentController extends Controller
 
             $installment_data_image['kafil_amana'] = 'installment' . '/' . $filename;
         }
-
-        for ($i = 1; $i <= count($client_data_image); $i++) {
-            $data_add['client_id'] = $clients->id;
-            $data_add['created_by'] = Auth::user()->id;
-            $data_add['updated_by'] = Auth::user()->id;
-            $data_add['created_at'] = date('Y-m-d-H-i-s');
-            $data_add['updated_at'] = date('Y-m-d-H-i-s');
+        // dd($client_data_image);
+        // for ($i = 1; $i <= count($client_data_image); $i++) {
+            
+        //     dd($client_data_image[0]);
+        //     $data_add['client_id'] = $clients->id;
+        //     $data_add['created_by'] = Auth::user()->id;
+        //     $data_add['updated_by'] = Auth::user()->id;
+        //     $data_add['created_at'] = date('Y-m-d-H-i-s');
+        //     $data_add['updated_at'] = date('Y-m-d-H-i-s');
+        //     $data_add['type'] = 
+        //     ClientImg::insert($data_add);
+        // }
+        foreach ($client_data_image as $key => $value) {
+            $data_add = [
+                'client_id'  => $clients->id,
+                'created_by' => Auth::user()->id,
+                'updated_by' => Auth::user()->id,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'type'       => $key, // Store the key here
+                'path' => $value, // Optionally store the image path
+            ];
+        
             ClientImg::insert($data_add);
         }
+        
         $installment->update($installment_data_image);
 
         if (count($client_data_image) == 0 && count($installment_data_image) == 0) {
