@@ -32,7 +32,22 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $this->data['ministries'] = Ministry::get();
 
     }
-    public function index($governate_id=null,$stop_salary_type=null,$ministry=null)
+    public function index(Request $request)
+    {
+        $message ="تم دخول صفحة  حجز راتب" ;
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " الشئون القانونية";
+        $breadcrumb[1]['url'] = route("military_affairs");
+        $breadcrumb[2]['title'] = $this->data['title'];
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        $view='military_affairs/stop_salary/index';
+        $title=$this->title;
+        return view('layout',compact(['title','view','breadcrumb','count']),$this->data);
+    }
+    public function index_old($governate_id=null,$stop_salary_type=null,$ministry=null)
     {
        // return dd('eeee');
         $message ="تم دخول صفحة  حجز راتب" ;
@@ -151,7 +166,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
    
      //dd($this->data['transactions']);
      
-     $breadcrumb = array();
+        $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
         $breadcrumb[1]['title'] = " الشئون القانونية";
