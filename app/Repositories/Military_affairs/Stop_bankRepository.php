@@ -109,7 +109,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
             $value->different_date = get_different_dates($value->date,date('Y-m-d'));
             $value->adress= ($value->installment->client->client_address ?  $value->installment->client->client_address->last() : '' );
-            $value->phone= ($value->installment->client->client_phone ?  $value->installment->client->client_phone->last() : ''   );
+            $value->phone= ($value->installment->client->client_phone ?  $value->installment->client->client_phone->last()->phone : ''   );
             if($value->eqrardain_date != NULL){
                 $value->type_papar= 'وصل امانة';
             }elseif ($value->qard_paper != NULL){
@@ -154,7 +154,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     $breadcrumb[1]['url'] = route("military_affairs");
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
-    
+
     $stop_type= $request->stop_bank_type;
     if(!$stop_type){
         $stop_type='stop_bank_request';

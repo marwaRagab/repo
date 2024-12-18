@@ -151,7 +151,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/myinstall/accept-condition/{id}',[advancedController::class, 'acceptCondationindex'])->name('advanced.acceptCondation');
     Route::get('/myinstall/accept/{id}',[advancedController::class, 'acceptindex'])->name('advanced.accept');
     Route::get('/myinstall/reject/{id}',[advancedController::class, 'rejectindex'])->name('advanced.reject');
-    
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -306,12 +306,12 @@ Route::middleware('auth')->group(function () {
     Route::get('region/filter/{id}', [RegionController::class, 'filter'])->name('region.filter');
 
     // courts
-    Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
+   /* Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
     Route::post('courts/store', [CourtController::class, 'store'])->name('courts.store');
     Route::get('courts/edit/{id}', [CourtController::class, 'edit'])->name('courts.edit');
     Route::any('courts/update/{id}', [CourtController::class, 'update'])->name('courts.update');
     Route::any('courts/delete/{id}', [CourtController::class, 'destroy'])->name('courts.destroy');
-    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');
+    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');*/
 
     // nationality
     Route::get('nationality', [NationalityController::class, 'index'])->name('nationality.index');

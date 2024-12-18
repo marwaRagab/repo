@@ -87,7 +87,7 @@
 
                                                 <a class="btn btn-warning rounded-0 w-100 mt-2" href="{{ route('installment.show-installment', ['id' => $item->id]) }}"
                                                 >
-                                                    التفاصيل<
+                                                  </a>  التفاصيل
                                             </li>
                                             <li>
                                                 <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
@@ -436,7 +436,7 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}}}<span
+                                                                            <td>{{$time}}}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
