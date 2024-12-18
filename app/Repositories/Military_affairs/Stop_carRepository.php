@@ -23,8 +23,9 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
     }
-    public function index($governate_id = null, $stop_car_type = null, $police_station_id = null)
+    public function index($governate_id = null, $stop_car_type = null)
     {
+        // dd($stop_car_type);
         $message = "تم دخول صفحة  حجز السيارات";
 
         $this->data['govern_count_total'] = $this->count_stop_car_governate_sql('execute', 'stop_car', '');
@@ -54,11 +55,9 @@ class Stop_carRepository implements Stop_carRepositoryInterface
 
         $this->data['item_type_time'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $current_request->slug])->first();
         $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $next_request->slug])->first();
-        //  dd($stop_type);
-        //  dd($this->data['item_type_time_new']);
-        //   $this->data['item_type_car'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => 'stop_car_request'])->first();
 
-        if (!empty($governate_id)) {
+        if (!empty($governate_id) && $governate_id != 0) {
+
             $governate_id = $governate_id;
             $this->data['governate_id'] = $governate_id;
         } else {
@@ -68,12 +67,14 @@ class Stop_carRepository implements Stop_carRepositoryInterface
 
         // echo $governate_id; exit();
 
-        if (!empty($stop_car_type)) {
+        if (!empty($stop_car_type) && $stop_car_type != 0) {
             $stop_car_type = $stop_car_type;
+            $this->data['stop_car_type'] = $stop_car_type;
         } else {
             $stop_car_type = '';
+            $this->data['stop_car_type'] = 0;
         }
-
+        //    dd($this->data);
         /*  if (!empty($police_station_id)) {
         $this->data['police_station_id'] = $police_station_id;
         } else {
@@ -81,15 +82,12 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         }
          */
 
-        $this->data['stop_car_request_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_request');
-        $this->data['stop_car_info_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_info');
-        $this->data['stop_car_catch_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_catch');
-        $this->data['stop_car_police_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_police');
-        $this->data['stop_car_doing_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_doing');
-        $this->data['stop_car_police_station'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_police_station');
-        $this->data['stop_car_finished_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_finished');
-        $this->data['stop_car_cancel_request_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_cancel_request');
-        $this->data['stop_car_cancel_counter'] = $this->count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_cancel');
+        $this->data['types'] = Military_affairs_stop_car_type::get();
+        $this->data['classes'] = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', '  bg-warning-subtle text-warning', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary'];
+
+        foreach ($this->data['types'] as $one) {
+            $this->data['stop_car_type_' . $one->id] = $this->count_stop_car('stop_car', $governate_id, $one->id);
+        }
 
         //  $transactions =$this->get_all_stop_car($governate_id,$stop_car_type);
 
@@ -286,102 +284,46 @@ class Stop_carRepository implements Stop_carRepositoryInterface
 
     }
 
-    public function count_stop_car_sql($status, $type, $governate_id, $stop_car_type)
+    public function count_stop_car($type, $governate_id, $stop_car_type)
     {
-        //count_stop_car_sql('execute', 'stop_car', $governate_id, 'stop_car_request');
 
-        if (!empty($type)) {
-            $type_e = ['military_affairs.' . $type => 1];
+        $status = 'execute';
+
+        $type_cond = ['military_affairs.stop_car' => 1];
+        $govern = !empty($governorate_id) ? ['governorate_id' => $governorate_id] : [];
+
+        $query = Military_affair::query()
+            ->where([
+                'stop_car_archive_type' => 'not_archived',
+                'tahseel' => null,
+                'archived' => 0,
+                'stop_car_archive' => 0,
+                'status' => $status,
+            ]);
+
+        $query->whereHas('installment', function ($q) {
+            $q->where('finished', 0);
+        });
+
+        if (!empty($govern)) {
+            $query->whereHas('installment.client', function ($q) use ($govern) {
+                $q->where($govern);
+            });
         }
 
-        if (!empty($governate_id)) {
-            $govern = ['clients.governorate_id' => $governate_id];
-        } else {
-            $govern = [];
+        if (!empty($stop_car_type) && is_array($stop_car_type)) {
+            $query->where($stop_car_type);
+        } elseif (!empty($stop_car_type) && is_string($stop_car_type)) {
+            $query->whereRaw($stop_car_type);
         }
 
-        $stop_car_type = "";
-
-        /*
-        if (!empty($stop_car_type)) {
-        if ($stop_car_type == 'stop_car_request') {
-        $stop_car_type = ["military_affairs.stop_car_info" => 0
-        , "military_affairs.stop_car_catch" => 0, "military_affairs.stop_car_police" => 0,
-        "military_affairs.stop_car_doing" => 0, "military_affairs.stop_car_police_station" => 0,
-        "military_affairs.stop_car_finished" => 0];
-        } elseif ($stop_car_type == 'stop_car_info') {
-        $stop_car_type = ["military_affairs.stop_car_request" => 1, "military_affairs.stop_car_info" => 1
-        , "military_affairs.stop_car_catch" => 0, "military_affairs.stop_car_police" => 0
-        , "military_affairs.stop_car_doing" => 0, "military_affairs.stop_car_police_station" => 0
-        , "military_affairs.stop_car_finished" => 0];
-
-        } elseif ($stop_car_type == 'stop_car_police') {
-        $stop_car_type = ["military_affairs.stop_car_request" => 1, "military_affairs.stop_car_info" => 1
-        , "military_affairs.stop_car_police" => 1, "military_affairs.stop_car_catch" => 0,
-        "military_affairs.stop_car_police_station" => 0,
-        "military_affairs.stop_car_doing" => 0, "military_affairs.stop_car_finished" => 0];
-
-        } elseif ($stop_car_type == 'stop_car_catch') {
-        $stop_car_type = ["military_affairs.stop_car_request" => 1, "military_affairs.stop_car_info" => 1
-        , "military_affairs.stop_car_police" => 1, "military_affairs.stop_car_catch" => 1
-        , "military_affairs.stop_car_doing" => 0, "military_affairs.stop_car_police_station" => 0,
-        "military_affairs.stop_car_finished" => 0];
-
-        } elseif ($stop_car_type == 'stop_car_police_station') {
-        $stop_car_type = ["military_affairs.stop_car_request" => 1, "military_affairs.stop_car_info" => 1,
-        "military_affairs.stop_car_catch" => 1, "military_affairs.stop_car_police" => 1,
-        "military_affairs.stop_car_doing" => 0, "military_affairs.stop_car_police_station" => 1,
-        "military_affairs.stop_car_finished" => 0];
-
-        // echo $stop_car_type; exit();
-
-        } elseif ($stop_car_type == 'stop_car_doing') {
-        $stop_car_type = ["military_affairs.stop_car_request" => 1, "military_affairs.stop_car_info" => 1
-        , "military_affairs.stop_car_catch" => 1, "military_affairs.stop_car_police" => 1,
-        "military_affairs.stop_car_doing" => 1, "military_affairs.stop_car_police_station" => 1
-        , "military_affairs.stop_car_finished" => 0];
-
-        } elseif ($stop_car_type == 'stop_car_finished') {
-        $stop_car_type = ['military_affairs.stop_car_request' => 1, 'military_affairs.stop_car_info' => 1,
-        'military_affairs.stop_car_catch' => 1, 'military_affairs.stop_car_police' => 1,
-        'military_affairs.stop_car_doing' => 1, 'military_affairs.stop_car_police_station' => 1,
-        'military_affairs.stop_car_finished' => 1];
-
-        } elseif ($stop_car_type == 'stop_car_cancel_request') {
-        $stop_car_type = ['military_affairs.cancel_stop_car' => 1];
-
-        } elseif ($stop_car_type == 'stop_car_cancel') {
-        $stop_car_type = ['military_affairs.cancel_stop_car' => 'done'];
-
-        } else {
-        $stop_car_type = "";
+        if (!empty($type_e) && is_array($type_e)) {
+            $query->where($type_e);
         }
 
-        } else {
-        $stop_car_type = "";
-        }
-         */
+        $item = $query->selectRaw('COUNT(id) as the_counter')->first();
 
-        $item = DB::table('military_affairs')->select(DB::raw('COUNT(military_affairs.id) as the_counter'))
-            ->where(['stop_car_archive_type' => 'not_archived', 'tahseel' => null, 'installment.finished' => 0
-                , 'military_affairs.archived' => 0, 'military_affairs.stop_car_archive' => 0, 'military_affairs.status' => $status])
-            ->when(!empty($govern), function ($query) use ($govern) {
-                return $query->where($govern);
-            })
-            ->when($stop_car_type != 0 && $stop_car_type != '', function ($query) use ($stop_car_type) {
-                return $query->where($stop_car_type);
-            })
-            ->when(!empty($type_e), function ($query) use ($type_e) {
-                return $query->where($type_e);
-            })
-            ->leftJoin('installment', 'military_affairs.installment_id', '=', 'installment.id')
-            ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
-            ->first();
-
-        if (empty($item)) {
-            $the_counter = 0;
-        } else { $the_counter = $item->the_counter;}
-        return $the_counter;
+        return $item ? $item->the_counter : 0;
 
     }
 
