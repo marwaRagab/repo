@@ -1,4 +1,4 @@
-<tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+<tr >
     <td>
         {{ $loop->index + 1 }}
     </td>
@@ -201,11 +201,14 @@
 
 
     <td>
+        @include('military_affairs.Execute_alert.print.print')
         <div class="btn-group dropup mb-6 me-6">
+            
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
                 الإجراءات
             </button>
+            
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li>
                     <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
@@ -218,7 +221,12 @@
                         الملاحظات</a>
                 </li>
 
+            
+                
+
             </ul>
+
+            
             <div id="open-details-{{ $item->id }}" class="modal fade" tabindex="-1"
                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -535,5 +543,6 @@
             </div>
 
         </div>
+        
     </td>
 </tr>

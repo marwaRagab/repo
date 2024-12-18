@@ -172,7 +172,8 @@ Route::middleware('auth')->group(function () {
 
     // print in excute_alert
     Route::get('/print/print_case_proof', [CertificateController::class, 'print_case_proof'])->name('print_case_proof');
-    Route::get('/print/sticker', [CertificateController::class, 'print_sticker'])->name('print_sticker');
+    Route::get('/print/sticker', [CertificateController::class, 'print_sticker'])->name(name: 'print_sticker');
+    Route::get('/print/issue', [CertificateController::class, 'print_issue'])->name(name: 'print_issue');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
