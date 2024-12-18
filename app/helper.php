@@ -379,7 +379,7 @@ function get_all_notes($type, $military_affairs_id)
 {
 
     $notes = Military_affairs_notes::where(['military_affairs_id' => $military_affairs_id, 'type' => $type])->get();
-    //dd($notes);
+    // dd($notes);
     return $notes;
 
 }

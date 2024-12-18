@@ -118,19 +118,12 @@ class Open_fileRepository implements Open_fileRepositoryInterface
        }
 
     public function convert_ex_alert(Request $request)
-
     {
-
-
-
         $request->validate([
             'date' => 'required| date',
             'place'=>'required',
             'issue_id'=>'required|numeric|min:9',
-
         ]);
-
-
 
         $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
         $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
