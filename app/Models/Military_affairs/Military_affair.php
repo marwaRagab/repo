@@ -55,4 +55,10 @@ class Military_affair extends Model
         return $this->hasMany(military_affairs_deligation::class, 'emp_id');
     }
 
+    public function mil_times()
+    {
+        return $this->hasMany(Military_affairs_times::class,'military_affairs_id');
+    }
+
+
 }

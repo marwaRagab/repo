@@ -2,10 +2,12 @@
 
 namespace App\Repositories\Military_affairs;
 
+use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Bank;
 use Inertia\Inertia;
 use App\Models\Court;
+use App\Models\Client;
 use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
@@ -20,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Stop_travel_types;
 use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_status;
 use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Prev_cols_military_affairs;
@@ -29,6 +32,7 @@ use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
 use App\Interfaces\Military_affairs\Stop_bankRepositoryInterface;
 use App\Models\Military_affairs\Military_affairs_certificate_type;
 use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
+
 
 class Stop_bankRepository implements Stop_bankRepositoryInterface
 {
@@ -63,7 +67,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     }
     public function index(Request $request)
     {
-
+// dd($request->all());
         $governorate_id= $request->governorate_id;
         $message ="تم دخول صفحة  حجز بنوك  " ;
         $user_id = 1 ;
@@ -71,8 +75,33 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
        // $this->log($user_id ,$message);
        // $user_id =  Auth::user()->id;
         $this->data['title']='    حجز بنوك';
-        $this->data['items']= Military_affair::where('archived','=',0)
-            ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])->with('installment')->with('status_all')->get();
+//         $this->data['items'] = Military_affair::where('archived','=',0)
+//             ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])
+//             ->with('installment')->with('status_all')
+//             ->whereHas('installment', function ($q){
+//                 return $q->where('finished',0);
+//             })
+// // ;
+//             ->get();
+//   dd( count($this->data['items']));
+        $this->data['items'] = Military_affair::with('status_all')
+                ->with('installment')
+                ->when($governorate_id, function ($q) use ($governorate_id) {
+                    return $q->where('governorate_id', $governorate_id);
+                })
+                ->when(request()->has('day'), function ($query) use ($request)  {
+                        $query->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+                            $q->where('date', $request->day);
+                            });
+                })
+                ->whereHas('installment', function ($q){
+                    return $q->where('finished',0);
+                })
+                ->where('archived',0)
+                ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])
+                ->get();
+            // dd($this->data['items']);
+
         $title=' حجز بنوك';
 
         $breadcrumb = array();
@@ -83,6 +112,8 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $stop_type= $request->stop_bank_type;
+        $date = $request->day;
+
         if(!$stop_type){
             $stop_type='stop_bank_request';
         }
@@ -100,10 +131,20 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         }
 
+        if($date)
+        {
+            $date_sel = '';
+        }
+
         $this->data['item_type_time_old']=Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=> $stop_type])->first();
         $this->data['item_type_time_new']=Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=>$new_type])->first();
+        $mins = collect();
 
+        // dd($this->data['items']);
         foreach ( $this->data['items'] as $value){
+            
+            $mins[$value->id] = $value->installment->client->ministry_last;
+            $value->min_id = Ministry::findORFail($value->installment->client->ministry_last)->date;
 
             $value->item_old_data=Prev_cols_military_affairs::where('military_affairs_id',$value->id) ->first();
 
@@ -117,8 +158,21 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             }else
                 $value->type_papar='لايوجد';
         }
-           // dd($this->data['items']);
-
+        // dd($this->data['items'] );
+        $ministries = $mins->unique();
+       
+        foreach($ministries as $one)
+        {
+            $dates[$one] = Ministry::where('id', $one)->first()->date;
+        }
+        // dd($dates);
+        $sortedArray = collect($dates)->sortBy(function($date) {
+            return strtotime($date);
+        });
+        
+        
+        $this->data['ministries'] = $sortedArray->unique()->toArray();
+        // dd( count($this->data['ministries']));
         $this->data['view']='military_affairs/Stop_bank/index';
         return view('layout',$this->data,compact('breadcrumb'));
 
@@ -434,6 +488,7 @@ public function save_jobs_info(Request $request)
 
         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
 
+        Add_note_time($new_time_type, $request->military_affairs_id);
 
 
         return redirect()->route('stop_bank');

@@ -2,28 +2,28 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\CertificateRepositoryInterface;
+use http\Client;
+use App\Models\Log;
+use Inertia\Inertia;
 use App\Models\Court;
+use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
+use Illuminate\Http\Request;
 use App\Models\InstallmentNote;
+use Yajra\DataTables\DataTables;
+use App\Models\Prev_cols_clients;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_certificate_type;
-use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_status;
-use App\Models\Military_affairs\Military_affairs_stop_salary_type;
+use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Models\Ministry;
-use App\Models\Prev_cols_clients;
-use http\Client;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Log;
+use App\Models\Military_affairs\Military_affairs_certificate_type;
+use App\Models\Military_affairs\Military_affairs_stop_salary_type;
+use App\Interfaces\Military_affairs\CertificateRepositoryInterface;
 
 class CertificateRepository implements CertificateRepositoryInterface
 {
@@ -112,6 +112,7 @@ class CertificateRepository implements CertificateRepositoryInterface
         $this->data['item_type_time_money'] = Military_affairs_certificate_type::where(['type' => 'certificate', 'slug' => 'money'])->first();
 
       
+        $this->data['get_responsible'] = get_responsible();
         $this->data['view'] = 'military_affairs/Military-certificate/index';
 
         // dd($this->data['items']);
@@ -138,6 +139,7 @@ class CertificateRepository implements CertificateRepositoryInterface
         $data_update['updated_at'] = date('Y-m-d');
         $case_proof_item->update($data_update);
         Add_note($item_old_time, $item_new_time, $id);
+        Add_note_time($item_new_time, $id);
 
         return redirect()->route('Certificate');
 
@@ -177,6 +179,8 @@ class CertificateRepository implements CertificateRepositoryInterface
         }
 
         Add_note($item_old_time, $item_new_time, $id);
+        Add_note_time($item_new_time, $request->military_affairs_id);
+
         change_status($request, $request->military_affairs_id);
         return redirect()->route('Certificate');
 
@@ -216,6 +220,7 @@ class CertificateRepository implements CertificateRepositoryInterface
         }
 
         Add_note($item_old_time, $item_new_time, $id);
+        Add_note_time($item_new_time, $request->military_affairs_id);
 
         change_status($request, $request->military_affairs_id);
 
@@ -248,6 +253,8 @@ class CertificateRepository implements CertificateRepositoryInterface
 
         }
         Add_note($item_old_time, $item_new_time, $id);
+        Add_note_time($item_new_time, $request->military_affairs_id);
+
         change_status($request, $request->military_affairs_id);
         return redirect()->route('Certificate');
     }

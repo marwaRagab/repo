@@ -1,18 +1,19 @@
 <?php
 
-use App\Models\Military_affairs\Military_affairs_times;
 use Carbon\Carbon;
 use App\Models\Log;
+use App\Models\User;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\InvoicesInstallment;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\InvoicesInstallment\Invoices_installment;
-use App\Models\Military_affairs\Military_affair;
 use App\Models\military_affairs_deligation;
-use App\Models\User;
+use App\Models\military_affairs_deligations;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -254,9 +255,19 @@ function UploadImage($path, $image, $model, $file)
 //     return $departmentName;
 // }
 
+// function formatTime($time)
+// {
+
+//     $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+//     $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
+//     return $toDay;
+// }
+
 function formatTime($time)
 {
-
+    if (!preg_match('/^\d{2}:\d{2}:\d{2}$/', $time)) {
+        return '';
+    }
     $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
     $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
     return $toDay;
@@ -384,6 +395,17 @@ function get_all_actions($military_affairs_id)
 
 }
 
+function get_all_delegations($military_affairs_id)
+{
+
+
+    $notes = military_affairs_deligation::where(['military_affairs_id' => $military_affairs_id])->get();
+
+    //dd($notes);
+    return $notes;
+
+}
+
 
 function get_modal_name($id)
 {
@@ -421,9 +443,16 @@ function get_modal_name($id)
     return null;
 }
 
-
-
-
+ function get_by_dates($type_id)
+    {
+        $date_arr = Military_affairs_times::where(['times_type_id' => $type_id])->whereYear('date_start',now()->year)
+                                        ->whereMonth('date_start', now()->month) 
+                                        ->selectRaw('DAY(date_start) as day, count(*) as count') 
+                                        ->groupBy(DB::raw('DAY(date_start)'))
+                                        ->get();
+        // dd($date_arr);
+        return $date_arr;
+    }
 
 
 function count_client($array_data)
@@ -445,6 +474,31 @@ function get_different_dates($first_end_date, $second_end_date)
     return $interval->days.'يوم' ;
 
 }
+
+function get_different_date($first_end_date, $second_end_date)
+    {
+        // Convert timestamps to DateTime strings if necessary
+        if (is_numeric($first_end_date)) {
+            $first_end_date = date('Y-m-d', $first_end_date);
+        }
+        if (is_numeric($second_end_date)) {
+            $second_end_date = date('Y-m-d', $second_end_date);
+        }
+
+        // Ensure both dates are valid
+        $datetime1 = date_create($first_end_date);
+        $datetime2 = date_create($second_end_date);
+
+        if (!$datetime1 || !$datetime2) {
+            return 'تاريخ غير صالح';
+        }
+
+        // Calculate the difference
+        $interval = date_diff($datetime1, $datetime2);
+
+        // Format the output
+        return $interval->days . ' يوم';
+    }
 
 function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $description, $process_type, $payment_type)
 {
@@ -979,7 +1033,7 @@ function get_responsible()
 
 function update_responsible($user_id, $military_id, $status)
 {
-    
+
 
     $dateFields = [
         'open_file' => 'open_file_date',
@@ -1027,12 +1081,12 @@ function update_responsible($user_id, $military_id, $status)
         $newRecord->save();
         return true;
     }
-   
+
 }
 
 
 // function actions_responsible($id)
 // {
-//     $data =     
+//     $data =
 // }
 

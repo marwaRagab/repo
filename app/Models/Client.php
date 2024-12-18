@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Client extends Model
 {
     use HasFactory;
-
+    protected $table = 'client_new';
     protected $fillable = ['location_google_map', 'kwfinder', 'location', 'Latitude', 'Longitude', 'house_id'];
 
     public function court()
@@ -54,6 +54,10 @@ class Client extends Model
         return $this->belongsTo(Bank::class, 'bank_ids');
     }
     // ministry_ids
+    public function get_ministry()
+    {
+        return $this->belongsTo(Ministry::class,'ministry_last');
+    }
 
     public function ministry()
     {

@@ -2,29 +2,29 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
-use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
+use App\Models\Log;
+use Inertia\Inertia;
 use App\Models\Court;
+use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
+use Illuminate\Http\Request;
 use App\Models\InstallmentNote;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_certificate_type;
-use App\Models\Military_affairs\Military_affairs_jalasaat;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\Military_affairs\Military_affairs_status;
-use App\Models\Military_affairs\Military_affairs_times;
-use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Models\Military_affairs\Stop_travel_types;
-use App\Models\Ministry;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Log;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Stop_travel_types;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
+use App\Models\Military_affairs\Military_affairs_status;
+use App\Models\Military_affairs\Military_affairs_jalasaat;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
+use App\Models\Military_affairs\Military_affairs_certificate_type;
+use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
 
 class Stop_travelRepository implements Stop_travelRepositoryInterface
 {
