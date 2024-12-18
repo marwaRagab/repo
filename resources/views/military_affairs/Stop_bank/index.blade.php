@@ -153,6 +153,9 @@
 
                 <tbody>
 
+                @foreach($items as $item)
+                    
+
                     @foreach($items as $item)
                     
                     @if($item->installment->finished==0)
@@ -177,10 +180,14 @@
 
                     @endif
 
-                    @endif
+                        @endif
                     @endif
 
-                    @endforeach
+                @endforeach
+                </tbody>
+
+            </table>
+
                 </tbody>
 
             </table>

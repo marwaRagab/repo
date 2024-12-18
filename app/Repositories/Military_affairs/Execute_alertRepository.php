@@ -109,7 +109,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
             ->get();*/
 
 
-
+            $this->data['get_responsible'] = get_responsible();
         $view='military_affairs/Execute_alert/index';
         return view('layout',compact('items','view','breadcrumb'),$this->data);
 
