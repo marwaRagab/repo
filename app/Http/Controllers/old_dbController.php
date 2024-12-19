@@ -42,6 +42,7 @@ class old_dbController extends Controller
                 'military_affairs_settlement.military_affairs_id',
                 'military_affairs_settlement.date as my_date',
                 'clients_old.ministry',
+                'clients_old.ministries_income_id',
                 'clients_old.job_type as client_job',
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.type_date")) as cancel_type'),
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.date")) as cancel_date'),
