@@ -44,6 +44,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                  <th>المحكمة</th>
                                  <th>نتيجه الاعلان</th>
                                  <th>إيداع الاعلان</th>
+                                 <th> تحديد مسئول</th>
                                  <th>الاجراءات</th>
 
 
@@ -81,7 +82,9 @@ $arr=['success','danger','primary','secondary','info','warning'];
                   </td>
                     <td>{{ $item->jalasaat_all->first() ? $item->jalasaat_all->first()->jalasat_alert_reason : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
                     <td>{{ $item->jalasaat_all->first() ? ($item->jalasaat_all->first()->a3lan_paper_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
-
+                    <td>
+                        @include('military_affairs.Open_file.partial.column_responsible')
+                    </td>
                   {{--  <td>
 
                   <div id="add_a3lan" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
