@@ -25,7 +25,7 @@ use App\Models\Military_affairs\Military_affairs_status;
 
 class Stop_salaryRepository implements Stop_salaryRepositoryInterface
 {
-    
+
     protected $data;
     protected $title;
 
@@ -67,7 +67,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                         ->whereHas('status_all', function ($q){
                                                             $q->where('type','stop_salary')->where('type_id',request()->get('type'))->where('flag',0);
                                                        })
-                                                        ;                                                       
+                                                        ;
                                                 })
                                                 ->whereHas('installment', function ($q){
                                                     return $q->where('finished',0);
@@ -75,7 +75,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 ->whereHas('installment.client', function ($q){
                                                     return $q->where('job_type','military');
                                                 })
-                                                
+
                                                 ->where('archived',0)
                                                 ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_salary' => 1  ])
                                                 ->orderBy('installment_id','asc')
@@ -104,7 +104,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $this->data['ministries'] = Ministry::whereIN('id',[5,14,27])->get();
         // $this->data['count'] = count($this->data['items']);
         // dd($this->data['item_type_time']);
-        $this->data['stop_salary_type'] = '';                                        
+        $this->data['stop_salary_type'] = '';
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -132,10 +132,10 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
             {
                 $array_new = Military_affairs_stop_salary_type::findorfail($all_types[$i]['id'] + 1);
             }
-              
+
          }
         $array_old = Military_affairs_stop_salary_type::findorfail($request->item_type_old);
-       
+
         // if($request->minist_id == 5 && $request->item_type_old == 10)
         //  {
         //     $array_new = Military_affairs_stop_salary_type::findorfail(11);
@@ -152,7 +152,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
 
         $item_time = Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->first();
         $item_status = Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->first();
-        
+
         if($item_status){
             $data_status['flag']=1;
             $item_status->update($data_status);
@@ -281,7 +281,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         join('military_affairs_settlement', 'military_affairs_settlement.military_affairs_id = military_affairs.id', 'left')->groupBy('installment.`id`')->
         orderBy('installment.id', 'asc');
 
-       
+
         $args = func_get_args();
 
         if (!empty($args[0])) {
@@ -402,12 +402,12 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                 }
 
             }
-        }        
+        }
 
         $this->data['transactions']=array();
-   
+
      //dd($this->data['transactions']);
-     
+
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -420,7 +420,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         return view('layout',compact(['title','view','breadcrumb','count']),$this->data);
 
 }
-       
+
 public function get_all_stop_salary_data($governate_id, $stop_salary_type, $ministry){
     $type = 'stop_salary';
     $stop_salary_type_send=$stop_salary_type;
@@ -428,7 +428,7 @@ public function get_all_stop_salary_data($governate_id, $stop_salary_type, $mini
     if ($stop_salary_type == 0) {
         $stop_salary_type = '';
         $stop_salary_type_send  =  ['stop_salary_request'];
-        
+
     } else {
         if (!empty($stop_salary_type)) {
             if ($stop_salary_type == 'stop_salary_request') {
@@ -516,8 +516,8 @@ public function get_all_stop_salary_data($governate_id, $stop_salary_type, $mini
     }
     if (!empty($type)) {
         $type_e = ['military_affairs.'.$type=>1];
-    } 
- 
+    }
+
     if (!empty($governate_id)) {
         $govern = ['clients.governorate_id'=>$governate_id];
     } else {
@@ -553,7 +553,7 @@ public function get_all_stop_salary_data($governate_id, $stop_salary_type, $mini
         return $query->where($type_e);
      })->
      when(!empty($ministry), function ($query) use ($ministry) {
-        if (!empty($ministry)) {  
+        if (!empty($ministry)) {
         return $query->where(['clients.ministry_ids'=>$ministry,
         'clients.job_type'=>'military']);
         }
@@ -572,14 +572,14 @@ public function get_all_stop_salary_data($governate_id, $stop_salary_type, $mini
     groupBy('installment.id')->
     orderBy('installment.id', 'asc')->get();
     return $result;
- 
+
  //   dd($result);
 
 }
 
 public function stop_salary_money_type_counter_sql($type, $governate_id, $stop_salary_type, $ministry)
 {
-   
+
     $stop_salary_type = " and military_affairs.stop_salary_request=1 and military_affairs.stop_salary_doing=1"
         . " and  military_affairs.stop_salary_money=1 and military_affairs.stop_salary_part=0";
 
@@ -617,10 +617,10 @@ $govern
 $stop_salary_type
 $my_ministry
 AND installment.client_id=clients.id    and tahseel=0 ";
-  
+
   $result= DB::select($sql);
   if (empty($result->the_counter)) {
-      $the_counter= 0;     
+      $the_counter= 0;
    }
    return $the_counter;
 }
@@ -695,10 +695,10 @@ AND installment.client_id=clients.id    and tahseel=0   and installment.finished
     //  echo $sql;exit;
     $the_counter= 0;
    /* $result= DB::select($sql);
-   
+
     if (empty($result->the_counter)) {
        $the_counter= 0;
-        
+
     }
 */
 
@@ -709,7 +709,7 @@ AND installment.client_id=clients.id    and tahseel=0   and installment.finished
 
 public function all_stop_salary_sql($type, $governate_id, $stop_salary_type, $ministry)
 
-{ 
+{
    // dd($ministry);
          if ($stop_salary_type === 0) {
     $stop_salary_type = '';
@@ -802,9 +802,9 @@ and clients.ministry_ids=ministries.id
 AND installment.client_id=clients.id    and tahseel=0  and installment.finished=0";
 
    $result= DB::select($sql);
-   
+
    return $result;
-  
+
 }
 public function count_stop_salary_governate_sql($type, $governate_id)
     {
@@ -835,7 +835,7 @@ $govern
 AND installment.client_id=clients.id    and tahseel=0 and installment.finished=0 ";
         $result= DB::select($sql);
 
-   
+
         return $result;
 
     }

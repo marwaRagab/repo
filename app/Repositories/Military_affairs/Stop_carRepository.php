@@ -22,18 +22,33 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $this->data['title'] = 'حجز السيارات';
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
+        $this->data['stop_car_types'] = military_affairs_stop_car_type::all();
+
+        $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
+                        'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
+                        'bg-warning-subtle text-warning','px-4 bg-primary-subtle text-primary','bg-success-subtle text-success'];
+
+        for ($i = 0; $i < count($this->data['courts']); $i++) {
+            $this->data['courts'][$i]['style'] = $color_array[$i];
+        }
+        for ($i = 0; $i < count($this->data['stop_car_types']); $i++) {
+            $this->data['stop_car_types'][$i]['style'] = $color_array[$i];
+        }
     }
     public function index($governate_id = null, $stop_car_type = null)
     {
         // dd($stop_car_type);
         $message = "تم دخول صفحة  حجز السيارات";
+        $stop_type = $request->stop_type ?? 'stop_car_request';
 
         $this->data['govern_count_total'] = $this->count_stop_car_governate_sql('execute', 'stop_car', '');
         foreach ($this->data['governorates'] as $one) {
             $count['govern_counter_' . $one->id] = $this->count_stop_car_governate_sql('execute', 'stop_car', $one->id);
         }
-        $this->data['item_type_time'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => 'stop_car'])->first();
-        $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => 'stop_car'])->first();
+        $this->data['item_type_time1'] = Military_affairs_times_type::where(['type' => 'stop_cars', 'slug' => $stop_type])->first();
+        // $this->data['item_type_time'] = military_affairs_stop_car_type::all();
+
+        $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'stop_cars', 'slug' => $stop_type])->first();
 
         //SELECT GROUP_CONCAT(name_en SEPARATOR ',') AS all_names FROM military_affairs_stop_car_type WHERE id > 1;
         //    stop_car_request,stop_car_info,stop_car_police,stop_car_catch,stop_car_police_station,stop_car_doing,stop_car_finished,stop_car_cancel_request,stop_car_cancel
@@ -53,7 +68,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             ->orderBy('id', 'asc')
             ->first();
 
-        $this->data['item_type_time'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $current_request->slug])->first();
+        $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $current_request->slug])->first();
         $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $next_request->slug])->first();
 
         if (!empty($governate_id) && $governate_id != 0) {
