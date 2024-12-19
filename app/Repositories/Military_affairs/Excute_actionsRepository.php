@@ -72,7 +72,11 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
           $this->data['check_amount']=0;
         foreach ($this->data['items'] as $value) {
-            $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
+            if (!empty($value->installment) && !empty($value->installment->client)) 
+            {
+                $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
+
+            }
 
         }
         $this->data['item_type_time']=Military_affairs_times_type::where(['type'=> 'excute_actions','slug'=>'excute_actions'])->first();
