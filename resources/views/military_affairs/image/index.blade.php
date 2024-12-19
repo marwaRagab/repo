@@ -52,35 +52,35 @@ $arr=['success','danger','primary','secondary','info','warning'];
       </thead>
       <tbody>
        @php $i=1; @endphp
-                  @foreach ($transactions as $one)
+                  @foreach ($transactions as $item)
 
 
                 <!-- start row -->
-                 @if($one->installment)
+                 @if($item->installment)
                 <tr>
                     <td>{{$i}}</td>
-                  <td><a href="{{url('installment/show-installment/'.$one->installment->id)}}">{{$one->installment->id}}</a></td>
+                  <td><a href="{{url('installment/show-installment/'.$item->installment->id)}}">{{$item->installment->id}}</a></td>
 
                     <td>
-                        {{$one->installment->client->name_ar}}
+                        {{$item->installment->client->name_ar}}
                         <br>
-                        {{$one->installment->client->civil_number}}
+                        {{$item->installment->client->civil_number}}
                         <br>
-                        {{$one->phone}}
+                        {{$item->phitem}}
 
 
                     </td>
 
-                  <td>{{$one->date}}</td>
-                  <td>{{$one->eqrar_dain_amount}}</td>
-                  <td>{{$one->open_file_date}}</td>
-                  <td>{{$one->issue_id}}</td>
-                  <td>{{ $one->jalasaat_all->first() ? ($one->jalasaat_all->first()->a3lan_jalsa_done_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+                  <td>{{$item->date}}</td>
+                  <td>{{$item->eqrar_dain_amount}}</td>
+                  <td>{{$item->open_file_date}}</td>
+                  <td>{{$item->issue_id}}</td>
+                  <td>{{ $item->jalasaat_all->first() ? ($item->jalasaat_all->first()->a3lan_jalsa_ditem_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
                   <td>
-                      {{$one->installment->client->court ?  \App\Models\Court::where('governorate_id', $one->installment->client->court->id)->first()->name_ar : ''}}
+                      {{$item->installment->client->court ?  \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->name_ar : ''}}
                   </td>
-                    <td>{{ $one->jalasaat_all->first() ? $one->jalasaat_all->first()->jalasat_alert_reason : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
-                    <td>{{ $one->jalasaat_all->first() ? ($one->jalasaat_all->first()->a3lan_paper_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+                    <td>{{ $item->jalasaat_all->first() ? $item->jalasaat_all->first()->jalasat_alert_reason : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+                    <td>{{ $item->jalasaat_all->first() ? ($item->jalasaat_all->first()->a3lan_paper_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
 
                   {{--  <td>
 
@@ -104,7 +104,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                   @error('jalsaat_alert_paper_date')
                                   <div class="alert alert-danger">{{ $message }}</div>
                                      @enderror
-                                  <input class="form-control" type="text" style="display:none;" name="installment_id" value="12">
+                                  <input class="form-control" type="text" style="display:nitem;" name="installment_id" value="12">
 
                                 </div>
                               </div>
@@ -125,9 +125,9 @@ $arr=['success','danger','primary','secondary','info','warning'];
                     <td>
                         @php
 
-                            $all_notes=get_all_notes('images',$one->id);
-                            $all_actions=get_all_actions($one->id);
-                            $get_all_delegations = get_all_delegations($one->id);
+                            $all_notes=get_all_notes('images',$item->id);
+                            $all_actions=get_all_actions($item->id);
+                            $get_all_delegations = get_all_delegations($item->id);
 
                         @endphp
                         <div class="btn-group dropup mb-6 me-6 d-block ">
@@ -139,7 +139,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                 <li>
 
                                     <button class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#open-details-{{$one->id}}">
+                                            data-bs-target="#open-details-{{$item->id}}">
                                         الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
 
@@ -147,15 +147,15 @@ $arr=['success','danger','primary','secondary','info','warning'];
 
                                 </li>
                                 <li>
-                                    <a class="btn btn-primary rounded-0 w-100 mt-2" href="{{url('installment/show-installment/'.$one->installment->id)}}">
+                                    <a class="btn btn-primary rounded-0 w-100 mt-2" href="{{url('installment/show-installment/'.$item->installment->id)}}">
                                         التفاصيل</a>
                                 <li>
                                     <a class="btn btn-info rounded-0 w-100 mt-2"
-                                       href="{{ url('military_affairs/image/athbat_7ala/'.$one->id) }}">طباعة كتاب اثبات
+                                       href="{{ url('military_affairs/image/athbat_7ala/'.$item->id) }}">طباعة كتاب اثبات
                                     </a>
                                 </li>
                                 <li >
-                                    @if($one->jalasaat_all->first())
+                                    @if($item->jalasaat_all->first())
                                     <a class="btn btn-success rounded-0 w-100 mt-2"
                                       href="">الصورة</a>
                                     @endif
@@ -166,40 +166,13 @@ $arr=['success','danger','primary','secondary','info','warning'];
 
 
                         </div>
-
-                        <div class="btn-group dropup mb-6 me-6 d-block ">
-                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                طباعة
-                            </button>
-                            <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <a class="btn btn-warning rounded-0 w-100 mt-2" href="#">
-                                        اثبات حالة</a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-primary rounded-0 w-100 mt-2" href="#">
-                                        ستيكر ملف التنفيذ</a>
-
-                                <li>
-                                    <a class="btn btn-success rounded-0 w-100 mt-2" href="#">البطاقة المدنية
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-info rounded-0 w-100 mt-2"
-                                       href="#">  اقرار الدين
-                                    </a>
-                                </li>
+                        @include('military_affairs.Execute_alert.print.print')
 
 
-                            </ul>
-
-
-                        </div>
 
 
                         <!-- sample modal content -->
-                        <div id="notes_{{ $one->id }}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
+                        <div id="notes_{{ $item->id }}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
                              aria-hidden="true">
                             <form class="mega-vertical"
                                   action="{{url('add_notes')}}" method="post"
@@ -242,7 +215,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                                     <textarea name="note" class="form-control mb-2">
 
                                              </textarea>
-                                                    <input type="text"  name="note" value="{{ $one->id }}"class="form-control mb-2" style="display:none;"/>
+                                                    <input type="text"  name="note" value="{{ $item->id }}"class="form-control mb-2" style="display:nitem;"/>
                                                 </div>
 
 
@@ -265,7 +238,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                             </form>
                             <!-- /.modal-dialog -->
                         </div>
-                        <div id="open-details-{{$one->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                        <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                 <div class="modal-content">
                                     <form class="mega-vertical"
@@ -280,18 +253,18 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                         <div class="modal-body">
                                             <ul class="nav nav-pills" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-bs-toggle="tab" href="#notes-{{$one->id}}" role="tab">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#notes-{{$item->id}}" role="tab">
                                                         <span>الملاحظات</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-bs-toggle="tab" href="#navpill-{{$one->id}}" role="tab">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#navpill-{{$item->id}}" role="tab">
                                                         <span>الإجراءات</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-bs-toggle="tab"
-                                                       href="#actions-{{$one->id}}" role="tab">
+                                                       href="#actions-{{$item->id}}" role="tab">
                                                         <span>تتبع المعاملة</span>
                                                     </a>
                                                 </li>
@@ -301,7 +274,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
 
                                             <div class="tab-content border mt-2">
 
-                                                <div class="tab-pane active p-3" id="notes-{{$one->id}}" role="tabpanel">
+                                                <div class="tab-pane active p-3" id="notes-{{$item->id}}" role="tabpanel">
 
                                                     <table id="notes1" class="table table-bordered border text-wrap align-middle">
                                                         <thead>
@@ -363,7 +336,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                                         <h4 class="mb-3">اضف ملاحظة</h4>
 
                                                         <input type="hidden" name="military_affairs_id"
-                                                               value="{{ $one->id }}">
+                                                               value="{{ $item->id }}">
 
                                                         <input type="hidden" name="type"
                                                                value="{{$item_type_time->type}}">
@@ -397,7 +370,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
 
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane p-3" id="navpill-{{$one->id}}" role="tabpanel">
+                                                <div class="tab-pane p-3" id="navpill-{{$item->id}}" role="tabpanel">
                                                     <table id="notes2" class="table table-bordered border text-wrap align-middle">
                                                         <thead>
                                                         <!-- start row -->
@@ -469,7 +442,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <div class="tab-pane p-3" id="actions-{{$one->id}}"
+                                                <div class="tab-pane p-3" id="actions-{{$item->id}}"
                                                      role="tabpanel">
                                                     <table id="notes2"
                                                            class="table table-bordered border text-wrap align-middle">
