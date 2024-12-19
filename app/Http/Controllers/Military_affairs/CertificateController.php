@@ -63,15 +63,17 @@ class CertificateController extends Controller
         return $this->CertificateRepository->convert_book_info($id);
     }
 
-    public function print_case_proof()
+    public function print_case_proof($item)
     {
+        $item =  Military_affair::find($item);
         // return $this->CertificateRepository->print_case_proof();
-        return view('military_affairs.Execute_alert.print.case_proof');
+        return view('military_affairs.Execute_alert.print.case_proof',compact('item'));
     }
 
-    public function print_sticker()
+    public function print_sticker($item)
     {
-        return view('military_affairs.Execute_alert.print.sticker');
+        $item =  Military_affair::find($item);
+        return view('military_affairs.Execute_alert.print.sticker',compact('item'));
     }
     public function print_issue($item,$data_id)
     {
