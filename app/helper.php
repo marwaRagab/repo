@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\FixedPrintData;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
@@ -1034,6 +1035,7 @@ function get_responsible()
 function update_responsible($user_id, $military_id, $status)
 {
 
+    // dd($user_id);
 
     $dateFields = [
         'open_file' => 'open_file_date',
@@ -1085,7 +1087,13 @@ function update_responsible($user_id, $military_id, $status)
 }
 
 
-// function actions_responsible($id)
-// {
-//     $data =
-// }
+function get_fixed_prin_data()
+{
+    return FixedPrintData::all();
+}
+function specific_fixed_prin_data($id)
+{
+    return FixedPrintData::find($id);
+}
+
+

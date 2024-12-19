@@ -228,8 +228,10 @@
             </ul>
 
 
+
             <div id="open-details-{{ $item->id }}" class="modal fade" tabindex="-1"
                  aria-labelledby="bs-example-modal-md" aria-hidden="true">
+
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                         <form class="mega-vertical" action="{{ url('add_notes') }}" method="post"
@@ -539,13 +541,17 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                        </div>
-
-
                                     </div>
 
+                                 
+                           
+
                             </div>
-                        </form>
+
+                        
+                        @endif
+                    </form>
+
                     </div>
                     <div class="modal-footer d-flex ">
                         <button class="btn btn-primary" type="submit"> حفظ
@@ -559,9 +565,11 @@
 
                     @endif
                 </div>
+
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
+
         </div>
 
 
@@ -571,8 +579,10 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector('.mega-vertical_open');
+ document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll('.mega-vertical_open');
+
+    forms.forEach(form => {
 
         form.addEventListener("submit", function (event) {
             let isValid = true;
@@ -595,6 +605,11 @@
             } else if (!/^\d+$/.test(issueIdInput.value)) {
                 showError(issueIdInput, "يجب أن يحتوي الرقم الآلي للقضية على أرقام فقط");
                 isValid = false;
+
+            } else if (issueIdInput.value.length < 9) {
+                showError(issueIdInput, "يجب أن يتكون الرقم الآلي للقضية من 9 أرقام على الأقل");
+                isValid = false;
+
             }
 
             // Validate place
@@ -609,11 +624,13 @@
             }
         });
 
+
         function showError(input, message) {
             const errorDiv = document.createElement("div");
             errorDiv.className = "error-message text-danger";
             errorDiv.textContent = message;
             input.closest(".form-group").appendChild(errorDiv);
         }
+
     });
 </script>

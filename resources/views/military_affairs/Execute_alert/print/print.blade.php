@@ -11,7 +11,9 @@
     <!-- Dropdown links -->
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         @if (Str::contains(request()->url(), 'open_file'))
-            <li><a class="dropdown-item" href="{{ route('print_issue') }}" target="_blank">بيانات اطراف القضية</a></li>
+            @foreach (get_fixed_prin_data() as $data)
+            <li><a class="dropdown-item" href="{{ route('print_issue', ['item' => $item->id , 'data_id' => $data->id]) }}" target="_blank">بيانات ({{   explode(' ', $data->name_ar)[0] }})</a></li>
+            @endforeach 
         @endif
         <li><a class="dropdown-item" href="{{ route('print_case_proof') }}" target="_blank">اثبات حالة</a></li>
         <li><a class="dropdown-item" href="{{ route('print_sticker') }}" target="_blank">ستيكر ملف التنفيذ</a></li>
