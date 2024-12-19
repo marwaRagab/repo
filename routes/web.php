@@ -177,8 +177,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/update-responsible', [Open_fileController::class, 'update_responsible'])->name('update-responsible');
 
     // print in excute_alert
-    Route::get('/print/print_case_proof', [CertificateController::class, 'print_case_proof'])->name('print_case_proof');
-    Route::get('/print/sticker', [CertificateController::class, 'print_sticker'])->name(name: 'print_sticker');
+    Route::get('/print/print_case_proof/{item}', [CertificateController::class, 'print_case_proof'])->name('print_case_proof');
+    Route::get('/print/sticker/{item}', [CertificateController::class, 'print_sticker'])->name(name: 'print_sticker');
     Route::get('/print/issue/{item}/{data_id}', [CertificateController::class, 'print_issue'])->name(name: 'print_issue');
 
 
@@ -242,7 +242,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/eqrardain/{id?}', [EqrardainController::class, 'index'])->name('eqrardain');
     //Route::get('/please_cancel_eqrar/{id?}', [ EqrardainController::class, 'please_cancel_eqrar']);
 
-    Route::get('military_affairs', [Military_affairsController::class, 'index'])->name('military_affairs');
+    Route::get('military_affairs_all', [Military_affairsController::class, 'index'])->name('military_affairs_all');
     Route::get('military_affairs/stop_car/{governorate_id?}/{stop_car_type?}', [Stop_carController::class, 'index'])->name('stop_car');
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');

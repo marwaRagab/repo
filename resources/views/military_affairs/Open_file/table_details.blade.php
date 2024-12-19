@@ -578,8 +578,8 @@
                                     </div>
 
 
-                                @endif
-                        </form>
+                        {{-- @endif --}}
+                    </form>
 
                     </div>
                     <div class="modal-footer d-flex ">
@@ -608,59 +608,54 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-                const forms = document.querySelectorAll('.mega-vertical_open');
+    document.addEventListener("DOMContentLoaded", function () {
+       const forms = document.querySelectorAll('.mega-vertical_open');
 
-                forms.forEach(form => {
+       forms.forEach(form => {
+           form.addEventListener("submit", function (event) {
+               let isValid = true;
 
-                    form.addEventListener("submit", function(event) {
-                        let isValid = true;
+               // Clear previous error messages
+               form.querySelectorAll(".error-message").forEach(e => e.remove());
 
-                        // Clear previous error messages
-                        form.querySelectorAll(".error-message").forEach(e => e.remove());
+               // Validate date
+               const dateInput = form.querySelector("input[name='date']");
+               if (!dateInput.value) {
+                   showError(dateInput, "تاريخ فتح الملف مطلوب");
+                   isValid = false;
+               }
 
-                        // Validate date
-                        const dateInput = form.querySelector("input[name='date']");
-                        if (!dateInput.value) {
-                            showError(dateInput, "تاريخ فتح الملف مطلوب");
-                            isValid = false;
-                        }
+               // Validate issue_id
+               const issueIdInput = form.querySelector("input[name='issue_id']");
+               if (!issueIdInput.value.trim()) {
+                   showError(issueIdInput, "الرقم الآلي للقضية مطلوب");
+                   isValid = false;
+               } else if (!/^\d+$/.test(issueIdInput.value)) {
+                   showError(issueIdInput, "يجب أن يحتوي الرقم الآلي للقضية على أرقام فقط");
+                   isValid = false;
+               } else if (issueIdInput.value.length < 9) {
+                   showError(issueIdInput, "يجب أن يتكون الرقم الآلي للقضية من 9 أرقام على الأقل");
+                   isValid = false;
+               }
 
-                        // Validate issue_id
-                        const issueIdInput = form.querySelector("input[name='issue_id']");
-                        if (!issueIdInput.value.trim()) {
-                            showError(issueIdInput, "الرقم الآلي للقضية مطلوب");
-                            isValid = false;
-                        } else if (!/^\d+$/.test(issueIdInput.value)) {
-                            showError(issueIdInput, "يجب أن يحتوي الرقم الآلي للقضية على أرقام فقط");
-                            isValid = false;
+               // Validate place
+               const placeSelect = form.querySelector("select[name='place']");
+               if (!placeSelect.value) {
+                   showError(placeSelect, "يرجى اختيار الجهة");
+                   isValid = false;
+               }
 
-                        } else if (issueIdInput.value.length < 9) {
-                            showError(issueIdInput,
-                                "يجب أن يتكون الرقم الآلي للقضية من 9 أرقام على الأقل");
-                            isValid = false;
+               if (!isValid) {
+                   event.preventDefault(); // Prevent form submission if validation fails
+               }
+           });
+       });
 
-                        }
-
-                        // Validate place
-                        const placeSelect = form.querySelector("select[name='place']");
-                        if (!placeSelect.value) {
-                            showError(placeSelect, "يرجى اختيار الجهة");
-                            isValid = false;
-                        }
-
-                        if (!isValid) {
-                            event.preventDefault(); // Prevent form submission if validation fails
-                        }
-                    });
-
-
-                    function showError(input, message) {
-                        const errorDiv = document.createElement("div");
-                        errorDiv.className = "error-message text-danger";
-                        errorDiv.textContent = message;
-                        input.closest(".form-group").appendChild(errorDiv);
-                    }
-
-                });
-</script>
+       function showError(input, message) {
+           const errorDiv = document.createElement("div");
+           errorDiv.className = "error-message text-danger";
+           errorDiv.textContent = message;
+           input.closest(".form-group").appendChild(errorDiv);
+       }
+   });
+   </script>

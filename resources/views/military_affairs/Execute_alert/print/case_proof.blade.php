@@ -52,7 +52,7 @@
             شركة الكترون للأجهزة الالكترونية
           </h5>
           <h5 class="print-text"> ضد</h5>
-          <h5 class="print-text">محمد نبيل محمد المشارى
+          <h5 class="print-text">  {{ $item->installment->client->name_ar }} 
           </h5>
         </div>
         <h5 class="print-text">

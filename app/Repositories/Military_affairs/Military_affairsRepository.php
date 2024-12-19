@@ -25,9 +25,12 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
     }
     public function index()
     {
+
         $message = "تم دخول صفحة  الشئون القانونية";
+
         $title = 'الشئون القانونية';
         $view = 'military_affairs/index';
+
         $count['all_military_affairs_count'] = count($this->all_military_affairs_count(''));
         $count['open_file_count'] = count($this->all_military_affairs_count('open_file'));
         $count['images_count'] = count($this->all_military_affairs_count('images'));

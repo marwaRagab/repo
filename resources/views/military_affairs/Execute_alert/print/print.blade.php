@@ -15,8 +15,8 @@
             <li><a class="dropdown-item" href="{{ route('print_issue', ['item' => $item->id , 'data_id' => $data->id]) }}" target="_blank">بيانات ({{   explode(' ', $data->name_ar)[0] }})</a></li>
             @endforeach
         @endif
-        <li><a class="dropdown-item" href="{{ route('print_case_proof') }}" target="_blank">اثبات حالة</a></li>
-        <li><a class="dropdown-item" href="{{ route('print_sticker') }}" target="_blank">ستيكر ملف التنفيذ</a></li>
+        <li><a class="dropdown-item" href="{{ route('print_case_proof',['item' => $item->id]) }}" target="_blank">اثبات حالة</a></li>
+        <li><a class="dropdown-item" href="{{ route('print_sticker' ,['item' => $item->id]) }}" target="_blank">ستيكر ملف التنفيذ</a></li>
         <li>
             <a class="dropdown-item {{ $qrareldin->qard_paper_img == null || $qrareldin->qard_paper_img == ''  ? 'disabled' : '' }}"
                href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}"
