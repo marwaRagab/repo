@@ -799,7 +799,8 @@
                                     </thead>
                                     <tbody>
                                         <!-- start row -->
-                                        @foreach( $data['get_all_delegations'] as $item)
+                                        @if (count($data['get_all_delegations']) > 0 )
+                                        @foreach( $data['get_all_delegations'] as $value)
                                         <tr>
                                             @php
                                                                                                        
@@ -854,7 +855,12 @@
                                                             </td>
                                         </tr>
                                         @endforeach
+                                        @else
+                                                    <tr>
+                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                    </tr>
 
+                                                @endif
                                     </tbody>
                                 </table>
                             </div>

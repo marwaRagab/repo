@@ -29,7 +29,7 @@ class ImageController extends Controller
     }
     public function athbat_7ala($id)
     {
-        return $this->ImageRepository->index($id);
+        return $this->ImageRepository->athbat_7ala($id);
     }
 
 }

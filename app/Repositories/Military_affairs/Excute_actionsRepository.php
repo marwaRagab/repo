@@ -56,7 +56,9 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $this->data['items'] = Military_affair::where(['military_affairs.archived'=>0,'military_affairs.status'=>'execute'])
 
-            ->with('installment')->with('military_amount')->get();
+            ->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })->with('military_amount')->get();
 
 
         $title = '   رصيد التنفيذ';
@@ -82,7 +84,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
     public function all_checks_index(Request $request)
     {
 
-        $checking_type = $request->checking_type;
+        $checking_type = $request->check_type;
         if(!$checking_type){
             $checking_type=0;
         }
@@ -93,6 +95,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
          log_move($user_id ,$message);
 
         $this->data['title'] = ' الشيكات المستلمة ';
+       // dd($checking_type);
 
 
         $this->data['items'] = Military_affair::where(['military_affairs.archived'=>0,'military_affairs.status'=>'execute'])
