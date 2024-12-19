@@ -128,7 +128,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
       {
           $request->validate([
               'a3lan_paper_date' => 'required| date',
-              'military_affairs_id'=>'required|exists:marks,id',
+              'military_affairs_id'=>'required',
               'type'=>'required'
           ]);
 
