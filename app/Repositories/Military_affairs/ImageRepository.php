@@ -157,7 +157,6 @@ class ImageRepository implements ImageRepositoryInterface
     }
     public function athbat_7ala($id)
     {
-dd($id);
 
       //  $data['item'] = $this->one_lawaffaires_items_sql($id);
 
