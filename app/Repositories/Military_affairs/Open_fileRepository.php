@@ -112,6 +112,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
       public function add_notes(Request $request)
        {
+        
            Add_note_general($request);
            return redirect()->back();
 
