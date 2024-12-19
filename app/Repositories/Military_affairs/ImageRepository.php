@@ -184,7 +184,7 @@ class ImageRepository implements ImageRepositoryInterface
         log_move($user_id,$message);
 
 
-        return view("military_affairs/images/print_data");
+        return view("military_affairs/image/print_data");
 
 
 

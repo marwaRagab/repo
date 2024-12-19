@@ -41,6 +41,8 @@ class old_dbController extends Controller
                 'military_affairs_old.*',
                 'military_affairs_settlement.military_affairs_id',
                 'military_affairs_settlement.date as my_date',
+                'clients_old.ministry',
+                'clients_old.job_type as client_job',
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.type_date")) as cancel_type'),
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.date")) as cancel_date'),
                 'military_affairs_settlement.stop_travel_cancel_reason'
@@ -61,6 +63,7 @@ class old_dbController extends Controller
         $items = $items->where('installment.finished', '=', 0)->get();
 
 
+
         $stop_car_request = [];
         $stop_car_info = [];
         $stop_car_police = [];
@@ -72,6 +75,7 @@ class old_dbController extends Controller
         $stop_car_cancel = [];
         $stop_salary_sabah_salem = [];
         $stop_salary_force_affairs = [];
+       // dd($items);
 
         if ($type == "stop_car") {
             $stop_car_types = Military_affairs_stop_car_type::all();
@@ -688,6 +692,7 @@ class old_dbController extends Controller
 
             foreach ($stop_Salary_types as $stop_salary_type_send) {
 
+
                 if ($stop_salary_type_send->slug == 'stop_salary_request') {
 
                     $stop_car_request = $items->filter(function ($item) use ($ministries) {
@@ -695,7 +700,7 @@ class old_dbController extends Controller
                         return
                             in_array($item->ministry, $ministries) &&
                             $item->stop_salary_request == 0 &&
-                            $item->job_type == 'military' &&
+                            $item->client_job == 'military' &&
                             $item->stop_salary == 1;
                     })->values(); // Re-index the collection after filtering
 
@@ -707,7 +712,7 @@ class old_dbController extends Controller
                             in_array($item->ministry, $ministries) &&
                             $item->stop_salary_request == 1 &&
                             $item->stop_salary_doing == 0 &&
-                            $item->job_type == 'military' &&
+                            $item->client_job == 'military' &&
                             $item->stop_salary == 1;
                     })->values();
                 } elseif ($stop_salary_type_send->slug == 'stop_salary_money') {
@@ -724,7 +729,7 @@ class old_dbController extends Controller
                             $item->stop_salary_request == 1 &&
                             $item->stop_salary_doing == 1 &&
                             $item->stop_salary_money == 0 &&
-                            $item->job_type == 'military' &&
+                            $item->client_job == 'military' &&
                             $item->stop_salary == 1;
                     })->values();
                 } elseif ($stop_salary_type_send->slug == 'stop_salary_part') {
@@ -742,7 +747,7 @@ class old_dbController extends Controller
                             $item->stop_salary_doing == 1 &&
                             $item->stop_salary_money == 1 &&
                             $item->stop_salary_part == 0 &&
-                            $item->job_type == 'military' &&
+                            $item->client_job == 'military' &&
                             $item->stop_salary == 1;
                     })->values();
                 } elseif ($stop_salary_type_send->slug == 'stop_salary_cancel_request') {
@@ -766,7 +771,7 @@ class old_dbController extends Controller
                                 $item->stop_salary_military_judgement == 0 &&
                                 $item->stop_salary_request == 1 &&
                                 $item->stop_salary_doing == 1 &&
-                                $item->job_type == 'military' &&
+                                $item->client_job == 'military' &&
                                 $item->stop_salary == 1);
 
                     })->values();
@@ -779,7 +784,7 @@ class old_dbController extends Controller
                                 $item->stop_salary_sabah_salem == 0 &&
                                 $item->stop_salary_request == 1 &&
                                 $item->stop_salary_doing == 1 &&
-                                $item->job_type == 'military' &&
+                                $item->client_job == 'military' &&
                                 $item->stop_salary == 1);
                     })->values();
                 } elseif ($stop_salary_type_send->slug == 'stop_salary_force_affairs') {
@@ -792,7 +797,7 @@ class old_dbController extends Controller
                                 $item->stop_salary_force_affairs == 0 &&
                                 $item->stop_salary_request == 1 &&
                                 $item->stop_salary_doing == 1 &&
-                                $item->job_type == 'military' &&
+                                $item->client_job == 'military' &&
                                 $item->stop_salary == 1);
                     })->values();
                 }
@@ -816,7 +821,7 @@ class old_dbController extends Controller
 
             ];
 
-//            dd($array);
+           dd($array);
 
             foreach ($array as $key => $value) {
 

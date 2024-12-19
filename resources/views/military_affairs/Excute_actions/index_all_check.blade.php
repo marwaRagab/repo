@@ -1,6 +1,6 @@
 @php
-    use Illuminate\Support\Facades\Request;if(Request::has('checking_type')){
-        $type=Request::get('checking_type');
+    use Illuminate\Support\Facades\Request;if(Request::has('check_type')){
+        $type=Request::get('check_type');
     }else{
        $type='';
     }
@@ -43,7 +43,7 @@
                 <!-- start row -->
                 @foreach( $items as $item)
                     @if($item->installment)
-                        @if(isset($item->military_check))
+                        @if($item->military_check->first())
 
 
                             <tr>
@@ -99,7 +99,7 @@
                                                             $check_amount = $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
                                                         @endphp
                                                         <input type="hidden"  name="military_affairs_id" value="{{$item->id}}"/>
-                                                        <input type="hidden"  name="check_id" value=""/>
+                                                        <input type="hidden"  name="check_id" value="{{$item->military_check->first()->id}}"/>
                                                         <input type="hidden"  name="installment_id" value="{{$item->installment->id}}"/>
                                                         <input type="hidden"  name="client_name" value="{{$item->installment->client->name_ar}}"/>
 
