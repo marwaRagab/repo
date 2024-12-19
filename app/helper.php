@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Military_affairs\Military_affairs_times;
+use App\Models\military_affairs_deligation;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Governorate;
@@ -381,6 +382,18 @@ function get_all_actions($military_affairs_id)
 
 }
 
+function get_all_delegations($military_affairs_id)
+{
+
+
+    $notes = military_affairs_deligation::where(['military_affairs_id' => $military_affairs_id])->get();
+
+    //dd($notes);
+    return $notes;
+
+}
+
+
 
 function get_modal_name($id)
 {
@@ -442,6 +455,32 @@ function get_different_dates($first_end_date, $second_end_date)
     return $interval->days.'يوم' ;
 
 }
+
+function get_different_date($first_end_date, $second_end_date)
+{
+    // Convert timestamps to DateTime strings if necessary
+    if (is_numeric($first_end_date)) {
+        $first_end_date = date('Y-m-d', $first_end_date);
+    }
+    if (is_numeric($second_end_date)) {
+        $second_end_date = date('Y-m-d', $second_end_date);
+    }
+
+    // Ensure both dates are valid
+    $datetime1 = date_create($first_end_date);
+    $datetime2 = date_create($second_end_date);
+
+    if (!$datetime1 || !$datetime2) {
+        return 'تاريخ غير صالح';
+    }
+
+    // Calculate the difference
+    $interval = date_diff($datetime1, $datetime2);
+
+    // Format the output
+    return $interval->days . ' يوم';
+}
+
 
 function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $description, $process_type, $payment_type)
 {
@@ -965,3 +1004,4 @@ function allInvoicesLimit($start_id, $end_id, $type, $payment_type)
 
     return $result;
 }
+

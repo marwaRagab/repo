@@ -46,7 +46,7 @@
                 <tbody>
                 <!-- start row -->
                 @foreach( $items as $item)
-                    @if($item->installment->finished==0)
+                    @if($item->installment)
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->governorate_id)
 
                             <tr>
