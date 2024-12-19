@@ -1047,7 +1047,7 @@ function update_responsible($user_id, $military_id, $status)
         'bank' => 'bank_date',
     ];
 
-    $up = Military_affair::where('installment_id',$military_id)->first();
+    $up = Military_affair::where('id',$military_id)->first();
     $up->emp_id = $user_id;
     $up->save();
 

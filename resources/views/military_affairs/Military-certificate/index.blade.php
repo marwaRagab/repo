@@ -1184,9 +1184,9 @@
 
                                     @php
 
-                                        $all_notes=get_all_notes('Military_certificate',$item->installment_id);
-                                        $all_actions = get_all_actions($item->installment_id);
-                                            $get_all_delegations = get_all_delegations($item->installment_id);
+                                        $all_notes=get_all_notes('Military_certificate',$item->id);
+                                        $all_actions = get_all_actions($item->id);
+                                            $get_all_delegations = get_all_delegations($item->id);
                                     @endphp
 
                                     <a class="btn btn-success me-6 my-2"
@@ -1258,6 +1258,7 @@
 
 
                                                                     <!-- start row -->
+                                                                    @if (count($all_notes) > 0 )
                                                                     @foreach($all_notes as $all_note)
 
                                                                         <tr data-bs-toggle="collapse"
@@ -1303,6 +1304,12 @@
                                                                         </tr>
 
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                                 <div class="add-note">
@@ -1365,6 +1372,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <!-- start row -->
+                                                                    @if (count($all_actions) > 0 )
                                                                     @foreach ($all_actions as $value)
                                                                         <tr>
                                                                         @php
@@ -1419,7 +1427,12 @@
 
                                                                         </tr>
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
 
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -1439,6 +1452,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <!-- start row -->
+                                                                        @if (count($get_all_delegations) > 0 )
                                                                         @foreach ($get_all_delegations as $value)
                                                                             <tr data-bs-toggle="collapse"
                                                                                 data-bs-target="#collapseExample" aria-expanded="false"
@@ -1496,7 +1510,12 @@
                     
                                                                             </tr>
                                                                         @endforeach
-                    
+                                                                        @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                             </div>

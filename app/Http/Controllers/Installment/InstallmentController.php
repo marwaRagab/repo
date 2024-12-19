@@ -305,7 +305,6 @@ class InstallmentController extends Controller
         // dd($data['invoices']);
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
         $data['get_all_delegations'] = get_all_delegations($military_affair->id);
-
         // $data['settle_item'] = Military_affairs_settlement::with('military_affair')->get();
 
         // if(count($data['settle_item']) > 0){
