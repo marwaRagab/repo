@@ -22,13 +22,14 @@ class Military_affairsController extends Controller
     }
     public function index()
     {
+
         return   $this->Military_affairsRepository->index();
 
     }
     public function convert($id)
     {
       return  $this->Military_affairsRepository->convert($id);
-      
+
     }
 
     public function get_settlment($type = null){

@@ -31,7 +31,7 @@ class ImageRepository implements ImageRepositoryInterface
         $user_id =  Auth::user()->id;
 
         log_move($user_id,$message);
-        $fun_status = ['military_affairs.status' => 'execute_alert', 'military_affairs.jalasat_alert_status' => 'accepted'];
+        $fun_status = ['military_affairs.status' => 'images', 'military_affairs.jalasat_alert_status' => 'accepted'];
         $count_total = $this->count_image('', $fun_status);
         foreach ($this->data['governorates'] as $one) {
             $count['counter_' . $one->id] = $this->count_image($one->id, $fun_status);
@@ -60,7 +60,7 @@ class ImageRepository implements ImageRepositoryInterface
         }*/
 
         $transactions= Military_affair::where('archived','=',0)
-            ->where(['military_affairs.status' =>'execute_alert','jalasat_alert_status'=> 'accepted'])
+            ->where(['military_affairs.status' =>'images','jalasat_alert_status'=> 'accepted'])
             ->with('installment', function ($query) {
                 return $query->where('finished','=', 0);
             })->with('jalasaat_all', function ($query) {
