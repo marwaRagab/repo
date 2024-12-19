@@ -81,7 +81,8 @@
                                 {{ $item->client->civil_number ?? '' }}
                             </td>
                             <td>
-                                {{ $item->created_at->format('Y-m-d') }}
+                            {{ $item->created_at ? $item->created_at->format('Y-m-d') : 'N/A' }}
+
                             </td>
                             <td>
                                 {{ $item->amount }}
