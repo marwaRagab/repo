@@ -814,11 +814,8 @@
                                         الملاحظات <span
                                             class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
-                                    <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
-                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                            <div class="modal-content">
-                                                <form class="mega-vertical"
+
+                                                           <form class="mega-vertical"
                                                       action="{{url('add_notes')}}" method="post"
                                                       enctype="multipart/form-data">
                                                     @csrf
@@ -1187,9 +1184,9 @@
 
                                     @php
 
-                                        $all_notes=get_all_notes('Military_certificate',$item->id);
-                                        $all_actions = get_all_actions($item->id);
-                                            $get_all_delegations = get_all_delegations($item->id);
+                                        $all_notes=get_all_notes('Military_certificate',$item->installment_id);
+                                        $all_actions = get_all_actions($item->installment_id);
+                                            $get_all_delegations = get_all_delegations($item->installment_id);
                                     @endphp
 
                                     <a class="btn btn-success me-6 my-2"

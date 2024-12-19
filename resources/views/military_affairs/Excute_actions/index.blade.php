@@ -87,7 +87,7 @@
 
                                                 <a class="btn btn-warning rounded-0 w-100 mt-2" href="{{ route('installment.show-installment', ['id' => $item->id]) }}"
                                                 >
-                                                    التفاصيل<
+                                                  </a>  التفاصيل
                                             </li>
                                             <li>
                                                 <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
@@ -384,9 +384,9 @@
                                                         <div class="tab-content border mt-2">
                                                             @php
 
-                                                                $all_notes=get_all_notes('excute_actions',$item->id);
-                                                                $all_actions=get_all_actions($item->id);
-                                                                $get_all_delegations = get_all_delegations($item->id);
+                                                                $all_notes=get_all_notes('excute_actions',$item->installment_id);
+                                                                $all_actions=get_all_actions($item->installment_id);
+                                                                $get_all_delegations = get_all_delegations($item->installment_id);
 
                                                             @endphp
                                                             <div class="tab-pane active p-3" id="notes-{{$item->id}}"
@@ -445,7 +445,7 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}}}<span
+                                                                            <td>{{$time}}}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 

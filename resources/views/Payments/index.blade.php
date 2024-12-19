@@ -55,7 +55,12 @@
                             $serial_no=date('Y').date('m') .$serial_no;
                         @endphp
                         <td> {{ $loop->index + 1 }}</td>
-                        <td> {{$item->installment->client->name_ar}}</td>
+                        @if(isset($item->installment->client))
+                            <td> {{$item->installment->client->name_ar}}</td>
+                        @else
+                            <td>لايوجد</td>
+                        @endif
+
                         <td>  {{$item->amount}}</td>
                         <td>
 
