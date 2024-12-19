@@ -77,7 +77,7 @@
 
                     <!-- start row -->
                     @foreach ($items as $item)
-
+      
                     <tr>
                         <td>
                             {{ $loop->iteration }}
@@ -96,11 +96,6 @@
                         <td>{{ $item->open_file_date}}</td>
                         <td>{{$item->issue_id}}</td>
                         @if(request()->has('type'))
-
-                        <!-- <td> <a class="btn btn-primary rounded-0 w-100 mt-2"
-                                href="{{ route('stop_salary_convert', $item->id) }}">
-                                {{ request()->get('type')}}</a></td> -->
-
                         <td>
                             <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
                                 data-bs-target="#convert_command-{{$item->id}}"> {{ $type_name }}

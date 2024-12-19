@@ -35,17 +35,13 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
         // $this->data['ministries'] = Ministry::get();
-        $this->data['stop_travel_types'] = Military_affairs_stop_salary_type::all();
+        $this->data['stop_types'] = Military_affairs_stop_salary_type::all();
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
                         'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
                         'bg-warning-subtle text-warning','px-4 bg-primary-subtle text-primary','bg-success-subtle text-success'];
 
         for ($i = 0; $i < count($this->data['courts']); $i++) {
             $this->data['courts'][$i]['style'] = $color_array[$i];
-        }
-
-        for ($i = 0; $i < count($this->data['stop_travel_types']); $i++) {
-            $this->data['stop_travel_types'][$i]['style'] = $color_array[$i];
         }
 
     }
@@ -67,14 +63,22 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                             });
                                                 })
                                                 ->when(request()->has('type'), function ($query) {
-                                                    $query->whereHas('mil_times.salaryType', function ($q)  {
-                                                        $q->where('id', request()->get('type'))
+                                                     $query
+                                                        ->whereHas('mil_times', function ($q){
+                                                             $q->where('times_type_id',request()->get('type'))->latest();
+                                                        })
                                                         
-                                                        //    ->where('mins_id',request()->get('minsitry_id'))
-                                                        //    ->orwhere('mins_id','=','all')
+                                                        ->whereHas('mil_times.salaryType', function ($q)  {
+                                                            $q->where('id', request()->get('type'))
+                                                               ->where('mins_id',request()->get('minsitry_id'))
+                                                               ->orwhere('mins_id','=','all')      
                                                         ;
-                                                        });
-                                                       
+                                                        })
+                                                        
+                                                    //     ->whereHas('status_all', function ($q){
+                                                    //         $q->where('type','stop_salary')->where('flag',1);
+                                                    //    })
+                                                        ;                                                       
                                                 })
                                                 ->whereHas('installment', function ($q){
                                                     return $q->where('finished',0);

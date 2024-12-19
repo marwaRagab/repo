@@ -41,6 +41,7 @@ class old_dbController extends Controller
                 'military_affairs_old.*',
                 'military_affairs_settlement.military_affairs_id',
                 'military_affairs_settlement.date as my_date',
+                'clients_old.ministry',
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.type_date")) as cancel_type'),
                 DB::raw('JSON_UNQUOTE(JSON_EXTRACT(military_affairs_settlement.stop_travel_cancel_request_date, "$.date")) as cancel_date'),
                 'military_affairs_settlement.stop_travel_cancel_reason'
@@ -72,6 +73,7 @@ class old_dbController extends Controller
         $stop_car_cancel = [];
         $stop_salary_sabah_salem = [];
         $stop_salary_force_affairs = [];
+       // dd($items);
 
         if ($type == "stop_car") {
             $stop_car_types = Military_affairs_stop_car_type::all();
