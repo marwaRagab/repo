@@ -60,7 +60,7 @@ class ImageRepository implements ImageRepositoryInterface
         }*/
 
         $transactions= Military_affair::where('archived','=',0)
-            ->where(['military_affairs.status' =>'execute_alert'])
+            ->where(['military_affairs.status' =>'execute_alert','jalasat_alert_status'=> 'accepted'])
             ->with('installment', function ($query) {
                 return $query->where('finished','=', 0);
             })->with('jalasaat_all', function ($query) {
@@ -146,6 +146,7 @@ class ImageRepository implements ImageRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $view = 'military_affairs/image/index';
         $title = $this->title;
+        $this->data['get_responsible'] = get_responsible();
 
 
         return view('layout', compact(['title', 'view', 'count', 'transactions', 'count_total', 'breadcrumb']), $this->data);

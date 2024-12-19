@@ -12,6 +12,7 @@ use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_status;
+use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_times_type;
 use App\Models\Ministry;
 use Illuminate\Support\Facades\App;
@@ -203,7 +204,9 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
                         $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
                         $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
                         Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
-                        $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert','date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
+                        $item_time=Military_affairs_times::where(['times_type_id'=>$old_time_type->id,'military_affairs_id'=>$military_affairs_id])->first();
+
+                        $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert','times_type_id'=>$old_time_type->id ])->first();
                         $update_note['date_end']= date(' Y-m-d H:i:s');
                      //   $update_note['times_type_id']=$request->id_time_type_new;
                         $update_note['updated_at']= date('Y-m-d H:i:s');
@@ -211,7 +214,19 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
                         $data_military['a3lan_jalsa_done_date']=$request->jalasat_alert_date;
 
                         //  $update_note['updated_by']=Auth::user()->id ;
-                        $note_item->update($update_note);
+                        if($note_item){
+                            $note_item->update($update_note);
+
+                        }
+
+                        if($item_time){
+                            $data_update['date_end']=date('Y-m-d H:i:s');
+
+                            $item_time->update($data_update);
+                        }
+
+                        Add_note_time($new_time_type,$military_affairs_id);
+                        change_status($request, $military_affairs_id);
 
                     }
 
