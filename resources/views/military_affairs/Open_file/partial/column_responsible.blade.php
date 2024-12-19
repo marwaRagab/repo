@@ -14,12 +14,12 @@
         <select class="form-select" name="user_id" id="responsibleSelect">
             <option selected>اختر</option>
             @foreach ($get_responsible as $res)
-                <option value="{{ $res->id }}" data-military-id="{{ $item->installment_id }}"
+                <option value="{{ $res->id }}" data-military-id="{{ $item->id }}"
                     data-user-id="{{ $res->id }}" data-status="open_file">{{ $res->name_ar }}</option>
             @endforeach
         </select>
     @endif
-    <input type="hidden" name="military_id" value="{{ $item->installment_id }}">
+    <input type="hidden" name="military_id" value="{{ $item->id }}">
     <input type="hidden" name="status" value="open_file">
     <button type="submit" class="d-none submit-button"></button>
 </form>

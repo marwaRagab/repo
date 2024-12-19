@@ -185,7 +185,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
         <div class="tab-content border mt-2">
           @php
 
-          $all_notes=get_all_notes('stop_car',$item->military_affairs_id);
+          $all_notes=get_all_notes('stop_car',$item->id);
       @endphp
           <div class="tab-pane active p-3" id="navpill-1" role="tabpanel">
           <form  class="mega-vertical"

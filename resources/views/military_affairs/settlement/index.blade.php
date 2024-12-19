@@ -342,9 +342,9 @@
                                 التفاصيل
                             </a>
                             @php
-                                $all_notes=get_all_notes('settlement',$one->installment_id);
-                                $all_actions=get_all_actions($one->installment_id);
-                                $get_all_delegations = get_all_delegations($one->installment_id);
+                                $all_notes=get_all_notes('settlement',$one->id);
+                                $all_actions=get_all_actions($one->id);
+                                $get_all_delegations = get_all_delegations($one->id);
 
                             @endphp
                             <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"

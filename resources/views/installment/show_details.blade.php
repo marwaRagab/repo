@@ -799,7 +799,7 @@
                                     </thead>
                                     <tbody>
                                         <!-- start row -->
-                                        @foreach( $data['get_all_delegations'] as $item)
+                                        @foreach( $data['get_all_delegations'] as $value)
                                         <tr>
                                             @php
                                                                                                        
