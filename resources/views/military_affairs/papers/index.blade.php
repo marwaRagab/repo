@@ -1,8 +1,4 @@
-@if (session()->has('message'))
-    <div class="alert alert-success">
-        {{ session()->get('message') }}
-    </div>
-@endif
+
 
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
@@ -90,7 +86,7 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link" data-bs-toggle="tab"
-                                                                   href="#actions-{{$item->id}}" role="tab">
+                                                                   href="#actions-{{$one->id}}" role="tab">
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
@@ -105,8 +101,8 @@
                                                                         'eqrar_dain',
                                                                         $one->m_a_id,
                                                                     );
-                                                                    $all_actions=get_all_actions($item->installment_id);
-                                                                    $get_all_delegations = get_all_delegations($item->installment_id);
+                                                                    $all_actions=get_all_actions($one->m_a_id);
+                                                                    $get_all_delegations = get_all_delegations($one->m_a_id);
                                                                     //   dd($all_notes);
                                                                 @endphp
                                                                 <div class="tab-pane active p-3" id="navpill-1"
@@ -303,7 +299,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-                                                                <div class="tab-pane p-3" id="actions-{{$item->id}}"
+                                                                <div class="tab-pane p-3" id="actions-{{$one->id}}"
                                                                  role="tabpanel">
                                                                 <table id="notes2"
                                                                        class="table table-bordered border text-wrap align-middle">
