@@ -69,10 +69,12 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 ->when(request()->has('type'), function ($query) {
                                                     $query->whereHas('mil_times.salaryType', function ($q)  {
                                                         $q->where('id', request()->get('type'))
+                                                        
                                                         //    ->where('mins_id',request()->get('minsitry_id'))
                                                         //    ->orwhere('mins_id','=','all')
                                                         ;
                                                         });
+                                                       
                                                 })
                                                 ->whereHas('installment', function ($q){
                                                     return $q->where('finished',0);
@@ -83,9 +85,9 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 ->where('archived',0)
                                                 ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_salary' => 1  ])
                                                 ->orderBy('installment_id','asc')
-                                                ->withCount('installment')
-                                                ->get();
-                                
+                                                ->get()
+                                                ;
+            // dd( $this->data['items']->first());
         $this->data['item_type_time1'] = Military_affairs_stop_salary_type::where(['type'=> 'stop_salary','slug'=> $stop_type])->first();
         if(request()->has('minsitry_id') &&  request()->get('minsitry_id') == 5)
         {
