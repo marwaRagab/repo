@@ -35,4 +35,8 @@ class Military_affairs_times extends Model
     {
         return $this->belongsTo(military_affairs_stop_travel_type::class, 'times_type_id', 'id');
     }
+    public function mil_times()
+    {
+        return $this->belongsTo(Military_affairs_times::class,'military_affairs_id')->last();
+    }
 }
