@@ -39,7 +39,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء المتقدمين</h4>
         <div class="d-flex">
-            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " >
+            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 ">
                 أضف جديد </a>
 
             <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
@@ -164,10 +164,10 @@
                                     <div class="d-block">
                                         <div>
                                             <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
-                                                 href="{{ route('advanced.car', $item->id) }}">
+                                                href="{{ route('advanced.car', $item->id) }}">
                                                 استعلام سيارات
                                                 {{-- ({{ App\Models\InstallmentCar::where('installment_clients_id', $item->id)->count() }}) --}}
-                                                ({{$item->installment_car_count}})
+                                                ({{ $item->installment_car_count }})
 
                                             </a>
                                         </div>
@@ -207,7 +207,7 @@
                                                 href="{{ route('advanced.issue', $item->id) }}">
                                                 استعلام قضائي
                                                 {{-- ({{ App\Models\InstallmentIssue::where('installment_clients_id', $item->id)->count() }}) --}}
-                                                ({{$item->installment_issue_count}})
+                                                ({{ $item->installment_issue_count }})
                                             </a>
                                         </div>
                                         @if ($item->installment_issue->isNotEmpty() || $item->installment_issue->count() > 0)
@@ -279,18 +279,21 @@
                                             </form>
                                         </li>
                                         <li>
-                                            <a class="btn btn-info rounded-0 w-100 mt-2" href="{{ route('advanced.acceptCondation',  $item->id) }}">
+                                            <a class="btn btn-info rounded-0 w-100 mt-2"
+                                                href="{{ route('advanced.acceptCondation', $item->id) }}">
                                                 مقبول بشرط </a>
 
                                         </li>
                                         <li>
-                                            <a class="btn btn-info rounded-0 w-100 mt-2" href="{{ route('advanced.accept',  $item->id) }}">
+                                            <a class="btn btn-info rounded-0 w-100 mt-2"
+                                                href="{{ route('advanced.accept', $item->id) }}">
                                                 مقبول </a>
 
                                             </form>
                                         </li>
                                         <li>
-                                            <a class="btn btn-warning rounded-0 w-100 mt-2"  href="{{ route('advanced.reject',  $item->id) }}">
+                                            <a class="btn btn-warning rounded-0 w-100 mt-2"
+                                                href="{{ route('advanced.reject', $item->id) }}">
                                                 مرفوض</a>
                                         </li>
 
@@ -318,7 +321,7 @@
                                     @endif
 
 
-                                    </li>
+                                </div>
                             </td>
                             <td>
                                 {{ $item->bank->name_ar ?? 'لا يوجد' }}
@@ -330,7 +333,8 @@
                                 <div class="block">
                                     <h5>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</h5>
 
-                                    <a class="btn btn-secondary w-100 mt-2" href="{{ route('advanced.notes',  $item->id) }}">
+                                    <a class="btn btn-secondary w-100 mt-2"
+                                        href="{{ route('advanced.notes', $item->id) }}">
                                         الملاحظات</a>
                                 </div>
 
@@ -352,6 +356,9 @@
                 </tbody>
             </table>
         </div>
+
+
+
     </div>
 
 
@@ -392,5 +399,3 @@
     </div> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-

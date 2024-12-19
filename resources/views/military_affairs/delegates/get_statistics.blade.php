@@ -4,7 +4,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive pb-4">
-                <table id="all" class="table table-bordered border text-nowrap align-middle">
+                <table id="all-student" class="table table-bordered border text-nowrap align-middle">
                     <thead class="thead-dark">
                         <tr>
                           <th>#</th>
@@ -25,7 +25,7 @@
                           <td><a href="{{ route('military_affairs.get_statistics_details', $item->id) }}" class="text-underline text-info" >{{App\Models\military_affairs_deligation::where('emp_id', $item->id)->where('end_date' , null)->count()}}</a></td>
                           <td><a href="{{ route('military_affairs.get_statistics_deligations', $item->id) }}" class="text-underline text-success" >{{App\Models\military_affairs_deligation::where('emp_id', $item->id)->whereNotNull('end_date')->count()}}</a></td>
                           <td><a href="{{ route('military_affairs.get_statistics_notes_details', $item->id) }}" class="text-underline text-indigo" >{{App\Models\military_affairs_notes::where('created_by', $item->id)->count()}}</a></td>
-                          <td><a href="{{ route('military_affairs.get_statistics_lawaffaires', $item->id) }}" class="text-underline text-success" >{{App\Models\Military_affairs\Military_affairs_amount::where('user_id', $item->id)->count()}}</a></td>
+                          <td><a href="{{ route('military_affairs.get_statistics_lawaffaires', $item->id) }}" class="text-underline text-success" >{{App\Models\Military_affairs\Military_affairs_amount::where('created_by', $item->id)->count()}}</a></td>
                           @php
                             $delegations = App\Models\military_affairs_deligation::where('emp_id', $item->id)->get();
                             $totalDays = 0;

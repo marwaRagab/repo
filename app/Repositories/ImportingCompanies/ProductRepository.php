@@ -174,6 +174,10 @@ class ProductRepository implements ProductRepositoryInterface
             ->whereHas('productsItems', function ($query) {
                 $query->groupBy('product_id');
             })
+            ->whereHas('class', function ($query) {
+                $query->orderBy('name_ar');
+            })
+            ->orderBy(ProductClass::select('name_ar')->whereColumn('class_id', 'classes.id'))
             ->get();
 
         $title = "المنتجات";

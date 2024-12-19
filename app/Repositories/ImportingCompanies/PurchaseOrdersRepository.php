@@ -39,13 +39,19 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
                 ->addColumn('invoice_value', function ($order) {
                     return number_format($order->order_item->sum('price_qabila'), 3);
                 })
+                ->addColumn('invoice_print', function ($order) {
+                    return '<a class="text-info" href="' . route('orders.print_invoice', $order->id) .'">  طباعة الفاتورة </a>'; 
+                })
                 ->addColumn('order_products', function ($order) {
                     return '<a class="text-info" href="' . route('orders.products', $order->id) .'"> منتجات طلب الشراء</a>'; 
+                })
+                ->addColumn('order_print', function ($order) {
+                    return '<a class="text-info" href="' . route('orders.print_order_company', $order->id) .'"> طباعة طلب الشراء</a>'; 
                 })
                 ->addColumn('actions', function ($order) {
                     return view('importingCompanies.Orders.partials.actions', compact('order'))->render();
                 })
-                ->rawColumns(['order_products','actions'])
+                ->rawColumns(['order_products','actions','invoice_print','order_print'])
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -99,7 +105,7 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         if ($request->hasFile('img')) {
             $file = $request->file('img');
             $filePath = $file->store('SentPurchaseRequests', 'public');
-            $data->img = '/storage/' . $filePath;
+            $data->img =  $filePath;
             $data->status = 'active';
             $data->send_status = 1;
             $data->sending_user_id = Auth::user()->id;
@@ -123,9 +129,10 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
 
     public function print_invoice($order_id)
     {
-        $order = Order::with('client')->findORFail($order_id);
+        $order = Order::with('order_item')->findORFail($order_id);
+        $totalCount = OrderItem::where('order_id', $order_id)->sum('price');
+        $qabilaCount = OrderItem::where('order_id', $order_id)->sum('price_qabila');
 
-        //    dd($order);
         $title = "المنتجات";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " ";
@@ -134,7 +141,49 @@ class PurchaseOrdersRepository implements PurchaseOrdersRepositoryInterface
         $view = 'importingCompanies/Orders/print_invoice';
         return view(
             'layout',
-            compact('title', 'order', 'view', 'breadcrumb', 'order_id')
+            compact('title', 'order', 'view', 'breadcrumb', 'order_id','totalCount','qabilaCount')
+        );
+    }
+
+    public function print_order_company($order_id)
+    {
+
+        $Order = Order::with('order_item','client')
+            ->whereHas('order_item.product_order_items', function ($query) {
+                $query->groupBy('company_id');
+            })
+        ->findORFail($order_id);
+        $order = $Order->order_item->groupBy(function ($item) {
+            return $item->product_order_items->company->name_ar; 
+        });
+        $totalCount = OrderItem::where('order_id', $order_id)->count();
+        foreach($order as $comp => $ord)
+        {
+            foreach($ord as $one)
+            {
+                $one->order_price += $one->final_price;
+                
+            }
+           
+        }
+        // dd($one);
+
+        $totalamount = OrderItem::with('product_order_items')
+                            ->whereHas('product_order_items', function ($query) {
+                                $query->groupBy('company_id');
+                            })
+                           ->where('order_id', $order_id)->sum('final_price');
+
+    //    dd($order);
+        $title = "المنتجات";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " ";
+        $breadcrumb[0]['url'] = route("dashboard");
+
+        $view = 'importingCompanies/Orders/print_order';
+        return view(
+            'layout',
+            compact('title', 'order', 'view', 'breadcrumb','order_id','totalCount','Order','one')
         );
     }
 

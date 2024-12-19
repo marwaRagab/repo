@@ -72,7 +72,9 @@
                                 {{ $loop->index + 1 }}
                             </td>
                             <td>
+                                <a class="text-dark" href="{{ route('installment.show-installment', ['id' => $item->id]) }}">
                                 {{ $item->id }}
+                                </a>
                             </td>
                             <td>
                                 {{ $item->installment_client->name_ar ?? 'لا يوجد' }} <br>

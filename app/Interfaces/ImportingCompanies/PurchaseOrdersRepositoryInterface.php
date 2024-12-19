@@ -11,4 +11,6 @@ interface PurchaseOrdersRepositoryInterface
     public function showOrderProducts($id);
     public function sending($id, Request $request);
     public function print_invoice($order_id);
+    public function print_order_company($order_id);
+
 }

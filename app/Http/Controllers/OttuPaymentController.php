@@ -17,9 +17,7 @@ class OttuPaymentController extends Controller
     {
         // Fetch client data from the database
         $clientData = DB::table('installment_clients')->find($id);
-
-        print_r($clientData);exit;
-
+        dd($clientData);
         if (!$clientData) {
             return redirect()->back()->with('error', 'Client not found');
         }

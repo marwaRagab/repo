@@ -42,10 +42,10 @@ class Installment_Client extends Model
         return $this->belongsTo(Bank::class, 'bank_id');
     }
 
-    // public function Boker()
-    // {
-    //     return $this->belongsTo(Boker::class, 'boker_id');
-    // }
+    public function Boker()
+    {
+        return $this->belongsTo(InstallmentBroker::class, 'boker_id');
+    }
     
      public function installmentBroker()
     {

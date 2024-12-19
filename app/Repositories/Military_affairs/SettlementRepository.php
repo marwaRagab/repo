@@ -2,27 +2,27 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\SettlementRepositoryInterface;
-use App\Models\InstallmentNote;
-use App\Models\InvoicesInstallment\Invoices_installment;
-use App\Models\Log;
-use App\Models\Military_affairs\Military_affairs_settlement;
-use App\Models\Military_affairs\Military_affairs_settlement_month;
-use App\Models\Military_affairs\Military_affairs_stop_bank_type;
-use App\Models\Military_affairs\Military_affairs_stop_car_type;
-use App\Models\Military_affairs\Military_affairs_stop_salary_type;
-use App\Models\Military_affairs\Stop_travel_types;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Models\Log;
+use App\Models\Court;
+use App\Models\Governorate;
 use Illuminate\Http\Request;
-
-use App\Models\Military_affairs\Military_affair;
+use App\Models\InstallmentNote;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Governorate;
-use App\Models\Court;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Stop_travel_types;
+use App\Models\InvoicesInstallment\Invoices_installment;
+
+use App\Models\Military_affairs\Military_affairs_settlement;
+use App\Models\Military_affairs\Military_affairs_stop_car_type;
+use App\Models\Military_affairs\Military_affairs_stop_bank_type;
 use App\Models\Military_affairs\Military_affairs_settlement_type;
+use App\Interfaces\Military_affairs\SettlementRepositoryInterface;
+use App\Models\Military_affairs\Military_affairs_settlement_month;
+use App\Models\Military_affairs\Military_affairs_stop_salary_type;
 
 
 class SettlementRepository implements SettlementRepositoryInterface
@@ -289,7 +289,7 @@ class SettlementRepository implements SettlementRepositoryInterface
 
 
         Add_note($old_case, $array_cancel, $request->military_affairs_id);
-
+        Add_note_time($array_cancel, $request->military_affairs_id);
 
         return redirect()->route('settle.index');
 
