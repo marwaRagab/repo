@@ -703,11 +703,8 @@
                                         الملاحظات <span
                                             class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
-                                    <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
-                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                            <div class="modal-content">
-                                                <form class="mega-vertical"
+
+                                                           <form class="mega-vertical"
                                                       action="{{url('add_notes')}}" method="post"
                                                       enctype="multipart/form-data">
                                                     @csrf
