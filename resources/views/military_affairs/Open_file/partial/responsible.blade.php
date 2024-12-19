@@ -1,3 +1,4 @@
+
 <!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -20,14 +21,14 @@
 
 <script>
     document.querySelectorAll('.form-select').forEach(select => {
-    select.addEventListener('change', function () {
-        const form = this.closest('form');
-        form.querySelector('.submit-button').click();
+        select.addEventListener('change', function () {
+            const form = this.closest('form');
+            form.querySelector('.submit-button').click();
 
-        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                            successModal.show();
-                            
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+        });
     });
-});
 
 </script>
