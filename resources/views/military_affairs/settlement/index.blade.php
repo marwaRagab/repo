@@ -342,9 +342,9 @@
                                 التفاصيل
                             </a>
                             @php
-                                $all_notes=get_all_notes('settlement',$one->installment_id);
-                                $all_actions=get_all_actions($one->installment_id);
-                                $get_all_delegations = get_all_delegations($one->installment_id);
+                                $all_notes=get_all_notes('settlement',$one->id);
+                                $all_actions=get_all_actions($one->id);
+                                $get_all_delegations = get_all_delegations($one->id);
 
                             @endphp
                             <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
@@ -397,6 +397,7 @@
                                                         </thead>
                                                         <tbody>
                                                         <!-- start row -->
+                                                        @if (count($all_notes) > 0 )
                                                         @foreach($all_notes as $all_note)
                                                             <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                                                 aria-controls="collapseExample">
@@ -433,6 +434,12 @@
 
                                                             </tr>
                                                         @endforeach
+                                                        @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                         </tbody>
                                                     </table>
                                                     <h4 class="mb-3">أضف ملاحظة </h4>
@@ -486,6 +493,7 @@
                                                         </thead>
                                                         <tbody>
                                                         <!-- start row -->
+                                                        @if (count($all_actions) > 0 )
                                                         @foreach ($all_actions as $value)
                                                         <tr>
                                                         @php
@@ -540,7 +548,12 @@
 
                                                         </tr>
                                                         @endforeach
+                                                        @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
 
+                                                                    @endif
                                                         </tbody>
                                                     </table>
 
@@ -562,6 +575,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <!-- start row -->
+                                                                    @if (count($get_all_delegations) > 0 )
                                                                     @foreach ($get_all_delegations as $value)
                                                         <tr data-bs-toggle="collapse"
                                                             data-bs-target="#collapseExample" aria-expanded="false"
@@ -619,7 +633,12 @@
 
                                                         </tr>
                                                     @endforeach
+                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
 
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                             </div>

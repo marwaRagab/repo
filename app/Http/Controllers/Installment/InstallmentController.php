@@ -4,31 +4,31 @@ namespace App\Http\Controllers\Installment;
 
 ini_set('memory_limit', '600M');
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\Order;
 use App\Models\Client;
 use App\Models\ClientImg;
 use App\Models\Installment;
-use App\Models\InstallmentCar;
-use App\Models\InstallmentClientNote;
-use App\Models\InstallmentIssue;
-use App\Models\InstallmentNote;
-use App\Models\Installment_Client;
-use App\Models\Installment_month;
-use App\Models\InvoicesInstallment\Invoices_installment;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_amount;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\Military_affairs\Military_affairs_settlement;
-use App\Models\Military_affairs\Military_affairs_settlement_month;
 use App\Models\Nationality;
-use App\Models\Order;
-use App\Models\PurchaseOrderItem;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\InstallmentCar;
+use App\Models\InstallmentNote;
+use App\Models\InstallmentIssue;
+use App\Models\Installment_month;
+use App\Models\PurchaseOrderItem;
+use App\Models\Installment_Client;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\InstallmentClientNote;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Military_affairs\Military_affairs_amount;
+use App\Models\Military_affairs\Military_affairs_settlement;
+use App\Models\Military_affairs\Military_affairs_settlement_month;
 
 class InstallmentController extends Controller
 {
@@ -304,7 +304,7 @@ class InstallmentController extends Controller
             ->where('installment_id', $id)->get();
         // dd($data['invoices']);
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
-
+        $data['get_all_delegations'] = get_all_delegations($military_affair->id);
         // $data['settle_item'] = Military_affairs_settlement::with('military_affair')->get();
 
         // if(count($data['settle_item']) > 0){

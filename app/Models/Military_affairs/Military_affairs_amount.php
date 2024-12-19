@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Military_affairs_amount extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
     protected $guarded = [];
 
     protected $table = 'military_affairs_amounts';

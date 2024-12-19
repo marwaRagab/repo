@@ -767,7 +767,7 @@
         </div>
     </div>
 </div>
-{{--
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -794,23 +794,73 @@
                                             <th> تاريخ البدأ </th>
                                             <th>تاريخ الانتهاء </th>
                                             <th> عدد الايام</th>
-                                            <th> عدد اجمالي الايام</th>
                                         </tr>
                                         <!-- end row -->
                                     </thead>
                                     <tbody>
                                         <!-- start row -->
+                                        @if (count($data['get_all_delegations']) > 0 )
+                                        @foreach( $data['get_all_delegations'] as $value)
                                         <tr>
+                                            @php
+                                                                                                       
+                                                                $created_by = DB::table('users')
+                                                                    ->where('id', $value->emp_id)
+                                                                    ->first();
+                                                                
+                                                            
+                                            @endphp
+                                            <td> {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                    $value['image_date'] ? 'الايمج' : (
+                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
+                                                                    $value['travel_date'] ? 'منع السفر' : (
+                                                                    $value['car_date'] ? 'حجز السيارات' : (
+                                                                    $value['bank_date'] ? 'حجز بنوك' : (
+                                                                    $value['salary_date'] ? 'حجز راتب' : (
+                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
+                                                                    )))))))
+                                                                }}
+                                                                </td>
                                             <td>
-                                                احمد
+                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
                                             </td>
-                                            <td>25/05/2012 </td>
-                                            <td>12</td>
-                                            <td>123 9988568</td>
-                                            <td>2</td>
-                                            <td>2</td>
-                                        </tr>
+                                            <td>
+                                                                @php
+                                                                    
+                                                                $day_start = explode(' ', $value->assign_date)[0];
+                                                                    if (is_numeric($day_start)) {
+                                                                        $day_start = date('Y-m-d', $day_start);
+                                                                    }
 
+                                                                    // Check the end date
+                                                                    if ($value->end_date && $value->end_date != '') {
+                                                                        $day_end = explode(' ', $value->end_date)[0];
+                                                                        if (is_numeric($day_end)) {
+                                                                            $day_end = date('Y-m-d', $day_end);
+                                                                        }
+                                                                        $different_day = get_different_date($day_start, $day_end);
+                                                                    } else {
+                                                                        // Use current timestamp if end_date is missing
+                                                                        $day_end = 'لم تنتهى';
+                                                                        $different_day = get_different_date($day_start, now()->timestamp);
+                                                                    }
+                                                                @endphp
+                                                                {{ $day_start }}
+
+                                                            </td>
+                                                            <td>{{ $day_end }}</td>
+
+                                                            <td>
+                                                                {{ $different_day }}
+                                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                                    <tr>
+                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                    </tr>
+
+                                                @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -820,7 +870,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div> 
 
 <!--<div class="card">-->
 <!--    <div class="card-body">-->
@@ -2039,7 +2089,7 @@
                                             <td>{{ number_format ($total_madionia1 ,3)}}
                                             </td>
                                             <td>-</td>
-                                            <td>{{$Installment->created_at->format('Y-m-d')}}</td>
+                                            <td>{{ $Installment->created_at ? $Installment->created_at->format('Y-m-d') : 'N/A' }}</td>
                                             <td></td>
                                             <td></td>
                                         </tr>
