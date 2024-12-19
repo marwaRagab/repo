@@ -99,7 +99,7 @@ class DelegatesController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $data['users'] = User::where('type' , 'emp')->get();
+        $data['users'] = User::where('type' , 'emp')->where('id' , $user_id)->first();
 
         $data['delegates'] = military_affairs_deligation::where('emp_id', $user_id)->where('end_date' , null)->with('militaryAffair')->get();
         // dd($data['delegates'] );
@@ -131,7 +131,7 @@ class DelegatesController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $data['users'] = User::where('type' , 'emp')->get();
+        $data['users'] = User::where( 'type' , 'emp')->where('id' , $user_id)->first();
 
         $data['delegates'] = military_affairs_deligation::where('emp_id', $user_id)->whereNotNull('end_date')->with('militaryAffair')->get();
         // dd($data['delegates'] );
@@ -162,19 +162,10 @@ class DelegatesController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $data['users'] = User::where('type' , 'emp')->get();
+        $data['users'] = User::where('type' , 'emp')->where('id' , $user_id)->first();
 
         $data['delegates'] = military_affairs_notes::where('created_by', $user_id)->get();
-        // dd($data['delegates'] );
-        // $data['delegates'] = Military_affair::where('emp_id', $data['delegate_user']->emp_id)->with('installment')->get();
-        //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
-        // if ($data) {
-        //     $user_id = 1;
-        //     //   $user_id =  Auth::user()->id,
-        //     $message = "تم دخول صفحة الوسطاء";
-        //     $this->log($user_id, $message);
-        // }
-
+        
         $view = 'military_affairs.delegates.get-statistics-notes-details';
         return view(
             'layout',
@@ -194,8 +185,10 @@ class DelegatesController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         
+        $data['users'] = User::where( 'type' , 'emp')->where('id' , $user_id)->first();
+
         // Iterate through the Military_affairs collection to get each id
-        $data['delegates'] = Military_affairs_amount::where('user_id', $user_id)->get();
+        $data['delegates'] = Military_affairs_amount::where('created_by', $user_id)->get();
         // dd($data['delegates'] );
         // $data['delegates'] = Military_affair::where('emp_id', $data['delegate_user']->emp_id)->with('installment')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();

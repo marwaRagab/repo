@@ -60,5 +60,20 @@ class CertificateController extends Controller
         return $this->CertificateRepository->convert_book_info($id);
     }
 
+    public function print_case_proof()
+    {
+        // return $this->CertificateRepository->print_case_proof();
+        return view('military_affairs.Execute_alert.print.case_proof');
+    }
+
+    public function print_sticker()
+    {
+        return view('military_affairs.Execute_alert.print.sticker');
+    }
+    public function print_issue()
+    {
+        return view('military_affairs.Execute_alert.print.issue');
+    }
+
 
 }

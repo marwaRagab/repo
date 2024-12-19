@@ -1,6 +1,6 @@
 <div class="card">
                         <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-                            <h4 class="card-title mb-0"> عدد الملاحظات</h4>
+                            <h4 class="card-title mb-0"> عدد ملاحظات المسئول ({{$data['users']->name_ar}})</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive pb-4">

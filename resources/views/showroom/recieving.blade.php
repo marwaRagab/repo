@@ -14,7 +14,7 @@
     <div class="card-body">
 
         <div class="table-responsive pb-4">
-            <table id="file-export" class="table w-100 table-bordered display text-nowrap">
+            <table id="file-export" class="table w-100  table-bordered display text-nowrap">
                 <thead>
                     <!-- start row -->
                     <tr>
@@ -180,7 +180,7 @@ function check(id) {
     }
     if (document.getElementById("receiving_" + id).checked) {
        
-        if (recieved_counter > counter || recieved_counter < 1 ) {
+        if (recieved_counter > counter || recieved_counter < 1) {
             alert('   العدد غير صحيح');
             return false;
         } 

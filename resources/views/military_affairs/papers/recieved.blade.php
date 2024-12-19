@@ -112,7 +112,6 @@
 
                                                         </div>
 
-
                                                         <div class="mb-3">
                                                             <label for="message-text" class="">ملاحظة</label>
                                                             <textarea class="form-control" name="note_transfer" id="message-text1"></textarea>
@@ -131,8 +130,6 @@
                                                         </div>
                                                     </form>
                                                 </div>
-
-
 
                                             </div>
                                         </div>

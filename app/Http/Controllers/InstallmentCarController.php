@@ -103,7 +103,7 @@ class InstallmentCarController extends Controller
         $this->log(Auth::user()->id ?? null, $message);
         $this->installment_notes($request->installment_clients_id, $message);
 
-        return redirect()->route('myinstall.index', ['status' => 'car_inquiry']);
+        return redirect()->route('installmentClient.index', ['status' => 'car_inquiry']);
         // ->with('success', 'تم إضافة استعلام السيارات بنجاح.');
         // return redirect()->back();
         }

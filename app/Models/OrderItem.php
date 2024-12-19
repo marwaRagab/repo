@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Showroom\products_items;
+use App\Models\ImportingCompanies\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
