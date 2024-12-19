@@ -154,11 +154,11 @@
                 <tbody>
 
                 @foreach($items as $item)
-                    
-                    
+
                     @if($item->installment->finished==0)
                    
                     @php
+
 
                     $item_statues=
                     $item->notes->where('type','=','stop_bank')->where('times_type_id',$item_type_time_old->id)->where('date_end',NULL);
@@ -170,13 +170,15 @@
 
                     @endif
 
-                    @if(!Request::has('governorate_id') || Request::get('governorate_id') == '' )
+                        @if(!Request::has('governorate_id') || Request::get('governorate_id') == '' )
 
-                    @if(count($item_statues)>=1)
 
-                    @include('military_affairs.Stop_bank.table_details')
 
-                    @endif
+
+                            @include('military_affairs.Stop_bank.table_details')
+
+
+
 
                         @endif
                     @endif

@@ -68,7 +68,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $breadcrumb[1]['url'] = route("military_affairs");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-$this->data['check_amount']=0;
+          $this->data['check_amount']=0;
         foreach ($this->data['items'] as $value) {
             $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
 
@@ -83,17 +83,26 @@ $this->data['check_amount']=0;
     {
 
         $checking_type = $request->checking_type;
+        if(!$checking_type){
+            $checking_type=0;
+        }
         $message = "تم دخول صفحة فتح  لشيكات المستلمة ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+
+        $user_id =  Auth::user()->id;
+
+         log_move($user_id ,$message);
+
         $this->data['title'] = ' الشيكات المستلمة ';
 
 
         $this->data['items'] = Military_affair::where(['military_affairs.archived'=>0,'military_affairs.status'=>'execute'])
 
-            ->with('installment')->with('military_amount')->with('military_check')->get();
+            ->with('installment', function ($query) {
+                return $query->where('status', '=', 'finished');
+            })->with('military_amount')->with('military_check', function ($query)use ($checking_type) {
+                return $query->where('deposit', '=', $checking_type);
+            })
+           ->get();
 
 
         $title = '   الشيكات المستلمة ';

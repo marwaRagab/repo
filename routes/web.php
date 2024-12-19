@@ -146,6 +146,13 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     // advanced
+    Route::get('/new',[advancedController::class, 'index'])->name('advanced.addnew');
+    Route::get('/notes/{id}',[advancedController::class, 'Notesindex'])->name('advanced.notes');
+    Route::get('/issue/{id}',[advancedController::class, 'Issueindex'])->name('advanced.issue');
+    Route::get('/car/{id}',[advancedController::class, 'Carindex'])->name('advanced.car');
+    Route::get('/myinstall/accept-condition/{id}',[advancedController::class, 'acceptCondationindex'])->name('advanced.acceptCondation');
+    Route::get('/myinstall/accept/{id}',[advancedController::class, 'acceptindex'])->name('advanced.accept');
+    Route::get('/myinstall/reject/{id}',[advancedController::class, 'rejectindex'])->name('advanced.reject');
     Route::get('/new', [advancedController::class, 'index'])->name('advanced.addnew');
     Route::get('/notes/{id}', [advancedController::class, 'Notesindex'])->name('advanced.notes');
     Route::get('/issue/{id}', [advancedController::class, 'Issueindex'])->name('advanced.issue');
@@ -335,12 +342,12 @@ Route::middleware('auth')->group(function () {
     Route::get('region/filter/{id}', [RegionController::class, 'filter'])->name('region.filter');
 
     // courts
-    Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
+   /* Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
     Route::post('courts/store', [CourtController::class, 'store'])->name('courts.store');
     Route::get('courts/edit/{id}', [CourtController::class, 'edit'])->name('courts.edit');
     Route::any('courts/update/{id}', [CourtController::class, 'update'])->name('courts.update');
     Route::any('courts/delete/{id}', [CourtController::class, 'destroy'])->name('courts.destroy');
-    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');
+    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');*/
 
     // nationality
     Route::get('nationality', [NationalityController::class, 'index'])->name('nationality.index');

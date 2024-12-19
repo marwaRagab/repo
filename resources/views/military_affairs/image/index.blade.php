@@ -1,5 +1,5 @@
 
-@php 
+@php
 $arr=['success','danger','primary','secondary','info','warning'];
 //dd($governorates[2]);
 @endphp
@@ -16,10 +16,10 @@ $arr=['success','danger','primary','secondary','info','warning'];
   محكمة {{ $governorates[$i]->name_ar }} ({{ $count['counter_'.$governorates[$i]->id]}})
 </a>
 @endfor
-    
 
 
-   
+
+
   </div>
 </div>
 <div class="card">
@@ -27,13 +27,13 @@ $arr=['success','danger','primary','secondary','info','warning'];
       <h4 class="card-title mb-0">{{ $title }}</h4>
   </div>
 <div class="card-body">
-  
+
   <div class="table-responsive pb-4">
     <table id="all-student" class="table table-bordered border text-nowrap align-middle">
       <thead>
         <!-- start row -->
         <tr>
-          <th>م</th>
+                                <th>م</th>
                                 <th >رقم المعاملة </th>
                                 <th>اسم العميل </th>
                                 <th>تاريخ البدء</th>
@@ -53,24 +53,36 @@ $arr=['success','danger','primary','secondary','info','warning'];
       <tbody>
        @php $i=1; @endphp
                   @foreach ($transactions as $one)
-                      
-                
+
+
                 <!-- start row -->
-  
+                 @if($one->installment)
                 <tr>
-            <td>{{$i}}</td>
-                  <td><a href="#">{{$one->id}}</a></td>
-                  <td>{{$one->name_ar}}<br/>{{ $one->civil_number }}<br/>{{ $one->phone_ids }}</td>
+                    <td>{{$i}}</td>
+                  <td><a href="{{url('installment/show-installment/'.$one->installment->id)}}">{{$one->installment->id}}</a></td>
+
+                    <td>
+                        {{$one->installment->client->name_ar}}
+                        <br>
+                        {{$one->installment->client->civil_number}}
+                        <br>
+                        {{$one->phone}}
+
+
+                    </td>
+
                   <td>{{$one->date}}</td>
-                  <td>{{$one->eqrardain_amount}}</td>
+                  <td>{{$one->eqrar_dain_amount}}</td>
                   <td>{{$one->open_file_date}}</td>
                   <td>{{$one->issue_id}}</td>
-                  <td></td> <!-- هجيبه من الجلسات وانا بتيست-->
-                  <td>{{$one->governorate_id}}</td>
-                  <td>لا يوجد</td>
-                  <td>  
-                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add_a3lan">
-                    ايداع الاعلان</button>
+                  <td>{{ $one->jalasaat_all->first() ? ($one->jalasaat_all->first()->a3lan_jalsa_done_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+                  <td>
+                      {{$one->installment->client->court ?  \App\Models\Court::where('governorate_id', $one->installment->client->court->id)->first()->name_ar : ''}}
+                  </td>
+                    <td>{{ $one->jalasaat_all->first() ? $one->jalasaat_all->first()->jalasat_alert_reason : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+                    <td>{{ $one->jalasaat_all->first() ? ($one->jalasaat_all->first()->a3lan_paper_date) : ''}}</td> <!-- هجيبه من الجلسات وانا بتيست-->
+
+                  {{--  <td>
 
                   <div id="add_a3lan" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -82,9 +94,9 @@ $arr=['success','danger','primary','secondary','info','warning'];
                         </div>
                         <div class="modal-body">
                           <form class="ps-3 pr-3" action="{{ route('image.to_a3lan_eda3') }}" method="POST" enctype="multipart/form-data">
-                            @csrf 
+                            @csrf
                             <div class="form-row">
-                              
+
                               <div class="form-group">
                                 <div class="my-3">
                                   <label class="form-label">تاريخ ايداع الاعلان</label>
@@ -108,145 +120,387 @@ $arr=['success','danger','primary','secondary','info','warning'];
                       </div>
                     </div>
                   </div>
-                 
-</td>
-                  <div class="btn-group dropup mb-6 me-6 d-block ">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                      الإجراءات
-                    </button>
-                    <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
-                      <li>
-                        <a class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                          data-bs-target="#notes">
-                          الملاحظات</a>
-                      </li>
-                      <li>
-                        <a class="btn btn-primary rounded-0 w-100 mt-2" href="#">
-                          التفاصيل</a>
-                          <li>
-                            <a class="btn btn-info rounded-0 w-100 mt-2" 
-                             href="{{ route('image.athbat_7ala/'.$one->id) }}">طباعة كتاب اثبات
-                            </a>
-                          </li>
-                      <li style="display:none">
-                        <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                          data-bs-target="#open-file">الصورة
-                        </a>
-                      </li>
-                    
-                    
-                    </ul>
+
+                    </td>--}}
+                    <td>
+                        <div class="btn-group dropup mb-6 me-6 d-block ">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                الإجراءات
+                            </button>
+                            <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <a class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                       data-bs-target="#open-details_{{ $one->id }}">
+                                        الملاحظات</a>
+                                    <div id="open-details_{{$one->id}}" class="modal fade" tabindex="-1"
+                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                            <div class="modal-content">
+                                                <form class="mega-vertical"
+                                                      action="{{url('add_notes')}}" method="post"
+                                                      enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-header d-flex align-items-center">
+                                                        <h4 class="modal-title" id="myModalLabel">
+                                                            ملاحظات منع السفر </h4>
+                                                        <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <ul class="nav nav-pills" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active"
+                                                                   data-bs-toggle="tab"
+                                                                   href="#navpill-{{$one->id}}" role="tab">
+                                                                    <span>الملاحظات</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab"
+                                                                   href="#actions-{{$one->id}}" role="tab">
+                                                                    <span>الإجراءات</span>
+                                                                </a>
+                                                            </li>
+
+                                                        </ul>
+                                                        <!-- Tab panes -->
+                                                        @if(count($transactions)>=1)
+
+                                                            <div class="tab-content border mt-2">
+                                                                @php
+
+                                                                    $all_notes=get_all_notes('images',$one->id);
+                                                                    $all_actions=get_all_actions($one->id);
+                                                                @endphp
+                                                                <div class="tab-pane active p-3"
+                                                                     id="navpill-{{$one->id}}"
+                                                                     role="tabpanel">
+
+                                                                    <table id="notes1"
+                                                                           class="table table-bordered border text-wrap align-middle">
+                                                                        <thead>
+                                                                        <!-- start row -->
+                                                                        <tr>
+                                                                            <th>اليوزر</th>
+                                                                            <th>النوع</th>
+                                                                            <th>الملاحظة</th>
+                                                                            <th> الساعة</th>
+                                                                            <th>التاريخ</th>
+
+                                                                        </tr>
+                                                                        <!-- end row -->
+                                                                        </thead>
+                                                                        <tbody>
 
 
-                  </div>
-                 
-                  <div class="btn-group dropup mb-6 me-6 d-block ">
-                    <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
-                      data-bs-toggle="dropdown" aria-expanded="false">
-                      طباعة
-                    </button>
-                    <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
-                      <li>
-                        <a class="btn btn-warning rounded-0 w-100 mt-2" href="#">
-                          اثبات حالة</a>
-                      </li>
-                      <li>
-                        <a class="btn btn-primary rounded-0 w-100 mt-2" href="#">
-                          ستيكر ملف التنفيذ</a>
-                        
-                      <li>
-                        <a class="btn btn-success rounded-0 w-100 mt-2" href="#">البطاقة المدنية
-                        </a>
-                      </li>
-                      <li>
-                        <a class="btn btn-info rounded-0 w-100 mt-2" 
-                         href="#">  اقرار الدين
-                        </a>
-                      </li>
-                     
-                   
-                    </ul>
+                                                                        <!-- start row -->
+                                                                        @foreach($all_notes as $all_note)
+
+                                                                            <tr data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapseExample"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseExample">
+                                                                                <td>
+                                                                                    {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    @php
+                                                                                        if($all_note->notes_type=='answered'){
+                                                                                        $type= 'رد'   ;
+                                                                                        }elseif ($all_note->notes_type=='refused'){
+                                                                                        $type= 'لم يرد'   ;
+                                                                                        }else{
+                                                                                        $type= 'ملاحظة'   ;
+                                                                                        }
+
+                                                                                    @endphp
+                                                                                    {{$type}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <p>
+                                                                                        {{$all_note->note}}
+                                                                                    </p>
+                                                                                </td>
+                                                                                @php
+                                                                                    $time= explode(' ', $all_note->date)[1];
+                                                                                    $day= explode(' ', $all_note->date)[0];
+
+                                                                                @endphp
+                                                                                <td>{{$time}}<span
+                                                                                        class="d-block"></span>
+                                                                                </td>
+                                                                                <td>{{$day}}</td>
+
+                                                                            </tr>
+
+                                                                        @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <div class="add-note">
+                                                                        <h4 class="mb-3">اضف ملاحظة</h4>
+
+                                                                        <input type="hidden"
+                                                                               name="military_affairs_id"
+                                                                               value="{{ $one->id }}">
 
 
-                  </div>
+                                                                        <input type="hidden" name="type"
+                                                                               value="">
 
-                     
-                      <!-- sample modal content -->
-                      <div id="notes_{{ $one->id }}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
-                      aria-hidden="true">
-                     <form class="mega-vertical"
-                           action="{{url('add_notes')}}" method="post"
-                           enctype="multipart/form-data">
-                         @csrf
-                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                             <div class="modal-content">
-                                 <div class="modal-header d-flex align-items-center">
-                                     <h4 class="modal-title" id="myModalLabel">
-                                         اضافة ملاحظة </h4>
-                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                             aria-label="Close"></button>
-                                 </div>
-                                 <div class="modal-body">
+                                                                        <div class="form-row">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">
+                                                                                    الاتصال</label>
+                                                                                <select class="form-select"
+                                                                                        name="notes_type">
+                                                                                    <option
+                                                                                        value="answered">
+                                                                                        رد
+                                                                                    </option>
+                                                                                    <option
+                                                                                        value="refused">
+                                                                                        لم يرد
+                                                                                    </option>
+                                                                                    <option
+                                                                                        value="note">
+                                                                                        ملاحظة
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div class="my-3">
+                                                                                    <label
+                                                                                        class="form-label">الملاحظات</label>
+                                                                                    <textarea name="note"
+                                                                                              class="form-control"
+                                                                                              rows="5"></textarea>
+                                                                                    @error('note')
+                                                                                    <div
+                                                                                        style='color:red'>{{$message}}</div>
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
 
-                                  
-                                     <div class="form-row">
-                                         <div class="form-group">
-                                             <label class="form-label"> الجهة</label>
-                                             <select class="form-select" name="notes_type">
-                                                 <option
-                                                     value="answered">
-                                                     رد
-                                                 </option>
-                                                 <option
-                                                     value="refused">
-                                                     لم يرد
-                                                 </option>
-                                                 <option
-                                                     value="note">
-                                                     ملاحظة
-                                                 </option>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="tab-pane p-3" id="actions-{{$one->id}}"
+                                                                     role="tabpanel">
+                                                                    <table id="notes2"
+                                                                           class="table table-bordered border text-wrap align-middle">
+                                                                        <thead>
+                                                                        <!-- start row -->
+                                                                        <tr>
+                                                                            <th>اليوزر</th>
+                                                                            <th>القسم</th>
+                                                                            <th>التاريخ</th>
+                                                                            <th> عدد الايام</th>
+                                                                        </tr>
+                                                                        <!-- end row -->
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <!-- start row -->
+                                                                        @foreach($all_actions as $value)
 
 
-                                             </select>
-                                         </div>
-                                         <div class="form-group">
-                                             <label class="form-label" for="input1 ">
-                                                 الملاحظة </label>
-                                             <textarea name="note" class="form-control mb-2">
+
+                                                                            <tr data-bs-toggle="collapse"
+                                                                                data-bs-target="#collapseExample"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseExample">
+                                                                                <td>
+                                                                                    {{\App\Models\User::findorfail($value->created_by)->name_ar}}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{$value->times_type_id}}
+
+
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    @php
+
+                                                                                        $day_start= explode(' ', $value->date_start)[0];
+                                                                                        if($value->date_end) {
+                                                                                        $day_end= explode(' ',$value->date_end)[0];
+                                                                                        }else{
+                                                                                        $day_end=date('Y-m-d');
+                                                                                        }
+                                                                                        $different_day=get_different_dates($day_start,$day_end);
+
+                                                                                    @endphp
+                                                                                    {{$day_start}}
+                                                                                    <br>
+                                                                                    {{$day_end}}
+                                                                                </td>
+
+                                                                                <td>
+                                                                                    {{$different_day}}
+                                                                                </td>
+
+                                                                            </tr>
+
+
+
+                                                                        @endforeach
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="modal-footer d-flex ">
+                                                        <button class="btn btn-primary" type="submit"> حفظ
+
+                                                        </button>
+                                                        <button type="button"
+                                                                class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                data-bs-dismiss="modal">
+                                                            إغلاق
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                                @endif
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+
+
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary rounded-0 w-100 mt-2" href="{{url('installment/show-installment/'.$one->installment->id)}}">
+                                        التفاصيل</a>
+                                <li>
+                                    <a class="btn btn-info rounded-0 w-100 mt-2"
+                                       href="{{ url('military_affairs/image/athbat_7ala/'.$one->id) }}">طباعة كتاب اثبات
+                                    </a>
+                                </li>
+                                <li >
+                                    @if($one->jalasaat_all->first())
+                                    <a class="btn btn-success rounded-0 w-100 mt-2"
+                                      href="">الصورة</a>
+                                    @endif
+                                </li>
+
+
+                            </ul>
+
+
+                        </div>
+
+                        <div class="btn-group dropup mb-6 me-6 d-block ">
+                            <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                طباعة
+                            </button>
+                            <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
+                                <li>
+                                    <a class="btn btn-warning rounded-0 w-100 mt-2" href="#">
+                                        اثبات حالة</a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary rounded-0 w-100 mt-2" href="#">
+                                        ستيكر ملف التنفيذ</a>
+
+                                <li>
+                                    <a class="btn btn-success rounded-0 w-100 mt-2" href="#">البطاقة المدنية
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-info rounded-0 w-100 mt-2"
+                                       href="#">  اقرار الدين
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+
+                        </div>
+
+
+                        <!-- sample modal content -->
+                        <div id="notes_{{ $one->id }}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
+                             aria-hidden="true">
+                            <form class="mega-vertical"
+                                  action="{{url('add_notes')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header d-flex align-items-center">
+                                            <h4 class="modal-title" id="myModalLabel">
+                                                اضافة ملاحظة </h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+
+
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="form-label"> الجهة</label>
+                                                    <select class="form-select" name="notes_type">
+                                                        <option
+                                                            value="answered">
+                                                            رد
+                                                        </option>
+                                                        <option
+                                                            value="refused">
+                                                            لم يرد
+                                                        </option>
+                                                        <option
+                                                            value="note">
+                                                            ملاحظة
+                                                        </option>
+
+
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="input1 ">
+                                                        الملاحظة </label>
+                                                    <textarea name="note" class="form-control mb-2">
 
                                              </textarea>
-                                             <input type="text"  name="note" value="{{ $one->id }}"class="form-control mb-2" style="display:none;"/>
-                                         </div>
+                                                    <input type="text"  name="note" value="{{ $one->id }}"class="form-control mb-2" style="display:none;"/>
+                                                </div>
 
 
-                                     </div>
+                                            </div>
 
-                                 </div>
-                                 <div class="modal-footer d-flex ">
-                                     <button type="submit" class="btn btn-primary">
-                                         حفظ
-                                     </button>
-                                     <button type="button"
-                                             class="btn bg-danger-subtle text-danger  waves-effect"
-                                             data-bs-dismiss="modal">
-                                         الغاء
-                                     </button>
-                                 </div>
-                             </div>
-                             <!-- /.modal-content -->
-                         </div>
-                     </form>
-                     <!-- /.modal-dialog -->
-                 </div>
+                                        </div>
+                                        <div class="modal-footer d-flex ">
+                                            <button type="submit" class="btn btn-primary">
+                                                حفظ
+                                            </button>
+                                            <button type="button"
+                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                    data-bs-dismiss="modal">
+                                                الغاء
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                            </form>
+                            <!-- /.modal-dialog -->
+                        </div>
 
-                  
+
+                    </td>
+
                 </tr>
                 <!-- end row -->
-          
+                 @endif
+
           @php $i++; @endphp
                 @endforeach
-      </tbody>  
+      </tbody>
     </table>
 
   </div>
