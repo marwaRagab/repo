@@ -86,9 +86,9 @@
     <td>
         @php
 
-        $all_notes=get_all_notes('execute_alert',$item->installment_id);
-        $all_actions=get_all_actions($item->installment_id);
-        $get_all_delegations = get_all_delegations($item->installment_id);
+        $all_notes=get_all_notes('execute_alert',$item->id);
+        $all_actions=get_all_actions($item->id);
+        $get_all_delegations = get_all_delegations($item->id);
 
         @endphp
         <a class="btn btn-success me-6 my-2"
