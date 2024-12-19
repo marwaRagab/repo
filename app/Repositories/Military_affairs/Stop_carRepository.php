@@ -120,6 +120,8 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $view = 'military_affairs/stop_car/index';
         $title = $this->title;
+        $this->data['get_responsible'] = get_responsible();
+
         return view('layout', compact(['title', 'view', 'transactions', 'breadcrumb', 'count']), $this->data);
 
     }
