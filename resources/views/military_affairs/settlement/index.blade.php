@@ -397,6 +397,7 @@
                                                         </thead>
                                                         <tbody>
                                                         <!-- start row -->
+                                                        @if (count($all_notes) > 0 )
                                                         @foreach($all_notes as $all_note)
                                                             <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                                                 aria-controls="collapseExample">
@@ -433,6 +434,12 @@
 
                                                             </tr>
                                                         @endforeach
+                                                        @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                         </tbody>
                                                     </table>
                                                     <h4 class="mb-3">أضف ملاحظة </h4>
