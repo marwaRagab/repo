@@ -150,7 +150,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
             $value->different_date = get_different_dates($value->date,date('Y-m-d'));
             $value->adress= ($value->installment->client->client_address ?  $value->installment->client->client_address->last() : '' );
-            $value->phone= ($value->installment->client->client_phone ?  $value->installment->client->client_phone->last() : ''   );
+            $value->phone= ($value->installment->client->client_phone ?  $value->installment->client->client_phone->last()->phone : ''   );
             if($value->eqrardain_date != NULL){
                 $value->type_papar= 'وصل امانة';
             }elseif ($value->qard_paper != NULL){

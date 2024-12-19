@@ -18,9 +18,9 @@ class ImageController extends Controller
     {
         $this->ImageRepository = $ImageRepository;
     }
-    public function index(Request $request, $governorate_id = null)
+    public function index(Request $request)
     {
-        return $this->ImageRepository->index($governorate_id);
+        return $this->ImageRepository->index($request);
 
     }
     public function to_a3lan_eda3(Request $request)

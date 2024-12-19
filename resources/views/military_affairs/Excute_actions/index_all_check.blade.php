@@ -10,7 +10,7 @@
     <div class="d-flex flex-wrap ">
         <a  href=" {{route('all_checks')}}"  class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
             الجديدة </a>
-        <a   href="{{route('all_checks',array('check_type' =>'deposit'))}}"    class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a   href="{{route('all_checks',array('check_type' =>1))}}"    class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
             تم الايداع  </a>
 
     </div>
@@ -42,7 +42,8 @@
                 <tbody>
                 <!-- start row -->
                 @foreach( $items as $item)
-                    @if($item->installment->finished==0)
+                    @if($item->installment)
+                        @if(isset($item->military_check))
 
 
                             <tr>
@@ -53,9 +54,9 @@
                                 <td>
                                     {{$item->installment->client->name_ar}}
 
-                                    {{$item->phone}} ({{$item->installment->id}})
+                                    ({{$item->installment->id}})
                                     <br>
-                                    {{$item->installment->client->	civil_number}}
+                                    {{$item->installment->client->civil_number}}
                                 </td>
 
                                 <td>{{$item->madionia_amount}}</td>
@@ -66,7 +67,7 @@
                                 <td>{{$item->military_check->first() ?    $item->military_check->first()->date : ''}}  </td>
                                 <td>
 
-                                  <a href=""></a> صورة الشيك  </td>
+                                    <a href=""></a> صورة الشيك  </td>
 
 
 
@@ -98,7 +99,7 @@
                                                             $check_amount = $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
                                                         @endphp
                                                         <input type="hidden"  name="military_affairs_id" value="{{$item->id}}"/>
-                                                        <input type="hidden"  name="check_id" value="{{$item->military_check->first()->id}}"/>
+                                                        <input type="hidden"  name="check_id" value=""/>
                                                         <input type="hidden"  name="installment_id" value="{{$item->installment->id}}"/>
                                                         <input type="hidden"  name="client_name" value="{{$item->installment->client->name_ar}}"/>
 
@@ -134,6 +135,7 @@
                             </tr>
 
 
+                        @endif
                     @endif
 
                 @endforeach
