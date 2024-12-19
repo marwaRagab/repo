@@ -35,19 +35,18 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+            <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <!-- start row -->
                     <tr>
                         <th>#</th>
-
-
 
                         <th>رقم المعاملة </th>
                         <th>اسم العميل</th>
                         <th> المحكمة</th>
                         <th>المبلغ </th>
                         <th> الرقم الالي </th>
+                        <th>تحديد مسئول</th>
 
                         <th> الإجراءات </th>
 
@@ -58,26 +57,26 @@
 
                     <!-- start row -->
                     @php $i=1; @endphp
-                    @foreach ($transactions as $one)
+                    @foreach ($transactions as $item)
                         <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                             aria-controls="collapseExample">
                             <td>
                                 {{ $i }}
                             </td>
                             <td>
-                                <a href="#">{{ $one->id }}</a>
+                                <a href="#">{{ $item->id }}</a>
                             </td>
-                            <td>{{ $one->name_ar }}<br />{{ $one->civil_number }}<br />{{ $one->phone_ids }}</td>
-                            <td>{{ $one->governate_id }}</td>
-                            <td>{{ $one->eqrar_dain_amount }}</td>
-                            <td>{{ $one->issue_id }}</td>
+                            <td>{{ $item->name_ar }}<br />{{ $item->civil_number }}<br />{{ $item->phone_ids }}</td>
+                            <td>{{ $item->governate_id }}</td>
+                            <td>{{ $item->eqrar_dain_amount }}</td>
+                            <td>{{ $item->issue_id }}</td>
 
                             <td>
-
+                                @include('military_affairs.Open_file.partial.column_responsible')
                             </td>
 
+                            <td> الاجراءات </td>
 
-                            
                         </tr>
                         @php $i++; @endphp
                     @endforeach
