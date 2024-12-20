@@ -26,7 +26,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
 
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
                         'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
-                        'bg-warning-subtle text-warning','px-4 bg-primary-subtle text-primary','bg-success-subtle text-success'];
+                        'bg-warning-subtle text-warning','px-4 bg-primary-subtle text-primary','bg-success-subtle text-success', 'bg-danger-subtle text-danger'];
 
         for ($i = 0; $i < count($this->data['courts']); $i++) {
             $this->data['courts'][$i]['style'] = $color_array[$i];
@@ -40,7 +40,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         // dd($stop_car_type);
         $message = "تم دخول صفحة  حجز السيارات";
         $stop_type = $request->stop_type ?? 'stop_car_request';
-
+        
         $this->data['govern_count_total'] = $this->count_stop_car_governate_sql('execute', 'stop_car', '');
         foreach ($this->data['governorates'] as $one) {
             $count['govern_counter_' . $one->id] = $this->count_stop_car_governate_sql('execute', 'stop_car', $one->id);

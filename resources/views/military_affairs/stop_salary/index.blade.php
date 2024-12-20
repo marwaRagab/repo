@@ -7,7 +7,7 @@
         @foreach($courts as $court)
 
         <a href="{{route('stop_salary',array('court' => $court->id ))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
+            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}} ({{ $court->counter}})
         </a>
 
         @endforeach
@@ -20,7 +20,7 @@
         @foreach($ministries as $one)
 
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => $one->id ))}}"
-            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}}
+            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}} ({{ $one->counter}})
         </a>
 
         @endforeach
