@@ -1096,4 +1096,42 @@ function specific_fixed_prin_data($id)
     return FixedPrintData::find($id);
 }
 
+ function count_court($court_id, $stop_type,$minst_id,$time_type)
+    {
+        
+        return Military_affair::with('installment')->with('installment.client')
+                ->with('status_all')->with('mil_times.salaryType')
+                ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
+                    if($stop_type == 'stop_salary')
+                    {
+                    $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
+                    }
+                    $q->where('governorate_id', $court_id);
+                })
+                ->whereHas('installment', function ($q){
+                    return $q->where('finished',0);
+                })
+                // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
+                //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
+                //     })
+                ->where('archived',0)
+                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+
+    }
+ function count_minstry($id, $stop_type, $minst_id)
+    {
+        return Military_affair::with('installment.client')->with('installment')
+                    ->whereHas('installment.client', function ($q) use($minst_id, $id) {
+                        $q->where('job_type','military')->whereIN('ministry_last',[5,14,27])
+                                ->where('governorate_id', $id);
+                    })
+                    ->whereHas('installment.client.get_ministry', function ($q) use($minst_id) {
+                        $q->where('id', $minst_id);
+                    })
+                ->whereHas('installment', function ($q){
+                    $q->where('finished',0);
+                })
+                ->where('archived',0)
+                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+    }
 
