@@ -1180,6 +1180,7 @@
                                                                 <!-- start row -->
                                                                 <tr>
                                                                     <th>اليوزر</th>
+                                                                    <th>البنك</th>
                                                                     <th>الساعة</th>
                                                                     <th>التاريخ</th>
                                                                     <th>الملاحظة</th>
@@ -1197,10 +1198,16 @@
                                                                                 $created_by = DB::table('users')
                                                                                     ->where('id', $value->created_by)
                                                                                     ->first();
+                                                                                    $bank = DB::table('banks')
+                                                                                    ->where('id', $value->bank_id)
+                                                                                    ->first();
 
                                                                             @endphp
                                                                             <td>
                                                                             {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                            {{ $bank->name_ar ?? 'لا يوجد' }}
                                                                             </td>
                                                                             <td>
                                                                                 {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}
@@ -1229,6 +1236,7 @@
                                                                 <!-- start row -->
                                                                 <tr>
                                                                     <th>اليوزر</th>
+                                                                    <th>جهة العمل</th>
                                                                     <th>الساعة</th>
                                                                     <th>التاريخ</th>
                                                                     <th>الملاحظة</th>
@@ -1247,10 +1255,25 @@
                                                                                     ->where('id', $value->created_by)
                                                                                     ->first();
 
+                                                                                    $items = array(
+                                                                                        0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
+                                                                                        1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
+                                                                                        2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
+                                                                                        3 => array('id' => '46', 'name' => 'التأمينات'),
+                                                                                        4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
+                                                                                    );
+
+                                                                                    $job = array_filter($items, function ($item) use ($value) {
+                                                                                        return $item['id'] == $value->ministry_id;
+                                                                                    });
+                                                                                    // Get the first matching item or null
+            $job = reset($job);
+
                                                                             @endphp
                                                                            <td>
-                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            {{$created_by->name_ar ?? 'لا يوجد' }}
                                                                             </td>
+                                                                            <td>{{ $job['name'] ?? 'لا يوجد' }}</td>
                                                                             <td>
                                                                                 {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}
                                                                             </td>
