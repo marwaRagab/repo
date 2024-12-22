@@ -1131,7 +1131,6 @@ function specific_fixed_prin_data($id)
 
  function count_court($court_id, $stop_type,$minst_id,$time_type)
     {
-        
         return Military_affair::with('installment')->with('installment.client')
                 ->with('status_all')->with('mil_times.salaryType')
                 ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
@@ -1139,7 +1138,11 @@ function specific_fixed_prin_data($id)
                     {
                     $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
                     }
-                    $q->where('governorate_id', $court_id);
+                    if($court_id != '')
+                    {
+                        $q->where('governorate_id', $court_id);
+                    }
+                    
                 })
                 ->whereHas('installment', function ($q){
                     return $q->where('finished',0);
@@ -1147,8 +1150,15 @@ function specific_fixed_prin_data($id)
                 // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
                 //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
                 //     })
-                ->where('archived',0)
-                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+                ->where('archived',operator: 0)
+                ->when($stop_type == 'open_file', function ($q) {
+                    $q->where('military_affairs.status', 'military');
+                }, function ($q) use ($stop_type) {
+                    $q->where('military_affairs.status', 'execute')
+                      ->where($stop_type, 1);
+                })
+                ->count();
+                
 
     }
  function count_minstry($id, $stop_type, $minst_id)
