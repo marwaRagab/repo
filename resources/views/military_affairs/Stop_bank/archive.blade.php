@@ -265,6 +265,18 @@
                                                             <span>تتبع المعاملة</span>
                                                         </a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#banks-{{ $item->id }}"
+                                                            role="tab">
+                                                            <span>استعلام بنك</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#jobs-{{ $item->id }}"
+                                                            role="tab">
+                                                            <span>استعلام عمل</span>
+                                                        </a>
+                                                    </li>
 
                                                 </ul>
                                                 <!-- Tab panes -->
@@ -275,7 +287,9 @@
                                                     $all_notes=get_all_notes('stop_bank',$item->id);
                                                     $all_actions = get_all_actions($item->id);
                                                     $get_all_delegations = get_all_delegations($item->id);
+                                                    $get_all_banks = get_all_banks($item->id);
 
+                                                    $get_all_jobs = get_all_jobs($item->id);
                                                     @endphp
                                                     <div class="tab-pane active p-3" id="notes-{{$item->id}}"
                                                         role="tabpanel">
@@ -539,6 +553,161 @@
                                                                 </tr>
                                                                 @endforeach
 
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="tab-pane p-3" id="banks-{{ $item->id }}" role="tabpanel">
+                                                        <table id="notes2"
+                                                            class="table table-bordered border text-wrap align-middle">
+                                                            <thead>
+                                                                <!-- start row -->
+                                                                <tr>
+                                                                    <th>اليوزر</th>
+                                                                    <th>الساعة</th>
+                                                                    <th>التاريخ</th>
+                                                                    <th>الملاحظة</th>
+                                                                </tr>
+                                                                <!-- end row -->
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- start row -->
+                                                                @if (count($get_all_banks) > 0)
+                                                                    @foreach ($get_all_banks as $value)
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                                            @php
+                                                                                $created_by = DB::table('users')
+                                                                                    ->where('id', $value->created_by)
+                                                                                    ->first();
+
+                                                                            @endphp
+                                                                            <td>
+                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('Y-m-d') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>{{ $value->note }}</td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                                    </tr>
+
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+
+                                                    <div class="tab-pane p-3" id="jobs-{{ $item->id }}" role="tabpanel">
+                                                        <table id="notes2"
+                                                            class="table table-bordered border text-wrap align-middle">
+                                                            <thead>
+                                                                <!-- start row -->
+                                                                <tr>
+                                                                    <th>القسم</th>
+                                                                    <th>المسئول</th>
+                                                                    <th>تاريخ البدء</th>
+                                                                    <th>تاريخ الانتهاء</th>
+                                                                    <th> عدد الايام</th>
+                                                                </tr>
+                                                                <!-- end row -->
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- start row -->
+                                                                @if (count($get_all_delegations) > 0)
+                                                                    @foreach ($get_all_delegations as $value)
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                                            @php
+                                                                                $created_by = DB::table('users')
+                                                                                    ->where('id', $value->emp_id)
+                                                                                    ->first();
+
+                                                                            @endphp
+                                                                            <td>
+                                                                                {{ $value['execute_date']
+                                                                                    ? 'اعلان التنفيذ'
+                                                                                    : ($value['image_date']
+                                                                                        ? 'الايمج'
+                                                                                        : ($value['case_proof_date']
+                                                                                            ? 'إثبات الحالة'
+                                                                                            : ($value['travel_date']
+                                                                                                ? 'منع السفر'
+                                                                                                : ($value['car_date']
+                                                                                                    ? 'حجز السيارات'
+                                                                                                    : ($value['bank_date']
+                                                                                                        ? 'حجز بنوك'
+                                                                                                        : ($value['salary_date']
+                                                                                                            ? 'حجز راتب'
+                                                                                                            : ($value['certificate_date']
+                                                                                                                ? 'إصدار شهادة العسكريين'
+                                                                                                                : 'فتح ملف'))))))) }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                @php
+
+                                                                                    $day_start = explode(
+                                                                                        ' ',
+                                                                                        $value->assign_date,
+                                                                                    )[0];
+                                                                                    if (is_numeric($day_start)) {
+                                                                                        $day_start = date('Y-m-d', $day_start);
+                                                                                    }
+
+                                                                                    // Check the end date
+                                                                                    if (
+                                                                                        $value->end_date &&
+                                                                                        $value->end_date != ''
+                                                                                    ) {
+                                                                                        $day_end = explode(
+                                                                                            ' ',
+                                                                                            $value->end_date,
+                                                                                        )[0];
+                                                                                        if (is_numeric($day_end)) {
+                                                                                            $day_end = date('Y-m-d', $day_end);
+                                                                                        }
+                                                                                        $different_day = get_different_date(
+                                                                                            $day_start,
+                                                                                            $day_end,
+                                                                                        );
+                                                                                    } else {
+                                                                                        // Use current timestamp if end_date is missing
+                                                                                        $day_end = 'لم تنتهى';
+                                                                                        $different_day = get_different_date(
+                                                                                            $day_start,
+                                                                                            now()->timestamp,
+                                                                                        );
+                                                                                    }
+                                                                                @endphp
+                                                                                {{ $day_start }}
+
+                                                                            </td>
+                                                                            <td>{{ $day_end }}</td>
+
+                                                                            <td>
+                                                                                {{ $different_day }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                                    </tr>
+
+                                                                @endif
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -713,7 +882,18 @@
                                                             <span>تتبع المعاملة</span>
                                                         </a>
                                                     </li>
-
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#banks-{{ $item->id }}"
+                                                            role="tab">
+                                                            <span>استعلام بنك</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-bs-toggle="tab" href="#jobs-{{ $item->id }}"
+                                                            role="tab">
+                                                            <span>استعلام عمل</span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                                 <!-- Tab panes -->
 
@@ -723,6 +903,9 @@
                                                     $all_notes=get_all_notes('stop_bank',$item->id);
                                                     $all_actions = get_all_actions($item->id);
                                                     $get_all_delegations = get_all_delegations($item->id);
+                                                    $get_all_banks = get_all_banks($item->id);
+
+                                                    $get_all_jobs = get_all_jobs($item->id);
 
                                                     @endphp
                                                     <div class="tab-pane active p-3" id="notes-{{$item->id}}"
@@ -987,6 +1170,103 @@
                                                                 </tr>
                                                                 @endforeach
 
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="tab-pane p-3" id="banks-{{ $item->id }}" role="tabpanel">
+                                                        <table id="notes2"
+                                                            class="table table-bordered border text-wrap align-middle">
+                                                            <thead>
+                                                                <!-- start row -->
+                                                                <tr>
+                                                                    <th>اليوزر</th>
+                                                                    <th>الساعة</th>
+                                                                    <th>التاريخ</th>
+                                                                    <th>الملاحظة</th>
+                                                                </tr>
+                                                                <!-- end row -->
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- start row -->
+                                                                @if (count($get_all_banks) > 0)
+                                                                    @foreach ($get_all_banks as $value)
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                                            @php
+                                                                                $created_by = DB::table('users')
+                                                                                    ->where('id', $value->created_by)
+                                                                                    ->first();
+
+                                                                            @endphp
+                                                                            <td>
+                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('Y-m-d') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>{{ $value->note }}</td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                                    </tr>
+
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <div class="tab-pane p-3" id="jobs-{{ $item->id }}" role="tabpanel">
+                                                        <table id="notes2"
+                                                            class="table table-bordered border text-wrap align-middle">
+                                                            <thead>
+                                                                <!-- start row -->
+                                                                <tr>
+                                                                    <th>اليوزر</th>
+                                                                    <th>الساعة</th>
+                                                                    <th>التاريخ</th>
+                                                                    <th>الملاحظة</th>
+                                                                </tr>
+                                                                <!-- end row -->
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- start row -->
+                                                                @if (count($get_all_jobs) > 0)
+                                                                    @foreach ($get_all_jobs as $value)
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false" aria-controls="collapseExample">
+                                                                            @php
+                                                                                $created_by = DB::table('users')
+                                                                                    ->where('id', $value->created_by)
+                                                                                    ->first();
+
+                                                                            @endphp
+                                                                           <td>
+                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ \Carbon\Carbon::parse($value->date)->format('Y-m-d') ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>{{ $value->note }}</td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                                    </tr>
+
+                                                                @endif
                                                             </tbody>
                                                         </table>
                                                     </div>
