@@ -196,7 +196,7 @@
                     <ul aria-expanded="false" class="collapse first-level">
                         <!-- Teachers -->
                         <li class="sidebar-item">
-                            <a href="{{ route('military_affairs_all') }}" class="sidebar-link">
+                            <a href="{{ route('military_affairs') }}" class="sidebar-link">
                                 <span class="sidebar-icon"></span>
                                 <span class="hide-menu"> الشئون القانونية
                                 </span>

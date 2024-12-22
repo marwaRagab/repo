@@ -61,7 +61,7 @@ class Client extends Model
 
     public function ministry()
     {
-        return $this->belongsTo(Ministry::class, 'ministry_ids');
+        return $this->hasMany(ClientMinistry::class, 'client_id');
     }
 
     public function boker()
@@ -82,5 +82,11 @@ class Client extends Model
     {
         return $this->hasMany(ClientImg::class, 'client_id');
     }
+
+    public function client_banks()
+    {
+        return $this->hasMany(ClientBank::class, 'client_id');
+    }
+
 
 }

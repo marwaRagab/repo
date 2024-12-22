@@ -11,10 +11,15 @@
     }else{
     $bank_type='';
     }
-    if(Request::has('ministry_id')){
-    $ministry=Request::get('ministry_id');
+    if(Request::has('date')){
+    $date=Request::get('date');
     }else{
-    $ministry='';
+    $date='';
+    }
+     if(Request::has('bank')){
+    $bank=Request::get('bank');
+    }else{
+    $bank='';
     }
     @endphp
     <div class="d-flex flex-wrap ">
@@ -34,10 +39,6 @@
 
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a href="{{route('stop_bank',array('governorate_id' => $court->id,'stop_bank_type' =>$bank_type))}}"
-            class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
-        </a>
 
         @foreach($stop_bank_types as $stop_bank_type)
 
@@ -50,50 +51,35 @@
 
 
 
-    @if(Request::has('stop_bank_type'))
-    <div class="d-flex flex-wrap ">
-        <a href="{{route('stop_bank')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
-        </a>
-        {{--@foreach($ministries as $ministry)
 
-                <a href="{{route('stop_bank',array('governorate_id' => $gov,'ministry_id' =>$ministry->date,'stop_bank_type' => $bank_type))}}"
-        class="btn-filter {{$ministry->style}} px-4 fs-4 mx-1 mb-2"> {{$ministry->ministries_dates}}
-        </a>
 
-        @endforeach--}}
-    </div>
-
-    @endif
-    @if(Request::has('stop_bank_type'))
-    <div class="d-flex flex-wrap ">
-        <a href="{{route('stop_bank')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
-        </a>
-
-        {{-- @foreach($banks as $bank)
-
-                <a href="{{route('stop_bank',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
-        class="btn-filter {{$bank->style}} px-4 fs-4 mx-1 mb-2"> {{$bank->name_ar}}
-        </a>
-
-        @endforeach--}}
-    </div>
-    @endif
 </div>
-
-@if(count($ministries) > 0 || request()->has('day'))
+@if(request()->has('stop_bank_type'))
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        @foreach($ministries as $one)
+        @foreach($dates as $one)
 
-        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'day' => $one))}}"
+        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
             class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            {{now()->format('Y').'/'.now()->format('m').'/'.\Carbon\Carbon::parse($one)->format('d')}}
+            {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
         </a>
         @endforeach
     </div>
 </div>
+
+@if(count($banks) > 0 || request()->has('bank'))
+    <div class="card mt-4 py-3">
+        <div class="d-flex flex-wrap ">
+            @foreach($banks as $bank)
+
+                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank,'date'=> $date))}}"
+                   class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+                    {{$bank}}
+                </a>
+            @endforeach
+        </div>
+    </div>
+@endif
 @endif
 
 <div class="card">
@@ -152,19 +138,41 @@
                 </thead>
 
                 <tbody>
+                @php
+
+                $x=1;
+                @endphp
 
                 @foreach($items as $item)
 
-                    @if($item->installment->finished==0)
-                   
-                    @php
+                    @if($item->installment)
+                        @php
+                            if($item->installment->client->court)
+                            $court_id= \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->id;
+                            else
+                                $court_id='';
 
 
-                    $item_statues=
-                    $item->notes->where('type','=','stop_bank')->where('times_type_id',$item_type_time_old->id)->where('date_end',NULL);
-                    @endphp
+                             if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
+
+
+                                    $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
+
+                                }else{
+                                 $array= count($items);
+                                }
+
+
+                        @endphp
+
+
+
                     @if( Request::has('governorate_id') && Request::get('governorate_id') ==
                     $item->installment->client->governorate_id)
+
+
+
+
 
                     @include('military_affairs.Stop_bank.table_details')
 
@@ -180,17 +188,24 @@
 
 
 
+
                         @endif
                     @endif
 
                 @endforeach
+                @php
+
+                    $x=$x+1;
+                @endphp
+
                 </tbody>
+
 
             </table>
 
-                </tbody>
 
-            </table>
+
+
 
 
         </div>
