@@ -352,7 +352,7 @@ function change_status($array_status, $id)
 {
 
 
-    //dd($array_status);
+    
     if ($array_status->hasFile('img_dir')) {
         $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
         $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
@@ -366,6 +366,8 @@ function change_status($array_status, $id)
         'type' => $array_status->type,
         'type_id' => $array_status->type_id,
         'date' => $array_status->date,
+        'ministry' => $array_status->ministry_id ?? '',
+        'flag' => $array_status->flag ?? 0,
         'note' => $array_status->note ?? $array_status->note,
         'military_affairs_id' => $id,
         'img_dir' => $data_img_dir,
@@ -1098,10 +1100,10 @@ function specific_fixed_prin_data($id)
 
  function count_court($court_id, $stop_type,$minst_id,$time_type)
     {
-        
+       
         return Military_affair::with('installment')->with('installment.client')
-                ->with('status_all')->with('mil_times.salaryType')
-                ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
+                ->with('status_all')
+                ->whereHas('installment.client', function ($q) use($court_id,$stop_type) {
                     if($stop_type == 'stop_salary')
                     {
                     $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
@@ -1111,9 +1113,12 @@ function specific_fixed_prin_data($id)
                 ->whereHas('installment', function ($q){
                     return $q->where('finished',0);
                 })
-                // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
-                //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
-                //     })
+                ->whereHas('status_all', function ($q) use($time_type, $minst_id ,$court_id ) {
+                       if($minst_id && $court_id)
+                       {
+                     return   $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
+                       }
+                    })
                 ->where('archived',0)
                 ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
 

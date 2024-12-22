@@ -1,7 +1,7 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" href="{{route('stop_salary')}}">
-            الكل
+            الكل ({{ $total_count}})
         </a>
 
         @foreach($courts as $court)
@@ -34,7 +34,7 @@
         @foreach($item_type_time as $item_type)
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->slug ))}}"
             class="btn-filter bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
-            {{$item_type->name_ar}}
+            {{$item_type->name_ar}} ({{ $item_type->counter}})
         </a>
         @endforeach
     </div>
@@ -99,9 +99,10 @@
                         @if(request()->has('type'))
                         <td>
                             <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                                data-bs-target="#convert_command-{{$item->id}}"> {{ $type_name }}
+                                data-bs-target="#convert_command-{{$item->id}}" onclick="check_delegate({{$item->emp_id}})"> {{ $type_name }}
                             </button>
-                            <div id="convert_command-{{$item->id}}" class="modal fade" tabindex="-1"
+                            @if($item->emp_id && $item->emp_id != '')
+                            <div id="convert_command-{{$item->id}}" class="modal fade convert_command" tabindex="-1"
                                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                     <div class="modal-content">
@@ -109,13 +110,13 @@
                                             method="post" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="military_affairs_id" value="{{$item->id}}">
-                                            <input type="hidden" name="minist_id"
+                                            <input type="hidden" name="ministry_id"
                                                 value="{{$item->installment->client->get_ministry->id}}">
                                             <input type="hidden" name="type" value="{{$item_type_time1->type}}">
-                                            <input type="hidden" name="type_id" value="{{$item_type_time1->slug}}">
+                                            <input type="hidden" name="type_id" value="{{request()->get('type')}}">
                                             <input type="hidden" name="item_type_new"
                                                 value="{{request()->get('type')}}">
-                                            <input type="hidden" name="item_type_old" value="{{$item_type_time1->id}}">
+                                            <input type="hidden" name="item_type_old" value="{{request()->get('type')}}">
 
                                             <div class="modal-header d-flex align-items-center">
                                                 <h4 class="modal-title" id="myModalLabel">
@@ -163,7 +164,7 @@
                                 </div>
                                 <!-- /.modal-dialog -->
                             </div>
-
+                            @endif
                         </td>
                         @endif
                         <td>
@@ -343,3 +344,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    function check_delegate(emp_id)
+    {
+      
+      if(emp_id == '' || emp_id == null)
+      {
+        alert('يجب تحديد مسئول اولا');
+     
+      }
+    }
+</script>
