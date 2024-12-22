@@ -74,6 +74,7 @@ class PapersRepository implements PapersRepositoryInterface
         $this->data['item_type_time'] = Military_affairs_times_type::where(['type' => 'lated_installment', 'slug' => 'lated_installment'])->first();
         $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'eqrar_dain', 'slug' => 'eqrar_dain_not_received'])->first();
 
+        // dd($this->data['item_type_time_new']);
         return view('layout', compact('title', 'users', 'view', 'transactions', 'count', 'breadcrumb'), $this->data);
 
         // return view('military_affairs/papers/index',compact('title','users'));
