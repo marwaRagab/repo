@@ -1,6 +1,6 @@
 <tr>
     <td>
-        {{ $loop->index + 1 }}
+        {{ $item->i  }}
     </td>
     <td>
         <a href="{{ url('installment/show-installment/' . $item->installment->id) }}"> {{ $item->installment->id }}</a>
