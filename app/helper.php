@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\FixedPrintData;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
+use App\Models\FixedPrintData;
 use Illuminate\Support\Facades\DB;
 use App\Models\InvoicesInstallment;
 use Illuminate\Support\Facades\Auth;
@@ -409,6 +409,28 @@ function get_all_delegations($military_affairs_id)
 
 }
 
+function get_all_banks($military_affairs_id)
+{
+
+    $notes = DB::table('military_affairs_bank_info')
+        ->where('military_affairs_id', $military_affairs_id)
+        ->get();
+
+    return $notes;
+
+}
+
+function get_all_jobs($military_affairs_id)
+{
+
+    $notes = DB::table('military_affairs_job_info')
+        ->where('military_affairs_id', $military_affairs_id)
+        ->get();
+
+    return $notes;
+
+}
+
 
 function get_modal_name($id)
 {
@@ -466,16 +488,27 @@ function count_client($array_data)
 
 function get_different_dates($first_end_date, $second_end_date)
 {
+    // Validate and parse the first date
+    $datetime1 = is_numeric($first_end_date) ? date_create(date('Y-m-d', $first_end_date)) : date_create($first_end_date);
 
-    $datetime1 = date_create($first_end_date);
-    $datetime2 = date_create($second_end_date);
+    // Validate and parse the second date
+    $datetime2 = is_numeric($second_end_date) ? date_create(date('Y-m-d', $second_end_date)) : date_create($second_end_date);
+
+    // Ensure both dates are valid
+    if (!$datetime1 || !$datetime2) {
+        return 'تاريخ غير صالح'; // Return a friendly error message
+    }
+
+    // Calculate the difference
     $interval = date_diff($datetime1, $datetime2);
-    // dd($interval->days);
-    $day = $interval->format('%d' . 'يوم');
-    $year = $interval->format('%m' . 'شهر');
-    $months = $interval->format('%y' . 'سنة');
-    return $interval->days.'يوم' ;
 
+    // Format and return the difference
+    $days = $interval->format('%d يوم');
+    $months = $interval->format('%m شهر');
+    $years = $interval->format('%y سنة');
+
+    // Return combined result if needed, or just days
+    return $years . ', ' . $months . ', ' . $days;
 }
 
 function get_different_date($first_end_date, $second_end_date)
