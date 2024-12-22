@@ -7,7 +7,7 @@
         @foreach($courts as $court)
 
         <a href="{{route('stop_salary',array('court' => $court->id ))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
+            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}} ({{ $court->counter}})
         </a>
 
         @endforeach
@@ -20,7 +20,7 @@
         @foreach($ministries as $one)
 
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => $one->id ))}}"
-            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}}
+            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}} ({{ $one->counter}})
         </a>
 
         @endforeach
@@ -32,7 +32,7 @@
     <div class="d-flex flex-wrap ">
 
         @foreach($item_type_time as $item_type)
-        <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->id ))}}"
+        <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->slug ))}}"
             class="btn-filter bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
             {{$item_type->name_ar}}
         </a>
@@ -51,7 +51,7 @@
                     <!-- start row -->
                     @php
                     $type_name =
-                    \App\Models\Military_affairs\Military_affairs_stop_salary_type::where('id',request()->get('type'))?->first()?->name_ar;
+                    \App\Models\Military_affairs\Military_affairs_stop_salary_type::where('slug',request()->get('type'))?->first()?->name_ar;
 
                     @endphp
                     <tr>
@@ -68,6 +68,7 @@
                         @if(request()->has('type'))
                         <th>{{ $type_name }}</th>
                         @endif
+                        <th>تحديد مسئول</th>
                         <th> الاجراءات</th>
 
                     </tr>
@@ -77,7 +78,7 @@
 
                     <!-- start row -->
                     @foreach ($items as $item)
-      
+
                     <tr>
                         <td>
                             {{ $loop->iteration }}
@@ -165,6 +166,9 @@
 
                         </td>
                         @endif
+                        <td>
+                            @include('military_affairs.Open_file.partial.column_responsible')
+                        </td>
                         <td>
                             <div class="btn-group dropup mb-6 me-6 d-block ">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"

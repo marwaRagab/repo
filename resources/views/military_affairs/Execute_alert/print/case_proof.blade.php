@@ -33,11 +33,15 @@
 
 <body>
     <div class="container-fluid print py-5">
-        <div class="d-flex justify-content-between">
-          <h6 class="print-text">السيد / رئيس إدارة تنفيذ محكمة حولي</h6>
-          <h6 class="print-text">المحترم</h6>
-        </div>
 
+        <div class="d-flex justify-content-between">
+          @if ($item->installment->client->governorate_id != 0 && $item->installment->client->courtNew)
+          <h6 class="print-text">السيد / رئيس إدارة تنفيذ محكمة  {{ $item->installment->client->courtNew->name_ar }}</h6>
+          @else
+          <h6 class="print-text">السيد / رئيس إدارة تنفيذ محكمة </h6>
+          @endif
+        </div>
+        <h6 class="print-text text-right">المحترم</h6>
         <h6 class="print-text">تحية طيبة وبعد
         </h6>
         <h5 class="print-text">مقدمه لسيادتكم / ماجد حمدان بليبص بصفتي وكيل عن شركة الكترون للأجهزة الالكترونيه.
@@ -52,7 +56,7 @@
             شركة الكترون للأجهزة الالكترونية
           </h5>
           <h5 class="print-text"> ضد</h5>
-          <h5 class="print-text">محمد نبيل محمد المشارى
+          <h5 class="print-text">  {{ $item->installment->client->name_ar }} 
           </h5>
         </div>
         <h5 class="print-text">

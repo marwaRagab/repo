@@ -2,16 +2,16 @@
 
 namespace App\Repositories\Military_affairs;
 
+use App\Interfaces\Military_affairs\Military_affairsRepositoryInterface;
 use App\Models\Client;
 use App\Models\Installment;
 use App\Models\Installment_month;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Interfaces\Military_affairs\Military_affairsRepositoryInterface;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class Military_affairsRepository implements Military_affairsRepositoryInterface
 {

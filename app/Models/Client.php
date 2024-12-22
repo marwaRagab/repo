@@ -18,6 +18,11 @@ class Client extends Model
         return $this->belongsTo(Governorate::class, 'governorate_id');
     }
 
+    public function courtNew()
+    {
+        return $this->belongsTo(Court::class, 'governorate_id');
+    }
+
     public function area()
     {
         return $this->belongsTo(Region::class, 'area_id');

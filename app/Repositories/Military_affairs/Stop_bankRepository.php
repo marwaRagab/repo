@@ -378,43 +378,43 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
     }
 
-    public function check_info_in_job($id)
-    {
-        $message = "تم دخول صفحة استعلام عمل  ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
-        $this->data['title'] = '    حجز بنوك';
+   
+public function check_info_in_job  ( $id)
+{
+    $message ="تم دخول صفحة استعلام عمل  " ;
+    $user_id = 1 ;
+    //$user_id =  Auth::user()->id,
+   // $this->log($user_id ,$message);
+   // $user_id =  Auth::user()->id;
+    $this->data['title']='    حجز بنوك';
+    
+    $this->data['items'] = array(
+        0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
+        1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
+        2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
+        3 => array('id' => '46', 'name' => 'التأمينات'),
+        4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
+    );
 
-        $this->data['items'] = array(
-            0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
-            1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
-            2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
-            3 => array('id' => '46', 'name' => 'التأمينات'),
-            4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
-        );
+    $ids = [5, 27, 14, 46, 47];
 
-        $ids = [5, 27, 14, 46, 47];
+    $Military = Military_affair::where('id', $id)
+    ->with('installment')
+    ->with('status_all')
+    ->first();
+   
+    $title=' حجز بنوك';
 
-        $Military = Military_affair::where('id', $id)
-            ->with('installment')
-            ->with('status_all')
-            ->first();
-
-        $title = ' حجز بنوك';
-
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route("dashboard");
-        $breadcrumb[1]['title'] = "الشئون القانونية";
-        $breadcrumb[1]['url'] = route("military_affairs");
-        $breadcrumb[2]['title'] = $title;
-        $breadcrumb[2]['url'] = 'javascript:void(0);';
-
-
-        $this->data['view'] = 'military_affairs/Stop_bank/check-job';
-        return view('layout', $this->data, compact('breadcrumb', 'Military'));
+    $breadcrumb = array();
+    $breadcrumb[0]['title'] = " الرئيسية";
+    $breadcrumb[0]['url'] = route("dashboard");
+    $breadcrumb[1]['title'] = "الشئون القانونية";
+    $breadcrumb[1]['url'] = route("military_affairs");
+    $breadcrumb[2]['title'] = $title;
+    $breadcrumb[2]['url'] = 'javascript:void(0);';
+    
+    $this->data['view']='military_affairs/Stop_bank/check-job';
+    return view('layout',$this->data,compact('breadcrumb','Military'));
 
     }
 

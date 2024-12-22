@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Military_affairs;
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\Military_affairs\CertificateRepositoryInterface;
-use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
 use App\Models\Governorate;
-use App\Models\Military_affairs;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Military_affairs\Military_affair;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
+use App\Interfaces\Military_affairs\CertificateRepositoryInterface;
+use App\Models\Client;
+// use App\Models\Military_affairs;
 
 class CertificateController extends Controller
 {
@@ -60,19 +63,24 @@ class CertificateController extends Controller
         return $this->CertificateRepository->convert_book_info($id);
     }
 
-    public function print_case_proof()
+    public function print_case_proof($item)
     {
+        $item =  Military_affair::find($item);
         // return $this->CertificateRepository->print_case_proof();
-        return view('military_affairs.Execute_alert.print.case_proof');
+        return view('military_affairs.Execute_alert.print.case_proof',compact('item'));
     }
 
-    public function print_sticker()
+    public function print_sticker($item)
     {
-        return view('military_affairs.Execute_alert.print.sticker');
+        $item =  Military_affair::find($item);
+        return view('military_affairs.Execute_alert.print.sticker',compact('item'));
     }
-    public function print_issue()
+    public function print_issue($item,$data_id)
     {
-        return view('military_affairs.Execute_alert.print.issue');
+        $item =  Military_affair::find($item);
+        // DB::table('military_affairs')->where('id', $item)->first();
+        // dd($item);
+        return view('military_affairs.Execute_alert.print.issue',compact('data_id','item'));
     }
 
 

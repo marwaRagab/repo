@@ -767,7 +767,7 @@
         </div>
     </div>
 </div>
-
+@if ($Installment->laws == 1)
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -799,7 +799,8 @@
                                     </thead>
                                     <tbody>
                                         <!-- start row -->
-                                        @foreach( $data['get_all_delegations'] as $item)
+                                        @if (count($data['get_all_delegations']) > 0 )
+                                        @foreach( $data['get_all_delegations'] as $value)
                                         <tr>
                                             @php
                                                                                                        
@@ -854,7 +855,12 @@
                                                             </td>
                                         </tr>
                                         @endforeach
+                                        @else
+                                                    <tr>
+                                                        <td colspan="5"> لا يوجد بيانات</td>
+                                                    </tr>
 
+                                                @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -865,6 +871,8 @@
         </div>
     </div>
 </div> 
+@endif
+
 
 <!--<div class="card">-->
 <!--    <div class="card-body">-->
@@ -3294,7 +3302,6 @@ function calculate(value, type) {
         }
     }
     if (type == 'cash_checked') {
-        alert($('#payment_order_id_{{$month->id}}').val());
         var real_price = parseFloat($('#real_price_checked').val()).toFixed(3);
         var cash = convert(value);
         var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);

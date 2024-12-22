@@ -33,7 +33,7 @@
                         </tr>
                         <tr>
                             <th scope="row">المدعى عليه </th>
-                            <td colspan="3">علي سعيد مجيد عبد الواحد </td>
+                            <td colspan="3">{{ $item->installment->client->name_ar }}</td>
                         </tr>
                         <tr>
                             <th scope="row">الرقم الآلي </th>
@@ -53,8 +53,19 @@
                         </tr>
                         <tr>
                             <th scope="row">عنوان السكن </th>
-                            <td colspan="3">حولي - قطعة : 6 - شارع : علي محمد خان - مبني : 3414 - الرقم الآلي :
-                                17550172</td>
+                            <td colspan="3">
+                                القطعه {{  $item->installment->client->client_address->last()->block  ?? ''}} 
+                                -
+                                الشارع {{  $item->installment->client->client_address->last()->street ?? '' }}
+                                -
+                                جاده {{  $item->installment->client->client_address->last()->jada ?? '' }}
+                                -
+                                المبنى {{  $item->installment->client->client_address->last()->building ?? '' }}
+                                -
+                                الدور {{  $item->installment->client->client_address->last()->floor ?? '' }}
+                                -
+                                الشقة {{  $item->installment->client->client_address->last()->flat ?? '' }}
+                            </td>
                         </tr>
 
 
@@ -64,10 +75,67 @@
                 </table>
             </div>
 
-            <div class="col-12 mx-5 py-1 d-flex justify-content-between">
-                <h6> :User name </h6>
-                <h6> : Date</h6>
+            
+
+
+
+        </div>
+        
+        <div class="row">
+
+            <div class="col-12 py-5 mx-5 ">
+                <table class="table table-bordered">
+
+                    <tbody>
+                        <tr>
+                            <th scope="row">المدعي </th>
+                            <td colspan="3">شركة الكترون للأجهزة الالكترونية </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">المدعى عليه </th>
+                            <td colspan="3">{{ $item->installment->client->name_ar }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">الرقم الآلي </th>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">رقم الإعلان </th>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">المندوب </th>
+                            <td colspan="3"> </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">عنوان السكن </th>
+                            <td colspan="3">
+                                القطعه {{  $item->installment->client->client_address->last()->block  ?? ''}} 
+                                -
+                                الشارع {{  $item->installment->client->client_address->last()->street ?? '' }}
+                                -
+                                جاده {{  $item->installment->client->client_address->last()->jada ?? '' }}
+                                -
+                                المبنى {{  $item->installment->client->client_address->last()->building ?? '' }}
+                                -
+                                الدور {{  $item->installment->client->client_address->last()->floor ?? '' }}
+                                -
+                                الشقة {{  $item->installment->client->client_address->last()->flat ?? '' }}
+                            </td>
+                        </tr>
+
+
+
+
+                    </tbody>
+                </table>
             </div>
+
+            
 
 
 

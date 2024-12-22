@@ -405,7 +405,7 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
-
+                                                            
                                     </ul>
                                     <!-- Tab panes -->
                                      
@@ -414,10 +414,10 @@
                                         <div class="tab-content border mt-2">
                                             @php
 
-                                                $all_notes=get_all_notes('stop_travel',$item->installment_id);
-                                                $all_actions=get_all_actions($item->installment_id);
-                                                $get_all_delegations = get_all_delegations($item->installment_id);
-
+                                                $all_notes=get_all_notes('stop_travel',$item->id);
+                                                $all_actions=get_all_actions($item->id);
+                                                $get_all_delegations = get_all_delegations( $item->id);
+                                               
                                             @endphp
                                             <!-- <pre>{{ print_r($get_all_delegations, return: true) }}</pre> -->
 
@@ -682,6 +682,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                           
                                         </div>
                                 </div>
                                 <div class="modal-footer d-flex ">

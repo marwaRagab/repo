@@ -823,7 +823,6 @@ class old_dbController extends Controller
             ];
 
 
-
             foreach ($array as $key => $value) {
 
 //            dd($value);

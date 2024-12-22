@@ -20,6 +20,10 @@
 
 
 <body>
+    {{-- {{ dd($item) }} --}}
+    @php
+        $data = specific_fixed_prin_data($data_id);
+    @endphp
     <div class="container my-5">
         <div class="row">
             <div class="col-12 text-center py-3">
@@ -37,7 +41,8 @@
                         </tr>
                         <tr>
                             <th scope="row"> اسم المدعي </th>
-                            <td colspan="4">علي سعيد مجيد عبد الواحد </td>
+                            <td colspan="4">شركة الكترون للأجهزة الالكترونية
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row"> الرقم المدني </th>
@@ -52,25 +57,31 @@
                         </tr>
                         <tr>
                             <th scope="row">عنوان السكن </th>
-                            <td colspan="4"> العاصمة - الشرق - قطعة: 004 - قسيمة: 000010 - شارع ابن مسباح - مبنى
+                            <td colspan="4"> العاصمة - الشرق - قطعة: 003 - قسيمة: 000010 - شارع ابن مسباح - مبنى
                                 ورثة/ أحمد عبدالله الايوب - الدور 11
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">عنوان العمل </th>
-                            <td colspan="4"> العاصمة - الشرق - قطعة: 004 - قسيمة: 000010 - شارع ابن مسباح - مبنى
+                            <td colspan="4"> العاصمة - الشرق - قطعة: 003 - قسيمة: 000010 - شارع ابن مسباح - مبنى
                                 ورثة/ أحمد عبدالله الايوب - الدور 11
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">اسم وكيل المدعي </th>
-                            <td colspan="4"> اسلام السيد أحمد السيد
+                            <td colspan="4"> {{ $data->name_ar }}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">رقم الوكالة </th>
-                            <td colspan="4"> رقم الهاتف
+                            <td colspan="4"> {{ $data->agancy_id }}
                             </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">رقم الهاتف </th>
+                            <td colspan="4"> {{ $data->phone_number }}
+                            </td>
+                            
                         </tr>
                         <tr>
                             <th colspan="5" class="text-center fw-bolder text-underline ">ثانيا :-- بيانات المدعي
@@ -79,39 +90,57 @@
                         </tr>
                         <tr>
                             <th scope="row"> اسم المدعي </th>
-                            <td colspan="4">علي سعيد مجيد عبد الواحد </td>
+                            <td colspan="4">{{ $item->installment->client->name_ar }}</td>
                         </tr>
                         <tr>
                             <th scope="row"> الرقم المدني </th>
-                            <td colspan="4"> </td>
+                            <td colspan="4"> {{ $item->installment->client->civil_number }}</td>
                         </tr>
+                       
                         <tr>
                             <th scope="row"> عنوان السكن </th>
-                            <td colspan="4"> </td>
+                            <td colspan="4">
+                                القطعه {{  $item->installment->client->client_address->last()->block  ?? ''}} 
+                                -
+                                الشارع {{  $item->installment->client->client_address->last()->street ?? '' }}
+                                -
+                                جاده {{  $item->installment->client->client_address->last()->jada ?? '' }}
+                                -
+                                المبنى {{  $item->installment->client->client_address->last()->building ?? '' }}
+                                -
+                                الدور {{  $item->installment->client->client_address->last()->floor ?? '' }}
+                                -
+                                الشقة {{  $item->installment->client->client_address->last()->flat ?? '' }}
+                            </td>
 
                         </tr>
                         <tr>
                             <th scope="row">عنوان العمل </th>
-                            <td colspan="4"> العاصمة - الشرق - قطعة: 004 - قسيمة: 000010 - شارع ابن مسباح - مبنى
-                                ورثة/ أحمد عبدالله الايوب - الدور 11
+                            <td colspan="4">
                             </td>
                         </tr>
+                        
                         <tr>
                             <th scope="row">رقم الهاتف </th>
                             <td colspan="4">
+                                @foreach($item->installment->client->client_phone as $phone)
+                                    {{ $phone->phone }}{{ !$loop->last ? ' - ' : '' }}
+                                @endforeach
+                                
+                                {{-- {{ ->phone }} --}}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row"> مبلغ إقرار الدين </th>
-                            <td colspan="4">
+                            <td colspan="4">{{ $item->eqrar_dain_amount }}
                             </td>
                         </tr>
                         <tr>
                             <th scope="row"> قيمة المبالغ المسددة خارج الإدارة بموجب الحكم المذكور أعلاه </th>
                             <td> المدفوع</td>
-                            <td>170.000 د.ك </td>
-                            <td> المتبق</td>
-                            <td> 2,380.000 د.ك
+                            <td>{{ $item->payment_done}} د.ك </td>
+                            <td> المتبقى</td>
+                            <td> {{ floatval( $item->eqrar_dain_amount) - floatval( $item->payment_done)  }} د.ك
                             </td>
 
                         </tr>
@@ -137,10 +166,7 @@
 
             </div>
 
-            <div class="col-12 mx-5 py-1 d-flex justify-content-between">
-                <h6> :User name </h6>
-                <h6> : Date</h6>
-            </div>
+            
 
 
 
