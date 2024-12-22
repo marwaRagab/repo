@@ -386,7 +386,6 @@ public function check_info_in_job  ( $id)
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
     
-
     $this->data['view']='military_affairs/Stop_bank/check-job';
     return view('layout',$this->data,compact('breadcrumb','Military'));
 
