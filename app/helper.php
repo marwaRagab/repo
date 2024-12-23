@@ -1149,9 +1149,12 @@ function specific_fixed_prin_data($id)
                 ->whereHas('installment', function ($q){
                     return $q->where('finished',0);
                 })
-                // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
-                //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
-                //     })
+                ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
+                    if($minst_id && $court_id)
+                    {
+                      $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
+                    }
+                    })
                 ->where('archived',operator: 0)
                 ->when($stop_type == 'open_file', function ($q) {
                     $q->where('military_affairs.status', 'military');
