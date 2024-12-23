@@ -504,7 +504,7 @@ function get_different_dates($first_end_date, $second_end_date)
     $days = $interval->format('%d يوم');
     $months = $interval->format('%m شهر');
     $years = $interval->format('%y سنة');
-
+ 
     // Return combined result if needed, or just days
     return $years . ', ' . $months . ', ' . $days;
 }
