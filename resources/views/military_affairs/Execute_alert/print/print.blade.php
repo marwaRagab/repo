@@ -18,18 +18,28 @@
         <li><a class="dropdown-item" href="{{ route('print_case_proof',['item' => $item->id]) }}" target="_blank">اثبات حالة</a></li>
         <li><a class="dropdown-item" href="{{ route('print_sticker' ,['item' => $item->id]) }}" target="_blank">ستيكر ملف التنفيذ</a></li>
         <li>
-            <a class="dropdown-item {{ $qrareldin->qard_paper_img == null || $qrareldin->qard_paper_img == ''  ? 'disabled' : '' }}"
-               href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}"
-               target="_blank" >
+            <a class="dropdown-item {{ $qrareldin->qard_paper_img == null || $qrareldin->qard_paper_img == '' || $qrareldin->qard_paper_img == 0   ? 'disabled' : '' }}"
+               {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+                  onclick="checkFileAndRedirect(
+                    '{{ $qrareldin && $qrareldin->qard_paper_img && $qrareldin->qard_paper_img !== '0' ? 'https://electron-kw.net/' . $qrareldin->qard_paper_img: '#' }}',
+                    '{{ $qrareldin && $qrareldin->qard_paper_img && $qrareldin->qard_paper_img !== '0' ? 'https://electron-kw.com/' . $qrareldin->qard_paper_img : '#' }}'
+                ); return false;"
+                  target="_blank" >
                اقرار الدين
             </a>
         </li>
         <li>
-            <a class="dropdown-item {{ !$client_img || !$client_img->path || $client_img->path == null ? 'disabled' : '' }}"
-                href="{{ $client_img ? asset($client_img->path) : '#' }}"
+            <a class="dropdown-item {{ !$client_img || !$client_img->path || $client_img->path == null || $client_img->path == 0 ? 'disabled' : '' }}"
+                {{-- href="{{ $client_img ? asset($client_img->path) : '#' }}" --}}
+                onclick="checkFileAndRedirect(
+                    '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.net/' . $client_img->path : '#' }}',
+                    '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.com/' . $client_img->path : '#' }}'
+                ); return false;"
                 target="_blank">
                  الصورة المدنية
              </a>
         </li>
     </ul>
 </div>
+
+@include('military_affairs.Execute_alert.print.script')
