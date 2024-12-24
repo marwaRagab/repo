@@ -281,6 +281,7 @@ function expolde_date($date){
 function Add_note($array_old, $array_new, $id)
 {
 
+    // dd($id);
     $notesData = [
         'note' => " تم التحويل من قسم $array_old->name_ar  الى قسم $array_new->name_ar",
         'type' => $array_new->type,
@@ -1072,16 +1073,18 @@ function update_responsible($user_id, $military_id, $status)
 
     $dateFields = [
         'open_file' => 'open_file_date',
-        'execute' => 'execute_date',
+        'Execute_alert' => 'execute_date',
         'image' => 'image_date',
         'case_proof' => 'case_proof_date',
-        'travel' => 'travel_date',
-        'certificate' => 'certificate_date',
-        'salary' => 'salary_date',
-        'car' => 'car_date',
-        'bank' => 'bank_date',
+        'stop_travel' => 'travel_date',
+        'Certificate' => 'certificate_date',
+        'stop_salary' => 'salary_date',
+        'stop_car' => 'car_date',
+        'stop_bank' => 'bank_date',
+        'eqrar_dain_received'=>'eqrar_dain_received',
     ];
 
+    // dd($military_id);
     $up = Military_affair::where('id',$military_id)->first();
     $up->emp_id = $user_id;
     $up->save();

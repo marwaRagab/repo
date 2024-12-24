@@ -48,14 +48,25 @@ class PapersRepository implements PapersRepositoryInterface
         $title = 'اقرارت غير مستلمة';
         $message = "تم دخول صفحة الاقرارات الغير مستلمة";
         log_move($user_id, $message);
-        $transactions = DB::table('installment')->select('military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
-            , 'installment.created_by', 'clients.civil_number', 'installment.created_at', 'eqrars_details.paper_received_img', 'file_number',
-            'eqrars_details.paper_eqrar_dain_received_date', 'eqrars_details.paper_eqrar_dain_sender_id', 'eqrars_details.paper_eqrar_dain_received_user_id')
-            ->where(['type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null, 'eqrars_details.paper_eqrar_dain_received' => 0, 'installment.laws' => 1])
-            ->leftJoin('eqrars_details', 'installment.eqrars_id', '=', 'eqrars_details.id')
-            ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
-            ->leftJoin('military_affairs', 'installment.id', '=', 'military_affairs.installment_id')
-            ->orderBy('installment.id', 'desc')->get();
+        // $transactions = DB::table('installment')->select('military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
+        //     , 'installment.created_by', 'clients.civil_number', 'installment.created_at', 'eqrars_details.paper_received_img', 'file_number',
+        //     'eqrars_details.paper_eqrar_dain_received_date', 'eqrars_details.paper_eqrar_dain_sender_id', 'eqrars_details.paper_eqrar_dain_received_user_id')
+        //     ->where(['type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null, 'eqrars_details.paper_eqrar_dain_received' => 0, 'installment.laws' => 1])
+        //     ->leftJoin('eqrars_details', 'installment.eqrars_id', '=', 'eqrars_details.id')
+        //     ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
+        //     ->leftJoin('military_affairs', 'installment.id', '=', 'military_affairs.installment_id')
+        //     ->orderBy('installment.id', 'desc')->get();
+
+        $transactions = DB::table('military_affairs')->select('military_affairs.*','military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
+        , 'installment.created_by', 'clients.civil_number', 'installment.created_at', 'eqrars_details.paper_received_img', 'file_number',
+        'eqrars_details.paper_eqrar_dain_received_date', 'eqrars_details.paper_eqrar_dain_sender_id', 'eqrars_details.paper_eqrar_dain_received_user_id')
+        ->where(['type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null, 'eqrars_details.paper_eqrar_dain_received' => 0, 'installment.laws' => 1])
+        ->leftJoin('installment', 'installment.id', '=', 'military_affairs.installment_id')
+        ->leftJoin('eqrars_details', 'installment.eqrars_id', '=', 'eqrars_details.id')
+        ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
+        ->orderBy('installment.id', 'desc')->get();
+
+        // dd($transactions);
 
         $count = $this->data['eqrar_dain_counter'];
 
@@ -104,9 +115,17 @@ class PapersRepository implements PapersRepositoryInterface
 
             $military_affairs_id = $lawsinff['id'];
 
+            // $data =
+            //     ['status' => 'military',
+            //     'emp_id' => $request->received_user_id,
+            //     'convert_date' => $request->convert_date,
+            //     'note_transfer' => $request->note_transfer,
+            //     'updated_by' => Auth::id(),
+            // ];
+            // received_user_id
             $data =
                 ['status' => 'military',
-                'emp_id' => $request->received_user_id,
+                'received_user_id' => $request->received_user_id,
                 'convert_date' => $request->convert_date,
                 'note_transfer' => $request->note_transfer,
                 'updated_by' => Auth::id(),
@@ -120,7 +139,7 @@ class PapersRepository implements PapersRepositoryInterface
             $old_time_type = Military_affairs_times_type::findOrFail($old_one->id);
             $new_time_type = Military_affairs_times_type::findOrFail($new_one->id);
             Add_note($old_time_type, $new_time_type, $military_affairs_id); //to open file
-            Add_note_time($new_time_type, $request->military_affairs_id);
+            Add_note_time($new_time_type, $military_affairs_id);
 
             return redirect()->route('papers.eqrar_dain_received')->with('message', 'تم التحويل بنجاح');
 
@@ -146,17 +165,21 @@ class PapersRepository implements PapersRepositoryInterface
                 ->withErrors($validatedData)
                 ->withInput();
         }
+        // dd($request);
 
         if ($request->hasFile('cinet_img')) {
-            $file = $request->file('cinet_img');
-            $filePath = $file->store('uploads/new_photos', 'public');
+            $filename = time() . '-' . $request->file('cinet_img')->getClientOriginalName();
+            $path = $request->file('cinet_img')->move(public_path('uploads/new_photos'), $filename);
+
+            // $file = $request->file('cinet_img');
+            // $filePath = $file->store('uploads/new_photos', 'public');
             $eqrars_id = DB::table('eqrars_details')->insertGetId([
 
                 'paper_eqrar_dain_received' => 1,
                 'paper_eqrar_dain_received_user_id' => $request->received_user_id,
                 'paper_eqrar_dain_sender_id' => auth()->id(),
                 'paper_eqrar_dain_received_date' => date('Y-m-d H:i:s'),
-                'paper_eqrar_dain_received_img' => '/storage/' . $filePath,
+                'paper_eqrar_dain_received_img' =>'uploads/new_photos' . '/' . $filename,
                 'created_by' => Auth::id(),
                 'updated_by' => null,
             ]);
@@ -171,14 +194,15 @@ class PapersRepository implements PapersRepositoryInterface
                 'slug' => 'paper_eqrar_dain_received',
                 'sender_id' => auth()->id(),
                 'date' => date('Y-m-d H:i:s'),
-                'img_dir' => '/storage/' . $filePath,
+                'img_dir' => 'uploads/new_photos' . '/' . $filename,
                 'note' => ($request->paper_recieved_note ? $request->paper_recieved_note : auth()->id()),
                 //    'created_by' => Auth::id(),
                 //   'updated_by' => null,
             ]);
 
             $military_affairs = Military_affair::where('installment_id', $request->installment_id)->first();
-            $military_affairs_id = $military_affairs->id;
+
+            $military_affairs_id = $military_affairs->id ?? null;
 
             $old_one = Military_affairs_times_type::where('slug', 'eqrar_dain_not_received')->first();
             $new_one = Military_affairs_times_type::where('slug', 'eqrar_dain_received')->first();
@@ -187,11 +211,12 @@ class PapersRepository implements PapersRepositoryInterface
 
             $new_time_type = Military_affairs_times_type::findOrFail($new_one->id);
 
-            //  dd($new_time_type);
+            //  dd($military_affairs);
 
             Add_note($old_time_type, $new_time_type, $military_affairs_id); //eqrart not recieved
-            Add_note_time($new_time_type, $request->military_affairs_id);
-
+            // 
+            Add_note_time($new_time_type, $military_affairs_id);
+            // dd("ssd");
             return redirect()->route('papers.eqrar_dain')->with('message', 'تم التحويل بنجاح');
 
         }
@@ -206,17 +231,27 @@ class PapersRepository implements PapersRepositoryInterface
 
         $extra = ['installment.laws' => '1', 'eqrars_details.paper_eqrar_dain_received' => '1'];
 
-        $items = DB::table('installment')->select('military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
+        // $items = DB::table('installment')->select('military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
+        //     , 'installment.created_by', 'clients.civil_number', 'installment.date', 'eqrars_details.paper_received_img', 'installment.file_number',
+        //     'eqrars_details.paper_eqrar_dain_received_date', 'eqrars_details.paper_eqrar_dain_sender_id', 'eqrars_details.paper_eqrar_dain_received_user_id')
+        //     ->where(['type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null])
+        //     ->where($extra)
+        //     ->leftJoin('eqrars_details', 'installment.eqrars_id', '=', 'eqrars_details.id')
+        //     ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
+        //     ->leftJoin('military_affairs', 'installment.id', '=', 'military_affairs.installment_id')
+        //     ->orderBy('installment.id', 'desc')->get();
+        $items = DB::table('military_affairs')->select('military_affairs.*','military_affairs.id as m_a_id', 'installment.id', 'clients.name_ar', 'installment.finished_user_id'
             , 'installment.created_by', 'clients.civil_number', 'installment.date', 'eqrars_details.paper_received_img', 'installment.file_number',
             'eqrars_details.paper_eqrar_dain_received_date', 'eqrars_details.paper_eqrar_dain_sender_id', 'eqrars_details.paper_eqrar_dain_received_user_id')
             ->where(['type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null])
             ->where($extra)
+            ->leftJoin('installment', 'installment.id', '=', 'military_affairs.installment_id')
             ->leftJoin('eqrars_details', 'installment.eqrars_id', '=', 'eqrars_details.id')
             ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
-            ->leftJoin('military_affairs', 'installment.id', '=', 'military_affairs.installment_id')
             ->orderBy('installment.id', 'desc')->get();
 
         $all_paper_eqrar_dain_received = $items;
+        // dd($all_paper_eqrar_dain_received);
 
         $count = $this->data['eqrar_dain_received_counter'];
         $view = 'military_affairs/papers/recieved';
@@ -230,6 +265,9 @@ class PapersRepository implements PapersRepositoryInterface
 
         $this->data['item_type_time'] = Military_affairs_times_type::where(['type' => 'lated_installment', 'slug' => 'lated_installment'])->first();
         $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'eqrar_dain', 'slug' => 'eqrar_dain_not_received'])->first();
+
+        $this->data['get_responsible'] = get_responsible();
+        
 
         return view('layout', compact('title', 'view', 'users', 'all_paper_eqrar_dain_received', 'count', 'breadcrumb'), $this->data);
 
