@@ -35,6 +35,7 @@
                             <th>تاريخ الاستلام</th>
                             <th> المسلم </th>
                             <th>المستلم</th>
+                            <th>تحديد مسئول</th>
                             <th>الاجراءات</th>
 
                         </tr>
@@ -46,23 +47,41 @@
 
                         @php $i=1; @endphp
 
-                        @foreach ($all_paper_eqrar_dain_received as $one)
+                        @foreach ($all_paper_eqrar_dain_received as $item)
                             <!-- start row -->
 
                             <tr>
                                 <td>{{ $i }}</td>
-                                <td><a href="#">{{ $one->id }}</a></td>
-                                <td>{{ $one->name_ar }}</td>
-                                <td>{{ $one->paper_eqrar_dain_received_date }}</td>
-                                <td>{{ App\Models\User::find($one->paper_eqrar_dain_sender_id)->name_ar }}</td>
-                                <td>{{ App\Models\User::find($one->paper_eqrar_dain_received_user_id)->name_ar }}</td>
+                                <td><a href="{{ route('installment.show-installment', $item->id) }}">{{ $item->id }}</a></td>
+                                <td>{{ $item->name_ar }}</td>
+                                <td>{{ $item->paper_eqrar_dain_received_date }}</td>
+                                <td>{{ App\Models\User::find($item->paper_eqrar_dain_sender_id)->name_ar }}</td>
+                                <td>{{ App\Models\User::find($item->paper_eqrar_dain_received_user_id)->name_ar }}</td>
+                                {{-- تحديد مسئول --}}
                                 <td>
+                                    @include('military_affairs.Open_file.partial.column_responsible')
+                                </td>
+                                
+                                <td>
+                                    @php
+                                        $empp_id = 0;
+                                        if(\Illuminate\Support\Str::contains(url()->full(), "eqrar_dain_received")) 
+                                            {
+                                                $m = App\Models\Military_affairs\Military_affair::find($item->m_a_id);
+                                                if($m)
+                                                {
+                                                    $empp_id = $m->emp_id;
+                                                }   
+                                            }
+                                    @endphp
+                                  
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#vertical-center-modal{{ $one->id }}">
+                                        data-bs-target="#vertical-center-modal{{ $item->id }}" 
+                                        {{ $empp_id == 0 || $empp_id == null ? 'disabled' : '' }} >
                                         فتح ملف
                                     </button>
                                     <!-- Primary Header Modal -->
-                                    <div id="vertical-center-modal{{ $one->id }}" class="modal fade"
+                                    <div id="vertical-center-modal{{ $item->id }}" class="modal fade"
                                         tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
 
@@ -108,7 +127,7 @@
 
                                                             <input class="form-control" type="text"
                                                                 style="display:none;" name="installment_id"
-                                                                value="{{ $one->id }}">
+                                                                value="{{ $item->id }}">
 
                                                         </div>
 
