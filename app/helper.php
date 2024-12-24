@@ -1163,7 +1163,7 @@ function specific_fixed_prin_data($id)
                 //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
                 //     })
                 ->where('archived',0)
-                ->where(['military_affairs.status' => 'execute'])->count();
+                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
 
     }
  function count_minstry($id, $stop_type, $minst_id)
