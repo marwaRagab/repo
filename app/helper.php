@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\FixedPrintData;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
+use App\Models\FixedPrintData;
 use Illuminate\Support\Facades\DB;
 use App\Models\InvoicesInstallment;
 use Illuminate\Support\Facades\Auth;
@@ -407,6 +407,28 @@ function get_all_delegations($military_affairs_id)
 
 }
 
+function get_all_banks($military_affairs_id)
+{
+
+    $notes = DB::table('military_affairs_bank_info')
+        ->where('military_affairs_id', $military_affairs_id)
+        ->get();
+
+    return $notes;
+
+}
+
+function get_all_jobs($military_affairs_id)
+{
+
+    $notes = DB::table('military_affairs_job_info')
+        ->where('military_affairs_id', $military_affairs_id)
+        ->get();
+
+    return $notes;
+
+}
+
 
 function get_modal_name($id)
 {
@@ -464,16 +486,27 @@ function count_client($array_data)
 
 function get_different_dates($first_end_date, $second_end_date)
 {
+    // Validate and parse the first date
+    $datetime1 = is_numeric($first_end_date) ? date_create(date('Y-m-d', $first_end_date)) : date_create($first_end_date);
 
-    $datetime1 = date_create($first_end_date);
-    $datetime2 = date_create($second_end_date);
+    // Validate and parse the second date
+    $datetime2 = is_numeric($second_end_date) ? date_create(date('Y-m-d', $second_end_date)) : date_create($second_end_date);
+
+    // Ensure both dates are valid
+    if (!$datetime1 || !$datetime2) {
+        return 'تاريخ غير صالح'; // Return a friendly error message
+    }
+
+    // Calculate the difference
     $interval = date_diff($datetime1, $datetime2);
-    // dd($interval->days);
-    $day = $interval->format('%d' . 'يوم');
-    $year = $interval->format('%m' . 'شهر');
-    $months = $interval->format('%y' . 'سنة');
-    return $interval->days.'يوم' ;
 
+    // Format and return the difference
+    $days = $interval->format('%d يوم');
+    $months = $interval->format('%m شهر');
+    $years = $interval->format('%y سنة');
+ 
+    // Return combined result if needed, or just days
+    return $years . ', ' . $months . ', ' . $days;
 }
 
 function get_different_date($first_end_date, $second_end_date)
@@ -1098,7 +1131,6 @@ function specific_fixed_prin_data($id)
 
  function count_court($court_id, $stop_type,$minst_id,$time_type)
     {
-        
         return Military_affair::with('installment')->with('installment.client')
                 ->with('status_all')->with('mil_times.salaryType')
                 ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
@@ -1106,7 +1138,11 @@ function specific_fixed_prin_data($id)
                     {
                     $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
                     }
-                    $q->where('governorate_id', $court_id);
+                    if($court_id != '')
+                    {
+                        $q->where('governorate_id', $court_id);
+                    }
+                    
                 })
                 ->whereHas('installment', function ($q){
                     return $q->where('finished',0);
@@ -1114,8 +1150,15 @@ function specific_fixed_prin_data($id)
                 // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
                 //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
                 //     })
-                ->where('archived',0)
-                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+                ->where('archived',operator: 0)
+                ->when($stop_type == 'open_file', function ($q) {
+                    $q->where('military_affairs.status', 'military');
+                }, function ($q) use ($stop_type) {
+                    $q->where('military_affairs.status', 'execute')
+                      ->where($stop_type, 1);
+                })
+                ->count();
+                
 
     }
  function count_minstry($id, $stop_type, $minst_id)

@@ -6,6 +6,15 @@
     </div>
 
 </div>
+
+        @if ($Installment->laws == 1)
+          <div data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $militaryAffair->id }}">
+            <div class="alert alert-danger text-center" role="alert">
+                المعاملة محولة للشئون القانونية
+                </div>      
+        </div>
+        @endif
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -767,7 +776,7 @@
         </div>
     </div>
 </div>
-
+@if ($Installment->laws == 1)
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -871,6 +880,8 @@
         </div>
     </div>
 </div> 
+@endif
+
 
 <!--<div class="card">-->
 <!--    <div class="card-body">-->
@@ -3300,7 +3311,6 @@ function calculate(value, type) {
         }
     }
     if (type == 'cash_checked') {
-        alert($('#payment_order_id_{{$month->id}}').val());
         var real_price = parseFloat($('#real_price_checked').val()).toFixed(3);
         var cash = convert(value);
         var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);

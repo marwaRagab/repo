@@ -215,7 +215,7 @@ class old_dbController extends Controller
 
 //            dd($value);
                 foreach ($value as $item) {
-//                dd($item->id);
+
                     $obj = new Military_affairs_status;
                     $obj->type = $type;
                     $obj->type_id = $key;
@@ -236,7 +236,7 @@ class old_dbController extends Controller
                     } elseif ($key == "stop_car_info") {
 
                         $obj->img_dir = $item->stop_car_request_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_car_request_date);
+                        $obj->date =  $item->stop_car_request_date;
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_car_police") {
@@ -245,15 +245,15 @@ class old_dbController extends Controller
                         $obj->note = null;
                     } elseif ($key == "stop_car_catch") {
                         $obj->img_dir = $item->stop_car_police_station_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_car_recieve_date);
+                        $obj->date =  $item->stop_car_recieve_date;
                         $obj->note = null;
                     } elseif ($key == "stop_car_police_station") {
                         $obj->img_dir = $item->img_dir;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_car_catch_date);
+                        $obj->date =  $item->stop_car_catch_date;
                         $obj->note = null;
                     } elseif ($key == "stop_car_doing") {
                         $obj->img_dir = $item->stop_car_police_station_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_car_police_station_date);
+                        $obj->date =  $item->stop_car_police_station_date;
                         $obj->note = null;
                     } elseif ($key == "stop_car_finished") {
                         $obj->img_dir = null;
@@ -261,12 +261,12 @@ class old_dbController extends Controller
                         $obj->note = null;
                     } elseif ($key == "stop_car_cancel_request") {
                         $obj->img_dir = $item->stop_car_police_station_img;
-                        $obj->date =  date("Y-m-d H:i:s", $item->my_date);
+                        $obj->date =   $item->my_date;
                         $obj->note = null;
                     } elseif ($key == "stop_car_cancel") {
                         $obj->img_dir = null;
                         if($item->cancel_type=='stop_car'){
-                            $obj->date =  date("Y-m-d H:i:s", $item->cancel_date);
+                            $obj->date =   $item->cancel_date;
                         }else{
                             $obj->date =  null;
                         }
@@ -282,6 +282,7 @@ class old_dbController extends Controller
 
             }
         }
+
 
 //        stop travel
         if ($type == "stop_travel") {
@@ -341,7 +342,6 @@ class old_dbController extends Controller
 //                'stop_car_cancel'=>$stop_car_cancel,
             ];
 
-        //  dd($array);
 
             foreach ($array as $key => $value) {
 
@@ -361,7 +361,7 @@ class old_dbController extends Controller
                         $obj->note = null;
                     } elseif ($key == "command") {
                         $obj->img_dir = $item->command_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->command_date);
+                        $obj->date =  $item->command_date;
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_travel_finished") {
@@ -373,16 +373,16 @@ class old_dbController extends Controller
                         $obj1->updated_by = Auth::user()->id ?? null;
                         $obj1->img_dir = $item->command_img;
                         $obj1->flag =1;
-                        $obj1->date = date("Y-m-d H:i:s", $item->command_date);
+                        $obj1->date =  $item->command_date;
                         $obj1->note = null;
                         $obj1->save();
 
                         $obj->img_dir = $item->stop_travel_finished_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_travel_finished_date);
+                        $obj->date =  $item->stop_travel_finished_date;
                         $obj->note = null;
                     } elseif ($key == "stop_travel_cancel_request") {
                         $obj->img_dir = null;
-                        $obj->date =  date("Y-m-d H:i:s", $item->my_date);
+                        $obj->date =   $item->my_date;
                         $obj->note = null;
                     } elseif ($key == "stop_travel_cancel") {
                         $obj2 = new Military_affairs_status;
@@ -393,13 +393,13 @@ class old_dbController extends Controller
                         $obj2->updated_by = Auth::user()->id ?? null;
                         $obj2->img_dir =null;
                         $obj2->flag =1;
-                        $obj2->date = date("Y-m-d H:i:s", $item->my_date);
+                        $obj2->date =  $item->my_date;
                         $obj2->note = null;
                         $obj2->save();
 //
                         $obj->img_dir = null;
                         if($item->cancel_type=='stop_travel'){
-                            $obj->date =  date("Y-m-d H:i:s", $item->cancel_date);
+                            $obj->date =   $item->cancel_date;
                         }else{
                             $obj->date =  null;
                         }
@@ -505,7 +505,7 @@ class old_dbController extends Controller
 //                    $obj->save();
                     } elseif ($key == "export") {
                         $obj->img_dir = $item->certificate_info_book_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->certificate_info_book_date);
+                        $obj->date =  $item->certificate_info_book_date;
                         $obj->note = null;
                     } elseif ($key == "money") {
                         $obj->img_dir = $item->certificate_export_img;
@@ -648,16 +648,16 @@ class old_dbController extends Controller
                     } elseif ($key == "stop_bank_command") {
 
                         $obj->img_dir = $item->stop_bank_request_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_bank_request_date);
+                        $obj->date =  $item->stop_bank_request_date;
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_bank_researcher") {
                         $obj->img_dir = $item->stop_bank_request_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_bank_request_date);
+                        $obj->date =  $item->stop_bank_request_date;
                         $obj->note = null;
                     } elseif ($key == "banks") {
                         $obj->img_dir = $item->stop_bank_banks_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_bank_banks_date);
+                        $obj->date =  $item->stop_bank_banks_date;
                         $obj->note = null;
                     } elseif ($key == "stop_bank_doing") {
                         $obj->img_dir = null;
@@ -666,7 +666,7 @@ class old_dbController extends Controller
                     } elseif ($key == "stop_bank_cancel_request") {
 //                        $obj->cancel_stop_bank = "1";
                         $obj->img_dir = null;
-                        $obj->date =  date("Y-m-d H:i:s", $item->my_date);
+                        $obj->date =   $item->my_date;
                         $obj->note = null;
 
                     } elseif ($key == "stop_bank_cancel") {
@@ -822,7 +822,7 @@ class old_dbController extends Controller
 
             ];
 
-          
+
             foreach ($array as $key => $value) {
 
 //            dd($value);
@@ -843,18 +843,18 @@ class old_dbController extends Controller
                     } elseif ($key == "stop_salary_doing") {
 
                         $obj->img_dir = $item->stop_salary_request_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_car_request_date);
+                        $obj->date =  $item->stop_car_request_date;
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_salary_money") {
                         if ($item->ministry == 14) {
                             $obj->img_dir = $item->stop_salary_military_judgement_img;
-                            $obj->date = date("Y-m-d H:i:s", $item->stop_salary_military_judgement_date);
+                            $obj->date =  $item->stop_salary_military_judgement_date;
                             $obj->note = null;
                         } elseif ($item->ministry == 5)
                         {
                         $obj->img_dir = $item->stop_salary_doing_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_doing_date);
+                        $obj->date =  $item->stop_salary_doing_date;
                         $obj->note = null;
 
                     }
@@ -862,19 +862,19 @@ class old_dbController extends Controller
                         ($item->ministry == 27)
                         {
                         $obj->img_dir = $item->stop_salary_force_affairs_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_force_affairs_date);
+                        $obj->date =  $item->stop_salary_force_affairs_date;
                         $obj->note = null;
                     }
 
                     } elseif ($key == "stop_salary_part") {
                         $obj->img_dir = $item->stop_salary_money_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_money_date);
+                        $obj->date =  $item->stop_salary_money_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_cancel_request") {
 
 //                        $obj->cancel_stop_salary = "1";
                         $obj->img_dir = null;
-                        $obj->date =  date("Y-m-d H:i:s", $item->my_date);
+                        $obj->date =   $item->my_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_cancel") {
 //                        $obj->cancel_stop_salary = "done";
@@ -885,16 +885,16 @@ class old_dbController extends Controller
                     } elseif ($key == "stop_salary_military_judgement") {
 //                        $obj->cancel_stop_bank = "done";
                         $obj->img_dir = $item->stop_salary_doing_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_doing_date);
+                        $obj->date =  $item->stop_salary_doing_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_sabah_salem") {
 //                        $obj->cancel_stop_bank = "done";
                         $obj->img_dir = $item->stop_salary_doing_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_doing_date);
+                        $obj->date =  $item->stop_salary_doing_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_force_affairs") {
                         $obj->img_dir = $item->stop_salary_sabah_salem_img;
-                        $obj->date = date("Y-m-d H:i:s", $item->stop_salary_sabah_salem_date);
+                        $obj->date =  $item->stop_salary_sabah_salem_date;
                         $obj->note = null;
                     }
 

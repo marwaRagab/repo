@@ -203,7 +203,6 @@ class InstallmentController extends Controller
         });
 
         $data['Installment'] = $installment = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs'])->findOrFail($id);
-        // $data['Installment_Client'] = $Installment_Client= Installment_Client::with(['installment_client'])->get();
 
         $data['Installment']->test = "";
 
@@ -211,12 +210,10 @@ class InstallmentController extends Controller
             $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         }
 
-//        $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image'])
 
             ->where('id', $data['Installment']->client_id)
             ->first();
-        // $data['phone'] = ClientPhone::where('client_id',$client->id);
         $data['OrderItem'] = DB::table('orders_items')->where('order_id', $data['Installment']->order_id)->get();
         $data['purchase_orders_items'] = PurchaseOrderItem::with('product')->where('order_id', $data['Installment']->order_id)->get();
 
@@ -271,10 +268,6 @@ class InstallmentController extends Controller
         // banks
         $data['client_banks'] = DB::table('client_banks')->where('client_id', $data['Client']->id)->first();
 
-        // dd( $data['Installment']);
-        // $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
-        //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
-
         if ($data) {
             $user_id = Auth::user()->id ?? null;
             $message = "تم دخول صفحة عرض التفاصيل للمعاملة";
@@ -285,6 +278,7 @@ class InstallmentController extends Controller
 
         $mil_item = Military_affair::with('installment')->get();
         $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->get();
+        $military_affair = null; // Default initialization
 
         if ($installment->laws == 1) {
             $military_affair = Military_affair::where('installment_id', $id)->first();
@@ -304,7 +298,11 @@ class InstallmentController extends Controller
             ->where('installment_id', $id)->get();
         // dd($data['invoices']);
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
-        $data['get_all_delegations'] = get_all_delegations($military_affair->id);
+        if ($military_affair) {
+            $data['get_all_delegations'] = get_all_delegations($military_affair->id);
+        } else {
+            $data['get_all_delegations'] = []; // Provide a default value
+        }
         // $data['settle_item'] = Military_affairs_settlement::with('military_affair')->get();
 
         // if(count($data['settle_item']) > 0){
@@ -348,6 +346,8 @@ class InstallmentController extends Controller
             // dd($data['MilitaryAffairNote']);
 
         }
+        
+        $data['militaryAffair'] = Military_affair::where('installment_id',$id)->first();
 
         // order items
 

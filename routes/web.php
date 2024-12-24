@@ -242,7 +242,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/eqrardain/{id?}', [EqrardainController::class, 'index'])->name('eqrardain');
     //Route::get('/please_cancel_eqrar/{id?}', [ EqrardainController::class, 'please_cancel_eqrar']);
 
-    Route::get('military_affairs', [Military_affairsController::class, 'index'])->name('military_affairs');
+    Route::get('military_affairs_all', [Military_affairsController::class, 'index'])->name('military_affairs');
     Route::get('military_affairs/stop_car/{governorate_id?}/{stop_car_type?}', [Stop_carController::class, 'index'])->name('stop_car');
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');
@@ -343,12 +343,12 @@ Route::middleware('auth')->group(function () {
     Route::get('region/filter/{id}', [RegionController::class, 'filter'])->name('region.filter');
 
     // courts
-   /* Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
+    Route::get('courts', [CourtController::class, 'index'])->name('courts.index');
     Route::post('courts/store', [CourtController::class, 'store'])->name('courts.store');
     Route::get('courts/edit/{id}', [CourtController::class, 'edit'])->name('courts.edit');
     Route::any('courts/update/{id}', [CourtController::class, 'update'])->name('courts.update');
     Route::any('courts/delete/{id}', [CourtController::class, 'destroy'])->name('courts.destroy');
-    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');*/
+    Route::any('courts/show/{id}', [CourtController::class, 'show'])->name('courts.show');
 
     // nationality
     Route::get('nationality', [NationalityController::class, 'index'])->name('nationality.index');

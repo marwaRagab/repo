@@ -345,7 +345,7 @@
                                 $all_notes=get_all_notes('settlement',$one->id);
                                 $all_actions=get_all_actions($one->id);
                                 $get_all_delegations = get_all_delegations($one->id);
-
+                                
                             @endphp
                             <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
                                     data-bs-target="#open-details-{{$one->id}}">
@@ -377,7 +377,7 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
-
+                                                            
                                             </ul>
                                             <!-- Tab panes -->
                                             <div class="tab-content border mt-2">
@@ -558,90 +558,7 @@
                                                     </table>
 
                                                 </div>
-                                                <div class="tab-pane p-3" id="actions-{{$one->id}}"
-                                                                 role="tabpanel">
-                                                                <table id="notes2"
-                                                                       class="table table-bordered border text-wrap align-middle">
-                                                                    <thead>
-                                                                    <!-- start row -->
-                                                                    <tr>
-                                                                        <th>القسم</th>
-                                                                        <th>المسئول</th>
-                                                                        <th>تاريخ البدء</th>
-                                                                        <th>تاريخ الانتهاء</th>
-                                                                        <th> عدد الايام</th>
-                                                                    </tr>
-                                                                    <!-- end row -->
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    <!-- start row -->
-                                                                    @if (count($get_all_delegations) > 0 )
-                                                                    @foreach ($get_all_delegations as $value)
-                                                        <tr data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseExample" aria-expanded="false"
-                                                            aria-controls="collapseExample">
-                                                            @php
-                                                                $created_by = DB::table('users')
-                                                                    ->where('id', $value->emp_id)
-                                                                    ->first();
-                                                                
-                                                            @endphp
-                                                           <td>
-                                                                {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
-                                                                    $value['image_date'] ? 'الايمج' : (
-                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
-                                                                    $value['travel_date'] ? 'منع السفر' : (
-                                                                    $value['car_date'] ? 'حجز السيارات' : (
-                                                                    $value['bank_date'] ? 'حجز بنوك' : (
-                                                                    $value['salary_date'] ? 'حجز راتب' : (
-                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
-                                                                    )))))))
-                                                                }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $created_by->name_ar ?? 'لا يوجد' }}
-                                                            </td>
-                                                            <td>
-                                                                @php
-                                                                    
-                                                                $day_start = explode(' ', $value->assign_date)[0];
-                                                                    if (is_numeric($day_start)) {
-                                                                        $day_start = date('Y-m-d', $day_start);
-                                                                    }
-
-                                                                    // Check the end date
-                                                                    if ($value->end_date && $value->end_date != '') {
-                                                                        $day_end = explode(' ', $value->end_date)[0];
-                                                                        if (is_numeric($day_end)) {
-                                                                            $day_end = date('Y-m-d', $day_end);
-                                                                        }
-                                                                        $different_day = get_different_date($day_start, $day_end);
-                                                                    } else {
-                                                                        // Use current timestamp if end_date is missing
-                                                                        $day_end = 'لم تنتهى';
-                                                                        $different_day = get_different_date($day_start, now()->timestamp);
-                                                                    }
-                                                                @endphp
-                                                                {{ $day_start }}
-
-                                                            </td>
-                                                            <td>{{ $day_end }}</td>
-
-                                                            <td>
-                                                                {{ $different_day }}
-                                                            </td>
-
-                                                        </tr>
-                                                    @endforeach
-                                                    @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
-                                                                        </tr>
-
-                                                                    @endif
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="modal-footer d-flex ">

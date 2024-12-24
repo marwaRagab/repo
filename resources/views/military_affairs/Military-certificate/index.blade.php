@@ -1187,6 +1187,7 @@
                                         $all_notes=get_all_notes('Military_certificate',$item->id);
                                         $all_actions = get_all_actions($item->id);
                                             $get_all_delegations = get_all_delegations($item->id);
+                                            
                                     @endphp
 
                                     <a class="btn btn-success me-6 my-2"
@@ -1232,6 +1233,7 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
+                                                            
                                                         </ul>
                                                         <!-- Tab panes -->
 
@@ -1519,6 +1521,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer d-flex ">
