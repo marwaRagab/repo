@@ -156,12 +156,11 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
     {
         $message = "تم تحويل المعاملة رقم " . $id . ' للشئون القانونية';
         log_move(Auth::user()->id, $message);
-        // $data['laws']=1;
+
 
         $install = Military_Affair::with('installment')->where(['installment_id' => $id])->first();
 
         if (!empty($install)) {
-            //  dd('kkk'.$install);
             return redirect()->route('military_affairs')->with('error', 'عفوا تم تحويل المعاملة للشئون القانونية من قبل!!');
         } else {
             $eqrars_id = DB::table('eqrars_details')->insertGetId([
