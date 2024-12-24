@@ -2,20 +2,20 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
         <div class="form-group">
-            <select class="form-select" id="dateSelect" name="month" onchange="addUrlParameter('month', this.value)">
-                <option selected disabled>اختر التاريخ</option>
-                @foreach($dates as $date)
-                <option value="{{ $date }}" {{ request()->get('month') == $date ? 'selected' : '' }}>
-                    {{ $date }}
-                </option>
-                @endforeach
-            </select>
-        </div>
+    <select class="form-select" id="dateSelect" name="month">
+        <option selected disabled>اختر التاريخ</option>
+        @foreach($dates as $date)
+            <option value="{{ $date }}" {{ request()->get('month') == $date ? 'selected' : '' }}>
+                {{ $date }}
+            </option>
+        @endforeach
+    </select>
+</div>
     </div>
 
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+            <table id="all-student1" class="table table-bordered border text-nowrap align-middle">
                 <thead class="thead-dark">
                     <tr>
                         <th>م</th>
@@ -112,6 +112,41 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#all-student1').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '{{ route('payments.data') }}',
+                data: function (d) {
+                    d.month = $('#dateSelect').val(); // Pass selected month
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'installment.client.name_ar', name: 'installment.client.name_ar', defaultContent: 'لايوجد' },
+                { data: 'amount', name: 'amount' },
+                { data: 'pay_method', name: 'pay_method' },
+                { data: 'serial_no', name: 'serial_no' },
+                { data: 'print_status_label', name: 'print_status_label', orderable: false, searchable: false },
+                { data: 'description', name: 'description' },
+                { data: 'date', name: 'date' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false },
+            ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json', // Arabic translations
+            }
+        });
+
+        // Reload DataTable on month selection change
+        $('#dateSelect').change(function () {
+            $('#all-student1').DataTable().ajax.reload();
+        });
+    });
+</script>
+
 <script>
     function addUrlParameter(name, value) {
         const searchParams = new URLSearchParams(window.location.search);

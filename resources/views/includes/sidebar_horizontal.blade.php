@@ -311,6 +311,13 @@
                                 <span class="hide-menu"> رفع الإجراءات</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('payments') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu"> عمليات الدفع
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
@@ -462,31 +469,7 @@
 
                     </ul>
                 </li>
-                <li class="nav-small-cap">
-                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu"> عمليات الدفع
-                    </span>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link has-arrow warning-hover-bg" href="javascript:void(0)"
-                        aria-expanded="false">
-                        <iconify-icon icon="solar:bedside-table-2-line-duotone" class="fs-6 aside-icon text-danger">
-                        </iconify-icon>
-                        <span class="hide-menu pe-1"> عمليات الدفع 
-                        </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ route('payments') }}" class="sidebar-link">
-                                <span class="sidebar-icon"></span>
-                                <span class="hide-menu"> عمليات الدفع
-                                </span>
-                            </a>
-                        </li>
-                        
-
-                    </ul>
-                </li>
+               
                 
                 <!-- =================== -->
                 <!-- المنتجات

@@ -2,41 +2,41 @@
 
 namespace App\Repositories\Payments;
 
-use App\Interfaces\Military_affairs\CheckingRepositoryInterface;
-use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
-use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
-use App\Interfaces\Payments\PaymentsRepositoryInterface;
+use DateTime;
+use Carbon\Carbon;
+use App\Models\Log;
 use App\Models\Bank;
-use App\Models\Client;
+use Inertia\Inertia;
 use App\Models\Court;
+use App\Models\Client;
+use App\Models\Ministry;
 use App\Models\Governorate;
 use App\Models\Installment;
-use App\Models\Installment_Client;
-use App\Models\Installment_month;
-use App\Models\InstallmentClientNote;
-use App\Models\InstallmentNote;
-use App\Models\InvoicesInstallment\Invoices_installment;
-use App\Models\Military_affairs\Military_affair;
-use App\Models\Military_affairs\Military_affairs_amount;
-use App\Models\Military_affairs\Military_affairs_certificate_type;
-use App\Models\Military_affairs\Military_affairs_check;
-use App\Models\Military_affairs\Military_affairs_jalasaat;
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\Military_affairs\Military_affairs_status;
-use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Models\Military_affairs\Stop_travel_types;
-use App\Models\Ministry;
-use Carbon\Carbon;
-use DateTime;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
-use Inertia\Inertia;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Log;
 use Illuminate\Http\Request;
+use App\Models\InstallmentNote;
+use Yajra\DataTables\DataTables;
+use App\Models\Installment_month;
+use App\Models\Installment_Client;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use App\Models\InstallmentClientNote;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Stop_travel_types;
+use App\Models\Military_affairs\Military_affairs_check;
+use App\Models\Military_affairs\Military_affairs_notes;
+use App\Interfaces\Payments\PaymentsRepositoryInterface;
+use App\Models\InvoicesInstallment\Invoices_installment;
+use App\Models\Military_affairs\Military_affairs_amount;
+use App\Models\Military_affairs\Military_affairs_status;
+use App\Models\Military_affairs\Military_affairs_jalasaat;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Interfaces\Military_affairs\CheckingRepositoryInterface;
+use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
+use App\Models\Military_affairs\Military_affairs_certificate_type;
+use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
 
 class PaymentsRepository implements PaymentsRepositoryInterface
 {
@@ -99,6 +99,78 @@ class PaymentsRepository implements PaymentsRepositoryInterface
         return view('layout', $this->data, compact('breadcrumb'));
 
     }
+
+    public function getPaymentsData(Request $request)
+{
+    // Retrieve the selected month from the request
+    $pay_date = $request->month;
+
+    // Query the database with necessary filters and relationships
+    $payments = Invoices_installment::where('arch', 0)
+        ->when($pay_date, function ($query) use ($pay_date) {
+            $date = new DateTime($pay_date);
+            $year = $date->format('Y');
+            $month = $date->format('m');
+            return $query->whereYear('date', $year)->whereMonth('date', $month);
+        })
+        ->where('branch_id', Auth::user()->branch_id)
+        ->with(['installment' => function ($query) {
+            $query->where('installment.laws', '=', 0);
+        }])
+        ->with('install_month')
+        ->select(['id', 'payment_type', 'date', 'branch_id', 'installment_id', 'install_month_id', 'description', 'amount', 'print_status']);
+
+    // Process data for DataTables
+    return DataTables::of($payments)
+        ->addColumn('pay_method', function ($payment) {
+            switch ($payment->payment_type) {
+                case 'cash':
+                    return 'كاش';
+                case 'part':
+                    return 'روابط';
+                case 'check':
+                    return 'شيك';
+                default:
+                    return 'كى نت';
+            }
+        })
+        ->addColumn('installment_name', function ($payment) {
+            return $payment->installment->client->name_ar ?? 'لايوجد';
+        })
+        ->addColumn('serial_no', function ($payment) {
+            $current_month_year = date('Y') . date('m');
+            $total_items = Invoices_installment::count();
+            return $current_month_year . ($total_items - $payment->id); // Example calculation
+        })
+        ->addColumn('print_status_label', function ($payment) {
+            return $payment->print_status == 'done' ? 
+                '<span class="text-success">تم الطباعة</span>' : 
+                '<span class="text-danger">لم يتم الطباعة</span>';
+        })
+        ->addColumn('actions', function ($payment) {
+            $printUrl = route('print_invoice', [
+                'id' => $payment->id,
+                'id1' => $payment->installment_id,
+                'id2' => $payment->install_month_id,
+                'id3' => $payment->id, // or serial_no if that's intended
+            ]);
+
+            $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
+
+            $printButton = $payment->print_status == 'done' 
+                ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
+                : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
+
+            $archiveButton = $payment->print_status == 'done' 
+                ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
+                : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
+
+            return $printButton . ' ' . $archiveButton;
+        })
+        ->rawColumns(['print_status_label', 'actions']) // Allow HTML for certain columns
+        ->addIndexColumn() // Add index column
+        ->make(true); // Generate JSON response for DataTables
+}
 
     public function invoices_installment_index(Request $request)
     {

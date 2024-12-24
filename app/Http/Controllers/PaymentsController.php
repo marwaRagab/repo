@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Payments;
 
+use App\Models\Governorate;
+use Illuminate\Http\Request;
+use App\Models\Military_affairs;
+use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Interfaces\Payments\PaymentsRepositoryInterface;
 use App\Interfaces\Military_affairs\Open_fileRepositoryInterface;
 use App\Interfaces\Military_affairs\Stop_bankRepositoryInterface;
 use App\Interfaces\Military_affairs\Stop_travelRepositoryInterface;
-use App\Interfaces\Payments\PaymentsRepositoryInterface;
-use App\Models\Governorate;
-use App\Models\Military_affairs;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\DataTables;
 
 class PaymentsController extends Controller
 {
@@ -28,6 +28,12 @@ class PaymentsController extends Controller
         // dd("dd");
         return $this->paymentRepository->index($request);
 
+
+    }
+
+    public function getPaymentsData()
+    {
+        return $this->paymentRepository->getPaymentsData();
 
     }
 
