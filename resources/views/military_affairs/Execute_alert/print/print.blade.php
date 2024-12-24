@@ -1,6 +1,7 @@
 @php
     $qrareldin = DB::table('installment')->where('id', $item->installment->id)->first();
     $client_img = DB::table('client_imgs')->where('client_id', $qrareldin->client_id)->where('type','civil_img')->first();
+    $pdf_img =\App\Models\Military_affairs\Military_affair::where('id', $item->id)->first();
 @endphp
 
 <div class="dropdown mb-6 me-6">
@@ -31,5 +32,10 @@
                  الصورة المدنية
              </a>
         </li>
+            @if (Str::contains(request()->url(), 'stop_bank'))
+
+                    <li><a class="dropdown-item  {{ $pdf_img->execute_do_img == null || $pdf_img->execute_do_img == ''  ? 'disabled' : '' }} " href="{{ $pdf_img ? asset($pdf_img->execute_do_img) : '#' }}" target="_blank">طباعة الpdf</a></li>
+
+            @endif
     </ul>
 </div>

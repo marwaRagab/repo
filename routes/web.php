@@ -218,6 +218,7 @@ Route::middleware('auth')->group(function () {
     Route::post('military_affairs/stop_bank/save_banks_info', [Stop_bankController::class, 'saveBanksInfo'])->name('stop_bank.save_banks_info');
     Route::get('military_affairs/stop_bank/check_info_in_job/{id?}', [Stop_bankController::class, 'check_info_in_job'])->name('stop_bank.check_info_in_job');
     Route::post('military_affairs/stop_bank/save_jobs_info', [Stop_bankController::class, 'save_jobs_info'])->name('stop_bank.save_jobs_info');
+    Route::post('stop_bank/stop_bank_request_results', [Stop_bankController::class, 'stop_bank_request_results']);
 
     // Route::get('/checking/{id?}', [ CheckingController::class, 'index'])->name('checking');
     // Route::post('/update_actions_up/', [ CheckingController::class, 'update_actions_up']);

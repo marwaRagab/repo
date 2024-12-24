@@ -837,56 +837,49 @@ class old_dbController extends Controller
                         $obj->img_dir = null;
                         $obj->date = null;
                         $obj->note = null;
-                    }
-                    elseif ($key == "stop_salary_doing") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                    } elseif ($key == "stop_salary_doing") {
+                        $this->get_old($type, 'stop_salary_request', $item->id, $item->stop_salary_request_date, $item->stop_salary_request_img);
+
                         $obj->img_dir = $item->stop_salary_request_img;
                         $obj->date = $item->stop_car_request_date;
                         $obj->note = null;
 //                    $obj->save();
                     } elseif ($key == "stop_salary_money") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
-                        $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
                         if ($item->ministry == 14) {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
                             $obj->img_dir = $item->stop_salary_military_judgement_img;
                             $obj->date = $item->stop_salary_military_judgement_date;
                             $obj->note = null;
-
                         } elseif ($item->ministry == 5) {
+
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
+
                             $obj->img_dir = $item->stop_salary_doing_img;
                             $obj->date = $item->stop_salary_doing_date;
                             $obj->note = null;
-                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
-
 
                         } elseif
                         ($item->ministry == 27) {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
+                            $this->get_old($type, 'stop_salary_force_affairs', $item->id, $item->stop_salary_force_affairs, $item->stop_salary_force_affairs_img);
                             $obj->img_dir = $item->stop_salary_force_affairs_img;
                             $obj->date = $item->stop_salary_force_affairs_date;
                             $obj->note = null;
-                            $this->get_old($type, 'stop_salary_sabah_salem', $item->id, $item->stop_salary_sabah_salem_date, $item->stop_salary_sabah_salem_img);
-                            $this->get_old($type, 'stop_salary_force_affairs', $item->id, $item->stop_salary_force_affairs, $item->stop_salary_force_affairs_img);
-
                         }
 
                     } elseif ($key == "stop_salary_part") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
-                        $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+
+
+
+
                         $obj->img_dir = $item->stop_salary_money_img;
                         $obj->date = $item->stop_salary_money_date;
                         $obj->note = null;
-                        if($item->ministry == 27){
-                            $this->get_old($type, 'stop_salary_sabah_salem', $item->id, $item->stop_salary_sabah_salem_date, $item->stop_salary_sabah_salem_img);
-                            $this->get_old($type, 'stop_salary_force_affairs', $item->id, $item->stop_salary_force_affairs, $item->stop_salary_force_affairs_img);
-
-                        }if($item->ministry == 5){
-                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
-
-                        }
-                        $this->get_old($type, 'stop_salary_money', $item->id, $item->stop_salary_money_date, $item->stop_salary_money_img);
-
-
-
                     } elseif ($key == "stop_salary_cancel_request") {
 
 //                        $obj->cancel_stop_salary = "1";
@@ -900,21 +893,53 @@ class old_dbController extends Controller
                         $obj->note = null;
 
                     } elseif ($key == "stop_salary_military_judgement") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+//                        $obj->cancel_stop_bank = "done";
+
+
                         $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+
+
                         $obj->img_dir = $item->stop_salary_doing_img;
                         $obj->date = $item->stop_salary_doing_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_sabah_salem") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
-                        $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+
+                        if ($item->ministry == 5) {
+
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
+
+
+                        } else {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                        }
+//                        $obj->cancel_stop_bank = "done";
+
                         $obj->img_dir = $item->stop_salary_doing_img;
                         $obj->date = $item->stop_salary_doing_date;
                         $obj->note = null;
                     } elseif ($key == "stop_salary_force_affairs") {
-                        $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
-                        $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
-                        $this->get_old($type, 'stop_salary_sabah_salem', $item->id, $item->stop_salary_sabah_salem_date, $item->stop_salary_sabah_salem_img);
+
+                        if ($item->ministry == 27) {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_salary_sabah_salem', $item->id, $item->stop_salary_sabah_salem_date, $item->stop_salary_sabah_salem_img);
+
+                        }
+                        if ($item->ministry == 5) {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_salary_military_judgement', $item->id, $item->stop_salary_military_judgement_date, $item->stop_salary_military_judgement_img);
+
+                        } else {
+                            $this->get_old($type, 'stop_salary_doing', $item->id, $item->stop_salary_doing_date, $item->stop_salary_doing_img);
+                            $this->get_old($type, 'stop_bank_request', $item->id, $item->stop_bank_request_date, $item->stop_salary_doing_img);
+                        }
+
+
                         $obj->img_dir = $item->stop_salary_sabah_salem_img;
                         $obj->date = $item->stop_salary_sabah_salem_date;
                         $obj->note = null;

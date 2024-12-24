@@ -274,7 +274,7 @@
                                             // dd();
                                             $all_actions = get_all_actions($item->id);
                                             $get_all_delegations = get_all_delegations($item->id);
-                                           
+
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                             role="tabpanel">
