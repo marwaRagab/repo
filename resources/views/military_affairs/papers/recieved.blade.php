@@ -62,22 +62,10 @@
                                     @include('military_affairs.Open_file.partial.column_responsible')
                                 </td>
                                 
-                                <td>
-                                    @php
-                                        $empp_id = 0;
-                                        if(\Illuminate\Support\Str::contains(url()->full(), "eqrar_dain_received")) 
-                                            {
-                                                $m = App\Models\Military_affairs\Military_affair::find($item->m_a_id);
-                                                if($m)
-                                                {
-                                                    $empp_id = $m->emp_id;
-                                                }   
-                                            }
-                                    @endphp
-                                  
+                                <td>                                 
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#vertical-center-modal{{ $item->id }}" 
-                                        {{ $empp_id == 0 || $empp_id == null ? 'disabled' : '' }} >
+                                        {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }} >
                                         فتح ملف
                                     </button>
                                     <!-- Primary Header Modal -->

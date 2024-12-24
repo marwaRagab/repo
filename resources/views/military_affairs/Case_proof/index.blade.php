@@ -2,14 +2,14 @@
     <div class="d-flex flex-wrap ">
         <a href="{{route('case_proof')}}"
            class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
+            العدد الكلي ({{ count_court('' ,'case_proof',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
 
             <a href="{{route('case_proof',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}} ({{ count_court($court->id ,'case_proof',null,null) }})
             </a>
 
         @endforeach
@@ -77,13 +77,15 @@
                 </thead>
 
                 <tbody>
-
+                @php $counter = 0; @endphp
                 @foreach($items as $item)
                     @if($item->installment->finished==0)
+                    @php $counter++; @endphp  
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->court->id)
+                         
                             <tr>
                                 <td>
-                                    {{ $loop->index + 1 }}
+                                    {{ $counter }}
                                 </td>
                                 <td>
                                     <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
@@ -519,7 +521,7 @@
 
 
                                 <td>
-                                    {{ $loop->index + 1 }}
+                                    {{ $counter }}
                                 </td>
                                 <td>
                                     <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
