@@ -91,8 +91,18 @@ class Stop_carRepository implements Stop_carRepositoryInterface
                     ->whereHas('installment.client.court', function ($q) {
                         $q->where('governorate_id', request()->get('governate_id'));
                     });
-            })->get();
-
+            })
+           ->with('installment.client.area.police_station')
+         /*   ->when(request()->has('stop_car_type'), function ($query) {
+                $query
+                    ->whereHas('status_all', function ($q) {
+                        $q->where('type', 'stop_car')->where('type_id', request()->get('stop_car_type'))->where('flag', 0);
+                    })
+                ;
+            })
+                */
+            ->get();
+        dd($transactions);
         foreach ($transactions as $value) {
 
             $value->item_old_data = Prev_cols_military_affairs::where('military_affairs_id', $value->id)->first();
