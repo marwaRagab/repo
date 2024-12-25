@@ -346,6 +346,8 @@ class InstallmentController extends Controller
             // dd($data['MilitaryAffairNote']);
 
         }
+        
+        $data['militaryAffair'] = Military_affair::where('installment_id',$id)->first();
 
         // order items
 

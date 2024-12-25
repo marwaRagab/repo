@@ -71,8 +71,9 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $this->data['item_type_time']=Military_affairs_times_type::where(['type'=> 'open_file','slug'=>'open_file'])->first();
         $this->data['item_type_time_new']=Military_affairs_times_type::where(['type'=> 'execute_alert','slug'=>'execute_alert'])->first();
-
+        $x=1;
         foreach ( $this->data['items'] as $value){
+            $value->i=$x;
             $value->final_data=  $item_data=explode(' ',$value->created_at);
             $value->different_date = get_different_dates($item_data[0],date('Y-m-d'));
             if(count($value->installment->client->client_address)>=1) {
@@ -97,11 +98,14 @@ class Open_fileRepository implements Open_fileRepositoryInterface
             }if ($value->installment->eqrardain_date == null && $value->installment->qard_paper == null) {
                 $value->type_papar='لايوجد';
             }
+            if($value->installment->finished==0){
+            $x=$x+1;
+            }
 
         }
 
 
-            //dd($this->data['items']);
+            // dd($this->data['items']);
         $this->data['get_responsible'] = get_responsible();
 
         $this->data['view']='military_affairs/Open_file/index';

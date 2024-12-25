@@ -80,8 +80,10 @@
                 @php $counter = 0; @endphp
                 @foreach($items as $item)
                     @if($item->installment->finished==0)
+
                         @php $counter++; @endphp
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->court->id)
+                         
                             <tr>
                                 <td>
                                     {{ $counter }}

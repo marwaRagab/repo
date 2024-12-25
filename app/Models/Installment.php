@@ -46,6 +46,10 @@ class Installment extends Model
     {
         return $this->belongsTo(Military_affair::class, 'installment_id')->where('status',0);
     }
+    public function militay_affairsNew()
+    {
+        return $this->belongsTo(Military_affair::class, 'installment_id');
+    }
 
     public function installment_client()
     {

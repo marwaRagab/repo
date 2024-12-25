@@ -6,6 +6,15 @@
     </div>
 
 </div>
+
+        @if ($Installment->laws == 1)
+          <div data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $militaryAffair->id }}">
+            <div class="alert alert-danger text-center" role="alert">
+                المعاملة محولة للشئون القانونية
+                </div>      
+        </div>
+        @endif
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
