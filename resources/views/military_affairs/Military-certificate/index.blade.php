@@ -25,7 +25,7 @@
         @foreach($courts as $court)
 
             <a href="{{route('Certificate',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  "> {{$court->name_ar}}
             </a>
 
         @endforeach
@@ -33,14 +33,14 @@
     @if(Request::has('governorate_id'))
         <div class="d-flex flex-wrap ">
             <a href="{{route('Certificate',array('governorate_id' =>$gov))}}"
-               class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+               class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  ">
                 العدد الكلي ({{count($items)}})
             </a>
 
             @foreach($ministries as $ministie)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id'=> $ministie->id))}}"
-                   class="btn-filter {{$ministie->style}}   px-4 fs-4 mx-1 mb-2"> {{$ministie->name_ar}}
+                   class="btn-filter {{$ministie->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('ministry_id') == $ministie->id ? 'active' : '' }}  "> {{$ministie->name_ar}}
                 </a>
 
             @endforeach
@@ -57,7 +57,7 @@
             @foreach($Certificate_types as $Certificate_type)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
-                   class="btn-filter {{$Certificate_type->style}}   px-4 fs-4 mx-1 mb-2"> {{$Certificate_type->name_ar}}
+                   class="btn-filter {{$Certificate_type->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->id ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
                 </a>
 
             @endforeach
@@ -377,7 +377,7 @@
                                                                                 $created_by = DB::table('users')
                                                                                     ->where('id', $value->created_by)
                                                                                     ->first();
-                                                                                
+
                                                                             @endphp
                                                                         <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                                         <td> @if ($value->timesType)
@@ -396,7 +396,7 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                              @php
-                
+
                                                                                 $day_start = explode(' ', $value->date_start)[0];
                                                                                 if (
                                                                                     $value->date_end &&
@@ -414,15 +414,15 @@
                                                                                         now(),
                                                                                     );
                                                                                 }
-                
+
                                                                                 @endphp
                                                                                 {{ $day_start }}
                                                                             </br>
                                                                             {{ $day_end }}
                                                                         </td>
                                                                         <td>{{ $different_day }}</td>
-                                                                        
-                
+
+
                                                                     </tr>
                                                                     @endforeach
 
@@ -454,7 +454,7 @@
                                                                 $created_by = DB::table('users')
                                                                     ->where('id', $value->emp_id)
                                                                     ->first();
-                                                                
+
                                                             @endphp
                                                            <td>
                                                                 {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -473,7 +473,7 @@
                                                             </td>
                                                             <td>
                                                                 @php
-                                                                    
+
                                                                 $day_start = explode(' ', $value->assign_date)[0];
                                                                     if (is_numeric($day_start)) {
                                                                         $day_start = date('Y-m-d', $day_start);
@@ -982,7 +982,7 @@
                                                                                 $created_by = DB::table('users')
                                                                                     ->where('id', $value->created_by)
                                                                                     ->first();
-                                                                                
+
                                                                             @endphp
                                                                         <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                                         <td> @if ($value->timesType)
@@ -1001,7 +1001,7 @@
                                                                                                 </td>
                                                                                                 <td>
                                                                              @php
-                
+
                                                                                 $day_start = explode(' ', $value->date_start)[0];
                                                                                 if (
                                                                                     $value->date_end &&
@@ -1019,15 +1019,15 @@
                                                                                         now(),
                                                                                     );
                                                                                 }
-                
+
                                                                                 @endphp
                                                                                 {{ $day_start }}
                                                                             </br>
                                                                             {{ $day_end }}
                                                                         </td>
                                                                         <td>{{ $different_day }}</td>
-                                                                        
-                
+
+
                                                                     </tr>
                                                                     @endforeach
 
@@ -1058,7 +1058,7 @@
                                                                                     $created_by = DB::table('users')
                                                                                         ->where('id', $value->emp_id)
                                                                                         ->first();
-                                                                                    
+
                                                                                 @endphp
                                                                                <td>
                                                                                     {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -1077,12 +1077,12 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     @php
-                                                                                        
+
                                                                                     $day_start = explode(' ', $value->assign_date)[0];
                                                                                         if (is_numeric($day_start)) {
                                                                                             $day_start = date('Y-m-d', $day_start);
                                                                                         }
-                    
+
                                                                                         // Check the end date
                                                                                         if ($value->end_date && $value->end_date != '') {
                                                                                             $day_end = explode(' ', $value->end_date)[0];
@@ -1097,17 +1097,17 @@
                                                                                         }
                                                                                     @endphp
                                                                                     {{ $day_start }}
-                    
+
                                                                                 </td>
                                                                                 <td>{{ $day_end }}</td>
-                    
+
                                                                                 <td>
                                                                                     {{ $different_day }}
                                                                                 </td>
-                    
+
                                                                             </tr>
                                                                         @endforeach
-                    
+
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -1187,7 +1187,7 @@
                                         $all_notes=get_all_notes('Military_certificate',$item->id);
                                         $all_actions = get_all_actions($item->id);
                                             $get_all_delegations = get_all_delegations($item->id);
-                                            
+
                                     @endphp
 
                                     <a class="btn btn-success me-6 my-2"
@@ -1233,7 +1233,7 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
-                                                            
+
                                                         </ul>
                                                         <!-- Tab panes -->
 
@@ -1381,7 +1381,7 @@
                                                                                     $created_by = DB::table('users')
                                                                                         ->where('id', $value->created_by)
                                                                                         ->first();
-                                                                                    
+
                                                                                 @endphp
                                                                             <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                                             <td> @if ($value->timesType)
@@ -1425,7 +1425,7 @@
                                                                                 {{ $day_end }}
                                                                             </td>
                                                                             <td>{{ $different_day }}</td>
-                                                                            
+
 
                                                                         </tr>
                                                                     @endforeach
@@ -1463,7 +1463,7 @@
                                                                                     $created_by = DB::table('users')
                                                                                         ->where('id', $value->emp_id)
                                                                                         ->first();
-                                                                                    
+
                                                                                 @endphp
                                                                                <td>
                                                                                     {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -1482,12 +1482,12 @@
                                                                                 </td>
                                                                                 <td>
                                                                                     @php
-                                                                                        
+
                                                                                     $day_start = explode(' ', $value->assign_date)[0];
                                                                                         if (is_numeric($day_start)) {
                                                                                             $day_start = date('Y-m-d', $day_start);
                                                                                         }
-                    
+
                                                                                         // Check the end date
                                                                                         if ($value->end_date && $value->end_date != '') {
                                                                                             $day_end = explode(' ', $value->end_date)[0];
@@ -1502,14 +1502,14 @@
                                                                                         }
                                                                                     @endphp
                                                                                     {{ $day_start }}
-                    
+
                                                                                 </td>
                                                                                 <td>{{ $day_end }}</td>
-                    
+
                                                                                 <td>
                                                                                     {{ $different_day }}
                                                                                 </td>
-                    
+
                                                                             </tr>
                                                                         @endforeach
                                                                         @else
@@ -1521,7 +1521,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer d-flex ">
