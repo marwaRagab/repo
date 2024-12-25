@@ -875,7 +875,7 @@
                                                                     <tbody>
 
 
-                                                                    <!-- start row -->
+                                                                    @if (count($all_notes) > 0 )
                                                                     @foreach($all_notes as $all_note)
 
                                                                         <tr data-bs-toggle="collapse"
@@ -883,7 +883,7 @@
                                                                             aria-expanded="false"
                                                                             aria-controls="collapseExample">
                                                                             <td>
-                                                                                {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
+                                                                                {{$all_note->created_by}}
                                                                             </td>
                                                                             <td>
                                                                                 @php
@@ -901,7 +901,6 @@
                                                                             <td>
                                                                                 <p>
                                                                                     {{$all_note->note}}
-
                                                                                 </p>
                                                                             </td>
                                                                             @php
@@ -912,13 +911,19 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}<span
+                                                                            <td>{{$time}}}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
                                                                         </tr>
 
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                                 <div class="add-note">
@@ -979,7 +984,7 @@
                                                                     <!-- end row -->
                                                                     </thead>
                                                                     <tbody>
-                                                                    <!-- start row -->
+                                                                    @if (count($all_actions) > 0 )
                                                                     @foreach ($all_actions as $value)
                                                                     <tr>
                                                                     @php
@@ -1034,6 +1039,12 @@
 
                                                                     </tr>
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
 
                                                                     </tbody>
                                                                 </table>

@@ -221,6 +221,74 @@
                                                     @endphp
                                                     <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                                         role="tabpanel">
+                                                        <table id="notes1"
+                                                            class="table table-bordered border text-wrap align-middle">
+                                                            <thead>
+                                                                <!-- start row -->
+                                                                <tr>
+                                                                    <th>اليوزر</th>
+                                                                    <th>النوع</th>
+                                                                    <th>الملاحظة</th>
+                                                                    <th> الساعة</th>
+                                                                    <th>التاريخ</th>
+
+                                                                </tr>
+                                                                <!-- end row -->
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- start row -->
+                                                                <!-- start row -->
+                                                                @if (count($all_notes) > 0 )
+                                                                    @foreach($all_notes as $all_note)
+
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapseExample">
+                                                                            <td>
+                                                                                {{$all_note->created_by}}
+                                                                            </td>
+                                                                            <td>
+                                                                                @php
+                                                                                    if($all_note->notes_type=='answered'){
+                                                                                      $type= 'رد'   ;
+                                                                                    }elseif ($all_note->notes_type=='refused'){
+                                                                                      $type= 'لم يرد'   ;
+                                                                                    }else{
+                                                                                     $type= 'ملاحظة'   ;
+                                                                                    }
+
+                                                                                @endphp
+                                                                                {{$type}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <p>
+                                                                                    {{$all_note->note}}
+                                                                                </p>
+                                                                            </td>
+                                                                            @php
+                                                                                $time= explode(' ', $all_note->date)[1];
+                                                                                $day= explode(' ', $all_note->date)[0];
+
+
+                                                                            @endphp
+
+
+                                                                            <td>{{$time}}<span
+                                                                                    class="d-block"></span></td>
+                                                                            <td>{{$day}}</td>
+
+                                                                        </tr>
+
+                                                                    @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
+                                                            </tbody>
+                                                        </table>
                                                         <form class="mega-vertical" action="{{ url('add_notes') }}"
                                                             method="post" enctype="multipart/form-data">
                                                             @csrf
@@ -269,67 +337,7 @@
                                                             </div>
                                                         </form>
 
-                                                        <table id="notes1"
-                                                            class="table table-bordered border text-wrap align-middle">
-                                                            <thead>
-                                                                <!-- start row -->
-                                                                <tr>
-                                                                    <th>اليوزر</th>
-                                                                    <th>النوع</th>
-                                                                    <th>الملاحظة</th>
-                                                                    <th> الساعة</th>
-                                                                    <th>التاريخ</th>
-
-                                                                </tr>
-                                                                <!-- end row -->
-                                                            </thead>
-                                                            <tbody>
-                                                                <!-- start row -->
-                                                                <!-- start row -->
-                                                                @foreach ($all_notes as $all_note)
-                                                                    <tr data-bs-toggle="collapse"
-                                                                        data-bs-target="#collapseExample"
-                                                                        aria-expanded="false"
-                                                                        aria-controls="collapseExample">
-                                                                        <td>
-                                                                            {{ $all_note->created_by }}
-                                                                        </td>
-                                                                        <td>
-                                                                            @php
-                                                                                if (
-                                                                                    $all_note->notes_type == 'answered'
-                                                                                ) {
-                                                                                    $type = 'رد';
-                                                                                } elseif (
-                                                                                    $all_note->notes_type == 'refused'
-                                                                                ) {
-                                                                                    $type = 'لم يرد';
-                                                                                } else {
-                                                                                    $type = 'ملاحظة';
-                                                                                }
-
-                                                                            @endphp
-                                                                            {{ $type }}
-                                                                        </td>
-                                                                        <td>
-                                                                            <p>
-                                                                                {{ $all_note->note }}
-                                                                            </p>
-                                                                        </td>
-                                                                        @php
-                                                                            $time = explode(' ', $all_note->date)[1];
-                                                                            $day = explode(' ', $all_note->date)[0];
-
-                                                                        @endphp
-                                                                        <td>{{ $time }}<span
-                                                                                class="d-block"></span>
-                                                                        </td>
-                                                                        <td>{{ $day }}</td>
-
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
+                                                        
                                                     </div>
 
                                                 </div>

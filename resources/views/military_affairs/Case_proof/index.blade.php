@@ -252,10 +252,11 @@
                                                                     <tbody>
 
 
-                                                                    <!-- start row -->
+                                                                    @if (count($all_notes) > 0 )
                                                                     @foreach($all_notes as $all_note)
 
-                                                                        <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                                                        <tr data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
                                                                             aria-expanded="false"
                                                                             aria-controls="collapseExample">
                                                                             <td>
@@ -283,13 +284,23 @@
                                                                                 $time= explode(' ', $all_note->date)[1];
                                                                                 $day= explode(' ', $all_note->date)[0];
 
+
                                                                             @endphp
-                                                                            <td>{{$time}}<span class="d-block"></span></td>
+
+
+                                                                            <td>{{$time}}}}<span
+                                                                                    class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
                                                                         </tr>
 
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                                 <div class="add-note">
@@ -343,61 +354,67 @@
                                                                     <!-- end row -->
                                                                     </thead>
                                                                     <tbody>
-                                                                    <!-- start row -->
+                                                                    @if (count($all_actions) > 0 )
                                                                     @foreach ($all_actions as $value)
-                                                                        <tr>
-                                                                            @php
+                                                                    <tr>
+                                                                    @php
                                                                                 $created_by = DB::table('users')
                                                                                     ->where('id', $value->created_by)
                                                                                     ->first();
 
                                                                             @endphp
-                                                                            <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
-                                                                            <td> @if ($value->timesType)
-                                                                                    {{ $value->timesType->name_ar }}
-                                                                                @elseif ($value->bankType)
-                                                                                    {{ $value->bankType->name_ar }}
-                                                                                @elseif ($value->carType)
-                                                                                    {{ $value->carType->name_ar }}
-                                                                                @elseif ($value->salaryType)
-                                                                                    {{ $value->salaryType->name_ar }}
-                                                                                @elseif ($value->travelType)
-                                                                                    {{ $value->travelType->name_ar }}
-                                                                                @else
-                                                                                    لا يوجد
-                                                                                @endif
-                                                                            </td>
-                                                                            <td>
-                                                                                @php
+                                                                        <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
+                                                                        <td> @if ($value->timesType)
+                                                                                                        {{ $value->timesType->name_ar }}
+                                                                                                    @elseif ($value->bankType)
+                                                                                                        {{ $value->bankType->name_ar }}
+                                                                                                    @elseif ($value->carType)
+                                                                                                        {{ $value->carType->name_ar }}
+                                                                                                    @elseif ($value->salaryType)
+                                                                                                        {{ $value->salaryType->name_ar }}
+                                                                                                        @elseif ($value->travelType)
+                                                                                                        {{ $value->travelType->name_ar }}
+                                                                                                    @else
+                                                                                                        لا يوجد
+                                                                                                    @endif
+                                                                                                </td>
+                                                                                                <td>
+                                                                             @php
 
-                                                                                    $day_start = explode(' ', $value->date_start)[0];
-                                                                                    if (
-                                                                                        $value->date_end &&
-                                                                                        $value->date_end != '0000-00-00 00:00:00'
-                                                                                    ) {
-                                                                                        $day_end = explode(' ', $value->date_end)[0];
-                                                                                        $different_day = get_different_date(
-                                                                                            $day_start,
-                                                                                            $day_end,
-                                                                                        );
-                                                                                    } else {
-                                                                                        $day_end = 'لم تنتهى';
-                                                                                        $different_day = get_different_date(
-                                                                                            $day_start,
-                                                                                            now(),
-                                                                                        );
-                                                                                    }
+                                                                                $day_start = explode(' ', $value->date_start)[0];
+                                                                                if (
+                                                                                    $value->date_end &&
+                                                                                    $value->date_end != '0000-00-00 00:00:00'
+                                                                                ) {
+                                                                                    $day_end = explode(' ', $value->date_end)[0];
+                                                                                    $different_day = get_different_date(
+                                                                                        $day_start,
+                                                                                        $day_end,
+                                                                                    );
+                                                                                } else {
+                                                                                    $day_end = 'لم تنتهى';
+                                                                                    $different_day = get_different_date(
+                                                                                        $day_start,
+                                                                                        now(),
+                                                                                    );
+                                                                                }
 
                                                                                 @endphp
                                                                                 {{ $day_start }}
-                                                                                </br>
-                                                                                {{ $day_end }}
-                                                                            </td>
-                                                                            <td>{{ $different_day }}</td>
+                                                                            </br>
+                                                                            {{ $day_end }}
+                                                                        </td>
+                                                                        <td>{{ $different_day }}</td>
 
 
-                                                                        </tr>
+                                                                    </tr>
                                                                     @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
 
                                                                     </tbody>
                                                                 </table>
