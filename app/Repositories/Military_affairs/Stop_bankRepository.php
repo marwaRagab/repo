@@ -152,6 +152,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
              $value->i=$x+1;
             if($value->installment){
 
+
                 $ministry = $value->installment->client->ministry->last()->ministry_id;
                 $value->ministry_name = Ministry::findorfail($ministry);
                 $date=date('Y-m-'.$value->ministry_name->date);

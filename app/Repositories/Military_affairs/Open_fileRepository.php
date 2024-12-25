@@ -256,7 +256,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
         ]);
 
-          //  dd($request->all());
+          // dd($request->all());
         change_status($request,$request->military_affairs_id);
         // Military_affairs_status::create($statusData);
 
