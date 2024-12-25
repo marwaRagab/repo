@@ -72,7 +72,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $breadcrumb[1]['url'] = route("military_affairs");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-          $this->data['check_amount']=0;
+        $this->data['check_amount']=0;
         foreach ($this->data['items'] as $value) {
             if (!empty($value->installment) && !empty($value->installment->client))
             {
@@ -98,10 +98,10 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $user_id =  Auth::user()->id;
 
-         log_move($user_id ,$message);
+        log_move($user_id ,$message);
 
         $this->data['title'] = ' الشيكات المستلمة ';
-       // dd($checking_type);
+        // dd($checking_type);
 
 
         $this->data['items'] = Military_affair::where(['military_affairs.archived'=>0,'military_affairs.status'=>'execute'])
@@ -111,7 +111,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             })->with('military_amount')->with('military_check', function ($query)use ($checking_type) {
                 return $query->where('deposit', '=', $checking_type);
             })
-           ->get();
+            ->get();
 
 
         $title = '   الشيكات المستلمة ';
@@ -179,14 +179,14 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
     public function add_amount(Request $request)
     {
         $item_military = Military_affair::findorfail($request->military_affairs_id);
-         if($request->check_found == 1) {
-             $request->validate([
-                 'date' => 'required| date',
-                 'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
-                 'check_type' => 'required',
-                 'amount' => 'required',
-             ]);
-         }
+        if($request->check_found == 1) {
+            $request->validate([
+                'date' => 'required| date',
+                'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+                'check_type' => 'required',
+                'amount' => 'required',
+            ]);
+        }
 
 
 
@@ -203,17 +203,17 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             'amount'=>$request->amount,
             'military_affairs_id'=>$request->military_affairs_id,
             'img_dir'=> $data['img_dir']
-          ];
+        ];
 
 
-            
-        
-                Military_affairs_amount::create($array_add);
-                $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
-                $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
-         
-       
-       
+
+
+        Military_affairs_amount::create($array_add);
+        $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
+        $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
+
+
+
         $update_data['excute_actions_last_date_check'] =date('Y-m-d H:i:s');
         $item_military->update($update_data);
         return redirect()->route('excute_actions');
@@ -243,7 +243,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         if ($request->hasFile('img_dir')) {
             $data_img_dir = $request->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
-           }
+        }
 
         $array_add =[
             'date'=>$request->date,
@@ -264,15 +264,15 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $items_amount = Military_affairs_amount::where(['military_affairs_id' => $item_military_affairs->id,'military_affairs_check_id' => 0])->get();
 
-         foreach ($items_amount as $value) {
-           //  dd('ffff');
-             $value->military_affairs_check_id=$last_check_add->id;
-             $value->save();
-         }
-          $data['excute_actions_counter']=0;
-          $data['excute_actions_amount']=0;
-          $data['excute_actions_check_amount']=$last_check_add->amount;
-           $item_military_affairs->update($data);
+        foreach ($items_amount as $value) {
+            //  dd('ffff');
+            $value->military_affairs_check_id=$last_check_add->id;
+            $value->save();
+        }
+        $data['excute_actions_counter']=0;
+        $data['excute_actions_amount']=0;
+        $data['excute_actions_check_amount']=$last_check_add->amount;
+        $item_military_affairs->update($data);
 
 
 
