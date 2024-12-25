@@ -102,7 +102,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             })
                 */
             ->get();
-        dd($transactions);
+    //    dd($transactions);
         foreach ($transactions as $value) {
 
             $value->item_old_data = Prev_cols_military_affairs::where('military_affairs_id', $value->id)->first();
