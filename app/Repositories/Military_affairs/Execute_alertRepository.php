@@ -49,7 +49,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
         $message ="تم دخول صفحة    اعلان التنفيذ" ;
 
         $user_id =  Auth::user()->id;
-         log_move($user_id ,$message);
+        log_move($user_id ,$message);
 
         $this->data['item_type_time']=Military_affairs_times_type::where(['type'=> 'execute_alert','slug'=>'execute_alert'])->first();
         $this->data['item_type_time_new']=Military_affairs_times_type::where(['type'=> 'images','slug'=>'images'])->first();
@@ -72,7 +72,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
 
 
-                $value->final_data =$item_data=explode(' ',$value->created_at);
+            $value->final_data =$item_data=explode(' ',$value->created_at);
 
 
 
@@ -96,26 +96,26 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
 
 
-       /* $data = Client::when($governorate_id, function ($q) use ($governorate_id) {
-            return $q->where('governorate_id', $governorate_id);
-        })->with('client_address')->with('court')->with('area')
-            ->with('military_clients', function ($query) {
-                $query->where('archived','=',0);
-                $query->where('military_affairs.jalasat_alert_status','!=','accepted');
-                $query->where('military_affairs.status','=','execute_alert');
-            })->with('installments', function ($query) {
-                $query->where('finished','=',0);
-            })
+        /* $data = Client::when($governorate_id, function ($q) use ($governorate_id) {
+             return $q->where('governorate_id', $governorate_id);
+         })->with('client_address')->with('court')->with('area')
+             ->with('military_clients', function ($query) {
+                 $query->where('archived','=',0);
+                 $query->where('military_affairs.jalasat_alert_status','!=','accepted');
+                 $query->where('military_affairs.status','=','execute_alert');
+             })->with('installments', function ($query) {
+                 $query->where('finished','=',0);
+             })
 
-            ->get();*/
+             ->get();*/
 
 
-            $this->data['get_responsible'] = get_responsible();
+        $this->data['get_responsible'] = get_responsible();
         $view='military_affairs/Execute_alert/index';
         return view('layout',compact('items','view','breadcrumb'),$this->data);
 
 
-       // return view('military_affairs/Execute_alert/index',$this->data );
+        // return view('military_affairs/Execute_alert/index',$this->data );
 
 
 
@@ -123,132 +123,132 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
 
 
-      public function add_a3lan_date(Request $request)
+    public function add_a3lan_date(Request $request)
 
-      {
-          $request->validate([
-              'a3lan_paper_date' => 'required| date',
-              'military_affairs_id'=>'required',
-              'type'=>'required'
-          ]);
+    {
+        $request->validate([
+            'a3lan_paper_date' => 'required| date',
+            'military_affairs_id'=>'required',
+            'type'=>'required'
+        ]);
 
-       //   dd($request->all());
-          $jalasat_dd=Military_affairs_jalasaat::where(['type'=> 'execute_alert','military_affairs_id'=>$request->military_affairs_id,'status'=> "NULL" ])->first();
+        //   dd($request->all());
+        $jalasat_dd=Military_affairs_jalasaat::where(['type'=> 'execute_alert','military_affairs_id'=>$request->military_affairs_id,'status'=> "NULL" ])->orderBy('created_at', 'desc')->first();
 
-            if(!$jalasat_dd && !$request->status){
-                $data['a3lan_paper_date'] =$request->a3lan_paper_date;
-               // dd( $data['a3lan_paper_date']);
-                $data['military_affairs_id'] =$request->military_affairs_id;
-                $data['date'] = date('Y-m-d H:i:s');
-                $data['type'] =$request->type;
-                $data['created_by']= Auth::user() ? Auth::user()->id : null;
-                $data['created_at'] = date(' Y-m-d H:i:s');
-              //  dd($data);
+        if(!$jalasat_dd && !$request->status){
+            $data['a3lan_paper_date'] =$request->a3lan_paper_date;
+            // dd( $data['a3lan_paper_date']);
+            $data['military_affairs_id'] =$request->military_affairs_id;
+            $data['date'] = date('Y-m-d H:i:s');
+            $data['type'] =$request->type;
+            $data['created_by']= Auth::user() ? Auth::user()->id : null;
+            $data['created_at'] = date(' Y-m-d H:i:s');
+            //  dd($data);
 
-                Military_affairs_jalasaat::create($data);
+            Military_affairs_jalasaat::create($data);
 
-                return redirect()->back();
-            }else{
+            return redirect()->back();
+        }else{
 
-                if($request->status){
-
-
-                    $military_affairs_id=$request->military_affairs_id;
-                    $jalasat_id=$request->jalasat_id;
-
-                    $item_military= Military_affair::findOrFail($military_affairs_id);
-
-                    $request->validate([
-                        'a3lan_paper_date' => 'required| date',
-                        'military_affairs_id'=>'required',
-                        'type'=>'required',
-                        'jalasat_alert_date'=>'required|date',
-                        'jalasat_alert_reason'=>'required|string',
-                        'jalasat_alert_img'=>'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
-                    ]);
-
-                    $data['a3lan_paper_date'] = $request->a3lan_paper_date;
-                    if($request->status=='accepted'){
-                        $data['a3lan_jalsa_done_date'] = $request->jalasat_alert_date;
-                    }else{
-                        $data['jalasat_alert_date'] = $request->jalasat_alert_date;
-                    }
-                    $data['jalasat_alert_date'] = $request->jalasat_alert_date;
-                    if ($request->hasFile('jalasat_alert_img')) {
-
-                        $filename = time() . '-' . $request->file('jalasat_alert_img')->getClientOriginalName();
-                        $path = $request->file('jalasat_alert_img')->move(public_path('military_affairs'), $filename);
-                        $data['jalasat_alert_img'] = 'military_affairs' . '/' . $filename;
-                    }
-                    $data['jalasat_alert_reason'] = $request->jalasat_alert_reason;
-
-                    $data['updated_at'] = date('Y-m-d H:i:s');
-
-                    $data['type'] =$request->type;
-                    $data['status'] =$request->status;
-                   // dd($jalasat_dd);
-                    if($jalasat_id){
-
-                        $jalasat_dd->update($data);
-                    }else{
-                        $data['military_affairs_id'] =$request->military_affairs_id;
-                        $data['date'] = date('Y-m-d H:i:s');
-                        $data['created_by']= Auth::user() ? Auth::user()->id : null;
-
-                        Military_affairs_jalasaat::create($data);
-                    }
+            if($request->status){
 
 
+                $military_affairs_id=$request->military_affairs_id;
+                $jalasat_id=$request->jalasat_id;
 
+                $item_military= Military_affair::findOrFail($military_affairs_id);
 
-                    $data_military['jalasat_alert_status']=$request->status;
+                $request->validate([
+                    'a3lan_paper_date' => 'required| date',
+                    'military_affairs_id'=>'required',
+                    'type'=>'required',
+                    'jalasat_alert_date'=>'required|date',
+                    'jalasat_alert_reason'=>'required|string',
+                    'jalasat_alert_img'=>'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+                ]);
 
-                    if($request->status=='accepted'){
-                        $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
-                        $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
-                        Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
-                        $item_time=Military_affairs_times::where(['times_type_id'=>$old_time_type->id,'military_affairs_id'=>$military_affairs_id])->first();
-
-                        $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert','times_type_id'=>$old_time_type->id ])->first();
-                        $update_note['date_end']= date(' Y-m-d H:i:s');
-                     //   $update_note['times_type_id']=$request->id_time_type_new;
-                        $update_note['updated_at']= date('Y-m-d H:i:s');
-                        $data_military['status']='images';
-                        $data_military['a3lan_jalsa_done_date']=$request->jalasat_alert_date;
-
-                        //  $update_note['updated_by']=Auth::user()->id ;
-                        if($note_item){
-                            $note_item->update($update_note);
-
-                        }
-
-                        if($item_time){
-                            $data_update['date_end']=date('Y-m-d H:i:s');
-
-                            $item_time->update($data_update);
-                        }
-
-                        Add_note_time($new_time_type,$military_affairs_id);
-                        change_status($request, $military_affairs_id);
-
-                    }
-
-                    $item_military->update($data_military);
-                    return redirect()->back();
-
-
-
-
+                $data['a3lan_paper_date'] = $request->a3lan_paper_date;
+                if($request->status=='accepted'){
+                    $data['a3lan_jalsa_done_date'] = $request->jalasat_alert_date;
                 }else{
-                    return redirect()->back();
+                    $data['jalasat_alert_date'] = $request->jalasat_alert_date;
+                }
+                $data['jalasat_alert_date'] = $request->jalasat_alert_date;
+                if ($request->hasFile('jalasat_alert_img')) {
+
+                    $filename = time() . '-' . $request->file('jalasat_alert_img')->getClientOriginalName();
+                    $path = $request->file('jalasat_alert_img')->move(public_path('military_affairs'), $filename);
+                    $data['jalasat_alert_img'] = 'military_affairs' . '/' . $filename;
+                }
+                $data['jalasat_alert_reason'] = $request->jalasat_alert_reason;
+
+                $data['updated_at'] = date('Y-m-d H:i:s');
+
+                $data['type'] =$request->type;
+                $data['status'] =$request->status;
+                // dd($jalasat_dd);
+                if($jalasat_dd){
+
+                    $jalasat_dd->update($data);
+                }else{
+                    $data['military_affairs_id'] =$request->military_affairs_id;
+                    $data['date'] = date('Y-m-d H:i:s');
+                    $data['created_by']= Auth::user() ? Auth::user()->id : null;
+
+                    Military_affairs_jalasaat::create($data);
                 }
 
 
+
+
+                $data_military['jalasat_alert_status']=$request->status;
+
+                if($request->status=='accepted'){
+                    $old_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_old);
+                    $new_time_type=Military_affairs_times_type::findOrFail($request->id_time_type_new);
+                    Add_note($old_time_type,$new_time_type,$request->military_affairs_id);
+                    $item_time=Military_affairs_times::where(['times_type_id'=>$old_time_type->id,'military_affairs_id'=>$military_affairs_id])->orderBy('created_at', 'desc')->first();
+
+                    $note_item=Military_affairs_notes::where(['military_affairs_id' =>$military_affairs_id, 'type'=>'execute_alert','times_type_id'=>$old_time_type->id ])->orderBy('created_at', 'desc')->first();
+                    // $update_note['date_end']= date(' Y-m-d H:i:s');
+                    //   $update_note['times_type_id']=$request->id_time_type_new;
+                    $update_note['updated_at']= date('Y-m-d H:i:s');
+                    $data_military['status']='images';
+                    $data_military['a3lan_jalsa_done_date']=$request->jalasat_alert_date;
+
+                    //  $update_note['updated_by']=Auth::user()->id ;
+                    if($note_item){
+                        $note_item->update($update_note);
+
+                    }
+
+                    if($item_time){
+                        $data_update['date_end']=date('Y-m-d H:i:s');
+
+                        $item_time->update($data_update);
+                    }
+
+                    Add_note_time($new_time_type,$military_affairs_id);
+                    change_status($request, $military_affairs_id);
+
+                }
+
+                $item_military->update($data_military);
+                return redirect()->back();
+
+
+
+
+            }else{
+                return redirect()->back();
             }
 
 
+        }
 
-      }
+
+
+    }
 
 
 

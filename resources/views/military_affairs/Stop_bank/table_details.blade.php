@@ -9,7 +9,7 @@
     <br>
     {{$item->phone}}
     <br>
-    {{$item->installment->id}}
+    {{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}
     <br>
 
     </td>

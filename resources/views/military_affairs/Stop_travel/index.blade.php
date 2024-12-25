@@ -126,6 +126,7 @@
                                  if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
 
 
+
                                         $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
 
                                     }else{

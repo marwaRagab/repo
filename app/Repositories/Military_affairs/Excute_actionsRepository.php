@@ -74,7 +74,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
           $this->data['check_amount']=0;
         foreach ($this->data['items'] as $value) {
-            if (!empty($value->installment) && !empty($value->installment->client)) 
+            if (!empty($value->installment) && !empty($value->installment->client))
             {
                 $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
 
@@ -186,23 +186,32 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
                  'check_type' => 'required',
                  'amount' => 'required',
              ]);
+         }
 
-             if ($request->hasFile('img_dir')) {
-                $data_img_dir = $request->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
-                }
-                $array_add=[
-                    'date'=>$request->date,
-                    'check_type'=>$request->check_type,
-                    'amount'=>$request->amount,
-                    'military_affairs_id'=>$request->military_affairs_id,
-                    'img_dir'=> $data_img_dir 
-        
-                ];
+
+
+        if ($request->hasFile('img_dir')) {
+
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
+            $data['img_dir'] = 'military_affairs' . '/' . $filename;
+        }
+
+        $array_add=[
+            'date'=>$request->date,
+            'check_type'=>$request->check_type,
+            'amount'=>$request->amount,
+            'military_affairs_id'=>$request->military_affairs_id,
+            'img_dir'=> $data['img_dir']
+          ];
+
+
+            
         
                 Military_affairs_amount::create($array_add);
                 $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
                 $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
-         }
+         
        
        
         $update_data['excute_actions_last_date_check'] =date('Y-m-d H:i:s');
