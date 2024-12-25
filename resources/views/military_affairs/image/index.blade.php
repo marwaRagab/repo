@@ -508,8 +508,8 @@
                                                                 <!-- end row -->
                                                                 </thead>
                                                                 <tbody>
-                                                                <!-- start row -->
-                                                                @foreach ($get_all_delegations as $value)
+                                                                @if (count($get_all_delegations) > 0 )
+                                                                    @foreach ($get_all_delegations as $value)
                                                                     <tr data-bs-toggle="collapse"
                                                                         data-bs-target="#collapseExample" aria-expanded="false"
                                                                         aria-controls="collapseExample">
@@ -519,7 +519,7 @@
                                                                                 ->first();
 
                                                                         @endphp
-                                                                        <td>
+                                                                       <td>
                                                                             {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
                                                                                 $value['image_date'] ? 'الايمج' : (
                                                                                 $value['case_proof_date'] ? 'إثبات الحالة' : (
@@ -537,23 +537,23 @@
                                                                         <td>
                                                                             @php
 
-                                                                                $day_start = explode(' ', $value->assign_date)[0];
-                                                                                    if (is_numeric($day_start)) {
-                                                                                        $day_start = date('Y-m-d', $day_start);
-                                                                                    }
+                                                                            $day_start = explode(' ', $value->assign_date)[0];
+                                                                                if (is_numeric($day_start)) {
+                                                                                    $day_start = date('Y-m-d', $day_start);
+                                                                                }
 
-                                                                                    // Check the end date
-                                                                                    if ($value->end_date && $value->end_date != '') {
-                                                                                        $day_end = explode(' ', $value->end_date)[0];
-                                                                                        if (is_numeric($day_end)) {
-                                                                                            $day_end = date('Y-m-d', $day_end);
-                                                                                        }
-                                                                                        $different_day = get_different_date($day_start, $day_end);
-                                                                                    } else {
-                                                                                        // Use current timestamp if end_date is missing
-                                                                                        $day_end = 'لم تنتهى';
-                                                                                        $different_day = get_different_date($day_start, now()->timestamp);
+                                                                                // Check the end date
+                                                                                if ($value->end_date && $value->end_date != '') {
+                                                                                    $day_end = explode(' ', $value->end_date)[0];
+                                                                                    if (is_numeric($day_end)) {
+                                                                                        $day_end = date('Y-m-d', $day_end);
                                                                                     }
+                                                                                    $different_day = get_different_date($day_start, $day_end);
+                                                                                } else {
+                                                                                    // Use current timestamp if end_date is missing
+                                                                                    $day_end = 'لم تنتهى';
+                                                                                    $different_day = get_different_date($day_start, now()->timestamp);
+                                                                                }
                                                                             @endphp
                                                                             {{ $day_start }}
 
@@ -565,7 +565,13 @@
                                                                         </td>
 
                                                                     </tr>
-                                                                @endforeach
+                                                                    @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
 
                                                                 </tbody>
                                                             </table>
