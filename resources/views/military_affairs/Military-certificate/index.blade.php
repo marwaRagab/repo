@@ -1066,63 +1066,70 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <!-- start row -->
+                                                                    @if (count($get_all_delegations) > 0 )
                                                                     @foreach ($get_all_delegations as $value)
-                                                        <tr data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseExample" aria-expanded="false"
-                                                            aria-controls="collapseExample">
-                                                            @php
-                                                                $created_by = DB::table('users')
-                                                                    ->where('id', $value->emp_id)
-                                                                    ->first();
+                                                                    <tr data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseExample" aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        @php
+                                                                            $created_by = DB::table('users')
+                                                                                ->where('id', $value->emp_id)
+                                                                                ->first();
 
-                                                            @endphp
-                                                           <td>
-                                                                {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
-                                                                    $value['image_date'] ? 'الايمج' : (
-                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
-                                                                    $value['travel_date'] ? 'منع السفر' : (
-                                                                    $value['car_date'] ? 'حجز السيارات' : (
-                                                                    $value['bank_date'] ? 'حجز بنوك' : (
-                                                                    $value['salary_date'] ? 'حجز راتب' : (
-                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
-                                                                    )))))))
-                                                                }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $created_by->name_ar ?? 'لا يوجد' }}
-                                                            </td>
-                                                            <td>
-                                                                @php
+                                                                        @endphp
+                                                                       <td>
+                                                                            {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                                $value['image_date'] ? 'الايمج' : (
+                                                                                $value['case_proof_date'] ? 'إثبات الحالة' : (
+                                                                                $value['travel_date'] ? 'منع السفر' : (
+                                                                                $value['car_date'] ? 'حجز السيارات' : (
+                                                                                $value['bank_date'] ? 'حجز بنوك' : (
+                                                                                $value['salary_date'] ? 'حجز راتب' : (
+                                                                                $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
+                                                                                )))))))
+                                                                            }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                        </td>
+                                                                        <td>
+                                                                            @php
 
-                                                                $day_start = explode(' ', $value->assign_date)[0];
-                                                                    if (is_numeric($day_start)) {
-                                                                        $day_start = date('Y-m-d', $day_start);
-                                                                    }
+                                                                            $day_start = explode(' ', $value->assign_date)[0];
+                                                                                if (is_numeric($day_start)) {
+                                                                                    $day_start = date('Y-m-d', $day_start);
+                                                                                }
 
-                                                                    // Check the end date
-                                                                    if ($value->end_date && $value->end_date != '') {
-                                                                        $day_end = explode(' ', $value->end_date)[0];
-                                                                        if (is_numeric($day_end)) {
-                                                                            $day_end = date('Y-m-d', $day_end);
-                                                                        }
-                                                                        $different_day = get_different_date($day_start, $day_end);
-                                                                    } else {
-                                                                        // Use current timestamp if end_date is missing
-                                                                        $day_end = 'لم تنتهى';
-                                                                        $different_day = get_different_date($day_start, now()->timestamp);
-                                                                    }
-                                                                @endphp
-                                                                {{ $day_start }}
+                                                                                // Check the end date
+                                                                                if ($value->end_date && $value->end_date != '') {
+                                                                                    $day_end = explode(' ', $value->end_date)[0];
+                                                                                    if (is_numeric($day_end)) {
+                                                                                        $day_end = date('Y-m-d', $day_end);
+                                                                                    }
+                                                                                    $different_day = get_different_date($day_start, $day_end);
+                                                                                } else {
+                                                                                    // Use current timestamp if end_date is missing
+                                                                                    $day_end = 'لم تنتهى';
+                                                                                    $different_day = get_different_date($day_start, now()->timestamp);
+                                                                                }
+                                                                            @endphp
+                                                                            {{ $day_start }}
 
-                                                            </td>
-                                                            <td>{{ $day_end }}</td>
+                                                                        </td>
+                                                                        <td>{{ $day_end }}</td>
 
-                                                            <td>
-                                                                {{ $different_day }}
-                                                            </td>
+                                                                        <td>
+                                                                            {{ $different_day }}
+                                                                        </td>
 
-                                                        </tr>
-                                                    @endforeach
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="5"> لا يوجد بيانات</td>
+                                                                        </tr>
+
+                                                                    @endif
 
                                                                     </tbody>
                                                                 </table>
