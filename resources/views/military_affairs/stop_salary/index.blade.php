@@ -249,54 +249,9 @@
                                                 $all_actions = get_all_actions($item->id);
                                                 $get_all_delegations = get_all_delegations($item->id);
                                                 @endphp
-                                               
-                                                <div class="tab-pane active p-3" id="notes-{{ $item->id }}"
+
+                                               <div class="tab-pane active p-3" id="notes-{{ $item->id }}"
                                                     role="tabpanel">
-                                                    <form class="mega-vertical" action="{{url('add_notes')}}"
-                                                        method="post" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <div class="form-row">
-                                                            <input type="hidden" name="military_affairs_id"
-                                                                value="{{ $item->id }}">
-                                                            <input type="hidden" name="type"
-                                                                value="{{$item_type_time1->type}}">
-                                                            <input type="hidden" name="type_id"
-                                                                value="{{$item_type_time1->slug}}">
-
-                                                            <div class="form-group">
-                                                                <label class="form-label"> الاتصال</label>
-                                                                <select class="form-select" name="notes_type">
-                                                                    <option value="answered">
-                                                                        رد
-                                                                    </option>
-                                                                    <option value="refused">
-                                                                        لم يرد
-                                                                    </option>
-                                                                    <option value="note">
-                                                                        ملاحظة
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <div class="my-3">
-                                                                    <label class="form-label">الملاحظات</label>
-                                                                    <textarea name="note" class="form-control"
-                                                                        rows="5"></textarea>
-
-                                                                    @error('note')
-                                                                    <div style='color:red'>{{$message}}</div>
-                                                                    @enderror
-                                                                </div>
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary">حفظ</button>
-                                                            <button type="button"
-                                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                                data-bs-dismiss="modal">
-                                                                الغاء
-                                                            </button>
-                                                        </div>
-                                                    </form>
-
                                                     <table id="notes1"
                                                         class="table table-bordered border text-wrap align-middle">
                                                         <thead>
@@ -312,49 +267,94 @@
                                                             <!-- end row -->
                                                         </thead>
                                                         <tbody>
-                                                            <!-- start row -->
-                                                            <!-- start row -->
-                                                            @foreach($all_notes as $all_note)
 
-                                                            <tr data-bs-toggle="collapse"
-                                                                data-bs-target="#collapseExample" aria-expanded="false"
-                                                                aria-controls="collapseExample">
-                                                                <td>
-                                                                    {{$all_note->created_by}}
-                                                                </td>
-                                                                <td>
-                                                                    @php
-                                                                    if($all_note->notes_type=='answered'){
-                                                                    $type= 'رد' ;
-                                                                    }elseif ($all_note->notes_type=='refused'){
-                                                                    $type= 'لم يرد' ;
-                                                                    }else{
-                                                                    $type= 'ملاحظة' ;
-                                                                    }
 
-                                                                    @endphp
-                                                                    {{$type}}
-                                                                </td>
-                                                                <td>
-                                                                    <p>
-                                                                        {{$all_note->note}}
-                                                                    </p>
-                                                                </td>
-                                                                @php
-                                                                $time= explode(' ', $all_note->date)[1];
-                                                                $day= explode(' ', $all_note->date)[0];
+                                                            @if (count($all_notes) > 0)
+                                                                <!-- start row -->
+                                                                @foreach ($all_notes as $all_note)
+                                                                    <tr data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseExample"
+                                                                        aria-expanded="false" aria-controls="collapseExample">
+                                                                        <td>
+                                                                            {{ $all_note->created_by }}
+                                                                        </td>
+                                                                        <td>
+                                                                            @php
+                                                                                if ($all_note->notes_type == 'answered') {
+                                                                                    $type = 'رد';
+                                                                                } elseif ($all_note->notes_type == 'refused') {
+                                                                                    $type = 'لم يرد';
+                                                                                } else {
+                                                                                    $type = 'ملاحظة';
+                                                                                }
 
-                                                                @endphp
-                                                                <td>{{ \Carbon\Carbon::parse($time)->format('H:i')}}<span
-                                                                        class="d-block"></span>
-                                                                </td>
-                                                                <td>{{$day}}</td>
+                                                                            @endphp
+                                                                            {{ $type }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <p>
+                                                                                {{ $all_note->note }}
+                                                                            </p>
+                                                                        </td>
+                                                                        @php
+                                                                            $time = explode(' ', $all_note->date)[1];
+                                                                            $day = explode(' ', $all_note->date)[0];
 
-                                                            </tr>
+                                                                        @endphp
+                                                                        <td>{{ $time }}<span class="d-block"></span>
+                                                                        </td>
+                                                                        <td>{{ $day }}</td>
 
-                                                            @endforeach
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
+                                                                <tr>
+                                                                    <td colspan="5"> لا يوجد بيانات</td>
+                                                                </tr>
+
+                                                            @endif
+
                                                         </tbody>
                                                     </table>
+                                                    <div class="add-note">
+                                                        <h4 class="mb-3">اضف ملاحظة</h4>
+                                                        <input type="hidden" name="military_affairs_id"
+                                                            value="{{ $item->installment_id }}">
+                                                            <input type="hidden" name="id_time_type_old" value="{{ $item_type_time->first()->id ?? '' }}">
+
+                                                            <input type="hidden" name="id_time_type_new" value="{{ $item_type_time_new->id ?? '' }}">
+
+                                                            <input type="hidden" name="type" value="{{ $item_type_time->first()->type ?? '' }}">
+
+                                                            <input type="hidden" name="type_id" value="{{ $item_type_time->first()->slug ?? '' }}">
+
+                                                        <div class="form-row">
+                                                            <div class="form-group">
+                                                                <label class="form-label">
+                                                                    الاتصال</label>
+                                                                <select class="form-select" name="notes_type">
+                                                                    <option value="answered">
+                                                                        رد
+                                                                    </option>
+                                                                    <option value="refused">
+                                                                        لم يرد
+                                                                    </option>
+                                                                    <option value="note">
+                                                                        ملاحظة
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="my-3">
+                                                                    <label class="form-label">الملاحظات</label>
+                                                                    <textarea name="note" class="form-control" rows="5"></textarea>
+                                                                    @error('note')
+                                                                        <div style='color:red'>{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="tab-pane p-3" id="navpill-{{$item->id}}" role="tabpanel">
                                                     <table id="notes2"
