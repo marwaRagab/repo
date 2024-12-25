@@ -24,6 +24,13 @@
     height: 150px;
     object-fit: cover;
 }
+.btn-filter.active {
+    background-color: #ffc107; /* A bright yellow for better visibility */
+    border: 2px solid #ff9800; /* Add a border for emphasis */
+    color: #fff; /* Change text color to white */
+    font-weight: bold; /* Make the text bold */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
 body {
     direction: rtl;
     font-family: "Noto Kufi Arabic", sans-serif;

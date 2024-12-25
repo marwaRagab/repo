@@ -3,36 +3,37 @@
 @endphp
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{ $govern_count_total }})
+        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" href="{{ route('stop_car') }}">
+            الكل
         </a>
 
 
 
-        @foreach($courts as $court)
-
-        <a href="{{route('stop_car',array('court' => $court->id ))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
-        </a>
-
+        @foreach ($courts as $court)
+            <a href="{{ route('stop_car', ['governate_id' => $court->id]) }}"
+                class="btn-filter {{ $court->style }}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governate_id') == $court->id ? 'active' : '' }} ">
+                {{ $court->name_ar }}
+                ({{ $court->counter }})
+            </a>
         @endforeach
     </div>
 </div>
-<div class="card mt-4 py-3">
-    <div class="d-flex flex-wrap ">
+@if (request()->get('governate_id'))
+    <div class="card mt-4 py-3">
+        <div class="d-flex flex-wrap ">
 
 
 
-        @foreach($stop_car_types as $item_type)
-        <a href="{{route('stop_car',array('court'=> request()->get('court')  ,'type' => $item_type->slug ))}}"
-            class="btn-filter {{$item_type->style}}  px-4 fs-4 mx-1 mb-2">
-            {{$item_type->name_ar}}
-        </a>
-        @endforeach
+            @foreach ($stop_car_types as $item_type)
+                <a href="{{ route('stop_car', ['stop_car_type' => $item_type->slug, 'governate_id' => request()->get('governate_id')]) }}"
+                    class="btn-filter {{ $item_type->style }} px-4 fs-4 mx-1 mb-2 {{ request()->get('stop_car_type') == $item_type->slug ? 'active' : '' }} ">
+                    {{ $item_type->name_ar }} ({{ $counts['stop_car_count_' . $item_type->id] ?? 0 }})
+                </a>
+            @endforeach
 
-
+        </div>
     </div>
-</div>
+@endif
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> حجز السيارات</h4>
