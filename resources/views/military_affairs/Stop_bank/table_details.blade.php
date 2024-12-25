@@ -190,6 +190,7 @@
             الملاحظات
         </button>
 
+
         <a class="btn btn-success me-6 my-2"   target="_blank"  href="{{url('installment/show-installment/'.$item->installment->id)}}">
             تفاصيل
         </a>
