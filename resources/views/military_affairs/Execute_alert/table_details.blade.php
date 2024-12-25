@@ -49,7 +49,13 @@
     <td>
         @foreach( $item->jalasaat_all as $jalasaat )
         @if($jalasaat->jalasat_alert_img)
-        <a href="{{url($jalasaat->jalasat_alert_img)}}" class="d-block btn rounded-0 bg-success-subtle text-success mb-2"> الصورة</a>
+        <a 
+            onclick="checkFileAndRedirect(
+                    '{{ $jalasaat && $jalasaat->jalasat_alert_img && $jalasaat->jalasat_alert_img !== '0' ? 'https://electron-kw.net/' . $jalasaat->jalasat_alert_img : '#' }}',
+                    '{{ $jalasaat && $jalasaat->jalasat_alert_img && $jalasaat->jalasat_alert_img !== '0' ? 'https://electron-kw.com/' . $jalasaat->jalasat_alert_img : '#' }}'
+                ); return false;"
+            
+            class="d-block btn rounded-0 bg-success-subtle text-success mb-2"> الصورة</a>
         @else
         <p class="mb-2 text-danger" >لايوجد</p>
         @endif
@@ -157,7 +163,7 @@
         @include('military_affairs.Execute_alert.print.print')
 
 
-
+        
 
         <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -259,7 +265,7 @@
                                                                     @endif
                                         </tbody>
                                     </table>
-                                    <div class="add-note">
+                                    <div class="add-note text-end">
                                         <h4 class="mb-3">اضف ملاحظة</h4>
                                         <input type="hidden" name="military_affairs_id"
                                                value="{{ $item->id }}">
@@ -579,3 +585,7 @@
 
 
 </tr>
+
+
+
+@include('military_affairs.Execute_alert.print.script')

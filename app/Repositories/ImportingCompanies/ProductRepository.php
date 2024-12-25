@@ -89,6 +89,17 @@ class ProductRepository implements ProductRepositoryInterface
             'barcode_number' => 'nullable|string|max:255',
             'serial' => 'nullable|string|max:255',
             'img' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ],
+        [
+            'company_id.required' => ' الشركة مطلوبة',
+            'mark_id.required' => ' الماركة مطلوبة',
+            'class_id.required' => ' الصنف مطلوب',
+            'model.required' => ' الموديل مطلوب',
+            'price.required' => ' السعر مطلوب',
+            'net_price.required' => ' صافى التكلفة مطلوب',
+            'img.required' => ' الصورة مطلوبة',
+            'number_type.required' => 'النوع مطلوب ',
+
         ]);
 
         $data = new Product();
