@@ -82,16 +82,15 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             $counts['stop_car_count_' . $one->id] = $this->count_stop_car($governate_id, $one->slug);
         }
 
-
         $transactions = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_car' => 1])
             ->with('installment')
             ->with('status_all')
-             ->when(request()->has('governate_id'), function ($query)  {
+            ->when(request()->has('governate_id'), function ($query) {
                 return $query
-                         ->whereHas('installment.client.court', function ($q)  {
-                          $q->where('governorate_id', request()->get('governate_id'));
-                        });
+                    ->whereHas('installment.client.court', function ($q) {
+                        $q->where('governorate_id', request()->get('governate_id'));
+                    });
             })->get();
 
         foreach ($transactions as $value) {
@@ -125,7 +124,6 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         return view('layout', compact(['title', 'view', 'transactions', 'breadcrumb', 'count']), $this->data);
 
     }
-
 
     public function count_stop_car($governate_id, $stop_car_type)
     {
