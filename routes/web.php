@@ -197,7 +197,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/return_to_lated', [Open_fileController::class, 'return_to_lated'])->name('return_to_lated');
     Route::post('/to_ex_alert', [Open_fileController::class, 'convert_ex_alert'])->name('to_ex_alert');
     Route::get('/case_proof/{id?}', [Open_fileController::class, 'index_case_proof'])->name('case_proof');
-    Route::post('/convert_to_execute', [Open_fileController::class, 'convert_to_execute']);
+    Route::post('/convert_to_execute', [Open_fileController::class, 'convert_to_execute'])->name('convert_to_execute');
     Route::get('/stop_travel/{id?}', [Stop_travelController::class, 'index'])->name('stop_travel');
     Route::get('/Execute_alert/{id?}', [Execute_alertController::class, 'index'])->name('execute_alert');
     Route::post('/add_a3lan', [Execute_alertController::class, 'add_a3lan_date']);
@@ -281,7 +281,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/return_to_lated', [Open_fileController::class, 'return_to_lated'])->name('return_to_lated');
     Route::post('/to_ex_alert', [Open_fileController::class, 'convert_ex_alert'])->name('to_ex_alert');
     Route::get('/case_proof/{id?}', [Open_fileController::class, 'index_case_proof'])->name('case_proof');
-    Route::post('/convert_to_execute', [Open_fileController::class, 'convert_to_execute']);
+    // Route::post('/convert_to_execute', [Open_fileController::class, 'convert_to_execute'])->name('convert_to_execute');
     Route::get('/stop_travel/{id?}', [Stop_travelController::class, 'index'])->name('stop_travel');
     Route::get('/Execute_alert/{id?}', [Execute_alertController::class, 'index'])->name('execute_alert');
     Route::post('/add_a3lan', [Execute_alertController::class, 'add_a3lan_date']);
