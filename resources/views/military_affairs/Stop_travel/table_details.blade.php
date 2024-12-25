@@ -261,9 +261,9 @@
 
             <td>{{$final_date_request ?   $final_date_request[0] : ''}}</td>
             <td>{{$final_date[0]}}</td>
-           
+
         @else
-        
+
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
                         data-bs-target="#convert_resuest-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
@@ -345,7 +345,7 @@
         <td>
             @include('military_affairs.Open_file.partial.column_responsible')
         </td>
-        
+
 
         <td>
             <div class="btn-group dropup mb-6 me-6">
@@ -405,10 +405,10 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
-                                                            
+
                                     </ul>
                                     <!-- Tab panes -->
-                                     
+
                                     @if(count($items)>=1)
 
                                         <div class="tab-content border mt-2">
@@ -417,7 +417,7 @@
                                                 $all_notes=get_all_notes('stop_travel',$item->id);
                                                 $all_actions=get_all_actions($item->id);
                                                 $get_all_delegations = get_all_delegations( $item->id);
-                                               
+
                                             @endphp
                                             <!-- <pre>{{ print_r($get_all_delegations, return: true) }}</pre> -->
 
@@ -552,7 +552,7 @@
                                                                 $created_by = DB::table('users')
                                                                     ->where('id', $value->created_by)
                                                                     ->first();
-                                                                
+
                                                             @endphp
                                                         <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                         <td> @if ($value->timesType)
@@ -596,7 +596,7 @@
                                                             {{ $day_end }}
                                                         </td>
                                                         <td>{{ $different_day }}</td>
-                                                        
+
 
                                                     </tr>
                                                     @endforeach
@@ -629,7 +629,7 @@
                                                                 $created_by = DB::table('users')
                                                                     ->where('id', $value->emp_id)
                                                                     ->first();
-                                                                
+
                                                             @endphp
                                                            <td>
                                                                 {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -648,7 +648,7 @@
                                                             </td>
                                                             <td>
                                                                 @php
-                                                                    
+
                                                                 $day_start = explode(' ', $value->assign_date)[0];
                                                                     if (is_numeric($day_start)) {
                                                                         $day_start = date('Y-m-d', $day_start);
@@ -682,7 +682,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                           
+
                                         </div>
                                 </div>
                                 <div class="modal-footer d-flex ">
@@ -704,6 +704,9 @@
                 </div>
 
             </div>
+
+            @include('military_affairs.Execute_alert.print.print')
+
         </td>
 
 
