@@ -84,16 +84,16 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         $this->data['item_type_time4'] = Stop_travel_types::where(['type' => 'stop_travel', 'slug' => 'stop_travel_cancel_request'])->first();
         $this->data['item_type_time5'] = Stop_travel_types::where(['type' => 'stop_travel', 'slug' => 'stop_travel_cancel'])->first();
 
-       foreach ($this->data['items'] as $value) {
+        foreach ($this->data['items'] as $value) {
 
 
-            $value->different_date_tranfer = get_diff_date($value->date, date('Y-m-d'));
+            $value->different_date_tranfer = get_different_date($value->date, date('Y-m-d'));
             if ($stop_travel_type == 'command') {
                 $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 0)->first();
 
-                    $date_command =$value->item_command   ?  $value->item_command->date : '';
-                    $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
-                    $value->different_date_command  =$value->item_command ?  get_diff_date($value->final_date_command[0], date('Y-m-d')) : '';
+                $date_command =$value->item_command   ?  $value->item_command->date : '';
+                $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
+                $value->different_date_command  =$value->item_command ?  get_different_date($value->final_date_command[0], date('Y-m-d')) : '';
 
 
             }
@@ -101,13 +101,13 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
                 $value->item_finished_command = $value->status_all->where('type_id', 'command')->where('flag', 1)->first();
                 $date_finished_command = $value->item_finished_command ?  $value->item_finished_command->date : '';
                 $value->final_date_finished_command = $value->item_finished_command ?  explode(' ', $date_finished_command) : '';
-                $value->different_date_finshied_command =  $value->item_finished_command ? get_diff_date($value->final_date_finished_command[0], date('Y-m-d')) : '';
+                $value->different_date_finshied_command =  $value->item_finished_command ? get_different_date($value->final_date_finished_command[0], date('Y-m-d')) : '';
 
                 ///finished date
                 $value->item_finished = $value->status_all->where('type_id', 'stop_travel_finished')->first();
                 $date_finished = $value->item_finished ? $value->item_finished->date : '';
                 $value->final_date_finished = $value->item_finished ?  explode(' ', $date_finished) : '';
-                $value->different_date_finshied = $value->item_finished ?  get_diff_date($value->final_date_finished[0], date('Y-m-d')) : '';
+                $value->different_date_finshied = $value->item_finished ?  get_different_date($value->final_date_finished[0], date('Y-m-d')) : '';
 
             }
 
@@ -133,15 +133,17 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         $array_new = Stop_travel_types::findorfail($request->item_type_new);
 
 
-       // $array_old->update($data);
-        $item_time=Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->first();
-        $item_status=Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->first();
+
+        // $array_old->update($data);
+        $item_time=Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
+        $item_status=Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
         if($item_status){
+
             $data_status['flag']=1;
 
             $item_status->update($data_status);
         }
-       // dd($item_status);
+        // dd($item_status);
         if($item_time){
             $data['date_end']=date('Y-m-d H:i:s');
 

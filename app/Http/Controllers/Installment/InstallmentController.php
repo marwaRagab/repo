@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Installment;
 
 ini_set('memory_limit', '600M');
 
+use App\Models\Military_affairs\Military_affairs_check;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Client;
@@ -277,11 +278,14 @@ class InstallmentController extends Controller
             ->where('installment_type', 'installment')->sum('amount');
 
         $mil_item = Military_affair::with('installment')->get();
-        $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->get();
+
+
         $military_affair = null; // Default initialization
 
         if ($installment->laws == 1) {
             $military_affair = Military_affair::where('installment_id', $id)->first();
+            $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
+            $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->where('deposit','=',0)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
 
             $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
@@ -290,7 +294,6 @@ class InstallmentController extends Controller
 
             $data['sum'] = $not_done_amount;
         }
-
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();
         $data['install_amount'] = $first_month->amount ?? 0;
 
@@ -346,7 +349,7 @@ class InstallmentController extends Controller
             // dd($data['MilitaryAffairNote']);
 
         }
-        
+
         $data['militaryAffair'] = Military_affair::where('installment_id',$id)->first();
 
         // order items
@@ -432,7 +435,7 @@ class InstallmentController extends Controller
 
             $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
             $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
-          
+
 
             // $file = $request->file('img_dir');
 
@@ -1911,7 +1914,7 @@ class InstallmentController extends Controller
         if ($request->hasFile('contract_2')) {
             $filename = time() . '-' . $request->file('contract_2')->getClientOriginalName();
             $path = $request->file('contract_2')->move(public_path('installment'), $filename);
-            
+
             // $installment_data_image['contract_2'] = $request->file('contract_2')->store('installment', 'public'); // Store in the 'products' directory
             $installment_data_image['contract_2'] =  'installment' . '/' . $filename;
         }
@@ -1939,7 +1942,7 @@ class InstallmentController extends Controller
             // $installment_data_image['prods_recieved_img'] = $request->file('prods_recieved_img')->store('installment', 'public');
             $installment_data_image['prods_recieved_img'] = 'installment' . '/' . $filename;
         }
-        
+
         if ($request->hasFile('part_10_dinar_img')) {
             $filename = time() . '-' . $request->file('part_10_dinar_img')->getClientOriginalName();
             $path = $request->file('part_10_dinar_img')->move(public_path('installment'), $filename);
@@ -1967,14 +1970,14 @@ class InstallmentController extends Controller
         }
         // dd($client_data_image);
         // for ($i = 1; $i <= count($client_data_image); $i++) {
-            
+
         //     dd($client_data_image[0]);
         //     $data_add['client_id'] = $clients->id;
         //     $data_add['created_by'] = Auth::user()->id;
         //     $data_add['updated_by'] = Auth::user()->id;
         //     $data_add['created_at'] = date('Y-m-d-H-i-s');
         //     $data_add['updated_at'] = date('Y-m-d-H-i-s');
-        //     $data_add['type'] = 
+        //     $data_add['type'] =
         //     ClientImg::insert($data_add);
         // }
         foreach ($client_data_image as $key => $value) {
@@ -1987,10 +1990,10 @@ class InstallmentController extends Controller
                 'type'       => $key, // Store the key here
                 'path' => $value, // Optionally store the image path
             ];
-        
+
             ClientImg::insert($data_add);
         }
-        
+
         $installment->update($installment_data_image);
 
         if (count($client_data_image) == 0 && count($installment_data_image) == 0) {

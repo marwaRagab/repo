@@ -75,7 +75,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         foreach ( $this->data['items'] as $value){
             $value->i=$x;
             $value->final_data=  $item_data=explode(' ',$value->created_at);
-            $value->different_date = get_different_dates($item_data[0],date('Y-m-d'));
+            $value->different_date = get_different_date($item_data[0],date('Y-m-d'));
             if(count($value->installment->client->client_address)>=1) {
 
                 $value->adress =$value->installment->client->client_address->last();
