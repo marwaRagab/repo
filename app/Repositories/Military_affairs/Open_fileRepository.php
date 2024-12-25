@@ -3,7 +3,6 @@
 namespace App\Repositories\Military_affairs;
 
 use App\Models\Log;
-use App\Models\Military_affairs\Military_affairs_times;
 use Inertia\Inertia;
 use App\Models\Court;
 use App\Models\Ministry;
@@ -20,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Stop_travel_types;
 use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_status;
 use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Military_affairs_times_type;
@@ -248,7 +248,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
     }
     public function convert_to_execute(Request $request){
 
-
+        // dd($request);
         $request->validate([
             'date' => 'required| date',
             'img_dir'=>'required|image|mimes:jpg,png,jpeg,gif|max:2048',
@@ -256,11 +256,12 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
         ]);
 
-          // dd($request->all());
+        //   dd($request->all());
         change_status($request,$request->military_affairs_id);
         // Military_affairs_status::create($statusData);
 
         $item_military= Military_affair::findOrFail($request->military_affairs_id);
+       
         $miltray_data['stop_car']=1;
         $miltray_data['stop_travel']=1;
         $miltray_data['stop_bank']=1;
@@ -273,22 +274,22 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         $item_military->update($miltray_data);
 
 
-
-
         $old_time_type=Military_affairs_times_type::findOrFail($request->type_id);
         $new_time_type1=Stop_travel_types::findOrFail($request->item_type_travel);
         $new_time_type2=Military_affairs_stop_car_type::findOrFail($request->item_type_car);
         $new_time_type3=Military_affairs_stop_bank_type::findOrFail($request->item_type_bank);
-        $new_time_type4=Military_affairs_certificate_type::findOrFail($request->item_type_certificate);
-
+     
+        // dd($new_time_type1);
         if($request->client_job=='military'){
+            $new_time_type4=Military_affairs_certificate_type::findOrFail($request->item_type_certificate);
 
             Add_note($old_time_type,$new_time_type4,$request->military_affairs_id);
             Add_note_time($new_time_type4, $request->military_affairs_id);
 
 
         }
-        $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL,'military_affairs_id' =>$request->military_affairs_id])->first();
+        // $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL,'military_affairs_id' =>$request->military_affairs_id])->first();
+        $update_notes_date=Military_affairs_times::where(['military_affairs_id' =>$request->military_affairs_id ,'date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
 
         if($update_notes_date){
             $data['date_end']= date('Y-m-d');
@@ -304,7 +305,9 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         Add_note($old_time_type,$new_time_type3,$request->military_affairs_id);
         Add_note_time($new_time_type3, $request->military_affairs_id);
 
-        return redirect()->route('case_proof');
+
+        dd('ffffffff');
+        return redirect()->route('case_proof')->with('success', 'تم التحويل بنجاح.');
 
     }
 
