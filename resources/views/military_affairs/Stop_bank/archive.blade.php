@@ -1064,13 +1064,13 @@
                                                                         $value->date_end != '0000-00-00 00:00:00'
                                                                         ) {
                                                                         $day_end = explode(' ', $value->date_end)[0];
-                                                                        $different_day = get_different_dates(
+                                                                        $different_day = get_different_date(
                                                                         $day_start,
                                                                         $day_end,
                                                                         );
                                                                         } else {
                                                                         $day_end = 'لم تنتهى';
-                                                                        $different_day = get_different_dates(
+                                                                        $different_day = get_different_date(
                                                                         $day_start,
                                                                         now(),
                                                                         );
@@ -1181,6 +1181,7 @@
                                                                 <tr>
                                                                     <th>اليوزر</th>
                                                                     <th>البنك</th>
+                                                                    <th>الحالة</th>
                                                                     <th>الساعة</th>
                                                                     <th>التاريخ</th>
                                                                     <th>الملاحظة</th>
@@ -1208,6 +1209,20 @@
                                                                             </td>
                                                                             <td>
                                                                             {{ $bank->name_ar ?? 'لا يوجد' }}
+                                                                            </td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $bankStatuses = [
+                                                                                        'money_found' => 'يوجد مبلغ بالحساب',
+                                                                                        'account_closed' => 'حساب مغلق',
+                                                                                        'housing' => 'يعمل بدل ايجار',
+                                                                                        'wrong_bank' => 'لا يوجد حساب',
+                                                                                        'visa' => 'فيزا',
+                                                                                        'stopped' => 'موقوف راتب',
+                                                                                    ];
+                                                                                @endphp
+
+                                                                                {{ $bankStatuses[$value->bank_status] ?? 'لا يوجد' }}
                                                                             </td>
                                                                             <td>
                                                                                 {{ \Carbon\Carbon::parse($value->date)->format('H:i:s') ?? 'لا يوجد' }}

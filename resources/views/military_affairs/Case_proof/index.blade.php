@@ -2,14 +2,14 @@
     <div class="d-flex flex-wrap ">
         <a href="{{route('case_proof')}}"
            class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
+            العدد الكلي ({{ count_court('' ,'case_proof',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
 
             <a href="{{route('case_proof',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}} ({{ count_court($court->id ,'case_proof',null,null) }})
             </a>
 
         @endforeach
@@ -77,13 +77,16 @@
                 </thead>
 
                 <tbody>
-
+                @php $counter = 0; @endphp
                 @foreach($items as $item)
                     @if($item->installment->finished==0)
+
+                        @php $counter++; @endphp
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->court->id)
+                         
                             <tr>
                                 <td>
-                                    {{ $loop->index + 1 }}
+                                    {{ $counter }}
                                 </td>
                                 <td>
                                     <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
@@ -128,18 +131,73 @@
                                         $get_all_delegations = get_all_delegations($item->id);
 
                                     @endphp
-                                    <a class="btn btn-success me-6 my-2"
+                                    <div class="btn-group dropup mb-6 me-6">
 
-                                       href="{{url('installment/show-installment/'.$item->installment->id)}}">
-                                        التفاصيل</a>
-                                    <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
-                                            data-bs-target="#open-details-{{$item->id}}">
-                                        الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
-                                    </button>
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            الإجراءات
+                                        </button>
 
-                                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}">
-                                        تحويل الطلب
-                                        للتنفيذ</button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li>
+                                                <a class="btn btn-success rounded-0 w-100 mt-2"
+                                                   href="{{ url('installment/show-installment/' . $item->installment->id) }}">
+                                                    التفاصيل</a>
+
+
+                                            </li>
+                                            <li>
+
+
+
+                                                <button class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                                        data-bs-target="#open-details-{{$item->id}}">
+                                                    الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
+                                                </button>
+                                            </li>
+                                            @if($item->jalasaat_all->last())
+                                                <li>
+                                                    <a
+                                                        target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{$item->jalasaat_all->last()->jalasat_alert_img}}', 'https://electron-kw.com/{{$item->jalasaat_all->last()->jalasat_alert_img}}'); return false;"
+                                                        class="btn btn-warning rounded-0 w-100 mt-2"
+                                                    >
+                                                        الصورة
+                                                    </a>
+                                                </li>
+
+
+                                            @endif
+
+                                            <li>
+
+                                                <button class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                                                    تحويل الطلب
+                                                    للتنفيذ</button>
+                                            </li>
+
+
+
+
+
+                                        </ul>
+
+
+
+
+                                        <!-- /.modal-dialog -->
+
+                                    </div>
+
+
+
+
+
+
+
+
+
+
                                     <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
@@ -195,50 +253,43 @@
 
 
                                                                     <!-- start row -->
-                                                                    @if (count($all_notes) > 0 )
-                                                                        @foreach($all_notes as $all_note)
+                                                                    @foreach($all_notes as $all_note)
 
-                                                                            <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                                                                                aria-expanded="false"
-                                                                                aria-controls="collapseExample">
-                                                                                <td>
-                                                                                    {{$all_note->created_by}}
-                                                                                </td>
-                                                                                <td>
-                                                                                    @php
-                                                                                        if($all_note->notes_type=='answered'){
-                                                                                        $type= 'رد'   ;
-                                                                                        }elseif ($all_note->notes_type=='refused'){
-                                                                                        $type= 'لم يرد'   ;
-                                                                                        }else{
-                                                                                        $type= 'ملاحظة'   ;
-                                                                                        }
-
-                                                                                    @endphp
-                                                                                    {{$type}}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <p>
-                                                                                        {{$all_note->note}}
-                                                                                    </p>
-                                                                                </td>
+                                                                        <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapseExample">
+                                                                            <td>
+                                                                                {{$all_note->created_by}}
+                                                                            </td>
+                                                                            <td>
                                                                                 @php
-                                                                                    $time= explode(' ', $all_note->date)[1];
-                                                                                    $day= explode(' ', $all_note->date)[0];
+                                                                                    if($all_note->notes_type=='answered'){
+                                                                                      $type= 'رد'   ;
+                                                                                    }elseif ($all_note->notes_type=='refused'){
+                                                                                      $type= 'لم يرد'   ;
+                                                                                    }else{
+                                                                                     $type= 'ملاحظة'   ;
+                                                                                    }
 
                                                                                 @endphp
-                                                                                <td>{{$time}}<span class="d-block"></span></td>
-                                                                                <td>{{$day}}</td>
+                                                                                {{$type}}
+                                                                            </td>
+                                                                            <td>
+                                                                                <p>
+                                                                                    {{$all_note->note}}
+                                                                                </p>
+                                                                            </td>
+                                                                            @php
+                                                                                $time= explode(' ', $all_note->date)[1];
+                                                                                $day= explode(' ', $all_note->date)[0];
 
-                                                                            </tr>
+                                                                            @endphp
+                                                                            <td>{{$time}}<span class="d-block"></span></td>
+                                                                            <td>{{$day}}</td>
 
-                                                                        @endforeach
-                                                                    @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
                                                                         </tr>
 
-                                                                    @endif
+                                                                    @endforeach
                                                                     </tbody>
                                                                 </table>
                                                                 <div class="add-note">
@@ -293,7 +344,6 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <!-- start row -->
-                                                                    @if (count($all_actions) > 0 )
                                                                     @foreach ($all_actions as $value)
                                                                         <tr>
                                                                             @php
@@ -326,13 +376,13 @@
                                                                                         $value->date_end != '0000-00-00 00:00:00'
                                                                                     ) {
                                                                                         $day_end = explode(' ', $value->date_end)[0];
-                                                                                        $different_day = get_different_dates(
+                                                                                        $different_day = get_different_date(
                                                                                             $day_start,
                                                                                             $day_end,
                                                                                         );
                                                                                     } else {
                                                                                         $day_end = 'لم تنتهى';
-                                                                                        $different_day = get_different_dates(
+                                                                                        $different_day = get_different_date(
                                                                                             $day_start,
                                                                                             now(),
                                                                                         );
@@ -348,12 +398,7 @@
 
                                                                         </tr>
                                                                     @endforeach
-                                                                    @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
-                                                                        </tr>
 
-                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -374,7 +419,6 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <!-- start row -->
-                                                                    @if (count($get_all_delegations) > 0 )
                                                                     @foreach ($get_all_delegations as $value)
                                                                         <tr data-bs-toggle="collapse"
                                                                             data-bs-target="#collapseExample" aria-expanded="false"
@@ -432,12 +476,7 @@
 
                                                                         </tr>
                                                                     @endforeach
-                                                                    @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
-                                                                        </tr>
 
-                                                                    @endif
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -458,7 +497,10 @@
                                             <!-- /.modal-content -->
                                         </div>
                                         <!-- /.modal-dialog -->
-                                    </div>
+                                    </div>\
+
+                                    <br>
+                                    @include('military_affairs.Execute_alert.print.print')
 
                                 </td>
                                 <div id="add-note-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
@@ -519,7 +561,7 @@
 
 
                                 <td>
-                                    {{ $loop->index + 1 }}
+                                    {{ $counter }}
                                 </td>
                                 <td>
                                     <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
@@ -564,19 +606,76 @@
                                         $get_all_delegations = get_all_delegations($item->id);
 
                                     @endphp
-                                    <a class="btn btn-success me-6 my-2"
+                                    <div class="btn-group dropup mb-6 me-6">
 
-                                       href="{{url('installment/show-installment/'.$item->installment->id)}}">
-                                        التفاصيل</a>
-                                    <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
-                                            data-bs-target="#open-details-{{$item->id}}">
-                                        الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
-                                    </button>
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            الإجراءات
+                                        </button>
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li>
+                                                <a class="btn btn-success rounded-0 w-100 mt-2"
+                                                   href="{{ url('installment/show-installment/' . $item->installment->id) }}">
+                                                    التفاصيل</a>
 
 
-                                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
-                                        تحويل الطلب
-                                        للتنفيذ</button>
+                                            </li>
+                                            <li>
+
+
+
+                                                <button class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                                        data-bs-target="#open-details-{{$item->id}}">
+                                                    الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
+                                                </button>
+                                            </li>
+                                             @if($item->jalasaat_all->last())
+                                                 <li>
+                                                     <a
+                                                         target="_blank"
+                                                         onclick="checkFileAndRedirect('https://electron-kw.net/{{$item->jalasaat_all->last()->jalasat_alert_img}}', 'https://electron-kw.com/{{$item->jalasaat_all->last()->jalasat_alert_img}}'); return false;"
+                                                         class="btn btn-warning rounded-0 w-100 mt-2"
+                                                     >
+                                                         الصورة
+                                                     </a>
+                                                 </li>
+
+
+                                            @endif
+
+                                            <li>
+
+                                                <button class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                                                    تحويل الطلب
+                                                    للتنفيذ</button>
+                                            </li>
+
+
+
+
+
+                                        </ul>
+
+
+
+
+                                        <!-- /.modal-dialog -->
+
+                                    </div>
+
+                                    <br>
+                                    @include('military_affairs.Execute_alert.print.print')
+
+
+
+
+
+
+
+
+
+
                                     <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
@@ -945,8 +1044,85 @@
 
     </div>
 </div>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<script>
+    async function checkFileAndRedirect(primaryUrl, fallbackUrl) {
+        console.log("Checking primary URL:", primaryUrl);
+
+        const primaryReachable = await checkImage(primaryUrl);
+        // alert(primaryReachable);
+        if (primaryReachable) {
+            console.log("Primary URL exists, redirecting...");
+            // window.location.href = primaryUrl; // Uncomment to enable redirection
+            window.open(primaryUrl, '_blank');
+        } else {
+            console.log("Primary URL not found, redirecting to fallback...");
+            // window.location.href = fallbackUrl; // Uncomment to enable redirection
+            window.open(fallbackUrl, '_blank');
+
+
+        }
+
+    }
+
+    async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
+
+        const primaryReachable = await checkImage(primaryUrl);
+        if (primaryReachable) {
+            console.log("Primary URL exists, redirecting...");
+            // window.location.href = primaryUrl; // Uncomment to enable redirection
+            const newWindow = window.open(primaryUrl, '_blank');
+            newWindow.onload = () => newWindow.print();
+        } else {
+            console.log("Primary URL not found, redirecting to fallback...");
+            // window.location.href = fallbackUrl; // Uncomment to enable redirection
+            const newWindow = window.open(fallbackUrl, '_blank');
+            newWindow.onload = () => newWindow.print();
+        }
+
+
+    }
+
+
+    function checkImage(url) {
+        return new Promise((resolve) => {
+            // Check file extension
+            const extension = url.split('.').pop().toLowerCase();
+            // alert(extension);
+
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+                // Check if the URL is a valid image
+                const img = new Image();
+                img.onload = () => {
+                    console.log('The file is an accessible image:', url);
+                    resolve(true);
+                };
+                img.onerror = () => {
+                    console.log('The file is not an accessible image:', url);
+                    resolve(false);
+                };
+                img.src = url;
+            } else if (extension === 'pdf') {
+
+                const substring = "uploads/";
+                if (url.includes(substring)) {
+                    console.log("The URL contains the substring:", substring);
+                    resolve(true);  // URL contains the substring
+                } else {
+                    console.log("The URL does not contain the substring:", substring);
+                    // return false;  // URL does not contain the substring
+                    resolve(false);
+                }
+
+
+            } else {
+                console.log('Unknown file type:', url);
+                // resolve('unknown');
+                resolve(false);
+            }
+        });
+    }
 
 
 </script>

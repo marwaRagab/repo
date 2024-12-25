@@ -274,7 +274,7 @@
                                             // dd();
                                             $all_actions = get_all_actions($item->id);
                                             $get_all_delegations = get_all_delegations($item->id);
-                                           
+
                                         @endphp
                                         <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
                                             role="tabpanel">
@@ -436,13 +436,13 @@
                                                                                 ' ',
                                                                                 $value->date_end,
                                                                             )[0];
-                                                                            $different_day = get_different_dates(
+                                                                            $different_day = get_different_date(
                                                                                 $day_start,
                                                                                 $day_end,
                                                                             );
                                                                         } else {
                                                                             $day_end = 'لم تنتهى';
-                                                                            $different_day = get_different_dates(
+                                                                            $different_day = get_different_date(
                                                                                 $day_start,
                                                                                 now(),
                                                                             );

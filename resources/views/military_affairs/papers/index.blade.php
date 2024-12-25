@@ -25,15 +25,15 @@
                     <!-- start row -->
 
                     @php $i=1; @endphp
-                    @foreach ($transactions as $one)
+                    @foreach ($transactions as $item)
                         <tr>
 
                             <td>{{ $i }}</td>
-                            <td><a href="{{ route('installment.show-installment', $one->id) }}">{{ $one->id }}</a>
+                            <td><a href="{{ route('installment.show-installment', $item->id) }}">{{ $item->id }}</a>
                             </td>
-                            <td>{{ $one->name_ar }}<br />{{ $one->civil_number }}</td>
-                            <td>{{ $one->created_at }}</td>
-                            <td>{{ $one->file_number }}</td>
+                            <td>{{ $item->name_ar }}<br />{{ $item->civil_number }}</td>
+                            <td>{{ $item->created_at }}</td>
+                            <td>{{ $item->file_number }}</td>
                             <td>
                                 <!-- Primary header modal -->
 
@@ -46,18 +46,18 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <a class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                                data-bs-target="#vertical-center-modal{{ $one->id }}">
+                                                data-bs-target="#vertical-center-modal{{ $item->id }}">
                                                 تسليم اقرار الدين</a>
                                         </li>
                                         <li>
                                             <a class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                                data-bs-target="#open-details-{{ $one->id }}">
+                                                data-bs-target="#open-details-{{ $item->id }}">
                                                 الملاحظات</a>
                                         </li>
 
                                     </ul>
 
-                                    <div id="open-details-{{ $one->id }}" class="modal fade" tabindex="-1"
+                                    <div id="open-details-{{ $item->id }}" class="modal fade" tabindex="-1"
                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <div class="modal-content">
@@ -86,7 +86,7 @@
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link" data-bs-toggle="tab"
-                                                                   href="#actions-{{$one->id}}" role="tab">
+                                                                   href="#actions-{{$item->id}}" role="tab">
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
@@ -99,10 +99,10 @@
 
                                                                     $all_notes = get_all_notes(
                                                                         'eqrar_dain',
-                                                                        $one->m_a_id,
+                                                                        $item->m_a_id,
                                                                     );
-                                                                    $all_actions=get_all_actions($one->m_a_id);
-                                                                    $get_all_delegations = get_all_delegations($one->m_a_id);
+                                                                    $all_actions=get_all_actions($item->m_a_id);
+                                                                    $get_all_delegations = get_all_delegations($item->m_a_id);
                                                                     //   dd($all_notes);
                                                                 @endphp
                                                                 <div class="tab-pane active p-3" id="navpill-1"
@@ -182,15 +182,15 @@
                                                                         <h4 class="mb-3">اضف ملاحظة</h4>
 
                                                                         <input type="hidden" name="military_affairs_id"
-                                                                            value="{{ $one->m_a_id }}">
+                                                                            value="{{ $item->m_a_id ?? ''}}">
                                                                         <input type="hidden" name="id_time_type_old"
-                                                                            value="{{ $item_type_time->id }}">
+                                                                            value="{{ $item_type_time->id ?? '' }}">
                                                                         <input type="hidden" name="id_time_type_new"
-                                                                            value="{{ $item_type_time_new->id }}">
+                                                                            value="{{ $item_type_time_new->id ?? '' }}">
                                                                         <input type="hidden" name="type"
-                                                                            value="{{ $item_type_time->type }}">
+                                                                            value="{{ $item_type_time->type ?? '' }}">
                                                                         <input type="hidden" name="type_id"
-                                                                            value="{{ $item_type_time->slug }}">
+                                                                            value="{{ $item_type_time->slug ?? '' }}">
                                                                         <div class="form-row">
                                                                             <div class="form-group">
                                                                                 <label class="form-label">
@@ -273,13 +273,13 @@
                                                                                                 $value->date_end != '0000-00-00 00:00:00'
                                                                                             ) {
                                                                                                 $day_end = explode(' ', $value->date_end)[0];
-                                                                                                $different_day = get_different_dates(
+                                                                                                $different_day = get_different_date(
                                                                                                     $day_start,
                                                                                                     $day_end,
                                                                                                 );
                                                                                             } else {
                                                                                                 $day_end = 'لم تنتهى';
-                                                                                                $different_day = get_different_dates(
+                                                                                                $different_day = get_different_date(
                                                                                                     $day_start,
                                                                                                     now(),
                                                                                                 );
@@ -299,7 +299,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-                                                                <div class="tab-pane p-3" id="actions-{{$one->id}}"
+                                                                <div class="tab-pane p-3" id="actions-{{$item->id}}"
                                                                  role="tabpanel">
                                                                 <table id="notes2"
                                                                        class="table table-bordered border text-wrap align-middle">
@@ -407,7 +407,7 @@
 
 
 <!-- Primary Header Modal -->
-<div id="vertical-center-modal{{ $one->id }}" class="modal fade" tabindex="-1" aria-hidden="true">
+<div id="vertical-center-modal{{ $item->id }}" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
 
         <div class="modal-content">
@@ -425,7 +425,7 @@
                     enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <a href="{{ route('papers.nmozag_eqrar', $one->id) }}" class="btn btn-primary">نموذج اقرار
+                        <a href="{{ route('papers.nmozag_eqrar', $item->id) }}" class="btn btn-primary">نموذج اقرار
                             الدين</a>
 
                     </div>
@@ -434,7 +434,7 @@
                             الدين</label>
                         <input class="form-control" type="file" name="cinet_img" id="formFile">
                         <input class="form-control" type="text" style="display:none;" name="installment_id"
-                            value="{{ $one->id }}">
+                            value="{{ $item->id }}">
                         @error('cinet_img')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror

@@ -281,6 +281,7 @@ function expolde_date($date){
 function Add_note($array_old, $array_new, $id)
 {
 
+    // dd($id);
     $notesData = [
         'note' => " تم التحويل من قسم $array_old->name_ar  الى قسم $array_new->name_ar",
         'type' => $array_new->type,
@@ -509,6 +510,21 @@ function get_different_dates($first_end_date, $second_end_date)
 
     // Return combined result if needed, or just days
     return $years . ', ' . $months . ', ' . $days;
+}
+
+
+function get_diff_date($date1,$date2){
+
+    $date1 = new DateTime($date1); // First date
+    $date2 = new DateTime($date2); // Second date
+
+// Get the difference
+    $interval = $date1->diff($date2);
+
+// Output the difference in days
+    return  $interval->days;
+
+
 }
 
 function get_different_date($first_end_date, $second_end_date)
@@ -1074,16 +1090,18 @@ function update_responsible($user_id, $military_id, $status)
 
     $dateFields = [
         'open_file' => 'open_file_date',
-        'execute' => 'execute_date',
+        'Execute_alert' => 'execute_date',
         'image' => 'image_date',
         'case_proof' => 'case_proof_date',
-        'travel' => 'travel_date',
-        'certificate' => 'certificate_date',
-        'salary' => 'salary_date',
-        'car' => 'car_date',
-        'bank' => 'bank_date',
+        'stop_travel' => 'travel_date',
+        'Certificate' => 'certificate_date',
+        'stop_salary' => 'salary_date',
+        'stop_car' => 'car_date',
+        'stop_bank' => 'bank_date',
+        'eqrar_dain_received'=>'eqrar_dain_received',
     ];
 
+    // dd($military_id);
     $up = Military_affair::where('id',$military_id)->first();
     $up->emp_id = $user_id;
     $up->save();
@@ -1131,55 +1149,163 @@ function specific_fixed_prin_data($id)
     return FixedPrintData::find($id);
 }
 
- function count_court($court_id, $stop_type,$minst_id,$time_type)
-    {
-        return Military_affair::with('installment')->with('installment.client')
-                ->with('status_all')
-                ->whereHas('installment.client', function ($q) use($court_id,$stop_type) {
-                    if($stop_type == 'stop_salary')
-                    {
-                    $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
-                    }
-                    if($court_id != '')
-                    {
-                        $q->where('governorate_id', $court_id);
-                    }
-                    
-                })
-                ->whereHas('installment', function ($q){
-                    return $q->where('finished',0);
-                })
-                ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
-                    if($minst_id && $court_id)
-                    {
-                      $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
-                    }
-                    })
-                ->where('archived',operator: 0)
-                ->when($stop_type == 'open_file', function ($q) {
-                    $q->where('military_affairs.status', 'military');
-                }, function ($q) use ($stop_type) {
-                    $q->where('military_affairs.status', 'execute')
-                      ->where($stop_type, 1);
-                })
-                ->count();
+//  function count_court($court_id, $stop_type,$minst_id,$time_type)
+//     {
+//         return Military_affair::with('installment')->with('installment.client')
+//                 ->with('status_all')->with('mil_times.salaryType')
+//                 ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
+//                     if($stop_type == 'stop_salary')
+//                     {
+             //$q->where('job_type','military')->whereIN('ministry_last',[5,14,27]);
+//                     }
+//                     if($court_id != '')
+//                     {
+//                         $q->where('governorate_id', $court_id);
+//                     }
+
+//                 })
+//                 ->whereHas('installment', function ($q){
+//                     return $q->where('finished',0);
+//                 })
+//                 // ->whereHas('status_all', function ($q) use($time_type, $minst_id) {
+//                 //         $q->where('type','stop_salary')->where('type_id',$time_type)->where('ministry',$minst_id)->where('flag',0);
+//                 //     })
+//                 ->where('archived',operator: 0)
+//                 ->when($stop_type == 'open_file', function ($q) {
+//                     $q->where('military_affairs.status', 'military');
+//                 }, function ($q) use ($stop_type) {
+//                     $q->where('military_affairs.status', 'execute')
+//                       ->where($stop_type, 1);
+//                 })
+//                 ->count();
+
                 
 
-    }
- function count_minstry($id, $stop_type, $minst_id)
+
+//     }
+
+
+function count_court($court_id, $stop_type,$minst_id,$time_type)
+{
+
+    return Military_affair::with('installment')->with('installment.client')
+        ->with('status_all')->with('mil_times.salaryType')
+        ->whereHas('installment.client', function ($q) use ($court_id, $stop_type, $minst_id) {
+            if ($stop_type == 'stop_salary') {
+                $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27]);
+            }
+            if ($court_id != '') {
+                $q->where('governorate_id', $court_id);
+            }
+
+        })
+        ->whereHas('installment', function ($q) {
+            return $q->where('finished', 0);
+        })
+        ->when($stop_type === "stop_salary", function ($query) use ($time_type, $minst_id, $court_id) {
+            $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id) {
+                if ($minst_id && $court_id) {
+                    $q->where('type', 'stop_salary')
+                        ->where('ministry', $minst_id)
+                        ->where('type_id', $time_type)
+                        ->where('flag', 0);
+                }
+            });
+        })
+        //  ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
+        //     if($minst_id && $court_id)
+        //     {
+        //       $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
+        //     }
+        //     })
+        ->where('archived', operator: 0)
+        ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
+            $q->where('military_affairs.status', 'execute')
+                ->where($stop_type, 1);
+
+        }, function ($q) use ($stop_type) {
+            if ($stop_type == 'open_file') {
+                $q->where('military_affairs.status', 'military');
+            }
+            if ($stop_type == 'case_proof') {
+                $q->where('military_affairs.status', 'case_proof');
+            }
+
+
+        })
+        ->count();
+
+
+//     }
+
+
+    function count_court($court_id, $stop_type, $minst_id, $time_type)
     {
-        return Military_affair::with('installment.client')->with('installment')
-                    ->whereHas('installment.client', function ($q) use($minst_id, $id) {
-                        $q->where('job_type','military')->whereIN('ministry_last',[5,14,27])
-                                ->where('governorate_id', $id);
-                    })
-                    ->whereHas('installment.client.get_ministry', function ($q) use($minst_id) {
-                        $q->where('id', $minst_id);
-                    })
-                ->whereHas('installment', function ($q){
-                    $q->where('finished',0);
-                })
-                ->where('archived',0)
-                ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+
+        return Military_affair::with('installment')->with('installment.client')
+            ->with('status_all')->with('mil_times.salaryType')
+            ->whereHas('installment.client', function ($q) use ($court_id, $stop_type, $minst_id) {
+                if ($stop_type == 'stop_salary') {
+                    $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27]);
+                }
+                if ($court_id != '') {
+                    $q->where('governorate_id', $court_id);
+                }
+
+            })
+            ->whereHas('installment', function ($q) {
+                return $q->where('finished', 0);
+            })
+            ->when($stop_type === "stop_salary", function ($query) use ($time_type, $minst_id, $court_id) {
+                $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id) {
+                    if ($minst_id && $court_id) {
+                        $q->where('type', 'stop_salary')
+                            ->where('ministry', $minst_id)
+                            ->where('type_id', $time_type)
+                            ->where('flag', 0);
+                    }
+                });
+            })
+            //  ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
+            //     if($minst_id && $court_id)
+            //     {
+            //       $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
+            //     }
+            //     })
+            ->where('archived', operator: 0)
+            ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
+                $q->where('military_affairs.status', 'execute')
+                    ->where($stop_type, 1);
+
+            }, function ($q) use ($stop_type) {
+                if ($stop_type == 'open_file') {
+                    $q->where('military_affairs.status', 'military');
+                }
+                if ($stop_type == 'case_proof') {
+                    $q->where('military_affairs.status', 'case_proof');
+                }
+
+
+            })
+            ->count();
+
+
     }
 
+    function count_minstry($id, $stop_type, $minst_id)
+    {
+        return Military_affair::with('installment.client')->with('installment')
+            ->whereHas('installment.client', function ($q) use ($minst_id, $id) {
+                $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27])
+                    ->where('governorate_id', $id);
+            })
+            ->whereHas('installment.client.get_ministry', function ($q) use ($minst_id) {
+                $q->where('id', $minst_id);
+            })
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
+            })
+            ->where('archived', 0)
+            ->where(['military_affairs.status' => 'execute', $stop_type => 1])->count();
+    }
+}

@@ -311,6 +311,13 @@
                                 <span class="hide-menu"> رفع الإجراءات</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('payments') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu"> عمليات الدفع
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
@@ -462,6 +469,8 @@
 
                     </ul>
                 </li>
+               
+                
                 <!-- =================== -->
                 <!-- المنتجات
 -->
@@ -554,6 +563,7 @@
             </li> -->
                     </ul>
                 </li>
+                
             </ul>
     </div>
 </aside>

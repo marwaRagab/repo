@@ -146,13 +146,13 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     // advanced
-    Route::get('/new',[advancedController::class, 'index'])->name('advanced.addnew');
-    Route::get('/notes/{id}',[advancedController::class, 'Notesindex'])->name('advanced.notes');
-    Route::get('/issue/{id}',[advancedController::class, 'Issueindex'])->name('advanced.issue');
-    Route::get('/car/{id}',[advancedController::class, 'Carindex'])->name('advanced.car');
-    Route::get('/myinstall/accept-condition/{id}',[advancedController::class, 'acceptCondationindex'])->name('advanced.acceptCondation');
-    Route::get('/myinstall/accept/{id}',[advancedController::class, 'acceptindex'])->name('advanced.accept');
-    Route::get('/myinstall/reject/{id}',[advancedController::class, 'rejectindex'])->name('advanced.reject');
+    Route::get('/new', [advancedController::class, 'index'])->name('advanced.addnew');
+    Route::get('/notes/{id}', [advancedController::class, 'Notesindex'])->name('advanced.notes');
+    Route::get('/issue/{id}', [advancedController::class, 'Issueindex'])->name('advanced.issue');
+    Route::get('/car/{id}', [advancedController::class, 'Carindex'])->name('advanced.car');
+    Route::get('/myinstall/accept-condition/{id}', [advancedController::class, 'acceptCondationindex'])->name('advanced.acceptCondation');
+    Route::get('/myinstall/accept/{id}', [advancedController::class, 'acceptindex'])->name('advanced.accept');
+    Route::get('/myinstall/reject/{id}', [advancedController::class, 'rejectindex'])->name('advanced.reject');
     Route::get('/new', [advancedController::class, 'index'])->name('advanced.addnew');
     Route::get('/notes/{id}', [advancedController::class, 'Notesindex'])->name('advanced.notes');
     Route::get('/issue/{id}', [advancedController::class, 'Issueindex'])->name('advanced.issue');
@@ -180,8 +180,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/print/print_case_proof/{item}', [CertificateController::class, 'print_case_proof'])->name('print_case_proof');
     Route::get('/print/sticker/{item}', [CertificateController::class, 'print_sticker'])->name(name: 'print_sticker');
     Route::get('/print/issue/{item}/{data_id}', [CertificateController::class, 'print_issue'])->name(name: 'print_issue');
-
-
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -218,6 +216,7 @@ Route::middleware('auth')->group(function () {
     Route::post('military_affairs/stop_bank/save_banks_info', [Stop_bankController::class, 'saveBanksInfo'])->name('stop_bank.save_banks_info');
     Route::get('military_affairs/stop_bank/check_info_in_job/{id?}', [Stop_bankController::class, 'check_info_in_job'])->name('stop_bank.check_info_in_job');
     Route::post('military_affairs/stop_bank/save_jobs_info', [Stop_bankController::class, 'save_jobs_info'])->name('stop_bank.save_jobs_info');
+    Route::post('stop_bank/stop_bank_request_results', [Stop_bankController::class, 'stop_bank_request_results']);
 
     // Route::get('/checking/{id?}', [ CheckingController::class, 'index'])->name('checking');
     // Route::post('/update_actions_up/', [ CheckingController::class, 'update_actions_up']);
@@ -243,7 +242,7 @@ Route::middleware('auth')->group(function () {
     //Route::get('/please_cancel_eqrar/{id?}', [ EqrardainController::class, 'please_cancel_eqrar']);
 
     Route::get('military_affairs_all', [Military_affairsController::class, 'index'])->name('military_affairs');
-    Route::get('military_affairs/stop_car/{governorate_id?}/{stop_car_type?}', [Stop_carController::class, 'index'])->name('stop_car');
+    Route::get('military_affairs/stop_car', [Stop_carController::class, 'index'])->name('stop_car');
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');
     Route::post('military_affairs/stop_salary/request_update/{id}', [Stop_salaryController::class, 'stop_salary_convert'])->name('stop_salary_convert');
@@ -311,8 +310,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/cancel_settlement', [SettlementController::class, 'cancel_settlement']);
     Route::post('/change_states', [Stop_bankController::class, 'change_states']);
     Route::get('/payments', [PaymentsController::class, 'index'])->name('payments');
-    Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice']);
-    Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief']);
+    Route::get('/payments/data', [PaymentsController::class, 'getPaymentsData'])->name('payments.data');
+
+    Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice');
+    Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief'])->name('set_archief.data');
     Route::get('/print_all/{ids}/{seriall}', [PaymentsController::class, 'print_all']);
     Route::get('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all']);
     Route::get('/invoices_installment', [PaymentsController::class, 'invoices_installment_index'])->name('invoices_installment');

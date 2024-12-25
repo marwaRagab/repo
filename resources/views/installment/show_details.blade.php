@@ -50,7 +50,7 @@
                                             @else
                                                 <td>لا يوجد</td>
                                             @endif
-                                            
+
                                         </tr>
                                         <tr>
                                             <th>المقدم الاساسي</th>
@@ -91,18 +91,18 @@
                                           @if (!empty($data["military_affairs_item"]))
                                                 <td>
                                                     {{ number_format(
-                                                        $data["military_affairs_item"]->eqrar_dain_amount 
-                                                        - $done_amount 
-                                                        - $data["military_affairs_item"]->excute_actions_amount 
-                                                        - $data["military_affairs_item"]->excute_actions_check_amount 
-                                                        - $done_amount_settlement, 
+                                                        $data["military_affairs_item"]->eqrar_dain_amount
+                                                        - $done_amount
+                                                        - $data["military_affairs_item"]->excute_actions_amount
+                                                        - $data["military_affairs_item"]->excute_actions_check_amount
+                                                        - $done_amount_settlement,
                                                         3
                                                     ) }}
                                                 </td>
                                             @else
                                             <td>{{  number_format( ((($done_amount + $not_done_amount)) - $Installment->total_first_amount ), '3')}}</td>
                                             @endif
-                                            
+
                                         </tr>
                                         <tr>
                                             <th>مبلغ اقرار الدين</th>
@@ -167,7 +167,7 @@
                                             @else
                                                 <td>لا يوجد</td>
                                             @endif
-                                           
+
                                         </tr>
                                         <tr>
                                             <th>العنوان</th>
@@ -261,17 +261,17 @@
                                     <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-7" role="tab">
                                       <span>  قضايا التنفيذ  </span>
                                     </a>
-                                  </li>      
+                                  </li>
                                   <li class="nav-item">
                                     <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-8" role="tab">
                                       <span>   التدقيق  </span>
                                     </a>
-                                  </li>      
+                                  </li>
                                   <li class="nav-item">
                                     <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" data-bs-toggle="tab" href="#navpill-9" role="tab">
                                       <span>          الشئون القانونية   </span>
                                     </a>
-                                  </li>      
+                                  </li>
                             </ul>
                               <!-- Tab panes -->
                             <div class="tab-content border mt-2">
@@ -286,7 +286,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -303,7 +303,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                                 @endif
@@ -316,7 +316,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -334,7 +334,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -351,7 +351,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                                 @endif
@@ -370,7 +370,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -385,7 +385,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -403,7 +403,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -418,7 +418,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -435,8 +435,8 @@
                                                     <th>النوع </th>
                                                     <th> السنة </th>
                                                     <th>متوسط السعر</th>
-                                                   
-        
+
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -452,7 +452,7 @@
                                                     <td>{{$item->model_year}}</td>
                                                     <td>{{$item->average_price}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                                 @endif
@@ -472,8 +472,8 @@
                                                     <th> المبلغ </th>
                                                     <th> الجهة </th>
                                                     <th>التاريخ</th>
-                                                  
-        
+
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -493,9 +493,9 @@
                                                     <td>{{$item->status == "open" ? $item->opening_amount : $item->closing_amount }}</td>
                                                     <td>{{$item->working_company}}</td>
                                                     <td>{{$item->date}}</td>
-                                                  
-                                                    
-        
+
+
+
                                                 </tr>
                                                 @endforeach
                                                 @endif
@@ -514,7 +514,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -529,7 +529,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -547,7 +547,7 @@
                                                     <th> الساعة </th>
                                                     <th>التاريخ</th>
                                                     <th> الملاحظة</th>
-        
+
                                                 </tr>
                                                 <!-- end row -->
                                             </thead>
@@ -562,7 +562,7 @@
                                                     <td>{{$item->time}}</td>
                                                     <td>{{$item->date}}</td>
                                                     <td>{{$item->note}}</td>
-        
+
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -605,10 +605,10 @@
                                                 <th>الملاحظة</th>
                                                 <th> الساعة</th>
                                                 <th>التاريخ</th>
-                            
-                            
-                            
-                            
+
+
+
+
                                               </tr>
                                               <!-- end row -->
                                             </thead>
@@ -631,7 +631,7 @@
                                                 </td>
                                                 <td>12:00 <span class="d-block">مساءا</span></td>
                                                 <td>29/10/2024</td>
-                            
+
                                               </tr>
                                               @foreach( $data['InstallmentNote'] as $item)
                                                 <tr>
@@ -643,14 +643,14 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('h:i A') }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
 
-                                                    
-        
+
+
                                                 </tr>
                                                 @endforeach
 
                                             </tbody>
                                           </table>
-                                          
+
                                         </div>
                                         <div class="tab-pane p-3" id="navpill-inside-2" role="tabpanel">
                                           <table id="notes2" class="table table-bordered border text-wrap align-middle">
@@ -662,10 +662,10 @@
                                                 <th>الملاحظة</th>
                                                 <th> الساعة</th>
                                                 <th>التاريخ</th>
-                            
-                            
-                            
-                            
+
+
+
+
                                               </tr>
                                               <!-- end row -->
                                             </thead>
@@ -687,7 +687,7 @@
                                                 </td>
                                                 <td>12:00 <span class="d-block">مساءا</span></td>
                                                 <td>29/10/2024</td>
-                            
+
                                               </tr>
                                             </tbody>
                                           </table>
@@ -710,7 +710,7 @@
                                               <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                                 aria-controls="collapseExample">
                                                 <td>
-                                                  
+
                                                 </td>
                                                 <td>
                                                   ملاحظة
@@ -723,7 +723,7 @@
                                                 </td>
                                                 <td>12:00 <span class="d-block">مساءا</span></td>
                                                 <td>29/10/2024</td>
-                            
+
                                               </tr>
                                             </tbody>
                                           </table>
@@ -746,7 +746,7 @@
                                                 <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                                                   aria-controls="collapseExample">
                                                   <td>
-                                                    
+
                                                   </td>
                                                   <td>
                                                     ملاحظة
@@ -759,13 +759,13 @@
                                                   </td>
                                                   <td>12:00 <span class="d-block">مساءا</span></td>
                                                   <td>29/10/2024</td>
-                              
+
                                                 </tr>
                                               </tbody>
                                             </table>
                                           </div>
                                       </div>
-                               
+
                                 </div>
                             </div>
 
@@ -812,12 +812,12 @@
                                         @foreach( $data['get_all_delegations'] as $value)
                                         <tr>
                                             @php
-                                                                                                       
+
                                                                 $created_by = DB::table('users')
                                                                     ->where('id', $value->emp_id)
                                                                     ->first();
-                                                                
-                                                            
+
+
                                             @endphp
                                             <td> {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
                                                                     $value['image_date'] ? 'الايمج' : (
@@ -835,7 +835,7 @@
                                             </td>
                                             <td>
                                                                 @php
-                                                                    
+
                                                                 $day_start = explode(' ', $value->assign_date)[0];
                                                                     if (is_numeric($day_start)) {
                                                                         $day_start = date('Y-m-d', $day_start);
@@ -879,7 +879,7 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
 @endif
 
 
@@ -979,11 +979,11 @@
                                         <!-- end row -->
                                     </thead>
                                     <tbody>
-                                       
+
                                         <!-- start row -->
                                         @foreach( $purchase_orders_array as $item)
-                                        
-                                    
+
+
                                         <tr>
                                              <td>
                                                 {{ $item['product_order']->first()?->mark->name_ar ?? '' }}
@@ -997,9 +997,9 @@
                                             @if (($item['counter'] != "")  || ($item['counter']!= null)  )
                                             <td>{{floatval($item['product_order']->first()?->net_price)* floatval($item['counter'])}}</td>
                                             @else
-                                            <td>{{floatval($item['product_order']->first()?->net_price)}}</td>   
+                                            <td>{{floatval($item['product_order']->first()?->net_price)}}</td>
                                             @endif
-                                           
+
                                         </tr>
                                         @endforeach
 
@@ -1085,7 +1085,7 @@
 
 <!--                                <div class="owl-carousel leadership-carousel owl-theme mt-lg-5 mb-lg-7">-->
 
-                                    
+
 <!--                                    @if ($Installment->contract_1 != Null)-->
 <!--                                        <div class="item">-->
 <!--                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
@@ -1127,7 +1127,7 @@
 <!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
 <!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
 <!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
-                                            
+
 <!--                                            {{-- <button type="button" -->
 <!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_2 }}');"-->
 <!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
@@ -1173,7 +1173,7 @@
 <!--                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">-->
 <!--                                           طباعة-->
 <!--                                           </button> --}}-->
-                                           
+
 <!--                                           <p for="">عقد الساينت 1</p>-->
 <!--                                           <a -->
 <!--                                                     target="_blank"-->
@@ -1234,7 +1234,7 @@
 <!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
 <!--                                        <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">-->
 <!--                                        <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">-->
-                                           
+
 <!--                                            {{-- <button type="button" -->
 <!--                                                 onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"-->
 <!--                                                class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">-->
@@ -1425,7 +1425,7 @@
 <!--                                        </div>-->
 <!--                                    </div>-->
 <!--                                    @endif-->
-                                    
+
 <!--                                    @if ($img_Client->type == "cid_img_2")-->
 <!--                                    <div class="item">-->
 <!--                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">-->
@@ -1517,7 +1517,7 @@
 <!--                                                </button> --}}-->
 <!--                                                <p for="">الرقم المدنى  </p>-->
 <!--                                                <a -->
-                                                   
+
 <!--                                                   target="_blank"-->
 <!--                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/test_vr/{{$img_Client->path   }}'); return false;"-->
 <!--                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"-->
@@ -1537,21 +1537,21 @@
 <!--                                    </div>-->
 <!--                                    @endif-->
 
-                                        
-<!--                                    @endforeach-->
-                                                                      
-                                   
 
-                                    
+<!--                                    @endforeach-->
+
+
+
+
 
 <!--                                  </div>-->
 
 <!--                            </div>-->
 
-                           
+
 <!--                        </div>-->
 <!--                    </div>-->
-                    
+
 
 <!--                </div>-->
 <!--            </div>-->
@@ -1584,25 +1584,25 @@
 
                                 <div class="owl-carousel leadership-carousel owl-theme mt-lg-5 mb-lg-7">
 
-                                    
+
                                     @if ($Installment->contract_1 != Null)
                                         <div class="item">
                                             <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                             <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                             <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                                {{-- <button type="button" 
+                                                {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button>
                                                  --}}
                                                  <p for="">العقد 1</p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_1 }}', 'https://electron-kw.com/{{$Installment->contract_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1610,7 +1610,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1}}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1626,19 +1626,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            
-                                            {{-- <button type="button" 
+
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
                                                 <p for="">العقد 2</p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$Installment->contract_2}}', 'https://electron-kw.com/{{ $Installment->contract_2 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1646,7 +1646,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_2 }}', 'https://electron-kw.com/{{ $Installment->contract_2 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1662,19 +1662,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                             onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                            تحميل
                                            </button>
-                                           <button type="button" 
+                                           <button type="button"
                                             onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                            طباعة
                                            </button> --}}
-                                           
+
                                            <p for="">عقد الساينت 1</p>
-                                           <a 
+                                           <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1682,7 +1682,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_1 }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_1 }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1698,18 +1698,18 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                             onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                            class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                            تحميل
                                            </button>
-                                           <button type="button" 
+                                           <button type="button"
                                             onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2 }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                            class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                            طباعة
                                            </button> --}}
                                            <p for="">عقد الساينت 2</p>
-                                           <a 
+                                           <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_2  }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1717,7 +1717,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->contract_cinet_2  }}', 'https://electron-kw.com/{{ $Installment->contract_cinet_2  }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1733,19 +1733,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                           
-                                            {{-- <button type="button" 
+
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img }}', 'https://electron-kw.com/{{ $Installment->contract_1 }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
                                                 <p for="">صورة استسلام المنتجات</p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/{{ $Installment->prods_recieved_img   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1753,7 +1753,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->prods_recieved_img   }}', 'https://electron-kw.com/{{ $Installment->prods_recieved_img   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1773,18 +1773,18 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <a 
+                                            {{-- <a
                                                 id="downloadLink"
-                                                href="https://electron-kw.net/{{ $img_Client->path }}" 
+                                                href="https://electron-kw.net/{{ $img_Client->path }}"
                                                 onclick="handleRedirect(event, 'https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                 title="Download the file from the primary or fallback server.">
                                                 تحميل
                                             </a>
 
-                                            <a 
+                                            <a
                                                 id="printLink"
-                                                href="https://electron-kw.net/{{ $img_Client->path }}" 
+                                                href="https://electron-kw.net/{{ $img_Client->path }}"
                                                 onclick="handlePrint(event, 'https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                 title="Print the file from the primary or fallback server.">
@@ -1793,7 +1793,7 @@
 
                                             <p for="">هويتى</p>
                                             {{-- <br> --}}
-                                                <a 
+                                                <a
                                                     target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1801,8 +1801,8 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
-                                                    target="_blank" 
+                                                <a
+                                                    target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1820,19 +1820,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
 
                                                 <p for="">صورة هوية العمل</p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1840,8 +1840,8 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
-                                                     target="_blank" 
+                                                <a
+                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
                                                     title="Print the file from the primary or fallback server.">
@@ -1857,19 +1857,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
 
                                                 <p for="">شهادة الراتب  </p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1877,7 +1877,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1893,19 +1893,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
 
                                                 <p for="">صورة  البطاقة المدنية وجه</p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1913,7 +1913,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1924,25 +1924,25 @@
                                         </div>
                                     </div>
                                     @endif
-                                    
+
                                     @if ($img_Client->type == "cid_img_2")
                                     <div class="item">
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
 
                                                 <p for=""> صورة البطاقة المدنية ضهر </p>
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -1950,7 +1950,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -1967,27 +1967,27 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
 
                                                 <p for="">عقد الساينت</p>
-                                                <a 
-                                                    target="_blank" 
+                                                <a
+                                                    target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
                                                     title="Download the file from the primary or fallback server.">
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                      target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -2004,19 +2004,19 @@
                                         <div class="meet-our-team position-relative rounded-4 overflow-hidden">
                                         <img src="{{ asset('assets/images/PDF_file_icon.png') }}" alt="PDF Thumbnail">
                                         <div class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
-                                            {{-- <button type="button" 
+                                            {{-- <button type="button"
                                                  onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm">
                                                 تحميل
                                                 </button>
-                                                <button type="button" 
+                                                <button type="button"
                                                  onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path }}', 'https://electron-kw.com/{{ $img_Client->path }}');"
                                                 class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm">
                                                 طباعة
                                                 </button> --}}
                                                 <p for="">الرقم المدنى  </p>
-                                                <a 
-                                                   
+                                                <a
+
                                                    target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{$img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
@@ -2024,7 +2024,7 @@
                                                     تحميل
                                                 </a>
 
-                                                <a 
+                                                <a
                                                     target="_blank"
                                                     onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->path   }}', 'https://electron-kw.com/{{ $img_Client->path   }}'); return false;"
                                                     class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
@@ -2036,21 +2036,21 @@
                                     </div>
                                     @endif
 
-                                        
-                                    @endforeach
-                                                                      
-                                   
 
-                                    
+                                    @endforeach
+
+
+
+
 
                                   </div>
 
                             </div>
 
-                           
+
                         </div>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -2091,7 +2091,7 @@
                                     </thead>
                                     <tbody>
                                         <!-- start row -->
-                                        @php $i=1; $the_balance = $total_madionia1 
+                                        @php $i=1; $the_balance = $total_madionia1
                                         ; @endphp
                                         <tr>
                                             <td>{{ $i }}</td>
@@ -2204,7 +2204,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                
+
                                                 <a href="{{ asset( $military_affairs_amount->img_dir ?? '/') }}"
                                                     target=" _blank">
                                                     <span class="btn btn-info"> صورة
@@ -3081,7 +3081,7 @@
 
 
                                                 <h6>{{ $month->payment_date }}</h6>
-                                                
+
                                                 <h6><a href="{{ asset($month->img_dir ?? '/')}}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
@@ -3111,107 +3111,7 @@
     </div>
 </div>
 @endif
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<script>
-    async function checkFileAndRedirect(primaryUrl, fallbackUrl) {
-        console.log("Checking primary URL:", primaryUrl);
-
-        const primaryReachable = await checkImage(primaryUrl);
-        // alert(primaryReachable);
-        if (primaryReachable) {
-            console.log("Primary URL exists, redirecting...");
-            // window.location.href = primaryUrl; // Uncomment to enable redirection
-            window.open(primaryUrl, '_blank');
-        } else {
-            console.log("Primary URL not found, redirecting to fallback...");
-            // window.location.href = fallbackUrl; // Uncomment to enable redirection
-            window.open(fallbackUrl, '_blank');
-            
-            
-        }
-      
-    }
-
-    async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
-
-        const primaryReachable = await checkImage(primaryUrl);
-        if (primaryReachable) {
-            console.log("Primary URL exists, redirecting...");
-            // window.location.href = primaryUrl; // Uncomment to enable redirection
-            const newWindow = window.open(primaryUrl, '_blank');
-            newWindow.onload = () => newWindow.print();
-        } else {
-            console.log("Primary URL not found, redirecting to fallback...");
-            // window.location.href = fallbackUrl; // Uncomment to enable redirection
-            const newWindow = window.open(fallbackUrl, '_blank');
-            newWindow.onload = () => newWindow.print();
-        }
-
-
-    }
-
-    // function checkImage(url) {
-    //    return new Promise((resolve) => {
-    //        const img = new Image();
-    //        img.onload = () => {
-    //            console.log('Image is accessible:', url);
-    //            resolve(true);
-    //        };
-    //        img.onerror = () => {
-    //            console.log('Image is not accessible:', url);
-    //            resolve(false);
-    //        };
-    //        img.src = url;
-    //    });
-    // }
-
-    function checkImage(url) {
-        return new Promise((resolve) => {
-            // Check file extension
-            const extension = url.split('.').pop().toLowerCase();
-            // alert(extension);
-            
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
-                // Check if the URL is a valid image
-                const img = new Image();
-                img.onload = () => {
-                    console.log('The file is an accessible image:', url);
-                    resolve(true);
-                };
-                img.onerror = () => {
-                    console.log('The file is not an accessible image:', url);
-                    resolve(false);
-                };
-                img.src = url;
-            } else if (extension === 'pdf') {
-               
-                const substring = "uploads/";
-                if (url.includes(substring)) {
-                    console.log("The URL contains the substring:", substring);
-                    resolve(true);  // URL contains the substring
-                } else {
-                    console.log("The URL does not contain the substring:", substring);
-                    // return false;  // URL does not contain the substring
-                    resolve(false);
-                }
-           
-                
-            } else {
-                console.log('Unknown file type:', url);
-                // resolve('unknown');
-                resolve(false);
-            }
-        });
-    }
-    
-    
-
-    
-
-
-
-</script>
 
 <script>
 $('#checkAll').click(function(event) {

@@ -7,7 +7,7 @@
     <td>
         <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
         <br>
-        {{$item->different_date}}
+        {{$item->different_date}} يوم
     </td>
     <td>{{$item->installment->client->name_ar}}</td>
 
@@ -89,34 +89,75 @@
         $all_notes=get_all_notes('execute_alert',$item->id);
         $all_actions=get_all_actions($item->id);
         $get_all_delegations = get_all_delegations($item->id);
-    
+
         @endphp
-        <a class="btn btn-success me-6 my-2"
 
-           href="{{url('installment/show-installment/'.$item->installment->id)}}">
-            التفاصيل</a>
+        <div class="btn-group dropup mb-6 me-6">
 
-        <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
-                data-bs-target="#open-details-{{$item->id}}">
-            الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
-        </button>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                الإجراءات
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li>
+                    <a class="btn btn-success rounded-0 w-100 mt-2"
+                       href="{{ url('installment/show-installment/' . $item->installment->id) }}">
+                        التفاصيل</a>
+
+
+                </li>
+                <li>
+
+
+
+                    <button class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                            data-bs-target="#open-details-{{$item->id}}">
+                        الملاحظات <span class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
+                    </button>
+
+
+
+                </li>
+                @php
+                    $new_a3lan= $item->jalasaat_all->where('status',NULL)->first();
+                @endphp
+
+                <li>
+
+
+
+
+                    @if(isset($new_a3lan))
+                        <button class="btn btn-success  rounded-0 w-100 mt-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                            إيداع  النتيجة</button>
+                    @else
+                        <button class="btn btn-success  rounded-0 w-100 mt-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                            إيداع الإعلان أولا</button>
+                    @endif
+
+                </li>
+
+
+
+
+
+            </ul>
+
+
+
+
+            <!-- /.modal-dialog -->
+
+        </div>
+
+
 
 
         @include('military_affairs.Execute_alert.print.print')
-        
-
-        @php
-        $new_a3lan= $item->jalasaat_all->where('status',NULL)->first();
-        @endphp
 
 
-        @if(isset($new_a3lan))
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
-            إيداع  النتيجة</button>
-        @else
-        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal" data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
-            إيداع الإعلان أولا</button>
-        @endif
+
 
         <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -147,7 +188,7 @@
                                                                    href="#actions-{{$item->id}}" role="tab">
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
-                                                            </li>                
+                                                            </li>
 
                             </ul>
                             <!-- Tab panes -->
@@ -279,7 +320,7 @@
                                                                 $created_by = DB::table('users')
                                                                     ->where('id', $value->created_by)
                                                                     ->first();
-                                                                
+
                                                             @endphp
                                                         <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                         <td> @if ($value->timesType)
@@ -305,13 +346,13 @@
                                                                     $value->date_end != '0000-00-00 00:00:00'
                                                                 ) {
                                                                     $day_end = explode(' ', $value->date_end)[0];
-                                                                    $different_day = get_different_dates(
+                                                                    $different_day = get_different_date(
                                                                         $day_start,
                                                                         $day_end,
                                                                     );
                                                                 } else {
                                                                     $day_end = 'لم تنتهى';
-                                                                    $different_day = get_different_dates(
+                                                                    $different_day = get_different_date(
                                                                         $day_start,
                                                                         now(),
                                                                     );
@@ -323,7 +364,7 @@
                                                             {{ $day_end }}
                                                         </td>
                                                         <td>{{ $different_day }}</td>
-                                                        
+
 
                                                     </tr>
                                                     @endforeach
@@ -362,7 +403,7 @@
                                                                             $created_by = DB::table('users')
                                                                                 ->where('id', $value->emp_id)
                                                                                 ->first();
-                                                                            
+
                                                                         @endphp
                                                                        <td>
                                                                             {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -381,12 +422,12 @@
                                                                         </td>
                                                                         <td>
                                                                             @php
-                                                                                
+
                                                                             $day_start = explode(' ', $value->assign_date)[0];
                                                                                 if (is_numeric($day_start)) {
                                                                                     $day_start = date('Y-m-d', $day_start);
                                                                                 }
-            
+
                                                                                 // Check the end date
                                                                                 if ($value->end_date && $value->end_date != '') {
                                                                                     $day_end = explode(' ', $value->end_date)[0];
@@ -401,14 +442,14 @@
                                                                                 }
                                                                             @endphp
                                                                             {{ $day_start }}
-            
+
                                                                         </td>
                                                                         <td>{{ $day_end }}</td>
-            
+
                                                                         <td>
                                                                             {{ $different_day }}
                                                                         </td>
-            
+
                                                                     </tr>
                                                                 @endforeach
                                                                 @else
@@ -421,7 +462,7 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            
+
                             </div>
                         </div>
                         <div class="modal-footer d-flex ">
