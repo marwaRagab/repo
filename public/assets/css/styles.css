@@ -51906,16 +51906,24 @@ body pre[class*=language-] {
     transition: .3s
 }
 
-.meet-our-team:hover .leadership-card {
+/* .meet-our-team:hover .leadership-card {
     bottom: 0
-}
+} */
 
 .leadership-card {
-    position: absolute;
-    bottom: -100%;
-    transition: all .3s
+    /* position: absolute;
+    bottom: 0;
+    transition: all .3s */
 }
-
+.meet-our-team{
+    border: 1px solid #ddd;
+    padding-top: 1.5rem;
+}
+.meet-our-team img {
+    height: 125px;
+    object-fit: contain;
+    width: 100%;
+}
 .banner-image {
     min-width: 1300px;
     max-height: 700px;
