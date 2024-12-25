@@ -18,23 +18,22 @@
         }
     @endphp
     <div class="d-flex flex-wrap ">
-        <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ !$gov && !$certificate_id && !$ministry ? 'active' : '' }}">
             العدد الكلي ({{count($items)}})
         </a>
 
         @foreach($courts as $court)
 
-            <a href="{{route('Certificate',array('governorate_id' => $court->id))}}"
+            <a href="{{route('Certificate',array('governorate_id' => $court->id))}} "
 
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}} {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}
-            </a>
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} </a>
 
         @endforeach
     </div>
     @if(Request::has('governorate_id'))
         <div class="d-flex flex-wrap ">
             <a href="{{route('Certificate',array('governorate_id' =>$gov))}}"
-               class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  ">
+               class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ !$ministry && !$certificate_id ? 'active' : '' }}">
                 العدد الكلي ({{count($items)}})
             </a>
 
@@ -51,14 +50,14 @@
 
     @if(Request::has('ministry_id'))
         <div class="d-flex flex-wrap ">
-            <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+            <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ !$certificate_id ? 'active' : '' }}">
                 العدد الكلي ({{count($items)}})
             </a>
 
             @foreach($Certificate_types as $Certificate_type)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
-                   class="btn-filter {{$Certificate_type->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->id ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
+                   class="btn-filter {{$Certificate_type->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
                 </a>
 
             @endforeach
@@ -304,7 +303,7 @@
                                                                             @endphp
 
 
-                                                                            <td>{{formatTime($time)}}}}<span
+                                                                            <td>{{formatTime($time)}}<span
                                                                                     class="d-block"></span></td>
                                                                             <td>{{$day}}</td>
 
@@ -816,7 +815,11 @@
                                             class="badge ms-auto text-bg-secondary">{{count($all_notes)}}</span>
                                     </button>
 
-                                                           <form class="mega-vertical"
+                                    <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
+                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                            <div class="modal-content">
+                                                <form class="mega-vertical"
                                                       action="{{url('add_notes')}}" method="post"
                                                       enctype="multipart/form-data">
                                                     @csrf
@@ -841,11 +844,12 @@
                                                                 </a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" data-bs-toggle="tab" href="#actions-{{ $item->id }}"
-                                                                    role="tab">
+                                                                <a class="nav-link" data-bs-toggle="tab"
+                                                                   href="#actions-{{$item->id}}" role="tab">
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
+
                                                         </ul>
                                                         <!-- Tab panes -->
 
@@ -880,7 +884,6 @@
                                                                             aria-controls="collapseExample">
                                                                             <td>
                                                                                 {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
-
                                                                             </td>
                                                                             <td>
                                                                                 @php
@@ -898,6 +901,7 @@
                                                                             <td>
                                                                                 <p>
                                                                                     {{$all_note->note}}
+
                                                                                 </p>
                                                                             </td>
                                                                             @php
@@ -922,7 +926,6 @@
 
                                                                     <input type="hidden" name="military_affairs_id"
                                                                            value="{{ $item->id }}">
-
 
 
                                                                     <input type="hidden" name="type"
@@ -1009,13 +1012,13 @@
                                                                                     $value->date_end != '0000-00-00 00:00:00'
                                                                                 ) {
                                                                                     $day_end = explode(' ', $value->date_end)[0];
-                                                                                    $different_day = get_different_dates(
+                                                                                    $different_day = get_different_date(
                                                                                         $day_start,
                                                                                         $day_end,
                                                                                     );
                                                                                 } else {
                                                                                     $day_end = 'لم تنتهى';
-                                                                                    $different_day = get_different_dates(
+                                                                                    $different_day = get_different_date(
                                                                                         $day_start,
                                                                                         now(),
                                                                                     );
@@ -1035,79 +1038,80 @@
                                                                     </tbody>
                                                                 </table>
                                                             </div>
-                                                            <div class="tab-pane p-3" id="actions-{{ $item->id }}" role="tabpanel">
+                                                            <div class="tab-pane p-3" id="actions-{{$item->id}}"
+                                                                 role="tabpanel">
                                                                 <table id="notes2"
-                                                                    class="table table-bordered border text-wrap align-middle">
+                                                                       class="table table-bordered border text-wrap align-middle">
                                                                     <thead>
-                                                                        <!-- start row -->
-                                                                        <tr>
-                                                                            <th>القسم</th>
-                                                                            <th>المسئول</th>
-                                                                            <th>تاريخ البدء</th>
-                                                                            <th>تاريخ الانتهاء</th>
-                                                                            <th> عدد الايام</th>
-                                                                        </tr>
-                                                                        <!-- end row -->
+                                                                    <!-- start row -->
+                                                                    <tr>
+                                                                        <th>القسم</th>
+                                                                        <th>المسئول</th>
+                                                                        <th>تاريخ البدء</th>
+                                                                        <th>تاريخ الانتهاء</th>
+                                                                        <th> عدد الايام</th>
+                                                                    </tr>
+                                                                    <!-- end row -->
                                                                     </thead>
                                                                     <tbody>
-                                                                        <!-- start row -->
-                                                                        @foreach ($get_all_delegations as $value)
-                                                                            <tr data-bs-toggle="collapse"
-                                                                                data-bs-target="#collapseExample" aria-expanded="false"
-                                                                                aria-controls="collapseExample">
-                                                                                @php
-                                                                                    $created_by = DB::table('users')
-                                                                                        ->where('id', $value->emp_id)
-                                                                                        ->first();
+                                                                    <!-- start row -->
+                                                                    @foreach ($get_all_delegations as $value)
+                                                        <tr data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseExample" aria-expanded="false"
+                                                            aria-controls="collapseExample">
+                                                            @php
+                                                                $created_by = DB::table('users')
+                                                                    ->where('id', $value->emp_id)
+                                                                    ->first();
 
-                                                                                @endphp
-                                                                               <td>
-                                                                                    {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
-                                                                                        $value['image_date'] ? 'الايمج' : (
-                                                                                        $value['case_proof_date'] ? 'إثبات الحالة' : (
-                                                                                        $value['travel_date'] ? 'منع السفر' : (
-                                                                                        $value['car_date'] ? 'حجز السيارات' : (
-                                                                                        $value['bank_date'] ? 'حجز بنوك' : (
-                                                                                        $value['salary_date'] ? 'حجز راتب' : (
-                                                                                        $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
-                                                                                        )))))))
-                                                                                    }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    {{ $created_by->name_ar ?? 'لا يوجد' }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    @php
+                                                            @endphp
+                                                           <td>
+                                                                {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                    $value['image_date'] ? 'الايمج' : (
+                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
+                                                                    $value['travel_date'] ? 'منع السفر' : (
+                                                                    $value['car_date'] ? 'حجز السيارات' : (
+                                                                    $value['bank_date'] ? 'حجز بنوك' : (
+                                                                    $value['salary_date'] ? 'حجز راتب' : (
+                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
+                                                                    )))))))
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                            </td>
+                                                            <td>
+                                                                @php
 
-                                                                                    $day_start = explode(' ', $value->assign_date)[0];
-                                                                                        if (is_numeric($day_start)) {
-                                                                                            $day_start = date('Y-m-d', $day_start);
-                                                                                        }
+                                                                $day_start = explode(' ', $value->assign_date)[0];
+                                                                    if (is_numeric($day_start)) {
+                                                                        $day_start = date('Y-m-d', $day_start);
+                                                                    }
 
-                                                                                        // Check the end date
-                                                                                        if ($value->end_date && $value->end_date != '') {
-                                                                                            $day_end = explode(' ', $value->end_date)[0];
-                                                                                            if (is_numeric($day_end)) {
-                                                                                                $day_end = date('Y-m-d', $day_end);
-                                                                                            }
-                                                                                            $different_day = get_different_date($day_start, $day_end);
-                                                                                        } else {
-                                                                                            // Use current timestamp if end_date is missing
-                                                                                            $day_end = 'لم تنتهى';
-                                                                                            $different_day = get_different_date($day_start, now()->timestamp);
-                                                                                        }
-                                                                                    @endphp
-                                                                                    {{ $day_start }}
+                                                                    // Check the end date
+                                                                    if ($value->end_date && $value->end_date != '') {
+                                                                        $day_end = explode(' ', $value->end_date)[0];
+                                                                        if (is_numeric($day_end)) {
+                                                                            $day_end = date('Y-m-d', $day_end);
+                                                                        }
+                                                                        $different_day = get_different_date($day_start, $day_end);
+                                                                    } else {
+                                                                        // Use current timestamp if end_date is missing
+                                                                        $day_end = 'لم تنتهى';
+                                                                        $different_day = get_different_date($day_start, now()->timestamp);
+                                                                    }
+                                                                @endphp
+                                                                {{ $day_start }}
 
-                                                                                </td>
-                                                                                <td>{{ $day_end }}</td>
+                                                            </td>
+                                                            <td>{{ $day_end }}</td>
 
-                                                                                <td>
-                                                                                    {{ $different_day }}
-                                                                                </td>
+                                                            <td>
+                                                                {{ $different_day }}
+                                                            </td>
 
-                                                                            </tr>
-                                                                        @endforeach
+                                                        </tr>
+                                                    @endforeach
 
                                                                     </tbody>
                                                                 </table>
@@ -1125,6 +1129,12 @@
                                                         </button>
                                                     </div>
                                                 </form>
+
+                                            </div>
+                                            <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
 
                                             </div>
                                             <!-- /.modal-content -->

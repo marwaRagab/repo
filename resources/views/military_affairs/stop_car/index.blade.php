@@ -49,9 +49,79 @@
                         <th>رقم المعاملة </th>
                         <th>اسم العميل</th>
                         <th> المحكمة</th>
+                        <?php if ($stop_car_type  == 'stop_car_police_station') {?>
+                            <th>
+                                اسم المخفر
+                            </th>
+
+                            <?php }?>
                         <th>المبلغ </th>
                         <th> الرقم الالي </th>
                         <th>تحديد مسئول</th>
+                        <?php if ($stop_car_type   == 'stop_car_request') {?>
+                            <th> طلب حجز</th>
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_amr_hajz') {?>
+                            <th> أمر حجز</th>
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_info') {?>
+                            <th>
+                                بيانات الاستعلام
+                            </th>
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_catch') {?>
+                            <th>
+                                كتاب الأمن العام
+                            </th>
+                            <?php }?>
+
+                            <?php if ($stop_car_type == 'stop_car_police') {?>
+                            <th>
+                                كتاب المديرية
+                            </th>
+
+                            <?php }?>
+
+                            <?php if ($stop_car_type == 'stop_car_police_station') {?>
+
+
+                            <th>
+                                مراجعة المخفر
+                            </th>
+
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_doing') {?>
+                            <th>
+                                تاريخ
+                                كتاب المديرية
+                            </th>
+                            <th>
+                                ادخال السيارات الحجز
+
+                            </th>
+                            <?php }?>
+
+                            <?php if ($stop_car_type == 'stop_car_finished') {?>
+                            <th>
+                                إرسال SMS
+                            </th>
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_cancel_request') {?>
+                            <th>
+                                رفع حجز السيارات
+                            </th>
+
+
+
+                            <?php }?>
+                            <?php if ($stop_car_type == 'stop_car_cancel') {?>
+                            <th>
+                                تفاصيل رفع الحجز
+                            </th>
+
+
+
+                            <?php }?>
 
                         <th> الإجراءات </th>
 
@@ -79,6 +149,28 @@
                                 <br />
                                 @include('military_affairs.Execute_alert.print.print')
                             </td>
+
+                            <?php if ($stop_car_type == 'stop_car_police_station') {?>
+                            <td>
+                                {
+
+                                    mRender: function(data, type, row) {
+
+                                        if (row[23]) {
+                                            var bindHtml = ' <span> ' + row[23] + ' </span>';
+
+                                        } else {
+                                            var bindHtml = ' <span> ' + 'لايوجد' + ' </span>';
+
+                                        }
+
+                                        return bindHtml;
+                                    }
+
+                                },
+                            </td>
+                                <?php }?>
+
                             <td>{{ $item->eqrar_dain_amount }}</td>
                             <td>{{ $item->issue_id }}</td>
 
