@@ -1,129 +1,110 @@
 <div class="card">
-
-
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-        <h4 class="card-title mb-0"> عمليات الدفع </h4>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="form-group ">
-                <!-- <label for="dateSelect" class="form-label">اختر التاريخ</label> -->
-                <select class="form-select" id="dateSelect"  name="month" onchange="addUrlParameter2('month',this.value )">
-                    <option selected disabled>اختر التاريخ</option>
-                    @foreach( $dates as $date)
-                        <option value="{{$date}}"  {{ request()->has('month') ?   request()->get('month')  == $date  ?  'selected' : '' : '' }}   >{{$date}}</option>
-
-                             @endforeach
-
-
-                    <!-- Add more dates as needed -->
-                </select>
-            </div>
-
-        </div>
+        <h4 class="card-title mb-0">عمليات الدفع</h4>
+        <div class="form-group">
+    <select class="form-select" id="dateSelect" name="month">
+        <option selected disabled>اختر التاريخ</option>
+        @foreach($dates as $date)
+            <option value="{{ $date }}" {{ request()->get('month') == $date ? 'selected' : '' }}>
+                {{ $date }}
+            </option>
+        @endforeach
+    </select>
+</div>
     </div>
+
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table class="table table-striped table-bordered border text-nowrap align-middle">
+            <table id="all-student1" class="table table-bordered border text-nowrap align-middle">
                 <thead class="thead-dark">
-                <tr>
-                    <th>م</th>
-                    <th>اسم العميل</th>
-                    <th>المبلغ</th>
-                    <th>طريقة الدفع</th>
-                    <th>رقم العملية</th>
-                    <th>حالة الطباعة</th>
-                    <th>التفاصيل</th>
-                    <th>التاريخ</th>
-                    <th>طباعة</th>
-                    <th>تحويل للأرشيف</th>
-                    <th>
-                        <input type="checkbox" class="form-check-input" name="action[]"
-                               value="0" id="all">
-                    </th>
-                </tr>
+                    <tr>
+                        <th>م</th>
+                        <th>اسم العميل</th>
+                        <th>المبلغ</th>
+                        <th>طريقة الدفع</th>
+                        <th>رقم العملية</th>
+                        <th>حالة الطباعة</th>
+                        <th>التفاصيل</th>
+                        <th>التاريخ</th>
+                        <th>طباعة</th>
+                        <th>تحويل للأرشيف</th>
+                        <th>
+                            <input type="checkbox" class="form-check-input" id="select-all">
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                @php
-                    $serial_no='';
+                    @php
+                    $total_items = count($items);
+                    $current_month_year = date('Y') . date('m');
+                    @endphp
 
-                @endphp
-
-                @foreach($items as $item)
+                    @foreach($items as $item)
+                    @php
+                    $serial_no = $current_month_year . ($total_items - $loop->index);
+                    $isPrinted = $item->print_status == 'done';
+                    @endphp
+                    <tr>
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td>{{ $item->installment->client->name_ar ?? 'لايوجد' }}</td>
+                        <td>{{ $item->amount }}</td>
+                        <td>{{ $item->pay_method }}</td>
+                        <td>{{ $serial_no }}</td>
+                        <td>
+                            <span class="{{ $isPrinted ? 'text-success' : 'text-danger' }}">
+                                {{ $isPrinted ? 'تم الطباعة' : 'لم يتم الطباعة' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url('installment.show-installment/'.$item->installment_id) }}">
+                                {{ $item->description }}
+                            </a>
+                        </td>
+                        <td>{{ $item->date }}</td>
+                        <td>
+                            @if($isPrinted)
+                            <a style="text-decoration: line-through; pointer-events: none"
+                                class="btn btn-primary btn-sm rounded-pill">طباعة</a>
+                            @else
+                            <a class="btn btn-primary btn-sm rounded-pill"
+                                href="{{ url('print_invoice/'.$item->id.'/'.$item->installment_id.'/'.$item->install_month_id.'/'.$serial_no) }}">
+                                طباعة
+                            </a>
+                            @endif
+                        </td>
+                        <td>
+                            @if($isPrinted)
+                            <a class="btn btn-danger btn-sm rounded-pill"
+                                href="{{ url('set_archief/'.$item->id) }}">تحويل للأرشيف</a>
+                            @else
+                            <button class="btn btn-secondary btn-sm rounded-pill" disabled>
+                                لم يتم الطباعة
+                            </button>
+                            @endif
+                        </td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" name="action[]" value="{{ $item->id }}"
+                                id="{{ $serial_no }}">
+                        </td>
+                    </tr>
+                    @endforeach
 
                     <tr>
-                        @php
-                            $serial_no=count($items) - $loop->index  ;
-                            $serial_no=date('Y').date('m') .$serial_no;
-                        @endphp
-                        <td> {{ $loop->index + 1 }}</td>
-                        @if(isset($item->installment->client))
-                            <td> {{$item->installment->client->name_ar}}</td>
-                        @else
-                            <td>لايوجد</td>
-                        @endif
-
-                        <td>  {{$item->amount}}</td>
+                        <td colspan="8"></td>
                         <td>
-
-                            {{$item->pay_method}}</td>
-                        <td>{{$serial_no}}</td>
-                        @if($item->print_status=='done')
-                            <td><span class="text-success"> تم  الطباعة</span></td>
-                        @else
-                            <td><span class="text-danger">لا يتم الطباعة</span></td>
-                        @endif
-                        @php
-
-                            @endphp
-
-                        <td>
-                            <a href="{{url('installment.show-installment/'.$item->installment_id)}}">{{$item->description}}</a>
-                        </td>
-
-                        <td>{{$item->date}}</td>
-                        <td>
-                            @if($item->print_status=='done')
-
-                                <a style="text-decoration: line-through; pointer-events: none "
-                                   class="btn btn-primary btn-sm rounded-pill" href="#">طباعة</a>
-                            @else
-
-                                <a class="btn btn-primary btn-sm rounded-pill" href="{{url('print_invoice/'.$item->id.'/'
-.$item->installment_id.'/'.$item->install_month_id .'/'.$serial_no )}}">طباعة</a>
-                            @endif
-
+                            <button class="btn btn-primary btn-sm rounded-pill" value="1" onclick="handleBulkAction(this)">
+                                طباعة الكل
+                            </button>
                         </td>
                         <td>
-                            @if($item->print_status=='done')
-                            <a class="btn btn-danger btn-sm rounded-pill"  href="{{url('set_archief/'.$item->id)}}">تحويل
-                                للأرشيف
-                            </a>
-
-                            @else
-                                <button class="btn btn-secondary btn-sm rounded-pill">
-                                    لم يتم   الطباعة
-                                </button>
-                            @endif
+                            <button class="btn btn-secondary btn-sm rounded-pill" value="2" onclick="handleBulkAction(this)">
+                                تحويل الجميع للأرشيف
+                            </button>
                         </td>
-                        <td><input type="checkbox" class="form-check-input" name="action[]"
-                                   value="{{$item->id}}"  id={{$serial_no}} ></td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" id="select-all-bottom">
+                        </td>
                     </tr>
-
-                @endforeach
-                <tr>
-                    <td colspan="8"></td>
-                    <td>
-                        <button class="btn btn-primary btn-sm rounded-pill" value="1"   onclick="valthisform(this);" > طباعة الكل</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm rounded-pill"  value="2"  onclick="valthisform(this);">
-                            تحويل الجميع
-                            للأرشيف
-                        </button>
-                    </td>
-                    <td><input type="checkbox" class="form-check-input"  name="action[]"
-                               value="0" id="one"></td>
-                </tr>
-
                 </tbody>
             </table>
         </div>
@@ -133,123 +114,76 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script>
-
-
-    function addUrlParameter2(name, value) {
-        var searchParams = new URLSearchParams(window.location.search)
-        searchParams.set(name, value)
-        window.location.search = searchParams.toString()
-    }
-    var allserials = [];
-
-
-    function valthisform(id) {
-
-        var checkboxs = document.getElementsByName("action[]");
-
-        var okay = false;
-        for (var i = 0, l = checkboxs.length; i < l; i++) {
-
-            if (checkboxs[i].checked) {
-                okay = true;
-                break;
-            }
-        }
-        if (!okay) {
-            alert("يجب اختيار عميل واحد على الاقل");
-            //  location.reload();
-            // event.preventDefault();
-        } else {
-
-            var radios = $('input[type=checkbox]:checked');
-            var value = 0; var arr=[]; var arr_arch = [];
-            for (var i = 0; i < radios.length; i++) {
-                if (radios[i].type === 'checkbox' && radios[i].checked) {
-                    // get value, set checked flag or do whatever you need to
-                    // value = Number(value) + Number(radios[i].value);
-
-                    var elem = document.getElementById(radios[i].id);
-
-                    var typeId_print = elem.getAttribute('data-print');
-                    console.log(typeId_print);
-
-                    if(!isNaN(Number(radios[i].value)))
-                    {
-                        if(typeId_print != 'done'){
-                            arr.push(Number(radios[i].value));
-                            allserials.push(Number(radios[i].id));
-                        }else {
-                            arr_arch.push(Number(radios[i].value));
-                        }
-
-                    }
+    $(document).ready(function () {
+        $('#all-student1').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '{{ route('payments.data') }}',
+                data: function (d) {
+                    d.month = $('#dateSelect').val(); // Pass selected month
                 }
-
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'installment.client.name_ar', name: 'installment.client.name_ar', defaultContent: 'لايوجد' },
+                { data: 'amount', name: 'amount' },
+                { data: 'pay_method', name: 'pay_method' },
+                { data: 'serial_no', name: 'serial_no' },
+                { data: 'print_status_label', name: 'print_status_label', orderable: false, searchable: false },
+                { data: 'description', name: 'description' },
+                { data: 'date', name: 'date' },
+                { data: 'actions', name: 'actions', orderable: false, searchable: false },
+            ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json', // Arabic translations
             }
+        });
 
+        // Reload DataTable on month selection change
+        $('#dateSelect').change(function () {
+            $('#all-student1').DataTable().ajax.reload();
+        });
+    });
+</script>
 
-
-
-            if( id.value == 1) {
-
-                console.log(arr);
-                $.ajax({
-                    type: 'Post',
-                    url: url('print_all/') + "/" + arr + '/' + allserials, // Append all client IDs to URL
-                    async: false,
-                    // dataType: 'json',
-
-                    success: function(data1) {
-                        data = JSON.parse( data1);
-                        console.log(data);
-
-
-
-                        window.location.href = data.redirect;
-
-                    },
-                    error: function() {}
-                });
-            }else if (id.value == 2) {
-                if(!arr_arch){
-                    $.ajax({
-                        type: 'Post',
-                        url: url('archieve_all/') + arr_arch,
-
-                        async: false,
-                        // dataType: 'json',
-
-                        success: function(data1) {
-                            data = JSON.parse( data1);
-                            console.log(data);
-
-                            window.location.href = data.redirect;
-
-                        },
-                        error: function() {}
-                    });
-                }else {
-                    alert('لا يمكن الارشفة قبل الطباعة');
-                }
-
-
-            }
-            // alert(arr);
-
-        }
+<script>
+    function addUrlParameter(name, value) {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set(name, value);
+        window.location.search = searchParams.toString();
     }
 
-    $('#all').click(function(event) {
-        if(this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function() {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function() {
-                this.checked = false;
-            });
-        }
+    document.getElementById('select-all').addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('input[name="action[]"]');
+        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
     });
 
+    function handleBulkAction(button) {
+        const actionValue = button.value;
+        const selectedItems = Array.from(document.querySelectorAll('input[name="action[]"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        if (selectedItems.length === 0) {
+            alert('يجب اختيار عميل واحد على الأقل!');
+            return;
+        }
+
+        const actionUrl = actionValue == 1 ? '/print_all' : '/archieve_all';
+        const csrfToken = '{{ csrf_token() }}'; // Add CSRF token for security
+
+        $.ajax({
+            type: 'POST',
+            url: `${actionUrl}/${selectedItems}`,
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            success: function (response) {
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            },
+            error: function (error) {
+                alert('حدث خطأ أثناء تنفيذ العملية');
+            }
+        });
+    }
 </script>

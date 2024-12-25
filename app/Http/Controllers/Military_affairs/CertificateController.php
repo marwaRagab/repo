@@ -66,6 +66,7 @@ class CertificateController extends Controller
     public function print_case_proof($item)
     {
         $item =  Military_affair::find($item);
+        
         // return $this->CertificateRepository->print_case_proof();
         return view('military_affairs.Execute_alert.print.case_proof',compact('item'));
     }
