@@ -578,13 +578,13 @@
                                                                     $value->date_end != '0000-00-00 00:00:00'
                                                                 ) {
                                                                     $day_end = explode(' ', $value->date_end)[0];
-                                                                    $different_day = get_different_dates(
+                                                                    $different_day = get_different_date(
                                                                         $day_start,
                                                                         $day_end,
                                                                     );
                                                                 } else {
                                                                     $day_end = 'لم تنتهى';
-                                                                    $different_day = get_different_dates(
+                                                                    $different_day = get_different_date(
                                                                         $day_start,
                                                                         now(),
                                                                     );
