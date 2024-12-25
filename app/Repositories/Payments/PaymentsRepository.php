@@ -67,27 +67,27 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     {
 
         $title = '  عمليات الدفع ';
-        $pay_date = $request->month;
-        $this->data['items'] = Invoices_installment::where('arch', 0)->when($pay_date, function ($q) use ($pay_date) {
-            $date = new DateTime($pay_date);
-            $year = $date->format('Y');
-            $month = $date->format('m');
-            return $q->whereyear('date', $year)->wheremonth('date', $month);
-        })->where('branch_id', Auth::user()->branch_id)
-            ->with('installment', function ($query) {
-                return $query->where('installment.laws', '=', 0);
-            })->with('install_month')->get();
-        foreach ($this->data['items'] as $item) {
-            if ($item->payment_type == 'cash') {
-                $item->pay_method = 'كاش';
-            } elseif ($item->payment_type == 'part') {
-                $item->pay_method = 'روابط';
-            } elseif ($item->payment_type == 'check') {
-                $item->pay_method = 'شيك';
-            } else {
-                $item->pay_method = 'كى نت';
-            }
-        }
+        // $pay_date = $request->month;
+        // $this->data['items'] = Invoices_installment::where('arch', 0)->when($pay_date, function ($q) use ($pay_date) {
+        //     $date = new DateTime($pay_date);
+        //     $year = $date->format('Y');
+        //     $month = $date->format('m');
+        //     return $q->whereyear('date', $year)->wheremonth('date', $month);
+        // })->where('branch_id', Auth::user()->branch_id)
+        //     ->with('installment', function ($query) {
+        //         return $query->where('installment.laws', '=', 0);
+        //     })->with('install_month')->get();
+        // foreach ($this->data['items'] as $item) {
+        //     if ($item->payment_type == 'cash') {
+        //         $item->pay_method = 'كاش';
+        //     } elseif ($item->payment_type == 'part') {
+        //         $item->pay_method = 'روابط';
+        //     } elseif ($item->payment_type == 'check') {
+        //         $item->pay_method = 'شيك';
+        //     } else {
+        //         $item->pay_method = 'كى نت';
+        //     }
+        // }
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -100,12 +100,12 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
     }
 
-    public function getPaymentsData(Request $request)
+public function getPaymentsData(Request $request)
 {
     // Retrieve the selected month from the request
     $pay_date = $request->month;
 
-    // Query the database with necessary filters and relationships
+    // Query the database with necessary filcolumn: column: ters and relationships
     $payments = Invoices_installment::where('arch', 0)
         ->when($pay_date, function ($query) use ($pay_date) {
             $date = new DateTime($pay_date);
@@ -114,63 +114,74 @@ class PaymentsRepository implements PaymentsRepositoryInterface
             return $query->whereYear('date', $year)->whereMonth('date', $month);
         })
         ->where('branch_id', Auth::user()->branch_id)
-        ->with(['installment' => function ($query) {
-            $query->where('installment.laws', '=', 0);
-        }])
-        ->with('install_month')
-        ->select(['id', 'payment_type', 'date', 'branch_id', 'installment_id', 'install_month_id', 'description', 'amount', 'print_status']);
+        ->with([
+            'installment' => function ($query) {
+                $query->where('laws', 0);
+            },
+            'install_month',
+        ])
+        ->select([
+            'id', 'payment_type', 'date', 'branch_id', 
+            'installment_id', 'install_month_id', 
+            'description', 'amount', 'print_status'
+        ]);
 
     // Process data for DataTables
     return DataTables::of($payments)
-        ->addColumn('pay_method', function ($payment) {
-            switch ($payment->payment_type) {
-                case 'cash':
-                    return 'كاش';
-                case 'part':
-                    return 'روابط';
-                case 'check':
-                    return 'شيك';
-                default:
-                    return 'كى نت';
-            }
-        })
-        ->addColumn('installment_name', function ($payment) {
-            return $payment->installment->client->name_ar ?? 'لايوجد';
-        })
-        ->addColumn('serial_no', function ($payment) {
-            $current_month_year = date('Y') . date('m');
-            $total_items = Invoices_installment::count();
-            return $current_month_year . ($total_items - $payment->id); // Example calculation
-        })
-        ->addColumn('print_status_label', function ($payment) {
-            return $payment->print_status == 'done' ? 
-                '<span class="text-success">تم الطباعة</span>' : 
-                '<span class="text-danger">لم يتم الطباعة</span>';
-        })
-        ->addColumn('actions', function ($payment) {
-            $printUrl = route('print_invoice', [
-                'id' => $payment->id,
-                'id1' => $payment->installment_id,
-                'id2' => $payment->install_month_id,
-                'id3' => $payment->id, // or serial_no if that's intended
-            ]);
+    ->addColumn('pay_method', function ($payment) {
+        return match ($payment->payment_type) {
+            'cash' => 'كاش',
+            'part' => 'روابط',
+            'check' => 'شيك',
+            default => 'كى نت',
+        };
+    })
+    ->addColumn('installment_name', function ($payment) {
+        return $payment->installment->client->name_ar ?? 'لايوجد';
+    })
+    ->addColumn('serial_no', function ($payment) {
+        $current_month_year = now()->format('Ym');
+        $total_items = Invoices_installment::count();
+        return $current_month_year . ($total_items - $payment->id); // Example calculation
+    })
+    ->addColumn('print_status_label', function ($payment) {
+        return $payment->print_status == 'done' 
+            ? '<span class="text-success">تم الطباعة</span>' 
+            : '<span class="text-danger">لم يتم الطباعة</span>';
+    })
+    ->addColumn('actions', function ($payment) {
+        $printUrl = route('print_invoice', [
+            'id' => $payment->id,
+            'id1' => $payment->installment_id,
+            'id2' => $payment->install_month_id,
+            'id3' => $payment->id,
+        ]);
 
-            $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
+        $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
 
-            $printButton = $payment->print_status == 'done' 
-                ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
-                : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
+        $printButton = $payment->print_status == 'done' 
+            ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
+            : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
 
-            $archiveButton = $payment->print_status == 'done' 
-                ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
-                : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
+        $archiveButton = $payment->print_status == 'done' 
+            ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
+            : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
 
-            return $printButton . ' ' . $archiveButton;
-        })
-        ->rawColumns(['print_status_label', 'actions']) // Allow HTML for certain columns
-        ->addIndexColumn() // Add index column
-        ->make(true); // Generate JSON response for DataTables
+        return $printButton . ' ' . $archiveButton;
+    })
+    ->addColumn('archive_button', function ($payment) {
+        return ''; // Ensure you provide a default value or actual button here
+    })
+    ->addColumn('select_checkbox', function ($payment) {
+        return '<input type="checkbox">'; // Provide the checkbox column data
+    })
+    ->rawColumns(['print_status_label', 'actions']) // Allow HTML for certain columns
+    ->addIndexColumn() // Add an auto-incrementing index column
+    ->make(true); // Generate JSON response for DataTables
+    // dd(DataTables::of($payments)->toArray());
+
 }
+
 
     public function invoices_installment_index(Request $request)
     {

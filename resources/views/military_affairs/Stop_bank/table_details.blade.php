@@ -60,8 +60,7 @@
             data-bs-target="#open-details-{{$item->id}}">
             الملاحظات
         </button>
-
-        <a class="btn btn-success me-6 my-2" data-bs-toggle="modal" href="">
+        <a href="{{ url('installment/show-installment/' . $item->installment->id) }}" class="btn btn-success me-6 my-2">
             تفاصيل
         </a>
         <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"

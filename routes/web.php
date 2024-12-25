@@ -313,7 +313,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments', [PaymentsController::class, 'index'])->name('payments');
     Route::get('/payments/data', [PaymentsController::class, 'getPaymentsData'])->name('payments.data');
 
-    Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice.data');
+    Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice');
     Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief'])->name('set_archief.data');
     Route::get('/print_all/{ids}/{seriall}', [PaymentsController::class, 'print_all']);
     Route::get('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all']);
