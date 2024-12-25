@@ -507,7 +507,7 @@
                                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                         <div class="modal-content">
                                             <form class="mega-vertical"
-                                                  action="{{url('convert_to_execute')}}" method="post"
+                                                  action="{{route('convert_to_execute')}}" method="post"
                                                   enctype="multipart/form-data">
                                                 @csrf
                                                 <input type="hidden" name="client_job" value="{{$item->installment->client->job_type}}">
