@@ -2,16 +2,16 @@
 
 namespace App\Repositories\ImportingCompanies;
 
-use App\Interfaces\ImportingCompanies\ProductRepositoryInterface;
-use App\Models\Company;
-use App\Models\ImportingCompanies\Product;
 use App\Models\Mark;
+use App\Models\Company;
 use App\Models\ProductClass;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\ImportingCompanies\Product;
 
 // use Illuminate\Http\Request;
 
-use Yajra\DataTables\Facades\DataTables;
+use App\Interfaces\ImportingCompanies\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -55,7 +55,6 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getProductsData()
     {
-
         $products = Product::with('mark', 'class')->select(['id', 'mark_id', 'class_id', 'model', 'number', 'net_price', 'price','company_id']);
 
         return DataTables::of($products)
