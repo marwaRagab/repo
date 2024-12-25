@@ -87,7 +87,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
             {
                 
                 $court->counter = count_court($court->id,'stop_salary','','');
-                $total_count += $court->counter ;
+                $total_count = count_court('','stop_salary','','') ;
             }
         foreach($this->data['ministries'] as $minist)
             {           

@@ -20,7 +20,8 @@
         @foreach($ministries as $one)
 
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => $one->id ))}}"
-            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}} ({{ $one->counter}})
+            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}}
+            ({{ $one->counter}})
         </a>
 
         @endforeach
@@ -99,7 +100,8 @@
                         @if(request()->has('type'))
                         <td>
                             <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                                data-bs-target="#convert_command-{{$item->id}}" onclick="check_delegate({{$item->emp_id}})"> {{ $type_name }}
+                                data-bs-target="#convert_command-{{$item->id}}"
+                                onclick="check_delegate({{$item->emp_id}})"> {{ $type_name }}
                             </button>
                             @if($item->emp_id && $item->emp_id != '')
                             <div id="convert_command-{{$item->id}}" class="modal fade convert_command" tabindex="-1"
@@ -116,7 +118,8 @@
                                             <input type="hidden" name="type_id" value="{{request()->get('type')}}">
                                             <input type="hidden" name="item_type_new"
                                                 value="{{request()->get('type')}}">
-                                            <input type="hidden" name="item_type_old" value="{{request()->get('type')}}">
+                                            <input type="hidden" name="item_type_old"
+                                                value="{{request()->get('type')}}">
 
                                             <div class="modal-header d-flex align-items-center">
                                                 <h4 class="modal-title" id="myModalLabel">
@@ -171,6 +174,7 @@
                             @include('military_affairs.Open_file.partial.column_responsible')
                         </td>
                         <td>
+
                             <div class="btn-group dropup mb-6 me-6 d-block ">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -179,14 +183,26 @@
                                 <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
 
                                     <li>
-                                        <a class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                        <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
                                             data-bs-target="#open-details-{{ $item->id }}">
                                             ملاحظات</a>
                                     </li>
                                     <li>
-                                        <a class="btn btn-primary rounded-0 w-100 mt-2"
-                                            href="{{url('show_settlement/'.$item->id)}}">
+                                        @php $date =
+                                        $item->status_all->where('type_id','stop_salary_doing')->whereNotNull('date')?->first()?->date;
+                                        @endphp
+
+                                        @if( $date != 0 )
+                                        <span class="btn btn-warning rounded  w-100 mt-2"> يوجد تسوية </span>
+                                        @elseif($item->installment->finished == 1)
+                                        <span class="btn btn-danger rounded  w-100 mt-2">تم انهاء المعاملة</span>
+                                        @else
+                                        <a class="btn btn-primary rounded-0 w-100 mt-2  @if($item->emp_id == '') disabled @endif"
+                                            @if($item->emp_id != '')
+                                            href="{{url('show_settlement/'.$item->id)}}" @endif
+                                            >
                                             تحويل للتسوية </a>
+                                        @endif
                                     </li>
                                 </ul>
 
@@ -203,14 +219,38 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
+                                            <ul class="nav nav-pills" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-bs-toggle="tab"
+                                                        href="#notes-{{$item->id}}" role="tab">
+                                                        <span>الملاحظات</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#navpill-{{$item->id}}" role="tab">
+                                                        <span>الإجراءات</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#actions-{{$item->id}}" role="tab">
+                                                        <span>تتبع المعاملة</span>
+                                                    </a>
+                                                </li>
 
+                                            </ul>
                                             <!-- Tab panes -->
+
                                             <div class="tab-content border mt-2">
                                                 @php
 
                                                 $all_notes=get_all_notes('stop_salary',$item->id);
+                                                $all_actions = get_all_actions($item->id);
+                                                $get_all_delegations = get_all_delegations($item->id);
                                                 @endphp
-                                                <div class="tab-pane active p-3" id="navpill-{{ $item->id }}"
+                                               
+                                                <div class="tab-pane active p-3" id="notes-{{ $item->id }}"
                                                     role="tabpanel">
                                                     <form class="mega-vertical" action="{{url('add_notes')}}"
                                                         method="post" enctype="multipart/form-data">
@@ -222,8 +262,6 @@
                                                                 value="{{$item_type_time1->type}}">
                                                             <input type="hidden" name="type_id"
                                                                 value="{{$item_type_time1->slug}}">
-
-
 
                                                             <div class="form-group">
                                                                 <label class="form-label"> الاتصال</label>
@@ -307,7 +345,8 @@
                                                                 $day= explode(' ', $all_note->date)[0];
 
                                                                 @endphp
-                                                                <td>{{$time}}<span class="d-block"></span>
+                                                                <td>{{ \Carbon\Carbon::parse($time)->format('H:i')}}<span
+                                                                        class="d-block"></span>
                                                                 </td>
                                                                 <td>{{$day}}</td>
 
@@ -317,7 +356,166 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <div class="tab-pane p-3" id="navpill-{{$item->id}}" role="tabpanel">
+                                                    <table id="notes2"
+                                                        class="table table-bordered border text-wrap align-middle">
+                                                        <thead>
+                                                            <!-- start row -->
+                                                            <tr>
+                                                                <th>اليوزر</th>
+                                                                <th>القسم</th>
+                                                                <th>التاريخ</th>
+                                                                <th> عدد الايام</th>
+                                                            </tr>
+                                                            <!-- end row -->
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- start row -->
+                                                            @foreach ($all_actions as $value)
+                                                            <tr>
+                                                                @php
+                                                                $created_by = DB::table('users')
+                                                                ->where('id', $value->created_by)
+                                                                ->first();
 
+                                                                @endphp
+                                                                <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
+                                                                <td> @if ($value->timesType)
+                                                                    {{ $value->timesType->name_ar }}
+                                                                    @elseif ($value->bankType)
+                                                                    {{ $value->bankType->name_ar }}
+                                                                    @elseif ($value->carType)
+                                                                    {{ $value->carType->name_ar }}
+                                                                    @elseif ($value->salaryType)
+                                                                    {{ $value->salaryType->name_ar }}
+                                                                    @elseif ($value->travelType)
+                                                                    {{ $value->travelType->name_ar }}
+                                                                    @else
+                                                                    لا يوجد
+                                                                    @endif
+                                                                </td>
+
+                                                                <td>
+                                                                    @php
+
+                                                                    $day_start = explode(
+                                                                    ' ',
+                                                                    $value->date_start,
+                                                                    )[0];
+                                                                    if (
+                                                                    $value->date_end &&
+                                                                    $value->date_end != '0000-00-00 00:00:00'
+                                                                    ) {
+                                                                    $day_end = explode(
+                                                                    ' ',
+                                                                    $value->date_end,
+                                                                    )[0];
+                                                                    $different_day = get_different_date(
+                                                                    $day_start,
+                                                                    $day_end,
+                                                                    );
+                                                                    } else {
+                                                                    $day_end = 'لم تنتهى';
+                                                                    $different_day = get_different_date(
+                                                                    $day_start,
+                                                                    now(),
+                                                                    );
+                                                                    }
+
+                                                                    @endphp
+                                                                    {{ $day_start }}
+                                                                    </br>
+                                                                    {{ $day_end }}
+
+                                                                </td>
+                                                                <td>{{ $different_day }}</td>
+
+
+                                                            </tr>
+                                                            @endforeach
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tab-pane p-3" id="actions-{{$item->id}}" role="tabpanel">
+                                                    <table id="notes2"
+                                                        class="table table-bordered border text-wrap align-middle">
+                                                        <thead>
+                                                            <!-- start row -->
+                                                            <tr>
+                                                                <th>القسم</th>
+                                                                <th>المسئول</th>
+                                                                <th>تاريخ البدء</th>
+                                                                <th>تاريخ الانتهاء</th>
+                                                                <th> عدد الايام</th>
+                                                            </tr>
+                                                            <!-- end row -->
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- start row -->
+                                                            @foreach ($get_all_delegations as $value)
+                                                            <tr data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                @php
+                                                                $created_by = DB::table('users')
+                                                                ->where('id', $value->emp_id)
+                                                                ->first();
+
+                                                                @endphp
+                                                                <td>
+                                                                    {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                                    $value['image_date'] ? 'الايمج' : (
+                                                                                    $value['case_proof_date'] ? 'إثبات الحالة' : (
+                                                                                    $value['travel_date'] ? 'منع السفر' : (
+                                                                                    $value['car_date'] ? 'حجز السيارات' : (
+                                                                                    $value['bank_date'] ? 'حجز بنوك' : (
+                                                                                    $value['salary_date'] ? 'حجز راتب' : (
+                                                                                    $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
+                                                                                    )))))))
+                                                                                }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                </td>
+                                                                <td>
+                                                                    @php
+
+                                                                    $day_start = explode(' ', $value->assign_date)[0];
+                                                                    if (is_numeric($day_start)) {
+                                                                    $day_start = date('Y-m-d', $day_start);
+                                                                    }
+
+                                                                    // Check the end date
+                                                                    if ($value->end_date && $value->end_date != '') {
+                                                                    $day_end = explode(' ', $value->end_date)[0];
+                                                                    if (is_numeric($day_end)) {
+                                                                    $day_end = date('Y-m-d', $day_end);
+                                                                    }
+                                                                    $different_day = get_different_date($day_start,
+                                                                    $day_end);
+                                                                    } else {
+                                                                    // Use current timestamp if end_date is missing
+                                                                    $day_end = 'لم تنتهى';
+                                                                    $different_day = get_different_date($day_start,
+                                                                    now()->timestamp);
+                                                                    }
+                                                                    @endphp
+                                                                    {{ $day_start }}
+
+                                                                </td>
+                                                                <td>{{ $day_end }}</td>
+
+                                                                <td>
+                                                                    {{ $different_day }}
+                                                                </td>
+
+                                                            </tr>
+                                                            @endforeach
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                             <div class="modal-footer d-flex ">
                                                 <button type="button"
@@ -346,13 +544,11 @@
 </div>
 
 <script>
-    function check_delegate(emp_id)
-    {
-      
-      if(emp_id == '' || emp_id == null)
-      {
+function check_delegate(emp_id) {
+
+    if (emp_id == '' || emp_id == null) {
         alert('يجب تحديد مسئول اولا');
-     
-      }
+        return false;
     }
+}
 </script>

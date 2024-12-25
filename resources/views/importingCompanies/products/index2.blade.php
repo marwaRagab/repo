@@ -31,19 +31,11 @@
                             <div class="modal-body">
                                 <form method="POST" action="{{ route('saving') }}" enctype="multipart/form-data">
                                     @csrf
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
+                                    
                                     <div class="form-row">
                                         <div class="form-group mb-3">
                                             <label class="form-label">الشركة الموردة</label>
-                                            <select class="form-select" name="company_id" required>
+                                            <select class="form-select" name="company_id" >
                                                 <option value="">اختر الشركة</option>
                                                 @foreach ($Allcompany as $company)
                                                     <option value="{{ $company->id }}">{{ $company->name_ar }}</option>
@@ -52,7 +44,7 @@
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="form-label"> الماركة</label>
-                                            <select class="form-select" name="mark_id" required>
+                                            <select class="form-select" name="mark_id" >
                                                 <option value="">اختر الماركة</option>
                                                 @foreach ($marks as $mark)
                                                     <option value="{{ $mark->id }}">{{ $mark->name_ar }}</option>
@@ -61,7 +53,7 @@
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="form-label"> الصنف</label>
-                                            <select class="form-select" name="class_id" required>
+                                            <select class="form-select" name="class_id" >
                                                 <option value="">اختر الصنف</option>
                                                 @foreach ($classes as $class)
                                                     <option value="{{ $class->id }}">{{ $class->name_ar }}</option>
@@ -71,17 +63,17 @@
                                         <div class="form-group mb-3">
                                             <label class="form-label" for="input1"> الموديل </label>
                                             <input type="text" class="form-control mb-2" id="input1"
-                                                name="model" required>
+                                                name="model" >
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="form-label" for="input2"> السعر </label>
                                             <input type="text" class="form-control mb-2" id="input2"
-                                                name="price" required>
+                                                name="price" >
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="form-label" for="input3"> صافي التكلفة </label>
                                             <input type="text" class="form-control mb-2" id="input3"
-                                                name="net_price" required>
+                                                name="net_price" >
                                         </div>
                                         <div class="form-group mb-3">
                                             <label class="form-label"> صورة المنتج </label>
