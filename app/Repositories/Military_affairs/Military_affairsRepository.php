@@ -157,7 +157,7 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
         $message = "تم تحويل المعاملة رقم " . $id . ' للشئون القانونية';
         log_move(Auth::user()->id, $message);
         // $data['laws']=1;
-        $old_time_type =  "";
+        $old_time_type = "";
 
         $install = Military_Affair::with('installment')->where(['installment_id' => $id])->first();
 
@@ -216,17 +216,15 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
 
             $old_one = Military_affairs_times_type::where('slug', 'lated_installment')->first();
             $new_one = Military_affairs_times_type::where('slug', 'eqrar_dain_not_received')->first();
-            if($old_one)
-            {
+            if ($old_one) {
                 $old_time_type = Military_affairs_times_type::findOrFail($old_one->id);
             }
-            
+
             $new_time_type = Military_affairs_times_type::findOrFail($new_one->id);
-            if($old_one)
-            {
+            if ($old_one) {
                 Add_note($old_time_type, $new_time_type, $military_affairs_id); //eqrart not recieved
             }
-            
+
             Add_note_time($new_time_type, $military_affairs_id);
 
             //   Add_note($old_time_type,3,$military_affairs_id);    // open file

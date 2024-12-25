@@ -76,7 +76,7 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
 
 
 
-            $value->different_date = get_different_dates($item_data[0], date('Y-m-d'));
+            $value->different_date = get_diff_date($item_data[0], date('Y-m-d'));
 
         }
 
@@ -175,7 +175,10 @@ class Execute_alertRepository implements Execute_alertRepositoryInterface
                     }
                     $data['jalasat_alert_date'] = $request->jalasat_alert_date;
                     if ($request->hasFile('jalasat_alert_img')) {
-                        $data['jalasat_alert_img'] = $request->file('jalasat_alert_img')->store('military_affairs', 'public'); // Store in the 'products' directory
+
+                        $filename = time() . '-' . $request->file('jalasat_alert_img')->getClientOriginalName();
+                        $path = $request->file('jalasat_alert_img')->move(public_path('military_affairs'), $filename);
+                        $data['jalasat_alert_img'] = 'military_affairs' . '/' . $filename;
                     }
                     $data['jalasat_alert_reason'] = $request->jalasat_alert_reason;
 

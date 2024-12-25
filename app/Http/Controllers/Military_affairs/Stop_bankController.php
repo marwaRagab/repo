@@ -45,7 +45,7 @@ class Stop_bankController extends Controller
 
 
     }
-    
+
     public function check_info_in_banks( $id)
     {
         // dd("dd");
@@ -89,6 +89,14 @@ class Stop_bankController extends Controller
     {
 
         return $this->stop_bankRepository->change_states_bank($id,$value);
+
+
+    }
+
+    public function stop_bank_request_results(Request $request)
+    {
+
+        return $this->stop_bankRepository->stop_bank_request_results($request);
 
 
     }

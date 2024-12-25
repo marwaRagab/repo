@@ -1,6 +1,6 @@
 <tr>
 <td>
-    {{ $loop->index + 1 }}
+    {{$item->i }}
 </td>
 <td>
     {{$item->installment->client->name_ar}}
@@ -18,6 +18,10 @@
 
         <br>
         {{$item->issue_id}}
+
+        <br>
+        <br>
+        @include('military_affairs.Execute_alert.print.print')
     </td>
 
     <td>
@@ -25,21 +29,146 @@
 
     </td>
     <td>
-        {{$item->installment->client->court ?  \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->name_ar : ''}}
+
+        {{$item->last_date}}
 
         <br>
-        {{$item->issue_id}}
+        عدد الحجوزات
+        {{$item->ministry_name->date}}
+
+
+
     </td>
 
-    <td>{{$item->eqrar_dain_amount}} </td>
+    <td>
+        @if($item->status_all->where('type_id','=','stop_bank_command')->first())
+            {{date('Y-m-d',$item->status_all->where('type_id','=','stop_bank_command')->first()->date)}}
+        @else
+            لا يوجد
+        @endif
+        <br>
+        <br>
+        @if( request()->has('stop_bank_type') && request()->get('stop_bank_type')=='stop_bank_doing')
+                <div class="btn-group dropup mb-6 me-6">
+                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                            id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        نتيجة الحجز
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                        <li>
+                            <a class="btn btn-success rounded-0 w-100 mt-2"
+
+                               data-bs-toggle="modal"
+                               data-type="tahseel"
+                               onclick="get_type('tahseel')"
+                               data-bs-target="#open-bank_request-{{$item->id}}">
+                                تحصيل مبلغ</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary rounded-0 w-100 mt-2"
+                               data-bs-toggle="modal"
+
+                               onclick="get_type('new_date')"
+                               data-bs-target="#open-bank_request-{{$item->id}}"
+                             >
+                                تقويس</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-warning rounded-0 w-100 mt-2"
+                               data-bs-toggle="modal"
+
+                               onclick="get_type('not_found')"
+                               data-bs-target="#open-bank_request-{{$item->id}}"
+                               >
+                                لايوجد</a>
+                        </li>
+
+
+                    </ul>
+                    <div id="open-bank_request-{{$item->id}}" class="modal fade" tabindex="-1"
+                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                            <div class="modal-content">
+                                <form class="mega-vertical"
+                                      action="{{url('stop_bank/stop_bank_request_results')}}" method="post"
+                                      enctype="multipart/form-data">
+                                    @csrf
+
+                                    <input type="hidden" name="military_affairs_id" value="{{ $item->id }}">
+                                    <input type="hidden" name="type" value="" id="type">
+                                    <div class="modal-header d-flex align-items-center">
+                                        <h4 class="modal-title" id="myModalLabel">
+                                             اضافة حجز بنوك</h4>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h6><span class="fw-semibold">
+                                    حجز بنوك :
+                                </span>
+                                            {{ $item->installment->client->name_ar }}-{{$item->installment->client->civil_number}}
+                                        </h6>
+
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label class="form-label" for="input1 "> المبلغ </label>
+                                                <input type="number" name="amount" class="form-control mb-2"
+                                                       id="input1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label" for="input1 "> تاريخ </label>
+                                                <input type="date" name="date" class="form-control mb-2"
+                                                       id="input1">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="formFile" class="form-label">اختر صورة </label>
+                                                <input class="form-control" name="img_dir" accept="image/*"
+                                                       type="file" id="formFile"/>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer d-flex ">
+                                        <button type="submit" class="btn btn-primary">حفظ
+
+                                        </button>
+                                        <button type="button"
+                                                class="btn bg-danger-subtle text-danger  waves-effect"
+                                                data-bs-dismiss="modal">
+                                            الغاء
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+
+
+                </div>
+
+        @endif
+    </td>
     <td>
 
         {{$item->installment->client->ministry ?  \App\Models\Ministry::findorfail($item->installment->client->ministry->last()->ministry_id)->name_ar : ''}}
 
      </td>
+    <td>
+        @include('military_affairs.Open_file.partial.column_responsible')
+    </td>
 
     <td>
         <select class="form-select form-control" name="statues" onchange="change_bank_satues(this,{{$item->id}})">
+            <option value="">غير محدد </option>
             <option value="work" {{ $item->bank_account_status =='work' ?   'selected' : ''}}>يعمل راتب</option>
             <option value="stop" {{ $item->bank_account_status =='stop' ?   'selected' : ''}}>موقوف راتب </option>
             <option value="visa" {{ $item->bank_account_status =='visa' ?   'selected' : ''}}>فيزا</option>
@@ -60,9 +189,12 @@
             data-bs-target="#open-details-{{$item->id}}">
             الملاحظات
         </button>
-        <a href="{{ url('installment/show-installment/' . $item->installment->id) }}" class="btn btn-success me-6 my-2">
+
+
+        <a class="btn btn-success me-6 my-2"   target="_blank"  href="{{url('installment/show-installment/'.$item->installment->id)}}">
             تفاصيل
         </a>
+
         <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -103,7 +235,7 @@
                                 $all_notes=get_all_notes('stop_bank',$item->id);
                                 $all_actions=get_all_actions($item->id);
                                 $get_all_delegations = get_all_delegations($item->id);
-                               
+
                                 @endphp
                                 <div class="tab-pane active p-3" id="notes-{{$item->id}}" role="tabpanel">
 
@@ -351,7 +483,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="modal-footer d-flex ">
@@ -397,5 +529,9 @@ function showInputs(id) {
 
     document.getElementById("additionalInputs-" + id).style.display = "block";
 
+}
+function get_type(type){
+
+    document.getElementById("type").value= type;
 }
 </script>
