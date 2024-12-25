@@ -3,6 +3,11 @@
     $client_img = DB::table('client_imgs')->where('client_id', $qrareldin->client_id)->where('type','civil_img')->first();
 @endphp
 
+<style>
+    a{
+        cursor: pointer;
+    }
+</style>
 <div class="dropdown mb-6 me-6">
     <!-- Dropdown button -->
     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
