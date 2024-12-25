@@ -87,13 +87,13 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
        foreach ($this->data['items'] as $value) {
 
 
-            $value->different_date_tranfer = get_different_dates($value->date, date('Y-m-d'));
+            $value->different_date_tranfer = get_diff_date($value->date, date('Y-m-d'));
             if ($stop_travel_type == 'command') {
                 $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 0)->first();
 
                     $date_command =$value->item_command   ?  $value->item_command->date : '';
                     $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
-                    $value->different_date_command  =$value->item_command ?  get_different_dates($value->final_date_command[0], date('Y-m-d')) : '';
+                    $value->different_date_command  =$value->item_command ?  get_diff_date($value->final_date_command[0], date('Y-m-d')) : '';
 
 
             }
@@ -101,13 +101,13 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
                 $value->item_finished_command = $value->status_all->where('type_id', 'command')->where('flag', 1)->first();
                 $date_finished_command = $value->item_finished_command ?  $value->item_finished_command->date : '';
                 $value->final_date_finished_command = $value->item_finished_command ?  explode(' ', $date_finished_command) : '';
-                $value->different_date_finshied_command =  $value->item_finished_command ? get_different_dates($value->final_date_finished_command[0], date('Y-m-d')) : '';
+                $value->different_date_finshied_command =  $value->item_finished_command ? get_diff_date($value->final_date_finished_command[0], date('Y-m-d')) : '';
 
                 ///finished date
                 $value->item_finished = $value->status_all->where('type_id', 'stop_travel_finished')->first();
                 $date_finished = $value->item_finished ? $value->item_finished->date : '';
                 $value->final_date_finished = $value->item_finished ?  explode(' ', $date_finished) : '';
-                $value->different_date_finshied = $value->item_finished ?  get_different_dates($value->final_date_finished[0], date('Y-m-d')) : '';
+                $value->different_date_finshied = $value->item_finished ?  get_diff_date($value->final_date_finished[0], date('Y-m-d')) : '';
 
             }
 

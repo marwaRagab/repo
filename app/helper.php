@@ -510,6 +510,21 @@ function get_different_dates($first_end_date, $second_end_date)
     return $years . ', ' . $months . ', ' . $days;
 }
 
+
+function get_diff_date($date1,$date2){
+
+    $date1 = new DateTime($date1); // First date
+    $date2 = new DateTime($date2); // Second date
+
+// Get the difference
+    $interval = $date1->diff($date2);
+
+// Output the difference in days
+  return  $interval->days;
+
+
+}
+
 function get_different_date($first_end_date, $second_end_date)
 {
     // Convert timestamps to DateTime strings if necessary
@@ -1168,12 +1183,13 @@ function specific_fixed_prin_data($id)
 
 function count_court($court_id, $stop_type,$minst_id,$time_type)
     {
+
         return Military_affair::with('installment')->with('installment.client')
                 ->with('status_all')->with('mil_times.salaryType')
                 ->whereHas('installment.client', function ($q) use($court_id,$stop_type, $minst_id) {
                     if($stop_type == 'stop_salary')
                     {
-                    $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]); 
+                    $q->where('job_type','military')->whereIN('ministry_last',[5,14,27]);
                     }
                     if($court_id != '')
                     {

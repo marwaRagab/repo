@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Military_affairs;
 
+use App\Models\Military_affairs\Military_affairs_bank_request;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\Bank;
@@ -46,7 +47,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
-        $this->data['stop_bank_types'] = Military_affairs_stop_bank_type::OrderBY('id')->get();
+        $this->data['stop_bank_types'] = Military_affairs_stop_bank_type::OrderBY('orderby')->get();
         $this->data['ministries'] = Ministry::get('date');
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning', 'bg-warning-subtle text-warning'];
 
@@ -88,8 +89,11 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 //             ->get();
 //   dd( count($this->data['items']));
         $this->data['items'] = Military_affair::where('archived', 0)
-            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1])
-            ->with('status_all')
+            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1,'bank_archive'=>0])
+
+           ->with('status_all', function ($query) {
+                return $query->where('type', '=', 'stop_bank');
+            })
             ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
             })
@@ -141,12 +145,26 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         $mins = collect();
         $array_date = [];
         $array_bank = [];
+        $x=0;
 
         //dd($this->data['items']);
         foreach ($this->data['items'] as $value) {
+             $value->i=$x+1;
             if($value->installment){
+
                 $ministry = $value->installment->client->ministry->last()->ministry_id;
                 $value->ministry_name = Ministry::findorfail($ministry);
+                $date=date('Y-m-'.$value->ministry_name->date);
+                $day_name = Carbon::parse($date)->format('l');
+                if($day_name=='Saturday'){
+                    $value->last_date=date('Y-m-'.$value->ministry_name->date-2);
+                }elseif ($day_name=='Friday'){
+                    $value->last_date=date('Y-m-'.$value->ministry_name->date-1);
+
+                }else{
+                    $value->last_date=date('Y-m-'.$value->ministry_name->date);
+                }
+                $x=$x+1;
 
                 $bank = $value->installment->client->client_banks->last();
                 $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last()->phone : '');
@@ -200,6 +218,8 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $this->data['dates']=$array_date;
         $this->data['banks']=$array_bank;
+        $this->data['get_responsible'] = get_responsible();
+
         $this->data['view'] = 'military_affairs/Stop_bank/index';
         return view('layout', $this->data, compact('breadcrumb'));
 
@@ -378,7 +398,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
     }
 
-   
+
 public function check_info_in_job  ( $id)
 {
     $message ="تم دخول صفحة استعلام عمل  " ;
@@ -387,7 +407,7 @@ public function check_info_in_job  ( $id)
    // $this->log($user_id ,$message);
    // $user_id =  Auth::user()->id;
     $this->data['title']='    حجز بنوك';
-    
+
     $this->data['items'] = array(
         0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
         1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
@@ -402,7 +422,7 @@ public function check_info_in_job  ( $id)
     ->with('installment')
     ->with('status_all')
     ->first();
-   
+
     $title=' حجز بنوك';
 
     $breadcrumb = array();
@@ -412,7 +432,7 @@ public function check_info_in_job  ( $id)
     $breadcrumb[1]['url'] = route("military_affairs");
     $breadcrumb[2]['title'] = $title;
     $breadcrumb[2]['url'] = 'javascript:void(0);';
-    
+
     $this->data['view']='military_affairs/Stop_bank/check-job';
     return view('layout',$this->data,compact('breadcrumb','Military'));
 
@@ -517,6 +537,73 @@ public function check_info_in_job  ( $id)
 
 
         return redirect()->route('stop_bank');
+
+    }
+
+
+    public function stop_bank_request_results(Request $request){
+
+      $item =Military_affair::findorfail($request->military_affairs_id);
+
+        $item_request =Military_affairs_bank_request::where(['military_affairs'=>$request->military_affairs_id,'status'=>''])->first();
+
+        if (empty($item_request)) {
+            $add_data_2['military_affairs_id'] = $request->military_affairs_id;
+            $add_data_2['date'] = time();
+             Military_affairs_bank_request::create($add_data_2);
+            return redirect()->route('stop_bank')->with('error', '  عفوا يوجد خطأ');
+
+        }
+
+        $request->validate([
+            'date' => 'required| date',
+            'military_affairs_id'=>'required',
+            'type'=>'required',
+            'img_dir'=>'required',
+            'amount'=>'required'
+        ]);
+
+
+
+            $item_request_id = $item_request->id;
+
+            $add_data["status"] = $request->military_affairs_id;
+
+            $add_data["amount"] = $request->amount;
+
+            $add_data['date'] = $request->date;
+
+
+            if ($request->hasFile('img_dir')) {
+
+                $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+                $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
+                $data['img_dir'] = 'military_affairs' . '/' . $filename;
+            }
+
+
+
+
+                if (!empty($data["item_request"]['id'])) {
+                    $this->db_get->update_tb('military_affairs_bank_request', $item_request_id, $add_data);
+
+                    if ($request->type == 'tahseel' or $request->type == 'not_found') {
+
+                        $add_data343["stop_bank_request"] = 1;
+
+                        $add_data343["stop_bank_doing"] = 0;
+
+                        $add_data343["stop_bank_command"] = 0;
+
+                        $this->db_get->update_tb('military_affairs', $id, $add_data343);
+
+                    }
+
+
+
+                    return redirect()->to(base_url() . 'military_affairs/stop_bank');
+                }
+
 
     }
 

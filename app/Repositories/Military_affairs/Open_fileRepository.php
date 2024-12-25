@@ -3,6 +3,7 @@
 namespace App\Repositories\Military_affairs;
 
 use App\Models\Log;
+use App\Models\Military_affairs\Military_affairs_times;
 use Inertia\Inertia;
 use App\Models\Court;
 use App\Models\Ministry;
@@ -116,7 +117,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
       public function add_notes(Request $request)
        {
-        
+
            Add_note_general($request);
            return redirect()->back();
 
@@ -135,7 +136,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
        //
         // $update_notes_date= Military_affairs_notes::where(['times_type_id'=>$old_time_type->id, 'date_end' =>NULL]);
-        $update_notes_date=Military_affairs_notes::where(['military_affairs_id' =>$request->military_affairs_id , 'type'=>'open_file','date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
+        $update_notes_date=Military_affairs_times::where(['military_affairs_id' =>$request->military_affairs_id ,'date_end' =>NULL,'times_type_id'=>$old_time_type->id ])->first();
 
         if($update_notes_date){
             $data['date_end']= date('Y-m-d');
@@ -229,8 +230,8 @@ class Open_fileRepository implements Open_fileRepositoryInterface
 
         foreach ( $this->data['items'] as $value) {
             $value->final_data=  $item_data=explode(' ',$value->created_at);
-            $value->different_date = get_different_dates($item_data[0],date('Y-m-d'));
-            $value->different_date_open = get_different_dates($value->open_file_date,date('Y-m-d'));
+            $value->different_date = get_diff_date($item_data[0],date('Y-m-d'));
+            $value->different_date_open = get_diff_date($value->open_file_date,date('Y-m-d'));
 
               //  $value->different_date = get_different_dates($value->open_file_date, date('Y-m-d'));
                 $value->jalasaat_date =$value->jalasaat_all->where('status','accepted')->first();
