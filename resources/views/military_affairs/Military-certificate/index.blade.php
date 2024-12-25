@@ -25,7 +25,7 @@
         @foreach($courts as $court)
 
             <a href="{{route('Certificate',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}} {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}
             </a>
 
         @endforeach
