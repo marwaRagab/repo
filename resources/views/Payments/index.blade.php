@@ -18,94 +18,20 @@
             <table id="all-student1" class="table table-bordered border text-nowrap align-middle">
                 <thead class="thead-dark">
                     <tr>
-                        <th>م</th>
-                        <th>اسم العميل</th>
-                        <th>المبلغ</th>
-                        <th>طريقة الدفع</th>
-                        <th>رقم العملية</th>
-                        <th>حالة الطباعة</th>
-                        <th>التفاصيل</th>
-                        <th>التاريخ</th>
-                        <th>طباعة</th>
-                        <th>تحويل للأرشيف</th>
-                        <th>
-                            <input type="checkbox" class="form-check-input" id="select-all">
-                        </th>
+                    <th>م</th>
+                    <th>اسم العميل</th>
+                    <th>المبلغ</th>
+                    <th>طريقة الدفع</th>
+                    <th>رقم العملية</th>
+                    <th>حالة الطباعة</th>
+                    <th>التفاصيل</th>
+                    <th>التاريخ</th>
+                    <th>طباعة</th>
+                    <th>تحويل للأرشيف</th>
+                    <th><input type="checkbox" class="form-check-input" id="select-all"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    @php
-                    $total_items = count($items);
-                    $current_month_year = date('Y') . date('m');
-                    @endphp
-
-                    @foreach($items as $item)
-                    @php
-                    $serial_no = $current_month_year . ($total_items - $loop->index);
-                    $isPrinted = $item->print_status == 'done';
-                    @endphp
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $item->installment->client->name_ar ?? 'لايوجد' }}</td>
-                        <td>{{ $item->amount }}</td>
-                        <td>{{ $item->pay_method }}</td>
-                        <td>{{ $serial_no }}</td>
-                        <td>
-                            <span class="{{ $isPrinted ? 'text-success' : 'text-danger' }}">
-                                {{ $isPrinted ? 'تم الطباعة' : 'لم يتم الطباعة' }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ url('installment.show-installment/'.$item->installment_id) }}">
-                                {{ $item->description }}
-                            </a>
-                        </td>
-                        <td>{{ $item->date }}</td>
-                        <td>
-                            @if($isPrinted)
-                            <a style="text-decoration: line-through; pointer-events: none"
-                                class="btn btn-primary btn-sm rounded-pill">طباعة</a>
-                            @else
-                            <a class="btn btn-primary btn-sm rounded-pill"
-                                href="{{ url('print_invoice/'.$item->id.'/'.$item->installment_id.'/'.$item->install_month_id.'/'.$serial_no) }}">
-                                طباعة
-                            </a>
-                            @endif
-                        </td>
-                        <td>
-                            @if($isPrinted)
-                            <a class="btn btn-danger btn-sm rounded-pill"
-                                href="{{ url('set_archief/'.$item->id) }}">تحويل للأرشيف</a>
-                            @else
-                            <button class="btn btn-secondary btn-sm rounded-pill" disabled>
-                                لم يتم الطباعة
-                            </button>
-                            @endif
-                        </td>
-                        <td>
-                            <input type="checkbox" class="form-check-input" name="action[]" value="{{ $item->id }}"
-                                id="{{ $serial_no }}">
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    <tr>
-                        <td colspan="8"></td>
-                        <td>
-                            <button class="btn btn-primary btn-sm rounded-pill" value="1" onclick="handleBulkAction(this)">
-                                طباعة الكل
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-secondary btn-sm rounded-pill" value="2" onclick="handleBulkAction(this)">
-                                تحويل الجميع للأرشيف
-                            </button>
-                        </td>
-                        <td>
-                            <input type="checkbox" class="form-check-input" id="select-all-bottom">
-                        </td>
-                    </tr>
-                </tbody>
+                
             </table>
         </div>
     </div>
@@ -122,6 +48,10 @@
                 url: '{{ route('payments.data') }}',
                 data: function (d) {
                     d.month = $('#dateSelect').val(); // Pass selected month
+                },
+                success: function (response) {
+                    // Log the response data to the console
+                    console.log('Data received from server:', response);
                 }
             },
             columns: [
@@ -134,10 +64,9 @@
                 { data: 'description', name: 'description' },
                 { data: 'date', name: 'date' },
                 { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                { data: null, name: 'archive_button', defaultContent: '', orderable: false, searchable: false },
+                { data: null, name: 'select_checkbox', defaultContent: '<input type="checkbox">', orderable: false, searchable: false },
             ],
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json', // Arabic translations
-            }
         });
 
         // Reload DataTable on month selection change
@@ -146,6 +75,7 @@
         });
     });
 </script>
+
 
 <script>
     function addUrlParameter(name, value) {

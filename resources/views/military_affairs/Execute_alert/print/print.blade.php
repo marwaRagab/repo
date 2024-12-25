@@ -4,6 +4,11 @@
     $pdf_img =\App\Models\Military_affairs\Military_affair::where('id', $item->id)->first();
 @endphp
 
+<style>
+    a{
+        cursor: pointer;
+    }
+</style>
 <div class="dropdown mb-6 me-6">
     <!-- Dropdown button -->
     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
