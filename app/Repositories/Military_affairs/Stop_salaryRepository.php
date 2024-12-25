@@ -2,26 +2,26 @@
 
 namespace App\Repositories\Military_affairs;
 
-use App\Interfaces\Military_affairs\Stop_salaryRepositoryInterface;
-use App\Models\InstallmentNote;
-use App\Models\Client;
-use App\Models\Installment;
-use App\Models\Installment_month;
 use App\Models\Log;
-use Illuminate\Support\Facades\DB;
+use App\Models\Court;
+use App\Models\Client;
+use App\Models\Ministry;
+use App\Models\Governorate;
+use App\Models\Installment;
+use Illuminate\Http\Request;
 
-use App\Models\Military_affairs\Military_affairs_notes;
-use App\Models\Military_affairs\Military_affairs_times_type;
-use App\Models\Military_affairs\Military_affair;
+use App\Models\InstallmentNote;
+use App\Models\Installment_month;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Governorate;
-use App\Models\Court;
-use App\Models\Ministry;
-use Illuminate\Http\Request;
-use App\Models\Military_affairs\Military_affairs_stop_salary_type;
+use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_status;
+use App\Models\Military_affairs\Military_affairs_times_type;
+use App\Models\Military_affairs\Military_affairs_stop_salary_type;
+use App\Interfaces\Military_affairs\Stop_salaryRepositoryInterface;
 
 class Stop_salaryRepository implements Stop_salaryRepositoryInterface
 {
@@ -97,6 +97,7 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
 // dd($this->data['items']);
         $this->data['total_count'] =  $total_count ;
         $this->data['item_type_time1'] = Military_affairs_stop_salary_type::where(['type'=> 'stop_salary','slug'=> $stop_type])->first();
+        
         if(request()->has('minsitry_id') &&  request()->get('minsitry_id') == 5)
         {
             $this->data['item_type_time'] = Military_affairs_stop_salary_type::where('mins_id','!=',27)->orderBy('id','asc')->get();
