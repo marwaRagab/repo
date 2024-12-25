@@ -38,13 +38,13 @@ body {
 }
 .notification-tab{
     display: flex
-    ;
-        align-items: center;
-        justify-content: center;
-        background: #f2f3f4;
-        padding: 2rem;
-        margin-top: 2rem;
-        border-radius: 1rem;
+;
+    align-items: center;
+    justify-content: center;
+    background: #f2f3f4;
+    padding: 2rem;
+    margin-top: 2rem;
+    border-radius: 1rem;
 }
 .notification-border{
     border-left: 1px solid #ddd;
@@ -55,10 +55,10 @@ body {
     object-fit: cover;
 }
 .dataTables_filter{
-	margin-top: 30px;
+    margin-top: 30px;
 }
 .dataTables_info{
-	margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 .ti {
     font-family: tabler-icons !important;
@@ -51906,16 +51906,24 @@ body pre[class*=language-] {
     transition: .3s
 }
 
-.meet-our-team:hover .leadership-card {
+/* .meet-our-team:hover .leadership-card {
     bottom: 0
-}
+} */
 
 .leadership-card {
-    position: absolute;
-    bottom: -100%;
-    transition: all .3s
+    /* position: absolute;
+    bottom: 0;
+    transition: all .3s */
 }
-
+.meet-our-team{
+    border: 1px solid #ddd;
+    padding-top: 1.5rem;
+}
+.meet-our-team img {
+    height: 125px;
+    object-fit: contain;
+    width: 100%;
+}
 .banner-image {
     min-width: 1300px;
     max-height: 700px;
@@ -53474,26 +53482,26 @@ body .connect-sorting-content {
     text-align: center;
 } */
 input[type="file"] {
- direction: ltr;
+    direction: ltr;
 }
 
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-  }
+}
 
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
-  }
+}
 
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: rgb(1 15 24 / 20%);
     border-radius: 10px;
-  }
+}
 
-  .hidden {
-     display: none;
+.hidden {
+    display: none;
 }
 /* .table th{
     background-color: #f2f7ff;
