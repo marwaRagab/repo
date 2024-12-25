@@ -3,7 +3,6 @@
 namespace App\Repositories\Military_affairs;
 
 use App\Models\Log;
-use App\Models\Military_affairs\Military_affairs_times;
 use Inertia\Inertia;
 use App\Models\Court;
 use App\Models\Ministry;
@@ -20,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Stop_travel_types;
 use App\Models\Military_affairs\Military_affairs_notes;
+use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_status;
 use App\Models\Military_affairs\Military_affairs_jalasaat;
 use App\Models\Military_affairs\Military_affairs_times_type;
@@ -75,7 +75,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         foreach ( $this->data['items'] as $value){
             $value->i=$x;
             $value->final_data=  $item_data=explode(' ',$value->created_at);
-            $value->different_date = get_different_dates($item_data[0],date('Y-m-d'));
+            $value->different_date = get_different_date($item_data[0],date('Y-m-d'));
             if(count($value->installment->client->client_address)>=1) {
 
                 $value->adress =$value->installment->client->client_address->last();
