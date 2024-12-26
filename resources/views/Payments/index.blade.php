@@ -27,7 +27,7 @@
                     <th>التفاصيل</th>
                     <th>التاريخ</th>
                     <th>طباعة</th>
-                    <th>تحويل للأرشيف</th>
+                    <!-- <th>تحويل للأرشيف</th> -->
                     <th><input type="checkbox" class="form-check-input" id="select-all"></th>
                     </tr>
                 </thead>
@@ -39,45 +39,6 @@
 
 <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 
-<!-- <script type="text/javascript">
-    $(document).ready(function () {
-        $('#all-student1').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '{{ route('payments.data') }}',
-
-                data: function (d) {
-                    d.month = $('#dateSelect').val(); // Pass selected month
-                },
-                success: function (response) {
-                    // Log the response data to the console
-                    console.log('Data received from server:', response);
-                }
-            },
-            columns: [
-                // { data: '', name: 'DT_RowIndex', orderable: false, searchable: false },
-                // { data: 'installment_name', name: 'installment_name', defaultContent: 'لايوجد' },
-                // { data: 'amount', name: 'amount' },
-                // { data: 'pay_method', name: 'pay_method' },
-                // { data: 'serial_no', name: 'serial_no' },
-                // { data: 'print_status_label', name: 'print_status_label', orderable: false, searchable: false },
-                // { data: 'description', name: 'description' },
-                // { data: 'date', name: 'date' },
-                // { data: 'actions', name: 'actions', orderable: false, searchable: false },
-                // { data: 'archive_button', name: 'archive_button', defaultContent: '', orderable: false, searchable: false },
-                // { data: 'select_checkbox', name: 'select_checkbox', defaultContent: '<input type="checkbox">', orderable: false, searchable: false },
-            ],
-        });
-
-        // Reload DataTable on month selection change
-        $('#dateSelect').change(function () {
-            $('#all-student1').DataTable().ajax.reload();
-        });
-    });
-</script> -->
-
-
 <script>
     function addUrlParameter(name, value) {
         const searchParams = new URLSearchParams(window.location.search);
@@ -86,37 +47,51 @@
     }
 
     document.getElementById('select-all').addEventListener('change', function () {
-        const checkboxes = document.querySelectorAll('input[name="action[]"]');
-        checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+    // Select all checkboxes within the table
+    const checkboxes = document.querySelectorAll('#users-table input[name="action[]"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked; // Set checkbox state based on "select-all"
     });
+});
 
-    function handleBulkAction(button) {
-        const actionValue = button.value;
-        const selectedItems = Array.from(document.querySelectorAll('input[name="action[]"]:checked'))
-            .map(checkbox => checkbox.value);
+// Ensure new rows are bound correctly after DataTable redraw
+$('#users-table').on('draw.dt', function () {
+    const selectAllCheckbox = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('#users-table input[name="action[]"]');
 
-        if (selectedItems.length === 0) {
-            alert('يجب اختيار عميل واحد على الأقل!');
-            return;
-        }
+    // Sync "select-all" state with individual checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+});
 
-        const actionUrl = actionValue == 1 ? '/print_all' : '/archieve_all';
-        const csrfToken = '{{ csrf_token() }}'; // Add CSRF token for security
+function handleBulkAction(button) {
+    const actionValue = button.value;
+    const selectedItems = Array.from(document.querySelectorAll('input[name="action[]"]:checked'))
+        .map(checkbox => checkbox.value);
 
-        $.ajax({
-            type: 'POST',
-            url: `${actionUrl}/${selectedItems}`,
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-            success: function (response) {
-                if (response.redirect) {
-                    window.location.href = response.redirect;
-                }
-            },
-            error: function (error) {
-                alert('حدث خطأ أثناء تنفيذ العملية');
-            }
-        });
+    if (selectedItems.length === 0) {
+        alert('يجب اختيار عميل واحد على الأقل!');
+        return;
     }
+
+    const actionUrl = actionValue == 1 ? '/print_all' : '/archieve_all';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+        type: 'POST',
+        url: actionUrl,
+        data: { items: selectedItems },
+        headers: { 'X-CSRF-TOKEN': csrfToken },
+        success: function (response) {
+            alert(response.message || 'تم تنفيذ العملية بنجاح');
+            $('#users-table').DataTable().ajax.reload();
+        },
+        error: function (error) {
+            alert(error.responseJSON?.message || 'حدث خطأ أثناء تنفيذ العملية');
+        }
+    });
+}
 </script>
 
 
@@ -155,7 +130,6 @@
                        
                     },
 
-                  
                     {
                         data: 'pay_method',
                         name: 'pay_method',
@@ -187,17 +161,16 @@
                         name: 'actions',
                         className: 'text-center'
                     },
-                    {
-                        data: 'archive_button',
-                        name: 'archive_button',
-                        className: 'text-center'
-                    },
+                    // {
+                    //     data: 'archive_button',
+                    //     name: 'archive_button',
+                    //     className: 'text-center'
+                    // },
                     {
                         data: 'select_checkbox',
                         name: 'select_checkbox',
                         className: 'text-center'
                     },
-                 
                     
                 ],
                 // language: {
