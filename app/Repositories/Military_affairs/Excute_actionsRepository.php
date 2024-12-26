@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Repositories\Military_affairs;
@@ -140,32 +141,32 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
     public function add_amount(Request $request)
     {
         $item_military = Military_affair::findorfail($request->military_affairs_id);
-         if($request->check_found == 1) {
-             $request->validate([
-                 'date' => 'required| date',
-                 'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
-                 'check_type' => 'required',
-                 'amount' => 'required',
-             ]);
+        if($request->check_found == 1) {
+            $request->validate([
+                'date' => 'required| date',
+                'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+                'check_type' => 'required',
+                'amount' => 'required',
+            ]);
 
-             if ($request->hasFile('img_dir')) {
+            if ($request->hasFile('img_dir')) {
                 $data_img_dir = $request->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
-                }
-                $array_add=[
-                    'date'=>$request->date,
-                    'check_type'=>$request->check_type,
-                    'amount'=>$request->amount,
-                    'military_affairs_id'=>$request->military_affairs_id,
-                    'img_dir'=> $data_img_dir 
-        
-                ];
-        
-                Military_affairs_amount::create($array_add);
-                $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
-                $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
-         }
-       
-       
+            }
+            $array_add=[
+                'date'=>$request->date,
+                'check_type'=>$request->check_type,
+                'amount'=>$request->amount,
+                'military_affairs_id'=>$request->military_affairs_id,
+                'img_dir'=> $data_img_dir
+
+            ];
+
+            Military_affairs_amount::create($array_add);
+            $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
+            $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
+        }
+
+
         $update_data['excute_actions_last_date_check'] =date('Y-m-d H:i:s');
         $item_military->update($update_data);
         return redirect()->route('excute_actions');
