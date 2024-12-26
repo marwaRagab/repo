@@ -2230,7 +2230,7 @@
                                      $total_checkat=0;
                                     @endphp
 
-                                    @if (count($mil_amount)>0)
+                                    @if (!empty($mil_amount))
 
                                         @foreach($mil_amount as $military_affairs_amount)
                                             @php

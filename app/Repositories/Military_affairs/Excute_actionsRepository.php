@@ -176,6 +176,11 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
     // }
 
+
+
+
+
+
     public function add_amount(Request $request)
     {
         $item_military = Military_affair::findorfail($request->military_affairs_id);
@@ -186,45 +191,31 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
                 'check_type' => 'required',
                 'amount' => 'required',
             ]);
+
+            if ($request->hasFile('img_dir')) {
+                $data_img_dir = $request->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
+            }
+            $array_add=[
+                'date'=>$request->date,
+                'check_type'=>$request->check_type,
+                'amount'=>$request->amount,
+                'military_affairs_id'=>$request->military_affairs_id,
+                'img_dir'=> $data_img_dir
+
+            ];
+
+            Military_affairs_amount::create($array_add);
+            $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
+            $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
         }
-
-
-
-        if ($request->hasFile('img_dir')) {
-
-            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
-            $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
-            $data['img_dir'] = 'military_affairs' . '/' . $filename;
-        }
-
-        $array_add=[
-            'date'=>$request->date,
-            'check_type'=>$request->check_type,
-            'amount'=>$request->amount,
-            'military_affairs_id'=>$request->military_affairs_id,
-            'img_dir'=> $data['img_dir']
-        ];
-
-
-
-
-        Military_affairs_amount::create($array_add);
-        $item_military['excute_actions_amount'] = $item_military['excute_actions_amount']  + $request->amount;
-        $item_military['excute_actions_counter']= 1+$item_military['excute_actions_counter'];
-
 
 
         $update_data['excute_actions_last_date_check'] =date('Y-m-d H:i:s');
         $item_military->update($update_data);
-        return redirect()->route('excute_actions');
+        return redirect()->route('excute_actions')->with('success','تم الاضافة بنجاح');
 
 
     }
-
-
-
-
-
 
 
 
@@ -327,7 +318,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             . '<br>'
             . $description;
         if ($add_data_bank_2['amount'] > 0) {
-            DB::table('fast_banks_invoices')->create($add_data_bank_2);
+            DB::table('fast_banks_invoices')->insert($add_data_bank_2);
 
         }
 
