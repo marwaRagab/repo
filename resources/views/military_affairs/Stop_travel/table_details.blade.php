@@ -1,476 +1,476 @@
 
 <tr >
-    <!--    <td>
+        <!--    <td>
         {{ $loop->index + 1 }}
 
-    </td>-->
+        </td>-->
 
 
-    <td>
-
-        <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
-
-    </td>
-    <td>{{$item->installment->client->name_ar}}
-        <br>
-        {{$item->installment->client->client_phone->first()->phone}}
-        <br>
-        {{$item->installment->client->civil_number}}
-    </td>
-    <td>
-        {{$item->installment->client->court ?  \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->name_ar : ''}}
-
-        <br>
-        {{$item->eqrar_dain_amount}}
-    </td>
-
-    <td>
-        <span>بداية التحويل :  {{ $item->different_date_tranfer}}</span>
-        <br>
-        @if(Request::get('stop_travel_type')=='command')
-            <span> طلب منع السفر :  {{$item->different_date_command}}</span>
-            <br>
-        @endif
-        @if(Request::get('stop_travel_type')=='stop_travel_finished')
-            <span>طلب منع السفر  :  {{$item->different_date_finshied_command}}</span>
-            <br>
-            <span> امر منع السفر :  {{ $item->different_date_finshied}}</span>
-
-        @endif
-
-    </td>
-    <td>
-        {{$item->open_file_date}}
-    </td>
-
-    <td>
-        {{$item->issue_id}}
-        {{--
-            {{$item->status_all->where('type_id','request')->first()->date}}
-            --}}
-    </td>
-    @if(Request::get('stop_travel_type')=='command')
         <td>
 
-            {{$item->final_date_command ? $item->final_date_command[0] : ''}}
+            <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
+
+        </td>
+        <td>{{$item->installment->client->name_ar}}
             <br>
-            @if($item->item_command)
-                <a href="https://electron-kw.net/{{$item->item_command->img_dir}}"
-                   target=" _blank">
-                                                            <span class="btn btn-info"> صورة
-                                                                 </span>
-                </a>
+            {{$item->installment->client->client_phone->first()->phone}}
+            <br>
+            {{$item->installment->client->civil_number}}
+        </td>
+        <td>
+            {{$item->installment->client->court ?  \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->name_ar : ''}}
+
+            <br>
+            {{$item->eqrar_dain_amount}}
+        </td>
+
+        <td>
+            <span>بداية التحويل :  {{ $item->different_date_tranfer}}</span>
+            <br>
+            @if(Request::get('stop_travel_type')=='command')
+                <span> طلب منع السفر :  {{$item->different_date_command}}</span>
+                <br>
+            @endif
+            @if(Request::get('stop_travel_type')=='stop_travel_finished')
+                <span>طلب منع السفر  :  {{$item->different_date_finshied_command}}</span>
+                <br>
+                <span> امر منع السفر :  {{ $item->different_date_finshied}}</span>
+
             @endif
 
         </td>
         <td>
-            <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                    data-bs-target="#convert_command-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+            {{$item->open_file_date}}
+        </td>
 
-                منع السفر
-            </button>
-            <div id="convert_command-{{$item->id}}" class="modal fade" tabindex="-1"
-                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                        <form class="mega-vertical"
-                              action="{{url('stop_travel_convert')}}" method="post"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="military_affairs_id"
-                                   value="{{$item->id}}">
-                            <input type="hidden" name="type"
-                                   value="{{$item_type_time3->type}}">
-                            <input type="hidden" name="type_id"
-                                   value="{{$item_type_time3->slug}}">
-                            <input type="hidden" name="item_type_new"
-                                   value="{{$item_type_time3->id}}">
-                            <input type="hidden" name="item_type_old"
-                                   value="{{$item_type_time2->id}}">
+        <td>
+            {{$item->issue_id}}
+            {{--
+                {{$item->status_all->where('type_id','request')->first()->date}}
+                --}}
+        </td>
+        @if(Request::get('stop_travel_type')=='command')
+            <td>
+@if (isset($item->final_date_command[0]) && is_numeric($item->final_date_command[0]) && (int)$item->final_date_command[0] > 0)
+        {{ \Carbon\Carbon::createFromTimestamp($item->final_date_command[0] ?? '')->format('d-m-Y') }}
 
-                            <div class="modal-header d-flex align-items-center">
-                                <h4 class="modal-title" id="myModalLabel">
-                                    منع السفر</h4>
-                                <button type="button" class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
+@else
+    {{ $item->final_date_command[0] }}
+@endif
+                <br>
+                @if($item->item_command)
+                    <a  target="_blank"
+                        onclick="checkFileAndRedirect(
+                            '{{ $item && $item->item_command && $item->item_command->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_command->img_dir : '#' }}',
+                            '{{ $item && $item->item_command && $item->item_command->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_command->img_dir : '#' }}'
+                        ); return false;">
+                                                            <span class="btn btn-info"> صورة
+                                                                 </span>
+                    </a>
+                @endif
 
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label" for="input1 ">
-                                            تاريخ </label>
-                                        <input type="date" name="date"
-                                               class="form-control mb-2"
-                                               id="input1">
-                                        @error('date')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="formFile" class="form-label">اختر
-                                            صورة </label>
-                                        <input class="form-control" name="img_dir"
-                                               accept="image/*" type="file"
-                                               id="formFile"/>
-                                        @error('img_dir')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
+            </td>
+            <td>
+                <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                        data-bs-target="#convert_command-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+
+                    منع السفر
+                </button>
+                <div id="convert_command-{{$item->id}}" class="modal fade" tabindex="-1"
+                     aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <form class="mega-vertical"
+                                  action="{{url('stop_travel_convert')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="military_affairs_id"
+                                       value="{{$item->id}}">
+                                <input type="hidden" name="type"
+                                       value="{{$item_type_time3->type}}">
+                                <input type="hidden" name="type_id"
+                                       value="{{$item_type_time3->slug}}">
+                                <input type="hidden" name="item_type_new"
+                                       value="{{$item_type_time3->id}}">
+                                <input type="hidden" name="item_type_old"
+                                       value="{{$item_type_time2->id}}">
+
+                                <div class="modal-header d-flex align-items-center">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        منع السفر</h4>
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
+                                <div class="modal-body">
 
-                            </div>
-                            <div class="modal-footer d-flex ">
-                                <button type="submit" class="btn btn-primary">حفظ
-                                </button>
-                                <button type="button"
-                                        class="btn bg-danger-subtle text-danger  waves-effect"
-                                        data-bs-dismiss="modal">
-                                    الغاء
-                                </button>
-                            </div>
-                        </form>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="input1 ">
+                                                تاريخ </label>
+                                            <input type="date" name="date"
+                                                   class="form-control mb-2"
+                                                   id="input1">
+                                            @error('date')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formFile" class="form-label">اختر
+                                                صورة </label>
+                                            <input class="form-control" name="img_dir"
+                                                   accept="image/*" type="file"
+                                                   id="formFile"/>
+                                            @error('img_dir')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer d-flex ">
+                                    <button type="submit" class="btn btn-primary">حفظ
+                                    </button>
+                                    <button type="button"
+                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                            data-bs-dismiss="modal">
+                                        الغاء
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- /.modal-content -->
                     </div>
-
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
 
 
-        </td>
-    @elseif(Request::get('stop_travel_type')=='stop_travel_finished')
+            </td>
+        @elseif(Request::get('stop_travel_type')=='stop_travel_finished')
 
-        <td>
-            {{$item->final_date_finished_command[0]}}
+            <td>
+@if (isset($item->final_date_finished_command[0]) && is_numeric($item->final_date_finished_command[0]) && (int)$item->final_date_finished_command[0] > 0)
+        {{ \Carbon\Carbon::createFromTimestamp($item->final_date_finished_command[0] ?? '')->format('d-m-Y') }}
 
-            <br>
-            <a href="https://electron-kw.net/{{$item->item_finished_command->img_dir}}"
-               target=" _blank">
+@else
+    {{ $item->final_date_finished_command[0] }}
+@endif
+                <br>
+                <a  target="_blank"
+                        onclick="checkFileAndRedirect(
+                            '{{ $item && $item->item_finished_command && $item->item_finished_command->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_finished_command->img_dir : '#' }}',
+                            '{{ $item && $item->item_finished_command && $item->item_finished_command->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_finished_command->img_dir : '#' }}'
+                        ); return false;">
+                
                                                             <span class="btn btn-info"> صورة
                                                                  </span>
-            </a>
-        </td>
-        <td>  {{$item->final_date_finished[0]}}
+                </a>
+            </td>
+            <td>             @if (isset($item->final_date_finished_command[0]) && is_numeric($item->final_date_finished_command[0]) && (int)$item->final_date_finished_command[0] > 0)
+        {{ \Carbon\Carbon::createFromTimestamp($item->final_date_finished_command[0] ?? '')->format('d-m-Y') }}
 
-            <br>
-            <a href="https://electron-kw.net/{{$item->item_finished->img_dir}}"
-               target=" _blank">
+@else
+    {{ $item->final_date_finished_command[0] }}
+@endif
+
+
+                <br>
+                <a  target="_blank"
+                        onclick="checkFileAndRedirect(
+                            '{{ $item && $item->item_finished && $item->item_finished->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_finished->img_dir : '#' }}',
+                            '{{ $item && $item->item_finished && $item->item_finished->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_finished->img_dir : '#' }}'
+                        ); return false;">
                                                             <span class="btn btn-info"> صورة
                                                                  </span>
-            </a>
-        </td>
-    @elseif(Request::get('stop_travel_type')=='stop_travel_cancel_request')
-        <td>
+                </a>
+            </td>
+        @elseif(Request::get('stop_travel_type')=='stop_travel_cancel_request')
+            <td>
+                @php
+                    $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel_request')->first()->date;
+                    $final_date=explode(' ',$date_convert_cancel);
+                @endphp
+@if (isset($final_date[0]) && is_numeric($final_date[0]) && (int)$final_date[0] > 0)
+        {{ \Carbon\Carbon::createFromTimestamp($final_date[0] ?? '')->format('d-m-Y') }}
+
+@else
+    {{ $final_date[0] }}
+@endif
+            </td>
+            <td>
+                <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                        data-bs-target="#cancel_stop_travel-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+
+                    منع السفر
+                </button>
+                <div id="cancel_stop_travel-{{$item->id}}" class="modal fade"
+                     tabindex="-1"
+                     aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <form class="mega-vertical"
+                                  action="{{url('stop_travel_convert')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="military_affairs_id"
+                                       value="{{$item->id}}">
+                                <input type="hidden" name="type"
+                                       value="{{$item_type_time4->type}}">
+                                <input type="hidden" name="type_id"
+                                       value="{{$item_type_time5->slug}}">
+                                <input type="hidden" name="item_type_new"
+                                       value="{{$item_type_time5->id}}">
+                                <input type="hidden" name="item_type_old"
+                                       value="{{$item_type_time4->id}}">
+
+                                <div class="modal-header d-flex align-items-center">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        منع السفر</h4>
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="input1 ">
+                                                تاريخ </label>
+                                            <input type="date" name="date"
+                                                   class="form-control mb-2"
+                                                   id="input1">
+                                            @error('date')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formFile" class="form-label">اختر
+                                                صورة </label>
+                                            <input class="form-control" name="img_dir"
+                                                   accept="image/*" type="file"
+                                                   id="formFile"/>
+                                            @error('img_dir')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer d-flex ">
+                                    <button type="submit" class="btn btn-primary">حفظ
+                                    </button>
+                                    <button type="button"
+                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                            data-bs-dismiss="modal">
+                                        الغاء
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+
+
+            </td>
+        @elseif(Request::get('stop_travel_type')=='stop_travel_cancel')
             @php
-                $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel_request')->first()->date;
+
+
+                $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel')->first()->date;
                 $final_date=explode(' ',$date_convert_cancel);
+                $date_convert_cancel_request=$item->status_all->where('type_id','stop_travel_cancel_request')->where('flag',1)->first() ?  $item->status_all->where('type_id','stop_travel_cancel_request')->first()->date : '';
+                $final_date_request= $date_convert_cancel_request ?  explode(' ',$date_convert_cancel_request) : '';
             @endphp
-            {{$final_date[0]}}
 
-        </td>
-        <td>
-            <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                    data-bs-target="#cancel_stop_travel-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+@if (isset($final_date_request[0]) && is_numeric($final_date_request[0]) && (int)$final_date_request[0] > 0)
+     <td>   {{ \Carbon\Carbon::createFromTimestamp($final_date_request[0] ?? '')->format('d-m-Y') }}</td>
 
-                منع السفر
-            </button>
-            <div id="cancel_stop_travel-{{$item->id}}" class="modal fade"
-                 tabindex="-1"
-                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                        <form class="mega-vertical"
-                              action="{{url('stop_travel_convert')}}" method="post"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="military_affairs_id"
-                                   value="{{$item->id}}">
-                            <input type="hidden" name="type"
-                                   value="{{$item_type_time4->type}}">
-                            <input type="hidden" name="type_id"
-                                   value="{{$item_type_time5->slug}}">
-                            <input type="hidden" name="item_type_new"
-                                   value="{{$item_type_time5->id}}">
-                            <input type="hidden" name="item_type_old"
-                                   value="{{$item_type_time4->id}}">
+@else
+   <td>  {{ $final_date_request[0] }}</td>
+@endif
+@if (isset($final_date[0]) && is_numeric($final_date[0]) && (int)$final_date[0] > 0)
+     <td>   {{ \Carbon\Carbon::createFromTimestamp($final_date[0] ?? '')->format('d-m-Y') }}</td>
 
-                            <div class="modal-header d-flex align-items-center">
-                                <h4 class="modal-title" id="myModalLabel">
-                                    منع السفر</h4>
-                                <button type="button" class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
+@else
+   <td>  {{ $final_date[0] }}</td>
+@endif
+        @else
 
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label" for="input1 ">
-                                            تاريخ </label>
-                                        <input type="date" name="date"
-                                               class="form-control mb-2"
-                                               id="input1">
-                                        @error('date')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="formFile" class="form-label">اختر
-                                            صورة </label>
-                                        <input class="form-control" name="img_dir"
-                                               accept="image/*" type="file"
-                                               id="formFile"/>
-                                        @error('img_dir')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
+            <td>
+                <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                        data-bs-target="#convert_resuest-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+
+                    منع السفر
+                </button>
+                <div id="convert_resuest-{{$item->id}}" class="modal fade" tabindex="-1"
+                     aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <form class="mega-vertical"
+                                  action="{{url('stop_travel_convert')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="military_affairs_id"
+                                       value="{{$item->id}}">
+                                <input type="hidden" name="type"
+                                       value="{{$item_type_time1->type}}">
+                                <input type="hidden" name="type_id"
+                                       value="{{$item_type_time2->slug}}">
+                                <input type="hidden" name="item_type_new"
+                                       value="{{$item_type_time2->id}}">
+                                <input type="hidden" name="item_type_old"
+                                       value="{{$item_type_time1->id}}">
+
+                                <div class="modal-header d-flex align-items-center">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        منع السفر</h4>
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
+                                <div class="modal-body">
 
-                            </div>
-                            <div class="modal-footer d-flex ">
-                                <button type="submit" class="btn btn-primary">حفظ
-                                </button>
-                                <button type="button"
-                                        class="btn bg-danger-subtle text-danger  waves-effect"
-                                        data-bs-dismiss="modal">
-                                    الغاء
-                                </button>
-                            </div>
-                        </form>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="input1 ">
+                                                تاريخ </label>
+                                            <input type="date" name="date"
+                                                   class="form-control mb-2"
+                                                   id="input1">
+                                            @error('date')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formFile" class="form-label">اختر
+                                                صورة </label>
+                                            <input class="form-control" name="img_dir"
+                                                   accept="image/*" type="file"
+                                                   id="formFile"/>
+                                            @error('img_dir')
+                                            <div style='color:red'>{{$message}}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer d-flex ">
+                                    <button type="submit" class="btn btn-primary">حفظ
+                                    </button>
+                                    <button type="button"
+                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                            data-bs-dismiss="modal">
+                                        الغاء
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- /.modal-content -->
                     </div>
-
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
-            </div>
 
+            </td>
 
+        @endif
+        <td>
+            @include('military_affairs.Open_file.partial.column_responsible')
         </td>
-    @elseif(Request::get('stop_travel_type')=='stop_travel_cancel')
-        @php
 
-
-            $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel')->first()->date;
-            $final_date=explode(' ',$date_convert_cancel);
-            $date_convert_cancel_request=$item->status_all->where('type_id','stop_travel_cancel_request')->where('flag',1)->first() ?  $item->status_all->where('type_id','stop_travel_cancel_request')->first()->date : '';
-            $final_date_request= $date_convert_cancel_request ?  explode(' ',$date_convert_cancel_request) : '';
-        @endphp
-
-
-        <td>{{$final_date_request ?   $final_date_request[0] : ''}}</td>
-        <td>{{$final_date[0]}}</td>
-
-    @else
 
         <td>
-            <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
-                    data-bs-target="#convert_resuest-{{$item->id}}"   {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+            <div class="btn-group dropup mb-6 me-6">
+                <button class="btn btn-secondary dropdown-toggle" type="button"
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    الإجراءات
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li>
+                        <a class="btn btn-success rounded-0 w-100 mt-2"
 
-                منع السفر
-            </button>
-            <div id="convert_resuest-{{$item->id}}" class="modal fade" tabindex="-1"
-                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                        <form class="mega-vertical"
-                              action="{{url('stop_travel_convert')}}" method="post"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="military_affairs_id"
-                                   value="{{$item->id}}">
-                            <input type="hidden" name="type"
-                                   value="{{$item_type_time1->type}}">
-                            <input type="hidden" name="type_id"
-                                   value="{{$item_type_time2->slug}}">
-                            <input type="hidden" name="item_type_new"
-                                   value="{{$item_type_time2->id}}">
-                            <input type="hidden" name="item_type_old"
-                                   value="{{$item_type_time1->id}}">
+                           href="{{url('installment/show-installment/'.$item->installment->id)}}">
+                            التفاصيل</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary rounded-0 w-100 mt-2"
+                           data-bs-toggle="modal"
+                           data-bs-target="#open-details-{{$item->id}}">
+                            الملاحظات</a>
+                    </li>
 
-                            <div class="modal-header d-flex align-items-center">
-                                <h4 class="modal-title" id="myModalLabel">
-                                    منع السفر</h4>
-                                <button type="button" class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label class="form-label" for="input1 ">
-                                            تاريخ </label>
-                                        <input type="date" name="date"
-                                               class="form-control mb-2"
-                                               id="input1">
-                                        @error('date')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="formFile" class="form-label">اختر
-                                            صورة </label>
-                                        <input class="form-control" name="img_dir"
-                                               accept="image/*" type="file"
-                                               id="formFile"/>
-                                        @error('img_dir')
-                                        <div style='color:red'>{{$message}}</div>
-                                        @enderror
-                                    </div>
+                </ul>
+                <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
+                     aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <form class="mega-vertical"
+                                  action="{{url('add_notes')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-header d-flex align-items-center">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        ملاحظات منع السفر </h4>
+                                    <button type="button" class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                 </div>
+                                <div class="modal-body">
+                                    <ul class="nav nav-pills" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active"
+                                               data-bs-toggle="tab"
+                                               href="#navpill-{{$item->id}}" role="tab">
+                                                <span>الملاحظات</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab"
+                                               href="#notes-{{$item->id}}" role="tab">
+                                                <span>الإجراءات</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                                                <a class="nav-link" data-bs-toggle="tab"
+                                                                   href="#actions-{{$item->id}}" role="tab">
+                                                                    <span>تتبع المعاملة</span>
+                                                                </a>
+                                                            </li>
 
-                            </div>
-                            <div class="modal-footer d-flex ">
-                                <button type="submit" class="btn btn-primary">حفظ
-                                </button>
-                                <button type="button"
-                                        class="btn bg-danger-subtle text-danger  waves-effect"
-                                        data-bs-dismiss="modal">
-                                    الغاء
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                                    </ul>
+                                    <!-- Tab panes -->
 
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
+                                    @if(count($items)>=1)
 
-        </td>
+                                        <div class="tab-content border mt-2">
+                                            @php
 
-    @endif
-    <td>
-        @include('military_affairs.Open_file.partial.column_responsible')
-    </td>
+                                                $all_notes=get_all_notes('stop_travel',$item->id);
+                                                $all_actions=get_all_actions($item->id);
+                                                $get_all_delegations = get_all_delegations( $item->id);
 
-
-    <td>
-        <div class="btn-group dropup mb-6 me-6">
-            <button class="btn btn-secondary dropdown-toggle" type="button"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                الإجراءات
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li>
-                    <a class="btn btn-success rounded-0 w-100 mt-2"
-
-                       href="{{url('installment/show-installment/'.$item->installment->id)}}">
-                        التفاصيل</a>
-                </li>
-                <li>
-                    <a class="btn btn-primary rounded-0 w-100 mt-2"
-                       data-bs-toggle="modal"
-                       data-bs-target="#open-details-{{$item->id}}">
-                        الملاحظات</a>
-                </li>
-
-            </ul>
-            <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
-                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                        <form class="mega-vertical"
-                              action="{{url('add_notes')}}" method="post"
-                              enctype="multipart/form-data">
-                            @csrf
-                            <div class="modal-header d-flex align-items-center">
-                                <h4 class="modal-title" id="myModalLabel">
-                                    ملاحظات منع السفر </h4>
-                                <button type="button" class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul class="nav nav-pills" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active"
-                                           data-bs-toggle="tab"
-                                           href="#navpill-{{$item->id}}" role="tab">
-                                            <span>الملاحظات</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab"
-                                           href="#notes-{{$item->id}}" role="tab">
-                                            <span>الإجراءات</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab"
-                                           href="#actions-{{$item->id}}" role="tab">
-                                            <span>تتبع المعاملة</span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                                <!-- Tab panes -->
-
-                                @if(count($items)>=1)
-
-                                    <div class="tab-content border mt-2">
-                                        @php
-
-                                            $all_notes=get_all_notes('stop_travel',$item->id);
-                                            $all_actions=get_all_actions($item->id);
-                                            $get_all_delegations = get_all_delegations( $item->id);
-
-                                        @endphp
+                                            @endphp
                                             <!-- <pre>{{ print_r($get_all_delegations, return: true) }}</pre> -->
 
-                                        <div class="tab-pane active p-3"
-                                             id="navpill-{{$item->id}}"
-                                             role="tabpanel">
+                                            <div class="tab-pane active p-3"
+                                                 id="navpill-{{$item->id}}"
+                                                 role="tabpanel">
 
-                                            <table id="notes1"
-                                                   class="table table-bordered border text-wrap align-middle">
-                                                <thead>
-                                                <!-- start row -->
-                                                <tr>
-                                                    <th>اليوزر</th>
-                                                    <th>النوع</th>
-                                                    <th>الملاحظة</th>
-                                                    <th> الساعة</th>
-                                                    <th>التاريخ</th>
-
-                                                </tr>
-                                                <!-- end row -->
-                                                </thead>
-                                                <tbody>
-
-
-                                                <!-- start row -->
-                                                @foreach($all_notes as $all_note)
-
-                                                    <tr >
-                                                        <td>
-                                                            {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
-                                                        </td>
-                                                        <td>
-                                                            @php
-                                                                if($all_note->notes_type=='answered'){
-                                                                $type= 'رد'   ;
-                                                                }elseif ($all_note->notes_type=='refused'){
-                                                                $type= 'لم يرد'   ;
-                                                                }else{
-                                                                $type= 'ملاحظة'   ;
-                                                                }
-
-                                                            @endphp
-                                                            {{$type}}
-                                                        </td>
-                                                        <td>
-                                                            <p>
-                                                                {{$all_note->note}}
-                                                            </p>
-                                                        </td>
-                                                        @php
-                                                            $time= explode(' ', $all_note->date)[1];
-                                                            $day= explode(' ', $all_note->date)[0];
-
+                                                <table id="notes1"
+                                                       class="table table-bordered border text-wrap align-middle">
+                                                    <thead>
+                                                    <!-- start row -->
+                                                    <tr>
+                                                        <th>اليوزر</th>
+                                                        <th>النوع</th>
+                                                        <th>الملاحظة</th>
+                                                        <th> الساعة</th>
+                                                        <th>التاريخ</th>
 
                                                     </tr>
                                                     <!-- end row -->
@@ -569,10 +569,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
-
                                             </div>
-
                                             <div class="tab-pane p-3" id="notes-{{$item->id}}"
                                                  role="tabpanel">
                                                 <table id="notes2"
@@ -735,34 +734,36 @@
 
                                                                     @endif
 
-                                                    </tr>
-                                                @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
 
-                                                </tbody>
-                                            </table>
                                         </div>
-                                    </div>
-                            </div>
-                            <div class="modal-footer d-flex ">
-                                <button class="btn btn-primary" type="submit"> حفظ
+                                </div>
+                                <div class="modal-footer d-flex ">
+                                    <button class="btn btn-primary" type="submit"> حفظ
 
-                                </button>
-                                <button type="button"
-                                        class="btn bg-danger-subtle text-danger  waves-effect"
-                                        data-bs-dismiss="modal">
-                                    إغلاق
-                                </button>
-                            </div>
-                        </form>
-                        @endif
+                                    </button>
+                                    <button type="button"
+                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                            data-bs-dismiss="modal">
+                                        إغلاق
+                                    </button>
+                                </div>
+                            </form>
+                            @endif
+                        </div>
+                        <!-- /.modal-content -->
                     </div>
-                    <!-- /.modal-content -->
+                    <!-- /.modal-dialog -->
                 </div>
-                <!-- /.modal-dialog -->
+
             </div>
 
-        </div>
-    </td>
+            @include('military_affairs.Execute_alert.print.print')
+
+        </td>
 
 
-</tr>
+    </tr>
+    @include('military_affairs.Execute_alert.print.script')
