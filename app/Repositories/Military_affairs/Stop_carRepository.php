@@ -82,6 +82,8 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             $counts['stop_car_count_' . $one->id] = $this->count_stop_car($governate_id, $one->slug);
         }
 
+        
+
         $transactions = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_car' => 1])
             ->with('installment')
