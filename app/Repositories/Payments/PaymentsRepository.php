@@ -149,6 +149,20 @@ public function getPaymentsData(Request $request)
             ? '<span class="text-success">تم الطباعة</span>' 
             : '<span class="text-danger">لم يتم الطباعة</span>';
     })
+    ->addColumn('final_date_formatted', function ($payment) {
+        $finalDate = $payment->date ?? null;
+    
+        if ($finalDate) {
+            try {
+                return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
+            } catch (\Exception $e) {
+                // Handle invalid date format gracefully
+                return $finalDate;
+            }
+        }
+    
+        return 'N/A'; // Return a default value if the date is null or invalid
+    })
     ->addColumn('actions', function ($payment) {
         $printUrl = route('print_invoice', [
             'id' => $payment->id,
@@ -169,13 +183,20 @@ public function getPaymentsData(Request $request)
 
         return $printButton . ' ' . $archiveButton;
     })
+    // ->addColumn('archive_button', function ($payment) {
+    //     return "<button class="btn btn-secondary btn-sm rounded-pill" value="2" onclick="handleBulkAction(this)">
+    //                             تحويل الجميع للأرشيف</button>"; 
+    // })
     ->addColumn('archive_button', function ($payment) {
-        return ''; // Ensure you provide a default value or actual button here
+        return "<button class='btn btn-secondary btn-sm rounded-pill' value='2' onclick='handleBulkAction(this)'>
+                    تحويل الجميع للأرشيف
+                </button>";
     })
+    
     ->addColumn('select_checkbox', function ($payment) {
         return '<input type="checkbox">'; // Provide the checkbox column data
     })
-    ->rawColumns(['print_status_label', 'actions']) // Allow HTML for certain columns
+    ->rawColumns(['print_status_label', 'actions','select_checkbox','archive_button']) // Allow HTML for certain columns
     ->addIndexColumn() // Add an auto-incrementing index column
     ->make(true); // Generate JSON response for DataTables
     // dd(DataTables::of($payments)->toArray());
@@ -363,8 +384,10 @@ public function getPaymentsData(Request $request)
         }
         // dd($client);
         // $ministries_income = $this->db_get->get_by_id('ministries_income', $data["client"]['ministries_income_id']);
-        if ($client->ministry) {
-            $ministries_income = Ministry::where(['id' => $client->ministry->id, 'type' => '2'])->first();
+        
+        if ($client->get_ministry) {
+            // dd($client->get_ministry);
+            $ministries_income = $client->get_ministry;
 
             if (isset($ministries_income)) {
                 $data["client"]['ministry_percent'] = $ministries_income['percent'];
@@ -426,9 +449,15 @@ public function getPaymentsData(Request $request)
         //  $data["items_invoices_installment"] = $this->db_get->get_where_conditions('invoices_installment', $cond_67777);
         // echo '<pre>';print_r($data['items_done']);exit;
         for ($i = 0; $i < count($data['items_done']); $i++) {
-            $knet = Invoices_installment::where('installment_id', $installment_id)->where($data['items_done'][$i]['id'], '=', $data['items_invoices_installment'][$i]['install_month_id']);
-
-            $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
+            if (isset($data['items_invoices_installment'][$i])) {
+                $knet = Invoices_installment::where('installment_id', $installment_id)
+                    ->where($data['items_done'][$i]['id'], '=', $data['items_invoices_installment'][$i]['install_month_id']);
+        
+                $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
+            } else {
+                // Handle cases where items_invoices_installment[$i] does not exist
+                $data['items_done'][$i]['knet'] = null; // or some default value
+            }
         }
 
         //$data['the_notes'] = InstallmentNote::where(['client_id'=> $client->id ,'installment_id'=>$installment_id])->get();

@@ -568,8 +568,8 @@ function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $desc
     $cond['bank_id'] = $bank_id;
 
     $item2 = DB::table('banks_invoices')->where('bank_id', $bank_id)->first();
-
-    $item = $item2[0];
+    // dd($item2);
+    // $item = $item2[0];
     $sum = $amount;
     //  echo '<pre>';  print_r($item);
     if (!empty($item)) {
@@ -609,7 +609,7 @@ function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $desc
 
     //  echo '<pre>';  print_r($add_data); exit;
 
-    $id = DB::table('banks_invoices')->create($add_data);
+    $id = DB::table('banks_invoices')->insert($add_data);
 
     return $id;
 }
@@ -1227,6 +1227,30 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                     ->where('military_affairs.stop_bank', '1')
                     ->where('military_affairs.bank_archive', '0');
             }
+            }, function ($q) use ($stop_type) {
+                if ($stop_type == 'open_file') {
+                    $q->where('military_affairs.status', 'military');
+                }
+                if ($stop_type == 'case_proof') {
+                    $q->where('military_affairs.status', 'case_proof');
+                }
+                if($stop_type == 'execute_alert')
+                {
+                    
+                    $q->where('military_affairs.status', 'execute_alert');
+                }
+                if($stop_type == 'images')
+                {
+                    
+                    $q->where('military_affairs.status', 'images');
+                }
+                if($stop_type == 'Certificate')
+                {
+                    
+                    $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.certificate', 1)
+                    ->where('military_affairs.stop_salary', 0);
+                }
 
 
         })
