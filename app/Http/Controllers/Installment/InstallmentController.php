@@ -2006,4 +2006,43 @@ class InstallmentController extends Controller
 
     }
 
+    public function print_cient($id)
+    {
+
+        // $args = func_get_args();
+
+        // $id = $args[0];
+
+        // if (count($args) == 1) {
+
+        //     $kafil_id = 0;
+        //     $start_date = 0;
+        // } elseif (count($args) == 2) {
+
+        //     $kafil_id = 0;
+        //     $start_date = $args[1];
+        // } else {
+        //     $kafil_id = $args[1];
+        //     $start_date = $args[2];
+        // }
+
+        $installment = Installment::findorfail($id);
+
+        $client = Client::findorfail($installment->client_id);
+
+        $nationality = Nationality::findorfail($client['nationality_id'])->name_ar;
+
+        // if ($start_date != 0) {
+        //     $data["item"]['start_date'] = strtotime($start_date);
+        // }
+
+        // $not_done_count = $installment->getCountAttribute('not_done');
+
+        //  $data["items"] = $this->db_get->get_where_conditions('installment_months', $conditions);
+        // $items = Installment_month::where('installment_id', '=', $installment->id)->get();
+
+        return view('installment.print_cinet',compact('installment','client','nationality'));
+
+    }
+
 }

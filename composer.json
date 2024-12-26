@@ -34,7 +34,7 @@
     "autoload": {
 
          "files": [
-            "app/helper.php"
+             "app/helper.php"
          ],
 
 

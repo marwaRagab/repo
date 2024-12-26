@@ -1,18 +1,20 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a   href="{{route('execute_alert')}}"  class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
+            العدد الكلي ({{ count_court('' ,'execute_alert',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
             <a href="{{route('execute_alert',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}} 
+               ({{ count_court($court->id ,'execute_alert',null,null) }})
             </a>
 
         @endforeach
     </div>
 </div>
+
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">إعلان التنفيذ </h4>

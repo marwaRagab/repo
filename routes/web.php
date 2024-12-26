@@ -244,6 +244,10 @@ Route::middleware('auth')->group(function () {
     Route::get('military_affairs_all', [Military_affairsController::class, 'index'])->name('military_affairs');
     Route::get('military_affairs/stop_car', [Stop_carController::class, 'index'])->name('stop_car');
 
+    Route::get('military_affairs/stop_car/updateRegionsPoliceStations', [Stop_carController::class, 'updateRegionsPoliceStations'])->name('updateRegionsPoliceStations');
+    Route::post('military_affairs/stop_car/request_update/{id}', [Stop_carController::class, 'stop_car_convert'])->name('stop_car_convert');
+
+
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');
     Route::post('military_affairs/stop_salary/request_update/{id}', [Stop_salaryController::class, 'stop_salary_convert'])->name('stop_salary_convert');
 
@@ -486,6 +490,7 @@ Route::middleware('auth')->group(function () {
     Route::get('installment/lated_installments_update/{id}', [InstallmentController::class, 'lated_installments_update'])->name('installment.lated_installments_update');
     Route::get('installment/warning_print_paper/{id}', [InstallmentController::class, 'warning_print_paper']);
     Route::get('installment/print_contrct/{id}', [InstallmentController::class, 'print_contrct']);
+    Route::get('installment/print_cient/{id}', [InstallmentController::class, 'print_cient'])->name('print_cient');
     Route::get('installment/print_install_paper_info/{id}', [InstallmentController::class, 'print_install_paper_info']);
     Route::get('installment/recive_install_paper/{id}', [InstallmentController::class, 'recive_install_paper']);
     Route::get('installment/print_invoice/{id}', [InstallmentController::class, 'print_invoice']);

@@ -306,7 +306,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         Add_note_time($new_time_type3, $request->military_affairs_id);
 
 
-        dd('ffffffff');
+        // dd('ffffffff');
         return redirect()->route('case_proof')->with('success', 'تم التحويل بنجاح.');
 
     }

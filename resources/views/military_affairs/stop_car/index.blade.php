@@ -57,72 +57,10 @@
                             <?php }?>
                         <th>المبلغ </th>
                         <th> الرقم الالي </th>
+                        @if(request()->has('stop_car_type'))
+                        <th>{{ $col_name }}</th>
+                        @endif
                         <th>تحديد مسئول</th>
-                        <?php if ($stop_car_type   == 'stop_car_request') {?>
-                            <th> طلب حجز</th>
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_amr_hajz') {?>
-                            <th> أمر حجز</th>
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_info') {?>
-                            <th>
-                                بيانات الاستعلام
-                            </th>
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_catch') {?>
-                            <th>
-                                كتاب الأمن العام
-                            </th>
-                            <?php }?>
-
-                            <?php if ($stop_car_type == 'stop_car_police') {?>
-                            <th>
-                                كتاب المديرية
-                            </th>
-
-                            <?php }?>
-
-                            <?php if ($stop_car_type == 'stop_car_police_station') {?>
-
-
-                            <th>
-                                مراجعة المخفر
-                            </th>
-
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_doing') {?>
-                            <th>
-                                تاريخ
-                                كتاب المديرية
-                            </th>
-                            <th>
-                                ادخال السيارات الحجز
-
-                            </th>
-                            <?php }?>
-
-                            <?php if ($stop_car_type == 'stop_car_finished') {?>
-                            <th>
-                                إرسال SMS
-                            </th>
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_cancel_request') {?>
-                            <th>
-                                رفع حجز السيارات
-                            </th>
-
-
-
-                            <?php }?>
-                            <?php if ($stop_car_type == 'stop_car_cancel') {?>
-                            <th>
-                                تفاصيل رفع الحجز
-                            </th>
-
-
-
-                            <?php }?>
-
                         <th> الإجراءات </th>
 
                     </tr>
@@ -150,34 +88,34 @@
                                 @include('military_affairs.Execute_alert.print.print')
                             </td>
 
-                            <?php if ($stop_car_type == 'stop_car_police_station') {?>
-                            <td>
-                                {
 
-                                    mRender: function(data, type, row) {
-
-                                        if (row[23]) {
-                                            var bindHtml = ' <span> ' + row[23] + ' </span>';
-
-                                        } else {
-                                            var bindHtml = ' <span> ' + 'لايوجد' + ' </span>';
-
-                                        }
-
-                                        return bindHtml;
-                                    }
-
-                                },
-                            </td>
-                                <?php }?>
 
                             <td>{{ $item->eqrar_dain_amount }}</td>
                             <td>{{ $item->issue_id }}</td>
 
+
+                            @if($stop_car_type)
+    <td>
+        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                data-bs-target="#convert_command-{{ $item->id }}"
+                onclick="check_delegate({{ $item->emp_id }})"> {{ $col_name }}
+        </button>
+        @if($item->emp_id && $item->emp_id != '')
+            @include('military_affairs/stop_car/partials/'.$stop_car_type, [
+                'item' => $item,
+                'col_name' => $col_name,
+                'item_type_time1' => $item_type_time1,
+            ])
+        @endif
+    </td>
+@endif
+
+
+
+
                             <td>
                                 @include('military_affairs.Open_file.partial.column_responsible')
                             </td>
-
                             <td>
                                 <div class="btn-group dropup mb-6 me-6 d-block ">
                                     <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -547,3 +485,12 @@
         </div>
     </div>
 </div>
+<script>
+    function check_delegate(emp_id) {
+
+        if (emp_id == '' || emp_id == null) {
+            alert('يجب تحديد مسئول اولا');
+            return false;
+        }
+    }
+    </script>
