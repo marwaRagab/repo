@@ -6,7 +6,9 @@ use App\Interfaces\Military_affairs\Stop_carRepositoryInterface;
 use App\Models\Court;
 use App\Models\Governorate;
 use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_status;
 use App\Models\Military_affairs\Military_affairs_stop_car_type;
+use App\Models\Military_affairs\Military_affairs_times;
 use App\Models\Military_affairs\Military_affairs_times_type;
 use App\Models\Military_affairs\Prev_cols_military_affairs;
 use Illuminate\Http\Request;
@@ -37,13 +39,14 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         for ($i = 0; $i < count($this->data['stop_car_types']); $i++) {
             $this->data['stop_car_types'][$i]['style'] = $color_array[$i];
         }
+        
     }
     public function index(Request $request)
     {
         // dd($request->stop_car_type);
         $message = "تم دخول صفحة  حجز السيارات";
 
-        $stop_car_type = $request->stop_car_type ?? 'stop_car_request';
+        $stop_car_type = $request->stop_car_type;
         $governate_id = $request->governate_id ?? 0;
 
         $this->data['govern_count_total'] = $this->countStopCarGovernate('execute', 'stop_car', '');
@@ -73,7 +76,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $next_request->slug])->first();
         $this->data['governate_id'] = $governate_id;
         $this->data['stop_car_type'] = $stop_car_type;
-
+        $this->data['col_name'] = $current_request->col_name ?? '';
         $this->data['types'] = Military_affairs_stop_car_type::get();
         $this->data['classes'] = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', '  bg-warning-subtle text-warning', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary'];
 
@@ -81,9 +84,6 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         foreach ($this->data['types'] as $type) {
             $counts['stop_car_count_' . $one->id] = $this->count_stop_car($governate_id, $one->slug);
         }
-
-        
-
         $transactions = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_car' => 1])
             ->with('installment')
@@ -94,17 +94,24 @@ class Stop_carRepository implements Stop_carRepositoryInterface
                         $q->where('governorate_id', request()->get('governate_id'));
                     });
             })
-           ->with('installment.client.area.police_station')
-         /*   ->when(request()->has('stop_car_type'), function ($query) {
+            ->with('installment.client.area.police_station')
+            ->when(request()->has('stop_car_type'), function ($query) {
                 $query
-                    ->whereHas('status_all', function ($q) {
-                        $q->where('type', 'stop_car')->where('type_id', request()->get('stop_car_type'))->where('flag', 0);
-                    })
-                ;
-            })
-                */
-            ->get();
-    //    dd($transactions);
+                   ->whereHas('status_all', function ($q){
+                      return $q->where('type','stop_cars')->where('type_id',request()->get('stop_car_type'))->where('flag',0);
+                  });
+           })->get();
+/*
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+            foreach ($bindings as $binding) {
+                $value = is_numeric($binding) ? $binding : "'$binding'";
+                $sql = preg_replace('/\\?/', $value, $sql, 1);
+            }
+
+            dd($sql);
+       */
+//dd($transactions);
         foreach ($transactions as $value) {
 
             $value->item_old_data = Prev_cols_military_affairs::where('military_affairs_id', $value->id)->first();
@@ -137,6 +144,46 @@ class Stop_carRepository implements Stop_carRepositoryInterface
 
     }
 
+    public function stop_car_convert(Request $request)
+    {
+        $request->validate([
+            'date' => 'required| date',
+            'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+        ],
+            [
+                'date.required' => 'التاريخ مطلوب',
+                'img_dir.required' => 'الصورة مطلوبة',
+            ]);
+
+        $old = Military_affairs_stop_car_type::where('slug', $request->item_type_old)->first();
+
+        if ($old) {
+            $new = Military_affairs_stop_car_type::where('id', '>', $old->id)
+                ->orderBy('id', 'asc')
+                ->first();
+
+        }
+
+        $request->type_id = $new->slug;
+
+        $item_time = Military_affairs_times::where(['times_type_id' => $old->id, 'military_affairs_id' => $request->military_affairs_id])->first();
+        // dd($item_time);
+        $item_status = Military_affairs_status::where(['type_id' => $old->slug, 'military_affairs_id' => $request->military_affairs_id])->first();
+        if ($item_status) {
+            $data_status['flag'] = 1;
+            $item_status->update($data_status);
+        }
+        if ($item_time) {
+            $data['date_end'] = date('Y-m-d H:i:s');
+            $item_time->update($data);
+        }
+        Add_note($old, $new, $request->military_affairs_id);
+        Add_note_time($new, $request->military_affairs_id);
+        change_status($request, $request->military_affairs_id);
+
+        return redirect()->back()->with('success', 'تم حفظ البيانات بنجاح');
+
+    }
     public function count_stop_car($governate_id, $stop_car_type)
     {
         $status = 'execute';
@@ -165,7 +212,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $subQuery = DB::table('military_affairs_status')
             ->select('id', 'military_affairs_id')
             ->where('flag', 0)
-            ->where('type', 'stop_car')
+            ->where('type', 'stop_cars')
             ->where('type_id', $stop_car_type);
 
         $query->whereIn('id', $subQuery->pluck('military_affairs_id'));
@@ -199,6 +246,28 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             });
         }
         return $query->count();
+    }
+
+    public function updateRegionsPoliceStations()
+    {
+        try {
+            $regions = DB::table('regions')->get();
+
+            foreach ($regions as $region) {
+                $policeStation = DB::table('military_affairs_areas_police_st')
+                    ->where('area_id', $region->id)
+                    ->first();
+
+                if ($policeStation) {
+                    DB::table('regions')
+                        ->where('id', $region->id)
+                        ->update(['police_station_id' => $policeStation->police_station_id]);
+                }
+            }
+            return "Regions updated successfully.";
+        } catch (\Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
     }
 
 }
