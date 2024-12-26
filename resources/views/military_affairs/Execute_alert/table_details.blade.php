@@ -227,7 +227,11 @@
                                                 aria-expanded="false"
                                                 aria-controls="collapseExample">
                                                 <td>
-                                                    {{\App\Models\User::findorfail($all_note->created_by)->name_ar}}
+                                                    @php
+                                                        $user = \App\Models\User::find($all_note->created_by);
+                                                    @endphp
+                                                
+                                                    {{ $user ? $user->name_ar : '' }}
                                                 </td>
                                                 <td>
                                                     @php

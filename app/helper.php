@@ -1194,6 +1194,23 @@ function specific_fixed_prin_data($id)
                 if ($stop_type == 'case_proof') {
                     $q->where('military_affairs.status', 'case_proof');
                 }
+                if($stop_type == 'execute_alert')
+                {
+                    
+                    $q->where('military_affairs.status', 'execute_alert');
+                }
+                if($stop_type == 'images')
+                {
+                    
+                    $q->where('military_affairs.status', 'images');
+                }
+                if($stop_type == 'Certificate')
+                {
+                    
+                    $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.certificate', 1)
+                    ->where('military_affairs.stop_salary', 0);
+                }
 
 
             })

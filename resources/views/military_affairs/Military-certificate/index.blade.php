@@ -19,14 +19,14 @@
     @endphp
     <div class="d-flex flex-wrap ">
         <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ !$gov && !$certificate_id && !$ministry ? 'active' : '' }}">
-            العدد الكلي ({{count($items)}})
+            العدد الكلي ({{ count_court('' ,'Certificate',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
             <a href="{{route('Certificate',array('governorate_id' => $court->id))}} "
 
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} </a>
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} ({{ count_court($court->id ,'Certificate',null,null) }}) </a>
 
         @endforeach
     </div>
