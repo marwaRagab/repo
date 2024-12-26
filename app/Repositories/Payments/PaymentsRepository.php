@@ -169,13 +169,20 @@ public function getPaymentsData(Request $request)
 
         return $printButton . ' ' . $archiveButton;
     })
+    // ->addColumn('archive_button', function ($payment) {
+    //     return "<button class="btn btn-secondary btn-sm rounded-pill" value="2" onclick="handleBulkAction(this)">
+    //                             تحويل الجميع للأرشيف</button>"; 
+    // })
     ->addColumn('archive_button', function ($payment) {
-        return ''; // Ensure you provide a default value or actual button here
+        return "<button class='btn btn-secondary btn-sm rounded-pill' value='2' onclick='handleBulkAction(this)'>
+                    تحويل الجميع للأرشيف
+                </button>";
     })
+    
     ->addColumn('select_checkbox', function ($payment) {
         return '<input type="checkbox">'; // Provide the checkbox column data
     })
-    ->rawColumns(['print_status_label', 'actions']) // Allow HTML for certain columns
+    ->rawColumns(['print_status_label', 'actions','select_checkbox','archive_button']) // Allow HTML for certain columns
     ->addIndexColumn() // Add an auto-incrementing index column
     ->make(true); // Generate JSON response for DataTables
     // dd(DataTables::of($payments)->toArray());
@@ -363,8 +370,10 @@ public function getPaymentsData(Request $request)
         }
         // dd($client);
         // $ministries_income = $this->db_get->get_by_id('ministries_income', $data["client"]['ministries_income_id']);
-        if ($client->ministry) {
-            $ministries_income = Ministry::where(['id' => $client->ministry->id, 'type' => '2'])->first();
+        
+        if ($client->get_ministry) {
+            // dd($client->get_ministry);
+            $ministries_income = $client->get_ministry;
 
             if (isset($ministries_income)) {
                 $data["client"]['ministry_percent'] = $ministries_income['percent'];
