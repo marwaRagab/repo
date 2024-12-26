@@ -486,6 +486,7 @@ Route::middleware('auth')->group(function () {
     Route::get('installment/lated_installments_update/{id}', [InstallmentController::class, 'lated_installments_update'])->name('installment.lated_installments_update');
     Route::get('installment/warning_print_paper/{id}', [InstallmentController::class, 'warning_print_paper']);
     Route::get('installment/print_contrct/{id}', [InstallmentController::class, 'print_contrct']);
+    Route::get('installment/print_cient/{id}', [InstallmentController::class, 'print_cient'])->name('print_cient');
     Route::get('installment/print_install_paper_info/{id}', [InstallmentController::class, 'print_install_paper_info']);
     Route::get('installment/recive_install_paper/{id}', [InstallmentController::class, 'recive_install_paper']);
     Route::get('installment/print_invoice/{id}', [InstallmentController::class, 'print_invoice']);

@@ -2303,7 +2303,7 @@
 
                                         @endforeach
                                     @endif
-                                    @if (count($mil_amount)>0)
+                                    @if (!empty($mil_amount) && count($mil_amount) > 0 )
 
                                         @foreach($mil_amount as $military_affairs_amount)
                                             @php

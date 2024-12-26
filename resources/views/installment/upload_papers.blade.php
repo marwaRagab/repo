@@ -32,7 +32,8 @@
                     <label for="saintContractImage1" class="form-label">صورة عقد الساينت (1)</label>
                     <div class="d-flex align-items-center">
                         <input type="file" class="form-control" name="contract_cinet_1"  id="saintContractImage1">
-                        <button type="button" class="btn btn-secondary me-3"> عقد الساينت </button>
+                        {{-- <button type="button" class="btn btn-secondary me-3">  </button> --}}
+                        <a href="{{ url('installment/print_cient/'.$item['id']) }}" class="btn btn-secondary me-3">عقد الساينت  </a>
                     </div>
                 </div>
 
