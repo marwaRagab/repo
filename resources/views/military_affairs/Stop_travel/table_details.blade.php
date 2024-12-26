@@ -1,5 +1,5 @@
 
-<tr >
+    <tr >
         <!--    <td>
         {{ $loop->index + 1 }}
 
@@ -191,12 +191,8 @@
                     $date_convert_cancel=$item->status_all->where('type_id','stop_travel_cancel_request')->first()->date;
                     $final_date=explode(' ',$date_convert_cancel);
                 @endphp
-@if (isset($final_date[0]) && is_numeric($final_date[0]) && (int)$final_date[0] > 0)
-        {{ \Carbon\Carbon::createFromTimestamp($final_date[0] ?? '')->format('d-m-Y') }}
+                {{$final_date[0]}}
 
-@else
-    {{ $final_date[0] }}
-@endif
             </td>
             <td>
                 <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
@@ -286,18 +282,10 @@
                 $final_date_request= $date_convert_cancel_request ?  explode(' ',$date_convert_cancel_request) : '';
             @endphp
 
-@if (isset($final_date_request[0]) && is_numeric($final_date_request[0]) && (int)$final_date_request[0] > 0)
-     <td>   {{ \Carbon\Carbon::createFromTimestamp($final_date_request[0] ?? '')->format('d-m-Y') }}</td>
 
-@else
-   <td>  {{ $final_date_request[0] }}</td>
-@endif
-@if (isset($final_date[0]) && is_numeric($final_date[0]) && (int)$final_date[0] > 0)
-     <td>   {{ \Carbon\Carbon::createFromTimestamp($final_date[0] ?? '')->format('d-m-Y') }}</td>
+            <td>{{$final_date_request ?   $final_date_request[0] : ''}}</td>
+            <td>{{$final_date[0]}}</td>
 
-@else
-   <td>  {{ $final_date[0] }}</td>
-@endif
         @else
 
             <td>

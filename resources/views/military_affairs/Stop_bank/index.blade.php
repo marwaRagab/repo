@@ -1,37 +1,38 @@
 <div class="card mt-4 py-3">
     @php
-    use Illuminate\Support\Facades\Request;
-    if(Request::has('governorate_id')){
-    $gov=Request::get('governorate_id');
-    }else{
-    $gov='';
-    }
-    if(Request::has('stop_bank_type')){
-    $bank_type=Request::get('stop_bank_type');
-    }else{
-    $bank_type='';
-    }
-    if(Request::has('date')){
-    $date=Request::get('date');
-    }else{
-    $date='';
-    }
-     if(Request::has('bank')){
-    $bank=Request::get('bank');
-    }else{
-    $bank='';
-    }
+        use Illuminate\Support\Facades\Request;
+        if(Request::has('governorate_id')){
+        $gov=Request::get('governorate_id');
+        }else{
+        $gov='';
+        }
+        if(Request::has('stop_bank_type')){
+        $bank_type=Request::get('stop_bank_type');
+        }else{
+        $bank_type='';
+        }
+        if(Request::has('date')){
+        $date=Request::get('date');
+        }else{
+        $date='';
+        }
+         if(Request::has('bank')){
+        $bank=Request::get('bank');
+        }else{
+        $bank='';
+        }
     @endphp
     <div class="d-flex flex-wrap ">
-        <a href="{{route('stop_bank')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
-            العدد الكلي ({{count($items)}})
+        <a href="{{route('stop_bank')}}"
+           class="btn-filter bg-success-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->has('governorate_id') == 0 ? 'active' : '' }}  ">
+            العدد الكلي ({{ count_court('' ,'stop_bank',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
-        <a href="{{route('stop_bank',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
-        </a>
+            <a href="{{route('stop_bank',array('governorate_id' => $court->id))}}"
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}({{ count_court($court->id ,'stop_bank',null,null) }})
+            </a>
 
         @endforeach
     </div>
@@ -42,44 +43,44 @@
 
         @foreach($stop_bank_types as $stop_bank_type)
 
-        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $stop_bank_type->slug))}}"
-            class="btn-filter {{$stop_bank_type->style}}   px-4 fs-4 mx-1 mb-2"> {{$stop_bank_type->name_ar}}
-        </a>
+            <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $stop_bank_type->slug))}}"
+               class="btn-filter {{$stop_bank_type->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('stop_bank_type') == $stop_bank_type->id ? 'active' : '' }} "> {{$stop_bank_type->name_ar}}
+            </a>
 
         @endforeach
     </div>
-
-
-
 
 
 </div>
 @if(request()->has('stop_bank_type'))
-<div class="card mt-4 py-3">
-    <div class="d-flex flex-wrap ">
-        @foreach($dates as $one)
-
-        <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
-            class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
-        </a>
-        @endforeach
-    </div>
-</div>
-
-@if(count($banks) > 0 || request()->has('bank'))
     <div class="card mt-4 py-3">
         <div class="d-flex flex-wrap ">
-            @foreach($banks as $bank)
 
-                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank,'date'=> $date))}}"
-                   class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-                    {{$bank}}
+
+        @foreach($dates as $one)
+
+
+                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
+                   class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
+                    {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
                 </a>
             @endforeach
         </div>
     </div>
-@endif
+
+    @if(count($banks) > 0 || request()->has('bank'))
+        <div class="card mt-4 py-3">
+            <div class="d-flex flex-wrap ">
+                @foreach($banks as $bank)
+
+                    <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank,'date'=> $date))}}"
+                       class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2 {{ request()->get('bank') == $bank ? 'active' : '' }}   ">
+                        {{$bank}}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
 @endif
 
 <div class="card">
@@ -94,51 +95,51 @@
 
                 <thead>
 
-                    <tr>
-                        <th
-                            class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            #
-                        </th>
+                <tr>
+                    <th
+                        class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        #
+                    </th>
 
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            اسم العميل
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            المحكمة
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            المبلغ
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            تاريخ الحجز
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            تاريخ اخر طلب
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            الوزارة
-                        </th>
-                        <th
-                            class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            تحديد مسئول
-                        </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        اسم العميل
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        المحكمة
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        المبلغ
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        تاريخ الحجز
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        تاريخ اخر طلب
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        الوزارة
+                    </th>
+                    <th
+                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        تحديد مسئول
+                    </th>
 
-                        <th
-                            class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            الحساب
-                        </th>
+                    <th
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        الحساب
+                    </th>
 
-                        <th
-                            class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
-                            الإجراءات
-                        </th>
-                    </tr>
+                    <th
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        الإجراءات
+                    </th>
+                </tr>
                 </thead>
 
                 <tbody>
@@ -146,7 +147,10 @@
 
                 @foreach($items as $item)
 
+
                     @if($item->installment)
+                    @if(count($item->status_all)>0)
+
                         @php
                             if($item->installment->client->court)
                             $court_id= \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->id;
@@ -154,10 +158,11 @@
                                 $court_id='';
 
 
-                             if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
+                             if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type')!= '' ){
 
 
-                                    $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
+                                    $array= count($item->status_all->where('type_id',Request::get('stop_bank_type'))->where('flag',0)) ;
+
 
                                 }else{
                                  $array= count($items);
@@ -168,29 +173,33 @@
 
 
 
-                    @if( Request::has('governorate_id') && Request::get('governorate_id') ==
-                    $item->installment->client->governorate_id)
+                        @if( Request::has('governorate_id') && Request::get('governorate_id') ==
+                        $item->installment->client->governorate_id)
+                            @if($array>0)
 
 
+                                    @include('military_affairs.Stop_bank.table_details')
 
-
-
-                    @include('military_affairs.Stop_bank.table_details')
-
-                    @endif
-
-                        @if(!Request::has('governorate_id') || Request::get('governorate_id') == '' )
-
-
-
-
-                            @include('military_affairs.Stop_bank.table_details')
-
-
-
-
+                            @endif
 
                         @endif
+
+                        @if(!Request::has('governorate_id') || Request::get('governorate_id') == '' )
+                            @if($array>0)
+
+
+
+                                    @include('military_affairs.Stop_bank.table_details')
+
+
+
+
+
+                            @endif
+
+
+                    @endif
+                    @endif
                     @endif
 
                 @endforeach
@@ -200,10 +209,6 @@
 
 
             </table>
-
-
-
-
 
 
         </div>

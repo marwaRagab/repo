@@ -1,16 +1,18 @@
 <tr>
-<td>
-    {{$item->i }}
-</td>
-<td>
-    {{$item->installment->client->name_ar}}
-    <br>
-    {{$item->installment->client->civil_number}}
-    <br>
-    {{$item->phone}}
-    <br>
-    <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
-    <br>
+
+
+    <td>
+        {{$item->i }}
+    </td>
+    <td>
+        {{$item->installment->client->name_ar}}
+        <br>
+        {{$item->installment->client->civil_number}}
+        <br>
+        {{$item->phone}}
+        <br>
+        <a href="{{url('installment/show-installment/'.$item->installment->id)}}"> {{$item->installment->id}}</a>
+        <br>
 
     </td>
     <td>
@@ -39,121 +41,120 @@
 
 
     </td>
-
     <td>
         @if($item->status_all->where('type_id','=','stop_bank_command')->first())
-            {{date('Y-m-d',$item->status_all->where('type_id','=','stop_bank_command')->first()->date)}}
+            {{$item->status_all->where('type_id','=','stop_bank_command')->first()->date}}
         @else
             لا يوجد
         @endif
         <br>
         <br>
         @if( request()->has('stop_bank_type') && request()->get('stop_bank_type')=='stop_bank_doing')
-                <div class="btn-group dropup mb-6 me-6">
-                    <button class="btn btn-secondary dropdown-toggle" type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        نتيجة الحجز
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="btn-group dropup mb-6 me-6">
+                <button class="btn btn-secondary dropdown-toggle" type="button"
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    نتيجة الحجز
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                        <li>
-                            <a class="btn btn-success rounded-0 w-100 mt-2"
+                    <li>
+                        <a class="btn btn-success rounded-0 w-100 mt-2"
 
-                               data-bs-toggle="modal"
-                               data-type="tahseel"
-                               onclick="get_type('tahseel')"
-                               data-bs-target="#open-bank_request-{{$item->id}}">
-                                تحصيل مبلغ</a>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary rounded-0 w-100 mt-2"
-                               data-bs-toggle="modal"
+                           data-bs-toggle="modal"
+                           data-type="tahseel"
+                           onclick="get_type('tahseel')"
+                           data-bs-target="#open-bank_request-{{$item->id}}">
+                            تحصيل مبلغ</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary rounded-0 w-100 mt-2"
+                           data-bs-toggle="modal"
 
-                               onclick="get_type('new_date')"
-                               data-bs-target="#open-bank_request-{{$item->id}}"
-                             >
-                                تقويس</a>
-                        </li>
-                        <li>
-                            <a class="btn btn-warning rounded-0 w-100 mt-2"
-                               data-bs-toggle="modal"
+                           onclick="get_type('new_date')"
+                           data-bs-target="#open-bank_request-{{$item->id}}"
+                        >
+                            تقويس</a>
+                    </li>
+                    <li>
+                        <a class="btn btn-warning rounded-0 w-100 mt-2"
+                           data-bs-toggle="modal"
 
-                               onclick="get_type('not_found')"
-                               data-bs-target="#open-bank_request-{{$item->id}}"
-                               >
-                                لايوجد</a>
-                        </li>
+                           onclick="get_type('not_found')"
+                           data-bs-target="#open-bank_request-{{$item->id}}"
+                        >
+                            لايوجد</a>
+                    </li>
 
 
-                    </ul>
-                    <div id="open-bank_request-{{$item->id}}" class="modal fade" tabindex="-1"
-                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                            <div class="modal-content">
-                                <form class="mega-vertical"
-                                      action="{{url('stop_bank/stop_bank_request_results')}}" method="post"
-                                      enctype="multipart/form-data">
-                                    @csrf
+                </ul>
+                <div id="open-bank_request-{{$item->id}}" class="modal fade" tabindex="-1"
+                     aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                        <div class="modal-content">
+                            <form class="mega-vertical"
+                                  action="{{url('stop_bank/stop_bank_request_results')}}" method="post"
+                                  enctype="multipart/form-data">
+                                @csrf
 
-                                    <input type="hidden" name="military_affairs_id" value="{{ $item->id }}">
-                                    <input type="hidden" name="type" value="" id="type">
-                                    <div class="modal-header d-flex align-items-center">
-                                        <h4 class="modal-title" id="myModalLabel">
-                                             اضافة حجز بنوك</h4>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h6><span class="fw-semibold">
+                                <input type="hidden" name="military_affairs_id" value="{{ $item->id }}">
+                                <input type="hidden" name="type" value="" id="type">
+                                <div class="modal-header d-flex align-items-center">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        اضافة حجز بنوك</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6><span class="fw-semibold">
                                     حجز بنوك :
                                 </span>
-                                            {{ $item->installment->client->name_ar }}-{{$item->installment->client->civil_number}}
-                                        </h6>
+                                        {{ $item->installment->client->name_ar }}-{{$item->installment->client->civil_number}}
+                                    </h6>
 
-                                    </div>
-                                    <div class="modal-body">
+                                </div>
+                                <div class="modal-body">
 
-                                        <div class="form-row">
-                                            <div class="form-group">
-                                                <label class="form-label" for="input1 "> المبلغ </label>
-                                                <input type="number" name="amount" class="form-control mb-2"
-                                                       id="input1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="form-label" for="input1 "> تاريخ </label>
-                                                <input type="date" name="date" class="form-control mb-2"
-                                                       id="input1">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="formFile" class="form-label">اختر صورة </label>
-                                                <input class="form-control" name="img_dir" accept="image/*"
-                                                       type="file" id="formFile"/>
-                                            </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label class="form-label" for="input1 "> المبلغ </label>
+                                            <input type="number" name="amount" class="form-control mb-2"
+                                                   id="input1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="input1 "> تاريخ </label>
+                                            <input type="date" name="date" class="form-control mb-2"
+                                                   id="input1">
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="formFile" class="form-label">اختر صورة </label>
+                                            <input class="form-control" name="img_dir" accept="image/*"
+                                                   type="file" id="formFile"/>
+                                        </div>
                                     </div>
-                                    <div class="modal-footer d-flex ">
-                                        <button type="submit" class="btn btn-primary">حفظ
 
-                                        </button>
-                                        <button type="button"
-                                                class="btn bg-danger-subtle text-danger  waves-effect"
-                                                data-bs-dismiss="modal">
-                                            الغاء
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="modal-footer d-flex ">
+                                    <button type="submit" class="btn btn-primary">حفظ
 
-                            <!-- /.modal-content -->
+                                    </button>
+                                    <button type="button"
+                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                            data-bs-dismiss="modal">
+                                        الغاء
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <!-- /.modal-dialog -->
+
+                        <!-- /.modal-content -->
                     </div>
-
-
+                    <!-- /.modal-dialog -->
                 </div>
+
+
+            </div>
 
         @endif
     </td>
@@ -161,65 +162,194 @@
 
         {{$item->installment->client->ministry ?  \App\Models\Ministry::findorfail($item->installment->client->ministry->last()->ministry_id)->name_ar : ''}}
 
-     </td>
+    </td>
+
     <td>
         @include('military_affairs.Open_file.partial.column_responsible')
     </td>
 
     <td>
         <select class="form-select form-control" name="statues" onchange="change_bank_satues(this,{{$item->id}})">
-            <option value="">غير محدد </option>
-            <option value="work" {{ $item->bank_account_status =='work' ?   'selected' : ''}}>يعمل راتب</option>
-            <option value="stop" {{ $item->bank_account_status =='stop' ?   'selected' : ''}}>موقوف راتب </option>
+            <option  value="work"  {{ $item->bank_account_status =='work' ?   'selected' : ''}} >يعمل راتب</option>
+            <option value="stop" {{ $item->bank_account_status =='stop' ?   'selected' : ''}}  >موقوف راتب </option>
             <option value="visa" {{ $item->bank_account_status =='visa' ?   'selected' : ''}}>فيزا</option>
-            <option value="wrong_bank" {{ $item->bank_account_status =='wrong_bank' ?   'selected' : ''}}>لا يوجد حساب
-            </option>
-            <option value="housing" {{ $item->bank_account_status =='housing' ?   'selected' : ''}}>يعمل بدل ايجار
-            </option>
-            <option value="account_closed" {{ $item->bank_account_status =='account_closed' ?   'selected' : ''}}>حساب
-                مغلق</option>
-            <option value="money_found" {{ $item->bank_account_status =='money_found' ?   'selected' : ''}}>يوجد مبلغ
-                بالحساب</option>
+            <option value="wrong_bank" {{ $item->bank_account_status =='wrong_bank' ?   'selected' : ''}}>لا يوجد حساب</option>
+            <option value="housing" {{ $item->bank_account_status =='housing' ?   'selected' : ''}}>يعمل بدل ايجار</option>
+            <option value="account_closed" {{ $item->bank_account_status =='account_closed' ?   'selected' : ''}} >حساب مغلق</option>
+            <option value="money_found" {{ $item->bank_account_status =='money_found' ?   'selected' : ''}} >يوجد مبلغ بالحساب</option>
         </select>
     </td>
 
 
     <td>
-        <button class="btn btn-secondary me-6 my-2 d-block" data-bs-toggle="modal"
-            data-bs-target="#open-details-{{$item->id}}">
-            الملاحظات
-        </button>
+
+        <div class="btn-group dropup mb-6 me-6">
+
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                الإجراءات
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li>
+
+                    <button class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                            data-bs-target="#open-details-{{$item->id}}">
+                        الملاحظات<span class="badge ms-auto text-bg-secondary">{{count($item->all_notes)}}</span>
+                    </button>
 
 
-        <a class="btn btn-success me-6 my-2"   target="_blank"  href="{{url('installment/show-installment/'.$item->installment->id)}}">
-            تفاصيل
-        </a>
 
-        <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"
-            aria-hidden="true">
+                </li>
+                <li>
+                    <a class="btn btn-warning rounded-0 w-100 mt-2"
+                       href="{{ url('installment/show-installment/' . $item->installment->id) }}">
+                        التفاصيل</a>
+
+
+                </li>
+                @if($item->emp_id !=0 || $item->emp_id !=NULL )
+                <li>
+                    <a class="btn btn-success rounded-0 w-100 mt-2"
+                       href="{{url('show_settlement/'.$item->id)}}">
+                        تحويل للتسوية
+                    </a>
+                </li>
+                <li>
+                    <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                            data-bs-target="#change_type-{{$item->id}}">
+                        تحويل الحالة
+                    </button>
+                </li>
+                    @else
+
+                    <li>
+                        <a class="btn btn-success rounded-0 w-100 mt-2"
+                           href="#">
+                            تحويل للتسوية
+                        </a>
+                    </li>
+                    <li>
+                        <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                data-bs-target="#change_type-{{$item->id}}" disabled>
+                            تحويل الحالة
+                        </button>
+                    </li>
+
+
+                @endif
+
+
+
+
+
+
+
+
+
+
+
+            </ul>
+
+
+
+
+            <!-- /.modal-dialog -->
+
+        </div>
+
+
+
+        <div id="change_type-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <form class="mega-vertical"
+                      action="{{url('change_states')}}" method="post"
+                      enctype="multipart/form-data">
+                    @csrf
+                    @php
+                        if(Request::has('stop_bank_type')){
+                        $slug_stop_bank=Request::get('stop_bank_type');
+                        }else{
+                        $slug_stop_bank='stop_bank_request';
+                        }
+                    @endphp
+
+                    <div class="modal-content">
+                        <div class="modal-header d-flex align-items-center">
+                            <h4 class="modal-title" id="myModalLabel">
+                                {{App\Models\Military_affairs\Military_affairs_stop_bank_type::where('slug',$slug_stop_bank)->first()->name_ar }}  </h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+
+
+                            <input type="hidden" name="new_stop_type"  value="{{$item_type_time_new->id}}" >
+                            <input type="hidden" name="old_stop_type"  value="{{$item_type_time_old->id}}" >
+                            <input type="hidden" name="type_id"  value="{{$item_type_time_new->slug}}" >
+                            <input type="hidden" name="type"  value="{{$item_type_time_new->type}}" >
+                            <input type="hidden" name="military_affairs_id"  value="{{$item->id}}" >
+
+
+                            <div class="form-row">
+
+
+                                <div class="form-group mb-3">
+                                    <label class="form-label">تاريخ  </label>
+                                    <input type="date" name="date" class="form-control">
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="formFile" class="form-label">الصورة </label>
+                                    <input class="form-control"  name="img_dir"   accept="image/*" type="file" id="formFile">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer d-flex ">
+                            <button type="submit" class="btn btn-primary">حفظ</button>
+                            <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
+                                الغاء
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div id="open-details-{{$item->id}}" class="modal fade" tabindex="-1"
+             aria-labelledby="bs-example-modal-md" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
-                    <form class="mega-vertical" action="{{url('add_notes')}}" method="post"
-                        enctype="multipart/form-data">
+                    <form class="mega-vertical"
+                          action="{{url('add_notes')}}" method="post"
+                          enctype="multipart/form-data">
                         @csrf
                         <div class="modal-header d-flex align-items-center">
                             <h4 class="modal-title" id="myModalLabel">
                                 ملاحظات حجز بنوك</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <ul class="nav nav-pills" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#notes-{{$item->id}}"
-                                        role="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab"
+                                       href="#notes-{{$item->id}}" role="tab">
                                         <span>الملاحظات</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#navpill-{{$item->id}}" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab"
+                                       href="#navpill-{{$item->id}}" role="tab">
                                         <span>الإجراءات</span>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" data-bs-toggle="tab" href="#actions-{{$item->id}}" role="tab">
                                         <span>تتبع المعاملة</span>
@@ -230,48 +360,51 @@
                             <!-- Tab panes -->
 
                             <div class="tab-content border mt-2">
-                                @php
 
-                                $all_notes=get_all_notes('stop_bank',$item->id);
-                                $all_actions=get_all_actions($item->id);
-                                $get_all_delegations = get_all_delegations($item->id);
+                                <div class="tab-pane active p-3" id="notes-{{$item->id}}"
+                                     role="tabpanel">
 
-                                @endphp
-                                <div class="tab-pane active p-3" id="notes-{{$item->id}}" role="tabpanel">
-
-                                    <table id="notes1" class="table table-bordered border text-wrap align-middle">
+                                    <table id="notes1"
+                                           class="table table-bordered border text-wrap align-middle">
                                         <thead>
-                                            <!-- start row -->
-                                            <tr>
-                                                <th>اليوزر</th>
-                                                <th>النوع</th>
-                                                <th>الملاحظة</th>
-                                                <th> الساعة</th>
-                                                <th>التاريخ</th>
+                                        <!-- start row -->
+                                        <tr>
+                                            <th>اليوزر</th>
+                                            <th>النوع</th>
+                                            <th>الملاحظة</th>
+                                            <th> الساعة</th>
+                                            <th>التاريخ</th>
 
-                                            </tr>
-                                            <!-- end row -->
+                                        </tr>
+                                        <!-- end row -->
                                         </thead>
                                         <tbody>
 
 
-                                            <!-- start row -->
-                                            @foreach($all_notes as $all_note)
+                                        <!-- start row -->
+                                        @if(count($item->all_notes)>0)
+                                        @foreach($item->all_notes as $all_note)
 
-                                            <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                                                aria-expanded="false" aria-controls="collapseExample">
+                                            <tr data-bs-toggle="collapse"
+                                                data-bs-target="#collapseExample"
+                                                aria-expanded="false"
+                                                aria-controls="collapseExample">
                                                 <td>
-                                                    {{$all_note->created_by}}
+                                                    {{\App\Models\User::
+                                                    where('id', $all_note->created_by)
+                                                    ->first()->name_ar }}
+
+
                                                 </td>
                                                 <td>
                                                     @php
-                                                    if($all_note->notes_type=='answered'){
-                                                    $type= 'رد' ;
-                                                    }elseif ($all_note->notes_type=='refused'){
-                                                    $type= 'لم يرد' ;
-                                                    }else{
-                                                    $type= 'ملاحظة' ;
-                                                    }
+                                                        if($all_note->notes_type=='answered'){
+                                                        $type= 'رد'   ;
+                                                        }elseif ($all_note->notes_type=='refused'){
+                                                        $type= 'لم يرد'   ;
+                                                        }else{
+                                                        $type= 'ملاحظة'   ;
+                                                        }
 
                                                     @endphp
                                                     {{$type}}
@@ -282,117 +415,141 @@
                                                     </p>
                                                 </td>
                                                 @php
-                                                $time= explode(' ', $all_note->date)[1];
-                                                $day= explode(' ', $all_note->date)[0];
+                                                    $time= explode(' ', $all_note->date)[1];
+                                                    $day= explode(' ', $all_note->date)[0];
 
 
                                                 @endphp
 
 
-                                                <td>{{formatTime($time)}}<span class="d-block"></span></td>
+                                                <td>{{formatTime($time)}}<span
+                                                        class="d-block"></span></td>
                                                 <td>{{$day}}</td>
 
                                             </tr>
 
-                                            @endforeach
+
+                                          @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5"> لا يوجد بيانات</td>
+                                            </tr>
+
+                                        @endif
                                         </tbody>
                                     </table>
                                     <div class="add-note">
                                         <h4 class="mb-3">اضف ملاحظة</h4>
 
-                                        <input type="hidden" name="military_affairs_id" value="{{ $item->id }}">
+                                        <input type="hidden" name="military_affairs_id"
+                                               value="{{ $item->id }}">
                                         @php
-                                        if(Request::has('stop_bank_type')){
-                                        $slug_stop_bank=Request::get('stop_bank_type');
-                                        }else{
-                                        $slug_stop_bank='stop_bank_request';
-                                        }
+                                            if(Request::has('stop_bank_type')){
+                                            $slug_stop_bank=Request::get('stop_bank_type');
+                                            }else{
+                                            $slug_stop_bank='stop_bank_request';
+                                            }
                                         @endphp
 
-                                        <input type="hidden" name="type" value="stop_bank">
-                                        <input type="hidden" name="type_id" value="{{$slug_stop_bank}}">
+                                        <input type="hidden" name="type"
+                                               value="stop_bank">
+                                        <input type="hidden" name="type_id"
+                                               value="{{$slug_stop_bank}}">
                                         <div class="form-row">
                                             <div class="form-group">
                                                 <label class="form-label"> الاتصال</label>
-                                                <select class="form-select" name="notes_type">
-                                                    <option value="answered">
+                                                <select class="form-select"
+                                                        name="notes_type">
+                                                    <option
+                                                        value="answered">
                                                         رد
                                                     </option>
-                                                    <option value="refused">
+                                                    <option
+                                                        value="refused">
                                                         لم يرد
                                                     </option>
-                                                    <option value="note">
+                                                    <option
+                                                        value="note">
                                                         ملاحظة
                                                     </option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <div class="my-3">
-                                                    <label class="form-label">الملاحظات</label>
-                                                    <textarea name="note" class="form-control" rows="5"></textarea>
+                                                    <label
+                                                        class="form-label">الملاحظات</label>
+                                                    <textarea name="note"
+                                                              class="form-control"
+                                                              rows="5"></textarea>
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-                                <div class="tab-pane p-3" id="navpill-{{$item->id}}" role="tabpanel">
-                                    <table id="notes2" class="table table-bordered border text-wrap align-middle">
+                                <div class="tab-pane p-3" id="navpill-{{$item->id}}"
+                                     role="tabpanel">
+                                    <table id="notes2"
+                                           class="table table-bordered border text-wrap align-middle">
                                         <thead>
-                                            <!-- start row -->
-                                            <tr>
-                                                <th>اليوزر</th>
-                                                <th>القسم</th>
-                                                <th>التاريخ</th>
-                                                <th> عدد الايام</th>
-                                            </tr>
-                                            <!-- end row -->
+                                        <!-- start row -->
+                                        <tr>
+                                            <th>اليوزر</th>
+                                            <th>القسم</th>
+                                            <th>التاريخ</th>
+                                            <th> عدد الايام</th>
+                                        </tr>
+                                        <!-- end row -->
                                         </thead>
                                         <tbody>
-                                            <!-- start row -->
-                                            @foreach ($all_actions as $value)
-                                            <tr>
+                                        <!-- start row -->
+                                        @if(count($item->all_actions)>0)
+                                        @foreach($item->all_actions as $value)
+
+
+
+                                             <tr>
                                                 @php
-                                                $created_by = DB::table('users')
-                                                ->where('id', $value->created_by)
-                                                ->first();
+                                                    $created_by = DB::table('users')
+                                                    ->where('id', $value->created_by)
+                                                    ->first();
 
                                                 @endphp
                                                 <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                 <td> @if ($value->timesType)
-                                                    {{ $value->timesType->name_ar }}
+                                                        {{ $value->timesType->name_ar }}
                                                     @elseif ($value->bankType)
-                                                    {{ $value->bankType->name_ar }}
+                                                        {{ $value->bankType->name_ar }}
                                                     @elseif ($value->carType)
-                                                    {{ $value->carType->name_ar }}
+                                                        {{ $value->carType->name_ar }}
                                                     @elseif ($value->salaryType)
-                                                    {{ $value->salaryType->name_ar }}
+                                                        {{ $value->salaryType->name_ar }}
                                                     @elseif ($value->travelType)
-                                                    {{ $value->travelType->name_ar }}
+                                                        {{ $value->travelType->name_ar }}
                                                     @else
-                                                    لا يوجد
+                                                        لا يوجد
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @php
 
-                                                    $day_start = explode(' ', $value->date_start)[0];
-                                                    if (
-                                                    $value->date_end &&
-                                                    $value->date_end != '0000-00-00 00:00:00'
-                                                    ) {
-                                                    $day_end = explode(' ', $value->date_end)[0];
-                                                    $different_day = get_different_dates(
-                                                    $day_start,
-                                                    $day_end,
-                                                    );
-                                                    } else {
-                                                    $day_end = 'لم تنتهى';
-                                                    $different_day = get_different_dates(
-                                                    $day_start,
-                                                    now(),
-                                                    );
-                                                    }
+                                                        $day_start = explode(' ', $value->date_start)[0];
+                                                        if (
+                                                        $value->date_end &&
+                                                        $value->date_end != '0000-00-00 00:00:00'
+                                                        ) {
+                                                        $day_end = explode(' ', $value->date_end)[0];
+                                                        $different_day = get_different_date(
+                                                        $day_start,
+                                                        $day_end,
+                                                        );
+                                                        } else {
+                                                        $day_end = 'لم تنتهى';
+                                                        $different_day = get_different_date(
+                                                        $day_start,
+                                                        now(),
+                                                        );
+                                                        }
 
                                                     @endphp
                                                     {{ $day_start }}
@@ -403,34 +560,45 @@
 
 
                                             </tr>
-                                            @endforeach
+
+
+
+                                                @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5"> لا يوجد بيانات</td>
+                                            </tr>
+
+
+                                        @endif
 
                                         </tbody>
                                     </table>
                                 </div>
+
                                 <div class="tab-pane p-3" id="actions-{{$item->id}}" role="tabpanel">
                                     <table id="notes2" class="table table-bordered border text-wrap align-middle">
                                         <thead>
-                                            <!-- start row -->
-                                            <tr>
-                                                <th>القسم</th>
-                                                <th>المسئول</th>
-                                                <th>تاريخ البدء</th>
-                                                <th>تاريخ الانتهاء</th>
-                                                <th> عدد الايام</th>
-                                            </tr>
-                                            <!-- end row -->
+                                        <!-- start row -->
+                                        <tr>
+                                            <th>القسم</th>
+                                            <th>المسئول</th>
+                                            <th>تاريخ البدء</th>
+                                            <th>تاريخ الانتهاء</th>
+                                            <th> عدد الايام</th>
+                                        </tr>
+                                        <!-- end row -->
                                         </thead>
                                         <tbody>
-                                            <!-- start row -->
-                                            @foreach ($get_all_delegations as $value)
+                                        <!-- start row -->
+                                        @if(count($item->get_all_delegations)>0)
+                                        @foreach ($item->get_all_delegations as $value)
                                             <tr data-bs-toggle="collapse" data-bs-target="#collapseExample"
                                                 aria-expanded="false" aria-controls="collapseExample">
                                                 @php
-                                                $created_by = DB::table('users')
-                                                ->where('id', $value->emp_id)
-                                                ->first();
-
+                                                    $created_by =\App\Models\User::
+                                                    where('id', $value->emp_id)
+                                                    ->first();
                                                 @endphp
                                                 <td>
                                                     {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
@@ -450,23 +618,23 @@
                                                 <td>
                                                     @php
 
-                                                    $day_start = explode(' ', $value->assign_date)[0];
-                                                    if (is_numeric($day_start)) {
-                                                    $day_start = date('Y-m-d', $day_start);
-                                                    }
+                                                        $day_start = explode(' ', $value->assign_date)[0];
+                                                        if (is_numeric($day_start)) {
+                                                        $day_start = date('Y-m-d', $day_start);
+                                                        }
 
-                                                    // Check the end date
-                                                    if ($value->end_date && $value->end_date != '') {
-                                                    $day_end = explode(' ', $value->end_date)[0];
-                                                    if (is_numeric($day_end)) {
-                                                    $day_end = date('Y-m-d', $day_end);
-                                                    }
-                                                    $different_day = get_different_date($day_start, $day_end);
-                                                    } else {
-                                                    // Use current timestamp if end_date is missing
-                                                    $day_end = 'لم تنتهى';
-                                                    $different_day = get_different_date($day_start, now()->timestamp);
-                                                    }
+                                                        // Check the end date
+                                                        if ($value->end_date && $value->end_date != '') {
+                                                        $day_end = explode(' ', $value->end_date)[0];
+                                                        if (is_numeric($day_end)) {
+                                                        $day_end = date('Y-m-d', $day_end);
+                                                        }
+                                                        $different_day = get_different_date($day_start, $day_end);
+                                                        } else {
+                                                        // Use current timestamp if end_date is missing
+                                                        $day_end = 'لم تنتهى';
+                                                        $different_day = get_different_date($day_start, now()->timestamp);
+                                                        }
                                                     @endphp
                                                     {{ $day_start }}
 
@@ -478,20 +646,26 @@
                                                 </td>
 
                                             </tr>
-                                            @endforeach
+
+                                        @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="5"> لا يوجد بيانات</td>
+                                            </tr>
+                                            @endif
 
                                         </tbody>
                                     </table>
                                 </div>
-
                             </div>
                         </div>
                         <div class="modal-footer d-flex ">
                             <button class="btn btn-primary" type="submit"> حفظ
 
                             </button>
-                            <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
-                                data-bs-dismiss="modal">
+                            <button type="button"
+                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                    data-bs-dismiss="modal">
                                 إغلاق
                             </button>
                         </div>

@@ -48,7 +48,8 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         $this->data['governorates'] = Governorate::with('clients')->get();
         $this->data['courts'] = Court::with('government')->get();
         $this->data['stop_bank_types'] = Military_affairs_stop_bank_type::OrderBY('orderby')->get();
-        $this->data['ministries'] = Ministry::get('date');
+        $this->data['ministries'] = Ministry::all();
+
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning', 'bg-warning-subtle text-warning'];
 
         $this->data['banks'] = Bank::all();
@@ -71,6 +72,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
     public function index(Request $request)
     {
+        //dd($this->data['ministries']->pluck('id'));
 // dd($request->all());
         $governorate_id = $request->governorate_id;
         $message = "تم دخول صفحة  حجز بنوك  ";
@@ -90,6 +92,11 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 //   dd( count($this->data['items']));
         $this->data['items'] = Military_affair::where('archived', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1,'bank_archive'=>0])
+            ->with('installment.client.get_ministry')
+             ->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+                // dd('fff');
+                $q->whereIn('date',$this->data['ministries']->pluck('date'));
+            })
 
            ->with('status_all', function ($query) {
                 return $query->where('type', '=', 'stop_bank');
@@ -98,8 +105,14 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
                 return $query->where('finished', '=', 0);
             })
             ->when(request()->has('date'), function ($query) use ($request) {
-                $query->whereHas('installment.client.ministry', function ($q) use ($request) {
+                $query->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+
                     $q->where('date', $request->date);
+                });
+            })->when(request()->has('bank'), function ($query) use ($request) {
+                $query->whereHas('installment.client.client_banks', function ($q) use ($request) {
+
+                    $q->where('date', $request->bank);
                 });
             })
 
@@ -149,8 +162,13 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         //dd($this->data['items']);
         foreach ($this->data['items'] as $value) {
-             $value->i=$x+1;
-            if($value->installment){
+
+            if($value->installment && $value->status_all){
+                $value->i=$x+1;
+                $value->all_notes=get_all_notes('stop_bank',$value->id);
+                $value->all_actions=get_all_actions($value->id);
+                $value->get_all_delegations = get_all_delegations($value->id);
+
 
 
                 $ministry = $value->installment->client->ministry->last()->ministry_id;
@@ -200,7 +218,6 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         }
 
-
       //  $ministries = $mins->unique();
 
        /* foreach ($ministries as $one) {
@@ -217,6 +234,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
 
 
+ //dd($array_date);
         $this->data['dates']=$array_date;
         $this->data['banks']=$array_bank;
         $this->data['get_responsible'] = get_responsible();
@@ -520,22 +538,29 @@ public function check_info_in_job  ( $id)
     {
 
 
-        change_status($request, $request->military_affairs_id);
+
 
         $item_law = Military_affair::findOrFail($request->military_affairs_id);
         $old_time_type = Military_affairs_stop_bank_type::findOrFail($request->old_stop_type);
         $new_time_type = Military_affairs_stop_bank_type::findOrFail($request->new_stop_type);
-        $update_notes_date = Military_affairs_notes::where(['times_type_id' => $old_time_type->id, 'date_end' => NULL]);
+        $update_notes_date = Military_affairs_times::where(['times_type_id' => $old_time_type->id,'military_affairs_id'=>$request->military_affairs_id, 'date_end' => NULL]);
+
         if ($update_notes_date) {
             $data['date_end'] = date('Y-m-d');
             $update_notes_date->update($data);
         }
+        $item_status=Military_affairs_status::where(['type_id'=>$old_time_type->slug,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
+        if($item_status){
+
+            $data_status['flag']=1;
+
+            $item_status->update($data_status);
+        }
 
 
         Add_note($old_time_type, $new_time_type, $request->military_affairs_id);
-
         Add_note_time($new_time_type, $request->military_affairs_id);
-
+        change_status($request, $request->military_affairs_id);
 
         return redirect()->route('stop_bank');
 
