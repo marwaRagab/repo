@@ -2201,7 +2201,7 @@
                                             </td>
                                             <td>-</td>
                                             <td>{{$one->amount}}</td>
-                                            <td>{{date('Y-m-d',$one->date)}}</td>
+                                            <td>{{$one->date}}</td>
                                             @if($one->payment_type=='cash')
                                             <td> <span class="btn btn-success"> كاش</span></td>
                                             @endif
@@ -2253,7 +2253,7 @@
                                             <td>-</td>
                                             <td>{{ $military_affairs_amount->amount }}
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($military_affairs_amount->date)->format('Y-m-d')}}
+                                            <td>{{ $military_affairs_amount->date }}
                                             </td>
                                             <td>
                                                 <span class="btn btn-danger font-weight-100 ">
@@ -2337,7 +2337,53 @@
                                         @endforeach
                                         @endif
 
-                                        
+                                        @if (count($settle_item)>0)
+
+                                        @foreach($settle_item as $settle)
+                                        @php
+                                        $total_amounts = $total_amounts + $settle->amout;
+                                        $total_diff = $total_amounts - $total_checkat;
+
+
+                                        @endphp
+                                        @if($settle->military_affairs_check_id !=-1)
+
+                                        @if($total_diff>0)
+                                        @php
+                                        $total_madionia = $total_madionia - $settle->amout;
+                                        @endphp
+                                        <tr>
+                                            <td> {{ $loop->iteration }} </td>
+                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
+                                            </td>
+                                            <td>-</td>
+                                            <td>{{ $settle->amount }}
+                                            </td>
+                                            <td>{{ $settle->payment_date }}
+                                            </td>
+                                            @if($settle->installment_type == 'first_installment')
+                                            <td>
+                                                <span class="btn btn-success font-weight-100 "> مقدم تسوية</span>
+                                            </td>
+                                            @else
+                                            <td>
+                                                <span class="btn btn-success font-weight-100 "> تسوية</span>
+                                            </td>
+                                            @endif
+                                            <td>
+                                                <a target="_blank"
+                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                    title="Download the file from the primary or fallback server.">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                        @endif
+                                        @endforeach
+                                        @endif
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2990,7 +3036,256 @@
     </div>
 </div>
 
+@if(isset($settle_item) && count($settle_item) > 0 )
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <div class="accordion accordion-flush" id="accordionFlushExampleSettlement">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseEight" aria-expanded="false"
+                            aria-controls="flush-collapseEight">
+                            <i class="ti ti-basket fs-6 mx-1" style="color: rgb(245, 18, 226);"></i> التسوية
+                            <span class="text-gray mx-1">( قم بالضغط هنا لاظهار اقساط التسوية)</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseEight" class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExampleSettlement">
+                        <div class="accordion-body">
+                            <div class="d-flex flex-wrap ">
 
+                                <a data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}"
+                                    class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
+                                    onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
+                                    دفع كامل المديونية
+                                </a>
+                                <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
+                                    aria-labelledby="pay-totalLabel{{$id}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header d-flex align-items-center">
+                                                <h4 class="modal-title mt-2" id="myModalLabel">
+                                                    دفع كامل المديونية </h4>
+                                                <hr>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-header">
+                                                <label class="form-label" for="input1"> المبلغ
+                                                    المطلوب : {{ $sum }} دينار
+                                                </label>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('installment.pay_total',$id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="form-group mb-3">
+                                                        <label class="form-label" for="cash"> المبلغ
+                                                            النقدي
+                                                        </label>
+                                                        <input type="text" class="form-control mb-2" id="cash"
+                                                            name="cash" onchange="calculate(this.value,'cash_amount');">
+                                                        @error('cash')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <input type="hidden" id="real_price" value="{{ $sum }}">
+                                                    <div class="form-group mb-3">
+                                                        <label class="form-label" for="knet"> المبلغ
+                                                            بالكي نت
+                                                        </label>
+                                                        <input type="text" class="form-control mb-2" id="knet"
+                                                            name="knet">
+                                                        @error('knet')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label class="form-label" for="knet_code">
+                                                            رقم وصل الكي نت
+                                                        </label>
+                                                        <input type="text" class="form-control mb-2" id="knet_code"
+                                                            name="knet_code">
+                                                        @error('knet_code')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <input type="file" name="paper_img_dir" class="form-control" />
+                                                        @error('paper_img_dir')
+                                                        <div style='color:red'>{{$message}}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <div class="modal-footer d-flex ">
+                                                        <button type="submit" class="btn btn-primary">دفع</button>
+                                                        <button type="button"
+                                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                                            data-bs-dismiss="modal">
+                                                            الغاء
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                            </div>
+
+                            <div class="table-responsive pb-4">
+                                <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+                                    <thead>
+                                        <!-- start row -->
+                                        <tr>
+                                            <th> م</th>
+                                            <th>تاريخ الاستحقاق</th>
+                                            <th> المبلغ (دينار)</th>
+                                            <th> دفع يدوي</th>
+                                            <th> دفع رابط</th>
+                                            <th> تاريخ الدفع</th>
+                                        </tr>
+                                        <!-- end row -->
+                                    </thead>
+                                    <tbody>
+                                        <!-- start row -->
+                                        @foreach($settle_item as $settle)
+                                        <tr>
+                                            <td> {{ $loop->index + 1 }} </td>
+                                            <td>{{ date('Y-m-d',$settle->date)}} </td>
+                                            <td>{{ $settle->settle_amount }}
+                                                @if ($settle->installment_type == "first_amount")
+                                                <label class="btn btn-success ">المقدم</label>
+                                                @endif
+                                            </td>
+                                            @if($settle->status == 'not_done')
+                                            <td>
+                                                <a class="btn btn-info " data-bs-toggle="modal"
+                                                    data-bs-target="#pay-settle_{{$settle->id}}">
+                                                    <label> دفع </label>
+                                                    @if ($settle->installment_type == "first_amount")
+                                                    المقدم
+                                                    @endif </a>
+                                                <div id="pay-settle_{{$settle->id}}" class="modal fade" tabindex="-1"
+                                                    aria-labelledby="pay-oneLabel{{$settle->id}}" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header d-flex align-items-center">
+                                                                <h4 class="modal-title mt-2" id="myModalLabel">
+                                                                    دفع قسط </h4>
+                                                                <hr>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-header">
+                                                                <label class="form-label" for="input1"> المبلغ
+                                                                    المطلوب : {{ $settle->amount }} دينار
+                                                                </label>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form
+                                                                    action="{{ route('installment.pay_settle',$settle->installment_id) }}"
+                                                                    method="POST" enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="form-label" for="cash">
+                                                                            المبلغ
+                                                                            النقدي
+                                                                        </label>
+                                                                        <input type="text" class="form-control mb-2"
+                                                                            id="cash_settle" name="cash"
+                                                                            onchange="calculate(this.value,'cash_settle');">
+                                                                        @error('cash')
+                                                                        <div style='color:red'>{{$message}}</div>
+                                                                        @enderror
+                                                                    </div>
+                                                                    <input type="hidden" id="real_price_settle"
+                                                                        value="{{$settle->amount}}">
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="form-label" for="knet_settle">
+                                                                            المبلغ
+                                                                            بالكي نت
+                                                                        </label>
+                                                                        <input type="text" class="form-control mb-2"
+                                                                            id="knet_settle" name="knet_settle">
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <label class="form-label"
+                                                                            for="knet_code_settle">
+                                                                            رقم وصل الكي نت
+                                                                        </label>
+                                                                        <input type="text" class="form-control mb-2"
+                                                                            id="knet_code_settle"
+                                                                            name="knet_code_settle">
+                                                                    </div>
+                                                                    <div class="form-group mb-3">
+                                                                        <input type="file" name="img_dir"
+                                                                            class="form-control" />
+                                                                    </div>
+                                                                    <div class="modal-footer d-flex ">
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">دفع
+                                                                        </button>
+                                                                        <button type="button"
+                                                                            class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                            data-bs-dismiss="modal">
+                                                                            الغاء
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                لا يوجد
+                                            </td>
+
+                                            @else
+                                           
+                                            @if ($settle->payment_type)
+                                            <td><span class="btn btn-success">
+                                            دفع يدوي </span></td>
+                                            @endif
+                                            <td>
+                                                <h6>{{ $settle->img }}</h6>
+
+                                                <h6><a href="{{ asset($settle->img_dir ?? '/')}}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+
+                                                    </a></h6>
+                                            </td>
+                                            @endif
+                                            <!-- <td> @if ($settle->status == "not_done")
+                                                        <input type="checkbox" disc="{{ $settle->amout}}"
+                                                    onclick="calculate( $settle->id );"
+                                                    id="payment_order_id_{{$settle->id}}" name="payment_order_id[]"
+                                                    value="{{ $settle->id }}" />
+
+
+                                                    @endif
+                                                    </td> -->
+
+                                            
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 
 <script>

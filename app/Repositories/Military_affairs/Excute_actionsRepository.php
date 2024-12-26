@@ -62,7 +62,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             ->orderBy('excute_actions_amount','desc')
             ->get();
 
-
+       
         $title = '   رصيد التنفيذ';
 
         $breadcrumb = array();
@@ -166,10 +166,9 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
          }
        
        
-        $update_data['excute_actions_last_date_check'] =date('Y-m-d H:i:s');
+        $update_data['excute_actions_last_date_check'] = date('Y-m-d H:i:s');
         $item_military->update($update_data);
-        return redirect()->route('excute_actions');
-
+        return redirect()->route('excute_actions')->with('success', 'تم الاستعلام بنجاح  ');
 
     }
 
@@ -272,7 +271,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             . '<br>'
             . $description;
         if ($add_data_bank_2['amount'] > 0) {
-            DB::table('fast_banks_invoices')->create($add_data_bank_2);
+            DB::table('fast_banks_invoices')->insert($add_data_bank_2);
 
         }
 
@@ -296,7 +295,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $add_data1['installment_id'] = $request->installment_id;
 
         $add_data1['amount'] = $check_item->amount;
-        $add_data1['user_id'] = Auth::user() ? Auth::user()->id : '' ;
+        $add_data1['created_by'] = Auth::user() ? Auth::user()->id : '' ;
         //  echo '<pre>';  print_r($add_data1); exit;
         Invoices_installment::create($add_data1);
 

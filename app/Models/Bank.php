@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Bank extends Model
 {
     use HasFactory;
+    protected $fillable = ['amount'];
 
     public function user()
     {

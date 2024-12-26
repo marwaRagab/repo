@@ -586,8 +586,8 @@ function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $desc
     $cond['bank_id'] = $bank_id;
 
     $item2 = DB::table('banks_invoices')->where('bank_id', $bank_id)->first();
-
-    $item = $item2[0];
+    // dd($item2);
+    // $item = $item2[0];
     $sum = $amount;
     //  echo '<pre>';  print_r($item);
     if (!empty($item)) {
@@ -627,7 +627,7 @@ function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $desc
 
     //  echo '<pre>';  print_r($add_data); exit;
 
-    $id = DB::table('banks_invoices')->create($add_data);
+    $id = DB::table('banks_invoices')->insert($add_data);
 
     return $id;
 }
