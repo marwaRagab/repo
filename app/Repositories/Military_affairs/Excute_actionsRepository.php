@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Repositories\Military_affairs;
@@ -175,6 +174,13 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
     }
 
 
+
+
+
+
+
+
+
     ///////////////////////////////case_proof function
     public function add_check(Request $request)
     {
@@ -297,7 +303,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $add_data1['installment_id'] = $request->installment_id;
 
         $add_data1['amount'] = $check_item->amount;
-        $add_data1['created_by'] = Auth::user() ? Auth::user()->id : '' ;
+        $add_data1['user_id'] = Auth::user() ? Auth::user()->id : '' ;
         //  echo '<pre>';  print_r($add_data1); exit;
         Invoices_installment::create($add_data1);
 
