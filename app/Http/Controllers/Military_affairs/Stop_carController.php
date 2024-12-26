@@ -23,5 +23,13 @@ class Stop_carController extends Controller
         return $this->Stop_carRepository->index($request);
 
     }
+    public function updateRegionsPoliceStations()
+    {
+        return $this->Stop_carRepository->updateRegionsPoliceStations();
+    }
+    public function stop_car_convert(Request $request)
+    {
+        return $this->Stop_carRepository->stop_car_convert($request);
+    }
 
 }

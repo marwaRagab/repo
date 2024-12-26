@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Repositories\Military_affairs;
@@ -140,15 +141,15 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
     public function add_amount(Request $request)
     {
         $item_military = Military_affair::findorfail($request->military_affairs_id);
-         if($request->check_found == 1) {
-             $request->validate([
-                 'date' => 'required| date',
-                 'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
-                 'check_type' => 'required',
-                 'amount' => 'required',
-             ]);
+        if($request->check_found == 1) {
+            $request->validate([
+                'date' => 'required| date',
+                'img_dir' => 'required|image|mimes:jpg,png,jpeg,gif|max:2048',
+                'check_type' => 'required',
+                'amount' => 'required',
+            ]);
 
-             if ($request->hasFile('img_dir')) {
+            if ($request->hasFile('img_dir')) {
                 $data_img_dir = $request->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
                 }
                 $array_add=[

@@ -112,7 +112,6 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
             }
 
 
-
         }
         $this->data['get_responsible'] = get_responsible();
         $this->data['view'] = 'military_affairs/Stop_travel/index';
@@ -131,8 +130,6 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
 
         $array_old = Stop_travel_types::findorfail($request->item_type_old);
         $array_new = Stop_travel_types::findorfail($request->item_type_new);
-
-
 
         // $array_old->update($data);
         $item_time=Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
