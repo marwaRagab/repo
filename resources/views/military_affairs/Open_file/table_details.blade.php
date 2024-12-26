@@ -13,7 +13,7 @@
     <td>
         {{ $item->final_data[0] }}
         <br>
-        {{ $item->different_date }}
+        {{ $item->different_date }} يوم
     </td>
 
     <td>{{ $item->type_papar }}</td>
