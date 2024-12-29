@@ -27,9 +27,25 @@ class Stop_carController extends Controller
     {
         return $this->Stop_carRepository->updateRegionsPoliceStations();
     }
+    public function getprevCols()
+    {
+        return $this->Stop_carRepository->getprevCols();
+    }
+    public function update_info_cars_numbers($id, Request $request)
+    {
+        return $this->Stop_carRepository->update_info_cars_numbers($id,$request);
+    }
+
     public function stop_car_convert(Request $request)
     {
         return $this->Stop_carRepository->stop_car_convert($request);
     }
-
+    public function info_update(Request $request)
+    {
+        return $this->Stop_carRepository->info_update($request);
+    }
+    public function catchCarDone($id, Request $request)
+    {
+        return $this->Stop_carRepository->catchCarDone($id,$request);
+    }
 }
