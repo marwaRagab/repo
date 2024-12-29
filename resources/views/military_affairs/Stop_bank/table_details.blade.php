@@ -60,11 +60,10 @@
 
                     <li>
                         <a class="btn btn-success rounded-0 w-100 mt-2"
-
                            data-bs-toggle="modal"
                            data-type="tahseel"
                            onclick="get_type('tahseel')"
-                           data-bs-target="#open-bank_request-{{$item->id}}">
+                           data-bs-target="#open-bank_request-{{$item->id}}"    {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}>
                             تحصيل مبلغ</a>
                     </li>
                     <li>
@@ -72,7 +71,7 @@
                            data-bs-toggle="modal"
 
                            onclick="get_type('new_date')"
-                           data-bs-target="#open-bank_request-{{$item->id}}"
+                           data-bs-target="#open-bank_request-{{$item->id}}"  {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}
                         >
                             تقويس</a>
                     </li>
@@ -81,7 +80,7 @@
                            data-bs-toggle="modal"
 
                            onclick="get_type('not_found')"
-                           data-bs-target="#open-bank_request-{{$item->id}}"
+                           data-bs-target="#open-bank_request-{{$item->id}}" {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}
                         >
                             لايوجد</a>
                     </li>
@@ -208,13 +207,15 @@
 
 
                 </li>
-                @if($item->emp_id !=0 || $item->emp_id !=NULL )
-                <li>
-                    <a class="btn btn-success rounded-0 w-100 mt-2"
+                    @if($item->emp_id !=0 || $item->emp_id !=NULL )
+                    @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
+                   <li>
+                     <a class="btn btn-success rounded-0 w-100 mt-2"
                        href="{{url('show_settlement/'.$item->id)}}">
                         تحويل للتسوية
                     </a>
-                </li>
+                   </li>
+                    @endif
                 <li>
                     <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
                             data-bs-target="#change_type-{{$item->id}}">
@@ -223,13 +224,15 @@
                 </li>
                     @else
 
+                    @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
                     <li>
                         <a class="btn btn-success rounded-0 w-100 mt-2"
                            href="#">
                             تحويل للتسوية
                         </a>
                     </li>
-                    <li>
+                    @endif
+                     <li>
                         <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
                                 data-bs-target="#change_type-{{$item->id}}" disabled>
                             تحويل الحالة
