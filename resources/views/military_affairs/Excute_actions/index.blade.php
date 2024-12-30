@@ -1,7 +1,7 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
-            الكل 
+            الكل
         </a>
         @foreach($courts as $court)
 
@@ -68,7 +68,7 @@
                         <td>{{$item->madionia_amount}}</td>
                         <td>{{$item->excute_actions_check_amount}} </td>
                         <td>{{$item->excute_actions_amount}} </td>
-                        <td> {{$item->excute_actions_counter}}</td>
+                        <td> {{$item->military_amount ? count($item->military_amount->where('check_type',1)) : 0 }} </td>
                         <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
@@ -213,6 +213,9 @@
                                                                     <label class="form-label">
                                                                         مصدر الحجز</label>
                                                                     <select class="form-select" name="check_type">
+                                                                        <option value="0">
+                                                                           اختر
+                                                                        </option>
                                                                         <option value="salary">
                                                                             حجز راتب
                                                                         </option>
