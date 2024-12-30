@@ -115,6 +115,7 @@ Route::get('/', function () {
     return view('login');
 });
 Route::get('/db/{type}', [old_dbController::class, 'index']);
+Route::get('/get_reminder_all', [old_dbController::class, 'get_reminder']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';

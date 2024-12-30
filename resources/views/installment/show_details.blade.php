@@ -2201,7 +2201,7 @@
                                             </td>
                                             <td>-</td>
                                             <td>{{$one->amount}}</td>
-                                            <td>{{date('Y-m-d',$one->date)}}</td>
+                                            <td>{{$one->date}}</td>
                                             @if($one->payment_type=='cash')
                                             <td> <span class="btn btn-success"> كاش</span></td>
                                             @endif
@@ -2218,10 +2218,21 @@
                                             </td>
                                             @endif
                                             <td>
-                                                <h6>{{ $one->payment_date }}</h6>
-                                                <h6><a href="{{ asset($one->img ?? '/') }}" target=" _blank">
+
+                                                <h6>{{ $one->date}}</h6>
+
+                                                <!--                                                    <a href="{{ asset($one->img ?? '/') }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
+                                                    </a>-->
+
+                                                <a target="_blank"
+                                                   onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
+                                                   title="Download the file from the primary or fallback server.">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+
                                             </td>
                                         </tr>
                                         @php $i++ @endphp
@@ -2323,8 +2334,9 @@
                                                 <span class="btn btn-success font-weight-100 "> شيك</span>
                                             </td>
                                             <td>
+
                                                 <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
@@ -2336,7 +2348,7 @@
                                         @endforeach
                                         @endif
 
-                                        
+
                                     </tbody>
                                 </table>
                             </div>
@@ -2990,7 +3002,7 @@
 </div>
 
 
-
+@include('military_affairs.Execute_alert.print.script')
 
 <script>
 $('#checkAll').click(function(event) {
