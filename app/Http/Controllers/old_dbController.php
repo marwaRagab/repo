@@ -949,6 +949,84 @@ class old_dbController extends Controller
         $obj1->save();
 
     }
+   public function get_reminder(){
 
+
+       $law_36 = '(SELECT SUM(installment_months.amount)
+            FROM installment_months
+            WHERE installment_months.installment_type = "law_percent"
+            AND installment_months.installment_id  =  installment.id)';
+
+       $total_madoina = '(SELECT SUM(installment_months.amount)
+                   FROM installment_months
+                   WHERE installment_months.installment_type != "first_amount"
+                   AND installment_months.installment_id  =  installment.id
+                   AND installment_months.status != "delay")';
+
+       $law_percent = '(SELECT SUM(installment_months.amount)
+                 FROM installment_months
+                 WHERE installment_months.installment_type = "law_percent"
+                 AND installment_months.installment_id  =  installment.id
+                 AND installment_months.status="done")';
+
+       $check_pay = '(SELECT SUM(military_affairs_check.amount)
+               FROM military_affairs_check
+               WHERE military_affairs_check.deposit = 1
+               AND military_affairs_check.military_affairs_id  =  military_affairs.id)';
+
+       $amount_pay = '(SELECT SUM(military_affairs_amounts.amount)
+                FROM military_affairs_amounts
+                WHERE military_affairs_amounts.military_affairs_check_id = 0
+                AND military_affairs_amounts.military_affairs_id  =  military_affairs.id)';
+       $pay_done ='(SELECT SUM(installment_months.amount)
+                FROM installment_months
+                 WHERE installment_months.installment_type != "first_amount" and  installment_months.status = "done"
+                AND installment_months.installment_id  =  installment.id)';
+       $settlement_paid= '(SELECT SUM(military_affairs_settlement_months.amount) FROM military_affairs_settlement_months WHERE  military_affairs_settlement_months.status="done" AND military_affairs_settlement_months.installment_id  =  installment.`id` )';
+
+
+       $items = DB::table('military_affairs')
+           ->select(
+               'military_affairs.id as my_id',
+               'military_affairs.excute_actions_check_amount',
+               'military_affairs.excute_actions_amount',
+               'installment_months.amount',
+               'installment_months.status',
+               'installment_months.installment_type',
+               DB::raw('(SELECT SUM(installment_months.amount)
+                  FROM installment_months
+                  WHERE installment_months.installment_type != "first_amount"
+                    AND installment_months.installment_id = installment.id
+                    AND installment_months.status = "done") AS pay_done'),
+               DB::raw('(
+            SELECT
+
+               IF(military_affairs.eqrar_dain_amount IS NULL, 0, military_affairs.eqrar_dain_amount)
+             - IF(' . $pay_done . ' IS NULL, 0, ' . $pay_done . ')
+             - IF(' . $check_pay . ' IS NULL, 0, ' . $check_pay . ')
+             - IF(' . $amount_pay . ' IS NULL, 0, ' . $amount_pay . ')
+             - IF(' . $settlement_paid . ' IS NULL, 0, ' . $settlement_paid . ')
+
+        ) AS ALL_reminder', false)
+           )
+           ->join('installment', 'installment.id', '=', 'military_affairs.installment_id')
+           ->join('installment_months', 'installment.id', '=', 'installment_months.installment_id')
+           ->where('installment.finished', '=', 0)
+           ->get();
+
+
+
+return $items;
+
+
+
+
+
+
+
+   }
 
 }
+
+
+
