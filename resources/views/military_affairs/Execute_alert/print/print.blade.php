@@ -5,51 +5,65 @@
 @endphp
 
 <style>
-    a{
+    a {
         cursor: pointer;
     }
 </style>
 <div class="dropdown mb-6 me-6">
     <!-- Dropdown button -->
-    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+            aria-expanded="false">
         طباعة
     </button>
     <!-- Dropdown links -->
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         @if (Str::contains(request()->url(), 'open_file'))
             @foreach (get_fixed_prin_data() as $data)
-            <li><a class="dropdown-item" href="{{ route('print_issue', ['item' => $item->id , 'data_id' => $data->id]) }}" target="_blank">بيانات ({{   explode(' ', $data->name_ar)[0] }})</a></li>
+                <li><a class="dropdown-item"
+                       href="{{ route('print_issue', ['item' => $item->id , 'data_id' => $data->id]) }}"
+                       target="_blank">بيانات ({{   explode(' ', $data->name_ar)[0] }})</a></li>
             @endforeach
         @endif
-        <li><a class="dropdown-item" href="{{ route('print_case_proof',['item' => $item->id]) }}" target="_blank">اثبات حالة</a></li>
-        <li><a class="dropdown-item" href="{{ route('print_sticker' ,['item' => $item->id]) }}" target="_blank">ستيكر ملف التنفيذ</a></li>
+        <li><a class="dropdown-item" href="{{ route('print_case_proof',['item' => $item->id]) }}" target="_blank">اثبات
+                حالة</a></li>
+        <li><a class="dropdown-item" href="{{ route('print_sticker' ,['item' => $item->id]) }}" target="_blank">ستيكر
+                ملف التنفيذ</a></li>
         <li>
             <a class="dropdown-item {{ $qrareldin->qard_paper_img == null || $qrareldin->qard_paper_img == '' || $qrareldin->qard_paper_img == 0   ? 'disabled' : '' }}"
                {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
-                  onclick="checkFileAndRedirect(
+               onclick="checkFileAndRedirect(
                     '{{ $qrareldin && $qrareldin->qard_paper_img && $qrareldin->qard_paper_img !== '0' ? 'https://electron-kw.net/' . $qrareldin->qard_paper_img: '#' }}',
                     '{{ $qrareldin && $qrareldin->qard_paper_img && $qrareldin->qard_paper_img !== '0' ? 'https://electron-kw.com/' . $qrareldin->qard_paper_img : '#' }}'
                 ); return false;"
-                  target="_blank" >
-               اقرار الدين
+               target="_blank">
+                اقرار الدين
             </a>
         </li>
         <li>
             <a class="dropdown-item {{ !$client_img || !$client_img->path || $client_img->path == null || $client_img->path == 0 ? 'disabled' : '' }}"
-                {{-- href="{{ $client_img ? asset($client_img->path) : '#' }}" --}}
-                onclick="checkFileAndRedirect(
+               {{-- href="{{ $client_img ? asset($client_img->path) : '#' }}" --}}
+               onclick="checkFileAndRedirect(
                     '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.net/' . $client_img->path : '#' }}',
                     '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.com/' . $client_img->path : '#' }}'
                 ); return false;"
-                target="_blank">
-                 الصورة المدنية
-             </a>
+               target="_blank">
+                الصورة المدنية
+            </a>
         </li>
-            @if (Str::contains(request()->url(), 'stop_bank'))
+        @if (Str::contains(request()->url(), 'stop_bank'))
+            <li>
+                <a class="dropdown-item {{ $pdf_img->execute_do_img == null || $pdf_img->execute_do_img == '' || $pdf_img->execute_do_img == 0   ? 'disabled' : '' }}"
+                   {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+                   onclick="checkFileAndRedirect(
+                    '{{ $pdf_img && $pdf_img->execute_do_img  && $pdf_img->execute_do_img !== '0' ? 'https://electron-kw.net/' . $pdf_img->execute_do_img: '#' }}',
+                    '{{ $pdf_img && $pdf_img->execute_do_img && $pdf_img->execute_do_img!== '0' ? 'https://electron-kw.com/' . $pdf_img->execute_do_img: '#' }}'
+                ); return false;"
+                   target="_blank">
+                    صورة الpdf
+                </a>
+            </li>
 
-                    <li><a class="dropdown-item  {{ $pdf_img->execute_do_img == null || $pdf_img->execute_do_img == ''  ? 'disabled' : '' }} " href="{{ $pdf_img ? asset($pdf_img->execute_do_img) : '#' }}" target="_blank">طباعة الpdf</a></li>
-
-            @endif
+        @endif
     </ul>
 </div>
 

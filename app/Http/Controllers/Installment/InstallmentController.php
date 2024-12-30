@@ -285,7 +285,7 @@ class InstallmentController extends Controller
         if ($installment->laws == 1) {
             $military_affair = Military_affair::where('installment_id', $id)->first();
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
-            $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->where('deposit','=',0)->get();
+            $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
 
             $data['sum'] = $not_done_amount - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
@@ -298,7 +298,7 @@ class InstallmentController extends Controller
         $data['install_amount'] = $first_month->amount ?? 0;
 
         $data['invoices'] = Invoices_installment::with('install_month', 'installment')
-            ->where('installment_id', $id)->get();
+            ->where('installment_id', $id)->where('payment_type','!=','check')->get();
         // dd($data['invoices']);
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
         if ($military_affair) {
