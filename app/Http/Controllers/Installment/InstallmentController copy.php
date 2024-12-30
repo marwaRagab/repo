@@ -1231,60 +1231,47 @@ class InstallmentController extends Controller
 
             // }
 
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
+
             $this->do_pay_to_bank($first->id, $request->some_amount, $request->pay_way);
           
             $months_id = array();
             $months = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->first();
 
-            $invoice = Invoices_installment::where('install_month_id', $first->id)->where('installment_id', $installment_id)->first();
-
-            if ($request->hasFile('img_dir')) {
-               
-                $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
-                $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
-               
-                    $invoice->update([
-                        'img' => 'uploads/new_photos' . '/' . $filename,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
-            }
+           
             for ($i = 0; $i < count($installments); $i++)
             {
                 if ($request->some_amount >= $installments[$i]['amount']) {
 
-                    $months_id[] = $installments[$i]['id'];
+                    $months_id[$i] = $installments[$i]['id'];
                     $request->some_amount = $request->some_amount - $installments[$i]['amount'];
-
-                    $months::where('id',$installments[$i]['id'])->update([
+                   
+                    $months->update([
                         'status' => "done",
-                        'payment_date' => now()->format('Y-m-d'),
+                        'payment_date' => now(),
                         'created_by' => Auth::user()->id ?? null,
                         'payment_type' => $request->pay_way,
                         'hesab_file' => 1,
                         'img_dir' => 'uploads/new_photos/' . $filename,
                     ]);
-                    
                 } else {
-                   
+                //    dd($request->some_amount);
                     if ($request->some_amount > 0) {
                         if ($installments[$i]['installment_type'] == 'law_percent') {
                             $old_law_percent = $installments[$i]['amount'];
                         }
 
                         $reminder = $installments[$i]['amount'] - $request->some_amount;
-                        $months_id[] = $installments[$i]['id'];
+                        $months_id[$i] = $installments[$i]['id'];
+                        
                         // dd($request->some_amount);
                         if ($request->some_amount > 0) {
                             // dd($installments[$i]['id'] - $reminder);
-                            $months::where('id',$installments[$i]['id'])->update([
+                            $months->update([
                                 'amount' => $installments[$i]['amount'] - $reminder,
                                 'notes' => $reminder . "تم ترحيل جزء من القسط للشهر التالي وقدره :  ",
-                                'status' => "done",
-                                'payment_date' => now()->format('Y-m-d'),
                                 'created_by' => Auth::user()->id ?? null,
-                                'payment_type' => $request->pay_way,
-                                'hesab_file' => 1,
-                                'img_dir' => 'uploads/new_photos/' . $filename,
                             ]);
                            
                             if ($installments[$i]['installment_type'] == 'law_percent') {
@@ -1304,19 +1291,19 @@ class InstallmentController extends Controller
                         // $months = new Installment_month();
                         if (!empty($installments[$i + 1])) {
                            
-                            $months::where('id',$installments[$i+1]['id'])->update([
+                            $months::where('id',$installments[$i + 1])->update([
                                 'amount' => $installments[$i + 1]['amount'] + $reminder,
                                 'notes' => $reminder . "تم إضافة جزء من القسط السابق وقدره :  ",
                                 'created_by' => Auth::user()->id ?? null,
                             ]);
                         }                       
                     }
-                    $request->some_amount = $request->some_amount - $installments[$i]['amount'];
+                    $request->some_amount = $request->some_amount - $installments[$i]['amout'];
                     $j = count($installments);
                 }
                 // dd($request->some_amount);
             }
-
+            // dd($months_id);
             if (empty($months)) {
 
                 $installment->update([
@@ -1332,7 +1319,19 @@ class InstallmentController extends Controller
                     ]);
                 }
             }
-
+            $invoice = Invoices_installment::where('install_month_id', $first->id)->where('installment_id', $installment_id)->get();
+            
+            if ($request->hasFile('img_dir')) {
+                // $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+                // $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
+               
+                foreach ($invoice as $one) {
+                    $one->update([
+                        'img' => 'uploads/new_photos' . '/' . $filename,
+                        'created_by' => Auth::user()->id ?? null,
+                    ]);
+                }
+            }
             // $months = new Installment_month;
             
         }
