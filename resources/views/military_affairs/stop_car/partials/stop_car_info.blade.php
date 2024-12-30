@@ -2,7 +2,7 @@
     aria-labelledby="bs-example-modal-md" aria-hidden="true">
    <div class="modal-dialog modal-dialog-scrollable modal-lg">
        <div class="modal-content">
-           <form class="mega-vertical" action="{{ route('stop_car_convert', $item->id) }}"
+           <form class="mega-vertical" action="{{ route('info_update', $item->id) }}"
                  method="post" enctype="multipart/form-data">
                @csrf
                <input type="hidden" name="military_affairs_id" value="{{ $item->id }}">
@@ -22,43 +22,51 @@
 
                     <div class="form-group col-12">
                         <div class="form-check-inline">
-                            <input type="radio" name="exist" id="exist" value="exist">
+                            <input type="radio" name="have_cars" id="have_cars" value="1" onclick="checkCheck2(1)" checked>
                             <label for="exist">يوجد</label>
                         </div>
                         <div class="form-check-inline">
-                            <input type="radio" name="exist" id="notexist" value="notexist" checked="">
+                            <input type="radio" name="have_cars" id="have_cars" value="0"  onclick="checkCheck2(0)">
                             <label for="status_close">لا يوجد</label>
                         </div>
                     </div>
 
 
+
+
+
+                       <div class="form-group">
+                           <label for="formFile" class="form-label">
+                               صورة أمر الحجز مختوم </label>
+                           <input class="form-control" name="img_dir_1" accept="image/*" type="file"
+                                  id="formFile"/>
+                           @error('img_dir_1')
+                           <div style='color:red'>{{ $message }}</div>
+                           @enderror
+                       </div>
+                       <div id="mydiv567" style="display: block;" class="form-group">
+
+                       <div class="form-group">
+                        <label for="formFile" class="form-label">
+                            صورة البرنت </label>
+                        <input class="form-control" name="img_dir_2" accept="image/*" type="file"
+                               id="formFile"/>
+                        @error('img_dir_2')
+                        <div style='color:red'>{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="form-group col-12">
                         <label class="form-label" for="input1 ">
                                عدد السيارات </label>
 
-                           <input type="text" name="date" class="form-control mb-2" id="input1">
-                           @error('date')
+                           <input type="text" name="stop_car_car_num" class="form-control mb-2" id="input1">
+                           @error('stop_car_car_num')
                            <div style='color:red'>{{ $message }}</div>
                            @enderror
                        </div>
-                       <div class="form-group">
-                           <label for="formFile" class="form-label">
-                               صورة أمر الحجز مختوم </label>
-                           <input class="form-control" name="img_dir" accept="image/*" type="file"
-                                  id="formFile"/>
-                           @error('img_dir')
-                           <div style='color:red'>{{ $message }}</div>
-                           @enderror
-                       </div>
-                       <div class="form-group">
-                        <label for="formFile" class="form-label">
-                            صورة البرنت </label>
-                        <input class="form-control" name="img_dir" accept="image/*" type="file"
-                               id="formFile"/>
-                        @error('img_dir')
-                        <div style='color:red'>{{ $message }}</div>
-                        @enderror
+
                     </div>
+
                    </div>
                </div>
                <div class="modal-footer d-flex ">
@@ -73,3 +81,9 @@
        </div>
    </div>
 </div>
+<script>
+    function checkCheck2(val) {
+        var myDiv = document.getElementById("mydiv567");
+        myDiv.style.display = (val == 1) ? "block" : "none";
+    }
+</script>

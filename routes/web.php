@@ -243,10 +243,18 @@ Route::middleware('auth')->group(function () {
     //Route::get('/please_cancel_eqrar/{id?}', [ EqrardainController::class, 'please_cancel_eqrar']);
 
     Route::get('military_affairs_all', [Military_affairsController::class, 'index'])->name('military_affairs');
-    Route::get('military_affairs/stop_car', [Stop_carController::class, 'index'])->name('stop_car');
 
+    Route::get('military_affairs/stop_car', [Stop_carController::class, 'index'])->name('stop_car');
     Route::get('military_affairs/stop_car/updateRegionsPoliceStations', [Stop_carController::class, 'updateRegionsPoliceStations'])->name('updateRegionsPoliceStations');
     Route::post('military_affairs/stop_car/request_update/{id}', [Stop_carController::class, 'stop_car_convert'])->name('stop_car_convert');
+    Route::post('military_affairs/stop_car/info_update/{id}', [Stop_carController::class, 'info_update'])->name('info_update');
+    Route::get('military_affairs/stop_car/getprevCols', [Stop_carController::class, 'getprevCols'])->name('getprevCols');
+    Route::get('/military_affairs/stop_car/update_info_cars_numbers/{id}', [Stop_carController::class, 'update_info_cars_numbers'])
+    ->name('show_update_info_cars_numbers');
+    Route::post('/military_affairs/stop_car/update_info_cars_numbers/{id}', [Stop_carController::class, 'update_info_cars_numbers'])
+    ->name('update_info_cars_numbers');
+    Route::match(['get', 'post'], '/military_affairs/stop_car/catch_car_done/{id}', [Stop_carController::class, 'catchCarDone'])
+    ->name('catch_car_done');
 
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');

@@ -3,8 +3,10 @@
 namespace App\Repositories\Military_affairs;
 
 use App\Interfaces\Military_affairs\Stop_carRepositoryInterface;
+use App\Models\Client;
 use App\Models\Court;
 use App\Models\Governorate;
+use App\Models\Installment;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_status;
 use App\Models\Military_affairs\Military_affairs_stop_car_type;
@@ -39,7 +41,7 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         for ($i = 0; $i < count($this->data['stop_car_types']); $i++) {
             $this->data['stop_car_types'][$i]['style'] = $color_array[$i];
         }
-        
+
     }
     public function index(Request $request)
     {
@@ -97,20 +99,20 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             ->with('installment.client.area.police_station')
             ->when(request()->has('stop_car_type'), function ($query) {
                 $query
-                   ->whereHas('status_all', function ($q){
-                      return $q->where('type','stop_cars')->where('type_id',request()->get('stop_car_type'))->where('flag',0);
-                  });
-           })->get();
+                    ->whereHas('status_all', function ($q) {
+                        return $q->where('type', 'stop_cars')->where('type_id', request()->get('stop_car_type'))->where('flag', 0);
+                    });
+            })->get();
 /*
-            $sql = $query->toSql();
-            $bindings = $query->getBindings();
-            foreach ($bindings as $binding) {
-                $value = is_numeric($binding) ? $binding : "'$binding'";
-                $sql = preg_replace('/\\?/', $value, $sql, 1);
-            }
+$sql = $query->toSql();
+$bindings = $query->getBindings();
+foreach ($bindings as $binding) {
+$value = is_numeric($binding) ? $binding : "'$binding'";
+$sql = preg_replace('/\\?/', $value, $sql, 1);
+}
 
-            dd($sql);
-       */
+dd($sql);
+ */
 //dd($transactions);
         foreach ($transactions as $value) {
 
@@ -141,6 +143,86 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         $this->data['get_responsible'] = get_responsible();
 
         return view('layout', compact(['title', 'view', 'transactions', 'breadcrumb', 'count']), $this->data);
+
+    }
+
+    public function info_update(Request $request)
+    {
+        $haveCars = $request->input('have_cars');
+
+        $addData = [];
+        if ($haveCars == 0) {
+            $addData['stop_car_archive_date'] = time();
+            $addData['stop_car_archive'] = 1;
+        } else {
+            $request->validate([
+                'stop_car_car_num' => 'required|numeric',
+                'img_dir_2' => 'required|image',
+            ], [
+                'stop_car_car_num.required' => 'هذا الحقل مطلوب.',
+                'stop_car_car_num.numeric' => 'يجب أن يكون عدد السيارات رقماً.',
+                'img_dir_2.required' => 'يرجى تحميل صورة البرنت.',
+                'img_dir_2.image' => 'يجب أن يكون الملف صورة.',
+            ]);
+
+            $addData['stop_car_car_num'] = $request->input('stop_car_car_num');
+
+            if ($request->hasFile('img_dir_1')) {
+                $file = $request->file("img_dir_1");
+                $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('military_affairs'), $filename);
+                $addData['stop_car_img_print'] = 'military_affairs/' . $filename;
+
+            } else {
+                return redirect()->back()
+                    ->withErrors(['img_dir_1' => 'عفوا يوجد خطأ فى رفع الصورة.'])
+                    ->withInput();
+            }
+
+            if ($request->hasFile('img_dir_2')) {
+                $file = $request->file("img_dir_2");
+                $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('military_affairs'), $filename);
+                $addData['stop_car_img_request'] = 'military_affairs/' . $filename;
+
+            } else {
+                return redirect()->back()
+                    ->withErrors(['img_dir_2' => 'عفوا يوجد خطأ فى رفع الصورة.'])
+                    ->withInput();
+            }
+        }
+        Military_affair::findOrFail($request->military_affairs_id)->update($addData);
+
+        $old = Military_affairs_stop_car_type::where('slug', $request->item_type_old)->first();
+
+        if ($old) {
+            $new = Military_affairs_stop_car_type::where('id', '>', $old->id)
+                ->orderBy('id', 'asc')
+                ->first();
+
+        }
+
+        $request->type_id = $new->slug;
+
+        $item_time = Military_affairs_times::where(['times_type_id' => $old->id, 'military_affairs_id' => $request->military_affairs_id])->first();
+        $item_status = Military_affairs_status::where(['type_id' => $old->slug, 'military_affairs_id' => $request->military_affairs_id])->first();
+        if ($item_status) {
+            $data_status['flag'] = 1;
+            $item_status->update($data_status);
+        }
+        if ($item_time) {
+            $data['date_end'] = date('Y-m-d H:i:s');
+            $item_time->update($data);
+        }
+        Add_note($old, $new, $request->military_affairs_id);
+        Add_note_time($new, $request->military_affairs_id);
+        change_status($request, $request->military_affairs_id);
+
+        if (!empty($addData['stop_car_car_num']) && $addData['stop_car_car_num'] > 0) {
+            return redirect()->route('show_update_info_cars_numbers', ['id' => $request->military_affairs_id])->with('success', 'تم حفظ البيانات بنجاح');
+        } else {
+            return redirect()->route('stop_car', ['governate_id' => 0, 'type' => 'stop_car_police'])->with('success', 'تم حفظ البيانات بنجاح');
+        }
 
     }
 
@@ -268,6 +350,162 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         } catch (\Exception $e) {
             return "Error: " . $e->getMessage();
         }
+    }
+
+    public function getprevCols()
+    {
+        $prevCols = DB::table('prev_cols_military_affairs')->get();
+
+        foreach ($prevCols as $prevCol) {
+            $militaryAffair = Military_affair::find($prevCol->military_affairs_id);
+
+            if ($militaryAffair) {
+                $militaryAffair->update([
+                    'stop_car_car_num' => $prevCol->stop_car_car_num,
+                    'stop_car_img_print' => $prevCol->stop_car_img_print,
+                    'stop_car_img_request' => $prevCol->stop_car_img_request,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Data transfer completed successfully.']);
+    }
+
+    public function update_info_cars_numbers($id, Request $request)
+    {
+        // Fetch item and related client data
+        $item = Military_affair::findOrFail($id);
+        $client = Installment::first('id', $item->installment_id)->with('client');
+//dd($client);
+
+        if ($request->isMethod('post')) {
+            $carNumber = $item->stop_car_car_num;
+
+            // Update military affairs record
+            //$item->update(['stop_car_police' => 1]);
+
+            if (!empty($carNumber) && $carNumber > 0) {
+                $validatedData = $request->validate([
+                    'car_number.*' => 'required|string',
+                    'car_type.*' => 'required|string',
+                    'car_price.*' => 'required|numeric',
+                    'car_modal.*' => 'nullable|string',
+                    'car_color.*' => 'nullable|string',
+                ], [
+                    'car_number.*.required' => 'رقم اللوحة مطلوب لكل سيارة.',
+                    'car_type.*.required' => 'نوع السيارة مطلوب لكل سيارة.',
+                    'car_price.*.required' => 'قيمة السيارة مطلوبة.',
+                ]);
+
+                $carsData = [];
+                foreach ($request->car_number as $index => $carNumber) {
+                    $carsData[] = [
+                        'military_affairs_id' => $id,
+                        'car_number' => $carNumber,
+                        'car_type' => $request->car_type[$index],
+                        'car_price' => $request->car_price[$index],
+                        'car_modal' => $request->car_modal[$index] ?? null,
+                        'car_color' => $request->car_color[$index] ?? null,
+                    ];
+                }
+
+                DB::table('military_affairs_cars')->insert($carsData);
+
+                // Log success action
+
+                return redirect()->route('stop_car', ['governate_id' => 0, 'stop_car_type' => 'stop_car_police'])
+                    ->with('success', 'تمت العملية بنجاح.');
+            }
+
+            // Log action if no cars
+            return redirect()->route('stop_car', ['governate_id' => 0, 'stop_car_type' => 'stop_car_police']);
+        }
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " الشئون القانونية";
+        $breadcrumb[1]['url'] = route("military_affairs");
+        $breadcrumb[2]['title'] = "حجز السيارات";
+        $breadcrumb[2]['url'] = route("stop_car");
+        $breadcrumb[3]['title'] = 'ادخال بيانات الاستعلام ';
+        $breadcrumb[3]['url'] = 'javascript:void(0);';
+        $view = 'military_affairs.stop_car.add_info_car_numbers';
+        $title = $this->title;
+
+        return view('layout', compact('item', 'client', 'breadcrumb', 'view', 'title'), $this->data);
+
+    }
+
+    public function catchCarDone($id, Request $request)
+    {
+
+        $item = Military_affair::findOrFail($id);
+        $client = Installment::first('id', $item->installment_id)->with('client');
+        $cars = DB::table('military_affairs_cars')->where('military_affairs_id', $id)->get();
+
+   $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => 'stop_car_doing'])->first();
+ $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => 'stop_car_finished'])->first();
+        if ($request->isMethod('post')) {
+            $carCatchIds = $request->input('car_catch', []);
+
+            DB::table('military_affairs_cars')->whereIn('id', $carCatchIds)->update(['car_catch' => 1]);
+
+            $remainingCars = DB::table('military_affairs_cars')->where('military_affairs_id', $id)
+                ->where('car_catch', 0)
+                ->count();
+
+            if ($remainingCars === 0) {
+                $old = Military_affairs_stop_car_type::where('slug', $request->item_type_old)->first();
+
+                if ($old) {
+                    $new = Military_affairs_stop_car_type::where('id', '>', $old->id)
+                        ->orderBy('id', 'asc')
+                        ->first();
+
+                }
+
+                $request->type_id = $new->slug;
+
+                $item_time = Military_affairs_times::where(['times_type_id' => $old->id, 'military_affairs_id' => $request->military_affairs_id])->first();
+                // dd($item_time);
+                $item_status = Military_affairs_status::where(['type_id' => $old->slug, 'military_affairs_id' => $request->military_affairs_id])->first();
+                if ($item_status) {
+                    $data_status['flag'] = 1;
+                    $item_status->update($data_status);
+                }
+                if ($item_time) {
+                    $data['date_end'] = date('Y-m-d H:i:s');
+                    $item_time->update($data);
+                }
+                Add_note($old, $new, $request->military_affairs_id);
+                Add_note_time($new, $request->military_affairs_id);
+                change_status($request, $request->military_affairs_id);
+
+                return redirect()
+                    ->route('military_affairs.stop_cars.index', ['governate_id' => 0, 'stop_car_type' => 'stop_car_finished'])
+                    ->with('success', 'تمت العملية بنجاح.');
+            }
+
+            return redirect()
+                ->route('military_affairs.stop_cars.index', ['governate_id' => 0, 'stop_car_type' => 'stop_car_doing'])
+                ->with('success', 'تمت العملية بنجاح.');
+        }
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " الشئون القانونية";
+        $breadcrumb[1]['url'] = route("military_affairs");
+        $breadcrumb[2]['title'] = "حجز السيارات";
+        $breadcrumb[2]['url'] = route("stop_car");
+        $breadcrumb[3]['title'] = 'ادخال سيارات الحجز ';
+        $breadcrumb[3]['url'] = 'javascript:void(0);';
+        $view = 'military_affairs.stop_car.catch_car_done';
+        $title = $this->title;
+
+        return view('layout', compact('item', 'client', 'breadcrumb', 'view', 'title', 'cars'), $this->data);
+
     }
 
 }
