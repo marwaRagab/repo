@@ -24,6 +24,7 @@
                     </div>
                 @endif
 
+                
                 @foreach ($cars as $car)
                     <div class="row mb-3">
                         <div class="col-md-3">
