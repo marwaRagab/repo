@@ -1,4 +1,5 @@
 @php
+    ini_set('memory_limit', '256M');
     $arr = ['success', 'danger', 'primary', 'secondary', 'info', 'warning'];
     $governateId = request()->get('governate_id');
     $stopCarType = request()->get('stop_car_type');
@@ -11,8 +12,8 @@
         </a>
         @foreach ($courts as $court)
             <a href="{{ route('stop_car', ['governate_id' => $court->id]) }}"
-               class="btn-filter {{ $court->style }} px-4 fs-4 mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
-                {{ $court->name_ar }} ({{ $court->counter }})
+                class="btn-filter {{ $court->style }} px-4 fs-4 mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
+                {{ $court->name_ar }} ({{ $count['govern_counter_' . $court->id] ?? 0 }})
             </a>
         @endforeach
     </div>
@@ -23,7 +24,7 @@
         <div class="d-flex flex-wrap">
             @foreach ($stop_car_types as $itemType)
                 <a href="{{ route('stop_car', ['stop_car_type' => $itemType->slug, 'governate_id' => $governateId]) }}"
-                   class="btn-filter {{ $itemType->style }} px-4 fs-4 mx-1 mb-2 {{ $stopCarType == $itemType->slug ? 'active' : '' }}">
+                    class="btn-filter {{ $itemType->style }} px-4 fs-4 mx-1 mb-2 {{ $stopCarType == $itemType->slug ? 'active' : '' }}">
                     {{ $itemType->name_ar }} ({{ $counts['stop_car_count_' . $itemType->id] ?? 0 }})
                 </a>
             @endforeach
@@ -72,29 +73,46 @@
                             </td>
 
                             @if ($stopCarType == 'stop_car_police_station')
-                            <td>{{$item->installment->client->area->police_station->name_ar}} </td>
+                                <td>{{ $item->installment->client->area->police_station->name_ar }} </td>
                             @endif
 
 
                             <td>{{ $item->eqrar_dain_amount }}</td>
                             <td>{{ $item->issue_id }}</td>
-                            @if ($stopCarType)
+                            @if ($stopCarType && $stopCarType != 'stop_car_cancel')
                                 <td>
-                                    @if ($stopCarType=='stop_car_doing')
+                                    @if ($stopCarType == 'stop_car_finished')
+                                        <a class="btn btn-primary me-6 my-2"
+                                            href="{{ route('send_sms', $item->id) }}">ارسال sms</a><br />
+                                    @endif
 
-                                    <a class="btn btn-success me-6 my-2" href="{{ route('catch_car_done' , $item->id) }}">{{ $col_name }}</a><br/>
-                                    <a class="btn btn-info me-6 my-2" href="1700611200"><span class="btn-label"><i class="fa fa-map-marker"></i></span>الموقع</a>
+                                    @if ($stopCarType == 'stop_car_doing')
+                                        <a class="btn btn-success me-6 my-2"
+                                            href="{{ route('catch_car_done', $item->id) }}">{{ $col_name }}</a><br />
+                                        <a class="btn btn-info me-6 my-2" href="1700611200"><span class="btn-label"><i
+                                                    class="fa fa-map-marker"></i></span>الموقع</a>
                                     @else
-                                    <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                                        @if ($stopCarType == 'stop_car_cancel_request')
+                                            {{ $item->status_all->where('flag', 0)->first()->date }}<br />
+                                        @endif
+                                        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
                                             data-bs-target="#convert_command-{{ $item->id }}"
                                             onclick="check_delegate({{ $item->emp_id }})">
-                                        {{ $col_name }}
-                                    </button>
+                                            {{ $col_name }}
+                                        </button>
                                     @endif
 
                                     @if ($item->emp_id)
-                                    @include("military_affairs.stop_car.partials.{$stopCarType}", compact('item', 'col_name', 'item_type_time1'))
-                                @endif
+                                        @include(
+                                            "military_affairs.stop_car.partials.{$stopCarType}",
+                                            compact('item', 'col_name', 'item_type_time1'))
+                                    @endif
+                                </td>
+                            @elseif ($stopCarType == 'stop_car_cancel')
+                                <td>
+                                    {{ $item->status_all->where('type', 'stop_cars')->where('type_id', 'stop_car_info')->where('flag', 1)->first()->date ?? '' }}
+                                    <br />
+                                    {{ $item->status_all->where('type', 'stop_cars')->where('flag', 0)->first()->date ?? '' }}
                                 </td>
                             @endif
                             <td>
@@ -103,17 +121,25 @@
                             <td>
                                 <div class="btn-group dropup">
                                     <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         الإجراءات
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
-                                            <a class="btn btn-warning w-100 mt-2" data-bs-toggle="modal" data-bs-target="#open-details-{{ $item->id }}">
+                                            <a class="btn btn-success  w-100 mt-2"
+                                                href="{{ route('advanced.archive', $item->installment->id) }}">تحويل
+                                                للارشيف</a>
+
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-warning w-100 mt-2" data-bs-toggle="modal"
+                                                data-bs-target="#open-details-{{ $item->id }}">
                                                 ملاحظات
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="btn btn-primary w-100 mt-2" href="{{ url('show_settlement/' . $item->id) }}">
+                                            <a class="btn btn-primary w-100 mt-2"
+                                                href="{{ url('show_settlement/' . $item->id) }}">
                                                 تحويل للتسوية
                                             </a>
                                         </li>

@@ -15,6 +15,7 @@ use App\Models\military_affairs_deligations;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_times;
+use Illuminate\Support\Facades\Log as LaravelLog;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -1236,17 +1237,17 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                 }
                 if($stop_type == 'execute_alert')
                 {
-                    
+
                     $q->where('military_affairs.status', 'execute_alert');
                 }
                 if($stop_type == 'images')
                 {
-                    
+
                     $q->where('military_affairs.status', 'images');
                 }
                 if($stop_type == 'Certificate')
                 {
-                    
+
                     $q->where('military_affairs.status', 'execute')
                     ->where('military_affairs.certificate', 1)
                     ->where('military_affairs.stop_salary', 0);
@@ -1289,4 +1290,54 @@ function get_diff_date($date1,$date2){
 
 
 }
+ function sendSmsHelper($message, $phones)
+{
+    $url = "http://62.150.26.41/SmsWebService.asmx/send";
+    $params = [
+        'username' => 'Electron',
+        'password' => 'rRrRNcAe',
+        'token' => 'hjazfzzKhahF3MHj5fznngsb',
+        'sender' => 'Electron',
+        'message' => $message,
+        'dst' => $phones,
+        'type' => 'text',
+        'coding' => 'unicode',
+        'datetime' => 'now',
+    ];
 
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+
+    $result = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        LaravelLog::error('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
+    }
+
+    curl_close($ch);
+
+    return $result;
+}
+ function buildMessage($slug, $item)
+{
+    switch ($slug) {
+
+        case 'stop_car':
+            return "عزيزي العميل / {$item->installment->client->name_ar}\n"
+                . "تم إتخاذ الإجراءات القانونية بحقكم\n"
+                . "1- منع سفر\n"
+                . "2- حجز سيارات\n"
+                . "3- حجز بنوك\n"
+                . "4- حجز عقار\n"
+                . "لمشاهدة صور مستندات الإجراءات\n"
+                . "اضغط على الرابط\n"
+                . url('pub/show_action/scar/' . $item->id . '/' . $item->code);
+        default:
+            return null;
+    }
+}

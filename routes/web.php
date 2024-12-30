@@ -255,6 +255,7 @@ Route::middleware('auth')->group(function () {
     ->name('update_info_cars_numbers');
     Route::match(['get', 'post'], '/military_affairs/stop_car/catch_car_done/{id}', [Stop_carController::class, 'catchCarDone'])
     ->name('catch_car_done');
+    Route::get('/military_affairs/stop_car/send_sms/{id}', [Stop_carController::class, 'send_sms'])->name('send_sms');
 
 
     Route::get('military_affairs/stop_salary/{governorate_id?}/{stop_salary_type?}/{ministry?}', [Stop_salaryController::class, 'index'])->name('stop_salary');
