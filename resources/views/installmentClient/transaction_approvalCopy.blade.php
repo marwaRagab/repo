@@ -289,10 +289,7 @@
                 <select name="start_date" class="form-control form-select">
                      @for ($i = 0; $i < 3; $i++)
                         @php
-                            $date = new DateTime($ministry->date); // Initialize with the original date
-
-                            $day = $date->format('d'); // Extract the day
-
+                           
                             // Get the current month and year
                             $currentDate = new DateTime(); // Use DateTime for current date
                             $currentDate->modify("+$i month"); // Increment month by $i
@@ -300,7 +297,7 @@
                             $currentMonth = $currentDate->format('m');
 
                             // Combine to form the display date
-                            $displayDate = "$currentYear-$currentMonth-$day";
+                            $displayDate = "$currentYear-$currentMonth-$ministry->date";
 
                             // Set the new date
                             $date = $displayDate;
