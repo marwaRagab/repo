@@ -56,9 +56,9 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             $count['govern_counter_' . $one->id] = $this->countStopCarGovernate('execute', 'stop_car', $one->id);
         }
 
-        $this->data['item_type_time1'] = Military_affairs_times_type::where(['type' => 'stop_cars', 'slug' => $stop_car_type])->first();
+        $this->data['item_type_time1'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => $stop_car_type])->first();
 
-        $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'stop_cars', 'slug' => $stop_car_type])->first();
+        $this->data['item_type_time_new'] = Military_affairs_times_type::where(['type' => 'stop_car', 'slug' => $stop_car_type])->first();
 
         $stop_type = $stop_car_type;
         if (!$stop_type) {
@@ -74,8 +74,8 @@ class Stop_carRepository implements Stop_carRepositoryInterface
             ->orderBy('id', 'asc')
             ->first();
 
-        $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $current_request->slug])->first();
-        $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => $next_request->slug ?? ''])->first();
+        $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_car', 'slug' => $current_request->slug])->first();
+        $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_car', 'slug' => $next_request->slug ?? ''])->first();
         $this->data['governate_id'] = $governate_id;
         $this->data['stop_car_type'] = $stop_car_type;
         $this->data['col_name'] = $current_request->col_name ?? '';
@@ -259,12 +259,13 @@ dd($sql);
         $item_time = Military_affairs_times::where(['times_type_id' => $old->id, 'military_affairs_id' => $request->military_affairs_id])->first();
 
         $item_status = Military_affairs_status::where(['type_id' => $old->slug, 'military_affairs_id' => $request->military_affairs_id])->first();
-         dd($item_status);
+
 
 
         if ($item_status) {
             $data_status['flag'] = 1;
             $item_status->update($data_status);
+          //   dd($item_status);
         }
         /* $isUpdated = $item_status->update($data_status);
 
@@ -450,8 +451,8 @@ dd($sql);
         $client = Installment::first('id', $item->installment_id)->with('client');
         $cars = DB::table('military_affairs_cars')->where('military_affairs_id', $id)->get();
 
-        $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => 'stop_car_doing'])->first();
-        $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_cars', 'slug' => 'stop_car_finished'])->first();
+        $this->data['item_type_time1'] = Military_affairs_stop_car_type::where(['type' => 'stop_car', 'slug' => 'stop_car_doing'])->first();
+        $this->data['item_type_time_new'] = Military_affairs_stop_car_type::where(['type' => 'stop_car', 'slug' => 'stop_car_finished'])->first();
         if ($request->isMethod('post')) {
 //dd($request->item_type_old);
 

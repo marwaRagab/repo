@@ -1,4 +1,5 @@
 @php
+    ini_set('memory_limit', '256M');
     $arr = ['success', 'danger', 'primary', 'secondary', 'info', 'warning'];
     $governateId = request()->get('governate_id');
     $stopCarType = request()->get('stop_car_type');
@@ -12,7 +13,7 @@
         @foreach ($courts as $court)
             <a href="{{ route('stop_car', ['governate_id' => $court->id]) }}"
                 class="btn-filter {{ $court->style }} px-4 fs-4 mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
-                {{ $court->name_ar }} ({{ $court->counter }})
+                {{ $court->name_ar }} ({{ $count['govern_counter_' . $court->id] ?? 0 }})
             </a>
         @endforeach
     </div>
@@ -92,7 +93,7 @@
                                                     class="fa fa-map-marker"></i></span>الموقع</a>
                                     @else
                                         @if ($stopCarType == 'stop_car_cancel_request')
-                                        {{ $item->status_all->where('flag', 0)->first()->date }}<br />
+                                            {{ $item->status_all->where('flag', 0)->first()->date }}<br />
                                         @endif
                                         <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
                                             data-bs-target="#convert_command-{{ $item->id }}"
@@ -109,9 +110,9 @@
                                 </td>
                             @elseif ($stopCarType == 'stop_car_cancel')
                                 <td>
-                                    {{ $item->status_all->where('type','stop_cars')->where('type_id','stop_car_info')->where('flag', 1)->first()->date ??''}}
-                                    <br/>
-                                    {{ $item->status_all->where('type','stop_cars')->where('flag', 0)->first()->date ?? '' }}
+                                    {{ $item->status_all->where('type', 'stop_cars')->where('type_id', 'stop_car_info')->where('flag', 1)->first()->date ?? '' }}
+                                    <br />
+                                    {{ $item->status_all->where('type', 'stop_cars')->where('flag', 0)->first()->date ?? '' }}
                                 </td>
                             @endif
                             <td>
