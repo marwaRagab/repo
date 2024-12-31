@@ -17,7 +17,7 @@ use App\Http\Controllers\HumanResources\TransactionsCompletedController;
 use App\Http\Controllers\HumanResources\UserController;
 use App\Http\Controllers\ImportingCompanies\ClassController;
 use App\Http\Controllers\ImportingCompanies\CompanyController;
-
+use App\Http\Controllers\QrCodeController;
 // use App\Exports\ClientsExport;
 //// use Maatwebsite\Excel\Facades\Excel;
 
@@ -666,4 +666,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/technical-support/Requests/{id}', [RequestController::class, 'show'])->name('supportRequest.show');
     Route::post('/technical-support/Requests/update/{id}', [RequestController::class, 'updateStatus'])->name('supportRequest.updateStatus');
     Route::post('/technical-support/Requests/{id}', [RequestController::class, 'addReply'])->name('supportRequest.addReply');
+
+    Route::get('/qr-code/generate', [QrCodeController::class, 'generate'])->name('qr-code.generate');
+    Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });
