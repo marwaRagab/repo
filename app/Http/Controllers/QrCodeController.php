@@ -20,25 +20,22 @@ class QrCodeController extends Controller
      */
     public function generate()
     {
-        // Fetch all users
         $users = User::all();
 
-        // Define the public folder path for QR codes
         $destinationPath = public_path('qr_codes');
 
-        // Ensure the directory exists
         if (!File::exists($destinationPath)) {
-            File::makeDirectory($destinationPath, 0755, true); // Create directory if it doesn't exist
+            File::makeDirectory($destinationPath, 0755, true);
         }
 
         foreach ($users as $user) {
             // Generate the QR code
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data("User ID: {$user->id}, Email: {$user->email}") // Encode user details
+                ->data("User ID: {$user->id}, Email: {$user->email}")
                 ->encoding(new Encoding('UTF-8'))
-                ->size(300) // Size of the QR Code
-                ->margin(10) // Margin around the QR Code
+                ->size(300)
+                ->margin(10) 
                 ->build();
 
             $encryptedName = md5(uniqid($user->id, true)) . '.png';
