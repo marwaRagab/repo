@@ -220,7 +220,8 @@
                                 <td>{{ $user->branches ? $user->branches->name_ar : 'غير محدد' }}</td>
                                 <td>
                                     @if ($user->qr_code_path)
-                                        <a href="{{ route('qr-code.download', $user->id) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('qr-code.download', $user->id) }}"
+                                            class="btn btn-sm btn-primary">
                                             تحميل QR Code
                                         </a>
                                     @else
