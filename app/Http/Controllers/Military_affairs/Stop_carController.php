@@ -48,4 +48,8 @@ class Stop_carController extends Controller
     {
         return $this->Stop_carRepository->catchCarDone($id,$request);
     }
+    public function send_sms($id)
+    {
+        return $this->Stop_carRepository->send_sms($id);
+    }
 }
