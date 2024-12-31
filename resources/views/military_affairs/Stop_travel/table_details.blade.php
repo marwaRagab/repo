@@ -62,7 +62,7 @@
                 <a  target="_blank"
                     onclick="checkFileAndRedirect(
                             '{{ $item && $item->item_command && $item->item_command->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_command->img_dir : '#' }}',
-                            '{{ $item && $item->item_command && $item->item_command->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_command->img_dir : '#' }}'
+                            '{{ $item && $item->item_command && $item->item_command->img_dir !== '0' ? 'https://electron-kw.com/' . $item->item_command->img_dir : '#' }}'
                         ); return false;">
                                                             <span class="btn btn-info"> صورة
                                                                  </span>
@@ -160,7 +160,7 @@
             <a  target="_blank"
                 onclick="checkFileAndRedirect(
                             '{{ $item && $item->item_finished_command && $item->item_finished_command->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_finished_command->img_dir : '#' }}',
-                            '{{ $item && $item->item_finished_command && $item->item_finished_command->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_finished_command->img_dir : '#' }}'
+                            '{{ $item && $item->item_finished_command && $item->item_finished_command->img_dir !== '0' ? 'https://electron-kw.com/' . $item->item_finished_command->img_dir : '#' }}'
                         ); return false;">
 
                                                             <span class="btn btn-info"> صورة
@@ -179,7 +179,7 @@
             <a  target="_blank"
                 onclick="checkFileAndRedirect(
                             '{{ $item && $item->item_finished && $item->item_finished->img_dir !== '0' ? 'https://electron-kw.net/' . $item->item_finished->img_dir : '#' }}',
-                            '{{ $item && $item->item_finished && $item->item_finished->img_dir !== '0' ? 'https://electron-kw.com/test_vr/' . $item->item_finished->img_dir : '#' }}'
+                            '{{ $item && $item->item_finished && $item->item_finished->img_dir !== '0' ? 'https://electron-kw.com/' . $item->item_finished->img_dir : '#' }}'
                         ); return false;">
                                                             <span class="btn btn-info"> صورة
                                                                  </span>

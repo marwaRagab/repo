@@ -75,6 +75,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         //dd($this->data['ministries']->pluck('id'));
 // dd($request->all());
         $governorate_id = $request->governorate_id;
+        $stop_bank_type = $request->stop_bank_type;
         $message = "تم دخول صفحة  حجز بنوك  ";
         $user_id = 1;
         //$user_id =  Auth::user()->id,
@@ -114,11 +115,17 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
                     $q->where('date', $request->bank);
                 });
+            })->when(request()->has('stop_bank_type'), function ($query) use ($request) {
+                $query->whereHas('status_all', function ($q) use ($request) {
+
+                    $q->where('type_id', $request->stop_bank_type)->where('flag',0);
+                });
             })
 
 
+
             ->get();
-        // dd($this->data['items']);
+       //  dd($this->data['items']);
 
         $title = ' حجز بنوك';
 
@@ -201,7 +208,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
                 if (!in_array($value->ministry_name->date, $array_date)) {
                     array_push($array_date, $value->ministry_name->date);
                 }
-                if ($bank) {
+                if ($bank && $bank->bank_name !=0 ) {
                     if (!in_array($bank->bank_name, $array_bank)){
                         array_push($array_bank, $bank->bank_name);
                     }
@@ -213,31 +220,35 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
 
 
+
            // $value->min_id = Ministry::findORFail($value->installment->client->ministry_last)->date;
             $value->different_date = get_different_dates($value->date, date('Y-m-d'));
 
         }
 
-      //  $ministries = $mins->unique();
+        foreach ($array_bank as $key => $value) {
 
-       /* foreach ($ministries as $one) {
-            $dates[$one] = Ministry::where('id', $one)->first()->date;
+                // Assuming $value is a string (slug), you fetch the Bank model.
+            $bank = Bank::where('slug', $value)
+                ->orWhere('id', $value)
+                ->first();
+
+
+                // Now $value can hold the bank object
+            if (!is_array($array_bank[$key])) {
+                $array_bank[$key] = [];
+            }
+            $array_bank[$key]['name'] = $bank ? $bank->name_ar : null;
+            $array_bank[$key]['slug'] = $bank ? $bank->slug : null;
+
         }
-        // dd($dates);
-        $sortedArray = collect($dates)->sortBy(function ($date) {
-            return strtotime($date);
-        });
 
 
-        $this->data['ministries'] = $sortedArray->unique()->toArray();
-        // dd( count($this->data['ministries']));*/
-
-
-
- //dd($array_date);
         $this->data['dates']=$array_date;
         $this->data['banks']=$array_bank;
         $this->data['get_responsible'] = get_responsible();
+
+
 
         $this->data['view'] = 'military_affairs/Stop_bank/index';
         return view('layout', $this->data, compact('breadcrumb'));

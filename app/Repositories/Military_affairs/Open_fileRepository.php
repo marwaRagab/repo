@@ -248,7 +248,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
     }
     public function convert_to_execute(Request $request){
 
-        // dd($request);
+         dd($request->all());
         $request->validate([
             'date' => 'required| date',
             'img_dir'=>'required|image|mimes:jpg,png,jpeg,gif|max:2048',
@@ -261,7 +261,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         // Military_affairs_status::create($statusData);
 
         $item_military= Military_affair::findOrFail($request->military_affairs_id);
-       
+
         $miltray_data['stop_car']=1;
         $miltray_data['stop_travel']=1;
         $miltray_data['stop_bank']=1;
@@ -278,7 +278,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         $new_time_type1=Stop_travel_types::findOrFail($request->item_type_travel);
         $new_time_type2=Military_affairs_stop_car_type::findOrFail($request->item_type_car);
         $new_time_type3=Military_affairs_stop_bank_type::findOrFail($request->item_type_bank);
-     
+
         // dd($new_time_type1);
         if($request->client_job=='military'){
             $new_time_type4=Military_affairs_certificate_type::findOrFail($request->item_type_certificate);
