@@ -193,6 +193,7 @@
         <div class="table-responsive pb-4">
             <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
+
                     <tr>
                         <th>الصورة</th>
                         <th>الاسم</th>
