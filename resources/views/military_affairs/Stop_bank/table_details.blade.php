@@ -59,30 +59,33 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                     <li>
-                        <a class="btn btn-success rounded-0 w-100 mt-2"
+                        <button class="btn btn-success rounded-0 w-100 mt-2"
                            data-bs-toggle="modal"
                            data-type="tahseel"
                            onclick="get_type('tahseel')"
-                           data-bs-target="#open-bank_request-{{$item->id}}"    {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}>
-                            تحصيل مبلغ</a>
+                           data-bs-target="#open-bank_request-{{$item->id}}"    {{ $item->emp_id ==0 || $item->emp_id ==null ? 'disabled'  : ''}}>
+                            تحصيل مبلغ</button>
                     </li>
                     <li>
-                        <a class="btn btn-primary rounded-0 w-100 mt-2"
+                        <button class="btn btn-primary rounded-0 w-100 mt-2"
                            data-bs-toggle="modal"
 
                            onclick="get_type('new_date')"
-                           data-bs-target="#open-bank_request-{{$item->id}}"  {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}
+                           data-bs-target="#open-bank_request-{{$item->id}}"  {{ $item->emp_id ==0 || $item->emp_id ==null ? 'disabled'  : ''}}
                         >
-                            تقويس</a>
+                            تقويس</button>
                     </li>
                     <li>
-                        <a class="btn btn-warning rounded-0 w-100 mt-2"
+                        <button class="btn btn-warning rounded-0 w-100 mt-2"
                            data-bs-toggle="modal"
 
                            onclick="get_type('not_found')"
-                           data-bs-target="#open-bank_request-{{$item->id}}" {{ $item->emp_id !=0 || $item->emp_id !=NULL ? 'disable'  : ''}}
+                           data-bs-target="#open-bank_request-{{$item->id}}" {{ $item->emp_id ==0 || $item->emp_id ==null ? 'disabled'  : ' '}}
                         >
-                            لايوجد</a>
+                            لايوجد</button>
+
+
+
                     </li>
 
 
@@ -207,45 +210,62 @@
 
 
                 </li>
-                @if($item->emp_id !=0 || $item->emp_id !=NULL )
+                @php
+
+
+
+                    if(Request::has('stop_bank_type')){
+                        if(Request::get('stop_bank_type')=='stop_bank_command'){
+                            $button_title='تحويل لباحث قانونى';
+
+                        }elseif(Request::get('stop_bank_type')=='stop_bank_request'){
+                            $button_title='تحويل  لمأمور تنفيذ';
+
+                        }elseif(Request::get('stop_bank_type')=='stop_bank_researcher'){
+                            $button_title='تحويل  ';
+
+                        }elseif(Request::get('stop_bank_type')=='banks'){
+                            $button_title='  طلب الحجز';
+
+                        }elseif(Request::get('stop_bank_type')=='stop_bank_cancel_request'){
+                            $button_title='  طلب رفع حجز البنك';
+
+                        }
+
+                    }
+
+                @endphp
+
                     @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
+
                         <li>
-                            <a class="btn btn-success rounded-0 w-100 mt-2"
+                            <a class="btn btn-success rounded-0 w-100 mt-2   {{ $item->emp_id == null || $item->emp_id == '' ||  $item->emp_id == 0   ? 'disabled' : '' }}"
                                href="{{url('show_settlement/'.$item->id)}}">
                                 تحويل للتسوية
                             </a>
                         </li>
-                    @endif
-                    <li>
-                        <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                data-bs-target="#change_type-{{$item->id}}">
-                            تحويل الحالة
-                        </button>
-                    </li>
-                @else
-
-                    @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
-                        <li>
-                            <a class="btn btn-success rounded-0 w-100 mt-2"
-                               href="#">
-                                تحويل للتسوية
-                            </a>
-                        </li>
-                    @endif
-                    <li>
-                        <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                data-bs-target="#change_type-{{$item->id}}" disabled>
-                            تحويل الحالة
-                        </button>
-                    </li>
 
 
                 @endif
 
-
-
-
-
+                @if(Request::has('stop_bank_type') &&  Request::get('stop_bank_type') !='stop_bank_doing' )
+                    @if(Request::get('stop_bank_type') !='stop_bank_cancel')
+                    <li>
+                        <button class="btn btn-secondary rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                data-bs-target="#change_type-{{$item->id}}" {{ $item->emp_id ==0 || $item->emp_id ==null ? 'disabled'  : ''}} >
+                           {{$button_title}}
+                        </button>
+                    </li>
+                @endif
+                @endif
+               {{-- @if( $item->bank_account_status)
+                    <li>
+                        <button class="btn btn-warning rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                data-bs-target="#change_type-{{$item->id}}" {{ $item->emp_id !=0 || $item->emp_id !=null ? 'disabled'  : ''}} >
+                          الارشيف
+                        </button>
+                    </li>
+                @endif--}}
 
 
 

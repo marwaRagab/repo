@@ -181,6 +181,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/print/print_case_proof/{item}', [CertificateController::class, 'print_case_proof'])->name('print_case_proof');
     Route::get('/print/sticker/{item}', [CertificateController::class, 'print_sticker'])->name(name: 'print_sticker');
     Route::get('/print/issue/{item}/{data_id}', [CertificateController::class, 'print_issue'])->name(name: 'print_issue');
+    Route::get('/print/print_civil_id/{item}', [CertificateController::class, 'print_civil_id'])->name('print_civil_id');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

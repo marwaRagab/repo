@@ -963,11 +963,16 @@ class old_dbController extends Controller
                    AND installment_months.installment_id  =  installment.id
                    AND installment_months.status != "delay")';
 
-       $law_percent = '(SELECT SUM(installment_months.amount)
+         if('installment.months'==24){
+             $law_percent = '(SELECT SUM(installment_months.amount)
                  FROM installment_months
-                 WHERE installment_months.installment_type = "law_percent"
+                 WHERE installment_months.installment_type in("law_percent","2_._5_percent")
                  AND installment_months.installment_id  =  installment.id
                  AND installment_months.status="done")';
+         }else{
+             $law_percent=0;
+         }
+
 
        $check_pay = '(SELECT SUM(military_affairs_check.amount)
                FROM military_affairs_check
@@ -982,17 +987,22 @@ class old_dbController extends Controller
                 FROM installment_months
                  WHERE installment_months.installment_type != "first_amount" and  installment_months.status = "done"
                 AND installment_months.installment_id  =  installment.id)';
-       $settlement_paid= '(SELECT SUM(military_affairs_settlement_months.amount) FROM military_affairs_settlement_months WHERE  military_affairs_settlement_months.status="done" AND military_affairs_settlement_months.installment_id  =  installment.`id` )';
+       $settlement_paid= '(SELECT SUM(military_affairs_settlement_months.amout) FROM military_affairs_settlement_months WHERE  military_affairs_settlement_months.status="done" AND military_affairs_settlement_months.installment_id  =  installment.`id` )';
 
 
        $items = DB::table('military_affairs')
            ->select(
                'military_affairs.id as my_id',
                'military_affairs.excute_actions_check_amount',
+               'military_affairs.reminder_amount',
+               'military_affairs.payment_done',
+               'military_affairs.is_reminder_amount',
                'military_affairs.excute_actions_amount',
                'installment_months.amount',
                'installment_months.status',
                'installment_months.installment_type',
+               'installment.months',
+
                DB::raw('(SELECT SUM(installment_months.amount)
                   FROM installment_months
                   WHERE installment_months.installment_type != "first_amount"
@@ -1006,17 +1016,34 @@ class old_dbController extends Controller
              - IF(' . $check_pay . ' IS NULL, 0, ' . $check_pay . ')
              - IF(' . $amount_pay . ' IS NULL, 0, ' . $amount_pay . ')
              - IF(' . $settlement_paid . ' IS NULL, 0, ' . $settlement_paid . ')
-
+             -'.$law_percent.'
         ) AS ALL_reminder', false)
            )
            ->join('installment', 'installment.id', '=', 'military_affairs.installment_id')
            ->join('installment_months', 'installment.id', '=', 'installment_months.installment_id')
-           ->where('installment.finished', '=', 0)
+           ->groupBy('military_affairs.id')
            ->get();
 
 
+       //  $all_items=Military_affair::all();
 
-return $items;
+
+
+       // Assuming you know the model related to the item (e.g. Reminder)
+       foreach ($items as $item) {
+           if ($item->is_reminder_amount == 0) {
+
+               $model = Military_affair::findorfail($item->my_id); // Find the Eloquent model
+
+               $model->reminder_amount = $item->ALL_reminder;
+               $model->payment_done = $item->pay_done;
+               $model->save(); // Save it to the database
+           }
+       }
+
+
+       dd($items);
+
 
 
 

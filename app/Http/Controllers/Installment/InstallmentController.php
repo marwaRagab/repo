@@ -300,7 +300,7 @@ class InstallmentController extends Controller
         // $data['invoices'] = Invoices_installment::with('install_month', 'installment')
         //     ->where('installment_id', $id)->get();
         $data['invoices'] = Invoices_installment::with('install_month', 'installment')
-                                                 ->where('installment_id', $id)->where('payment_type','!=','check')->get();
+            ->where('installment_id', $id)->where('payment_type','!=','check')->get();
         // dd($data['invoices']);
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
         if ($military_affair) {
