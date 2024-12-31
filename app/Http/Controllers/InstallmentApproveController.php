@@ -541,7 +541,7 @@ class InstallmentApproveController extends Controller
             $order_product->cost = $product['cost'];
             $order_product->product_id = $product['id'];
 
-            $order_product->product_items_id = $product['product_item_id'];
+            $order_product->product_items_id = $product['product_item_id'] ?? 0;
 
             //
 
@@ -737,11 +737,11 @@ class InstallmentApproveController extends Controller
 
 
     }
-    
+
      public function insert_to_invoice()
     {
         $installment = Installment::whereBetween('id', [1410, 1424])->get();
-        
+
         foreach($installment as $item)
         {
         $last = Invoices_installment::latest()->first();
@@ -774,9 +774,8 @@ class InstallmentApproveController extends Controller
 
         }
 
-        
+
     }
 
 
 }
-

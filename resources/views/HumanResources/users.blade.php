@@ -198,6 +198,7 @@
                         <th>الاسم</th>
                         <th>الوظيفة</th>
                         <th>الفرع</th>
+                        <th>تحميل QR Code</th>
                         <th>الاجراءات</th>
                     </tr>
                 </thead>
@@ -217,6 +218,15 @@
                                 <td>{{ $user->name_ar }}</td>
                                 <td>{{ $user->roles ? $user->roles->name_ar : 'غير محدد' }}</td>
                                 <td>{{ $user->branches ? $user->branches->name_ar : 'غير محدد' }}</td>
+                                <td>
+                                    @if ($user->qr_code_path)
+                                        <a href="{{ route('qr-code.download', $user->id) }}" class="btn btn-sm btn-primary">
+                                            تحميل QR Code
+                                        </a>
+                                    @else
+                                        <span class="text-muted">غير متوفر</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="d-block">
                                         <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4"
