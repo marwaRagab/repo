@@ -6,9 +6,12 @@ ini_set('memory_limit', '600M');
 
 use App\Http\Controllers\Controller;
 use App\Models\Installment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class OttuPaymentController extends Controller
 {
@@ -17,15 +20,15 @@ class OttuPaymentController extends Controller
     {
         // Fetch client data from the database
         $clientData = DB::table('installment_clients')->find($id);
-        dd($clientData);
+        // dd($clientData);
         if (!$clientData) {
             return redirect()->back()->with('error', 'Client not found');
         }
 
         $customerPhone = $clientData->phone;
-        $customerEmail = $clientData->email;
+        $customerEmail = $clientData->email ?? 'tech_support@electronkw.com';
         $amount = $clientData->first_amount;
-        $civilId = $clientData->civil_id;
+        $civilId = $clientData->civil_number;
         $orderNum = "#electron" . rand(1, 100000);
 
         $payload = [
@@ -37,8 +40,8 @@ class OttuPaymentController extends Controller
             "customer_email" => $customerEmail,
             "customer_phone" => $customerPhone,
             "customer_id" => $civilId,
-            "redirect_url" => "https://electronkw.com/installment/admin",
-            "webhook_url" => "https://electronkw.com/payment/webhook",
+            "redirect_url" => "http://127.0.0.1:8000/installment/admin",
+            "webhook_url" => "http://127.0.0.1:8000/payment/webhook",
             "payment_type" => "auto_debit",
             "agreement" => [
                 "id" => $civilId,
@@ -59,7 +62,8 @@ class OttuPaymentController extends Controller
         ])->post('https://pay.electronkw.com/b/checkout/v1/pymt-txn/', $payload);
 
         if ($response->failed()) {
-            return redirect()->back()->with('error', 'Payment failed.');
+            //    return redirect()->back()->with('error', 'Payment failed.');
+            dd($response);
         }
 
         $data = $response->json();
@@ -190,7 +194,7 @@ class OttuPaymentController extends Controller
         }
 
         $returnSession = $this->processInitiating($instClientId); // Assuming processInitiating is in the same controller
-        $civilId = $clientData->civil_id;
+        $civilId = $clientData->civil_number;
 
         // Prepare API payload
         $payload = [
@@ -375,4 +379,84 @@ class OttuPaymentController extends Controller
 
         return response()->json(['error' => 'Failed to complete payment process'], 500);
     }
+    public function updatePaymentLaw($installmentId, $amount)
+    {
+        $item = \DB::table('laws')->where('installment_id', $installmentId)->first();
+
+        if ($item) {
+            $updatedAmount = $amount + $item->payment_done;
+
+            \DB::table('laws')->where('id', $item->id)->update(['payment_done' => $updatedAmount]);
+        }
+    }
+    public function addInstallMoney($id, $amount, $type, $knetCode = null)
+    {
+        $installmentMonth = DB::table('installment_months')->find($id);
+
+        if (!$installmentMonth) {
+            throw new \Exception("Installment month not found");
+        }
+
+        $addData = [
+            'amount' => $amount,
+            'description' => "عملية دفع قسط عن المعاملة رقم " . $installmentMonth->installment_id,
+            'type' => 'income',
+            'payment_type' => $type,
+            'date' => Carbon::now()->timestamp,
+            'install_month_id' => $id,
+            'installment_id' => $installmentMonth->installment_id,
+            'user_id' => Session::get('admin.id'),
+            'branch_id' => Session::get('branch_id'),
+        ];
+
+        if (!empty($knetCode)) {
+            $addData['knet_code'] = $knetCode;
+        }
+
+        $lastInvoice = DB::table('invoices_installment')->orderBy('id', 'desc')->first();
+
+        $sum = $amount;
+        if ($lastInvoice) {
+            switch ($addData['type']) {
+                case 'income':
+                case 'share_capital':
+                    $sum += $lastInvoice->balance;
+                    break;
+                case 'expenses':
+                case 'export':
+                case 'advance':
+                    $sum = $lastInvoice->balance - $amount;
+                    break;
+                case 'income_pending':
+                case 'expenses_pending':
+                    $sum = $lastInvoice->balance;
+                    break;
+            }
+        }
+
+        if ($type === 'cash') {
+            $addData['balance_cash'] = $lastInvoice->balance_cash + $amount;
+            $addData['balance_knet'] = $lastInvoice->balance_knet;
+            $this->updateInvoiceCentralBank('cash', '+', $amount, 'installment');
+        } else {
+            $addData['balance_cash'] = $lastInvoice->balance_cash;
+            $addData['balance_knet'] = $lastInvoice->balance_knet + $amount;
+            $this->updateInvoiceCentralBank('knet', '+', $amount, 'installment');
+        }
+
+        $addData['debtor'] = 1;
+        $addData['balance_bank'] = $lastInvoice->balance_bank;
+        $addData['balance'] = $sum;
+
+        DB::table('invoices_installment')->insert($addData);
+
+
+    }
+    public function makeMilitaryAffairsFinished($lawsAffairId)
+    {
+        DB::table('military_affairs')
+            ->where('id', $lawsAffairId)
+            ->update(['checking' => 1]);
+    }
+
 }

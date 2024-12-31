@@ -1,15 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+<style>
+    ._success {
+        box-shadow: 0 15px 25px #00000019;
+        padding: 45px;
+        width: 100%;
+        text-align: center;
+        margin: 40px auto;
+        border-bottom: solid 4px #28a745;
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Status</title>
-</head>
+    ._success i {
+        font-size: 55px;
+        color: #28a745;
+    }
 
-<body>
-    <h1>Payment Successful</h1>
-    <p>Your payment has been successfully processed!</p>
-</body>
+    ._success h2 {
+        margin-bottom: 12px;
+        font-size: 40px;
+        font-weight: 500;
+        line-height: 1.2;
+        margin-top: 10px;
+    }
 
-</html>
+    ._success p {
+        margin-bottom: 0px;
+        font-size: 18px;
+        color: #495057;
+        font-weight: 500;
+    }
+</style>
+<div class="container">
+
+    <div class="row justify-content-center">
+        <?php echo '<pre>';
+        print_r($response); ?>
+    </div>
+</div>
+<hr>
+
+</div>
