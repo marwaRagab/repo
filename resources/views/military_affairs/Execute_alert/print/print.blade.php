@@ -1,6 +1,6 @@
 @php
     $qrareldin = DB::table('installment')->where('id', $item->installment->id)->first();
-    $client_img = DB::table('client_imgs')->where('client_id', $qrareldin->client_id)->where('type','civil_img')->first();
+    $client_img = DB::table('client_imgs')->where('client_id', $qrareldin->client_id)->where('type','cid_img1')->first();
     $pdf_img =\App\Models\Military_affairs\Military_affair::where('id', $item->id)->first();
 @endphp
 
@@ -40,15 +40,9 @@
             </a>
         </li>
         <li>
-            <a class="dropdown-item {{ !$client_img || !$client_img->path || $client_img->path == null || $client_img->path == 0 ? 'disabled' : '' }}"
-               {{-- href="{{ $client_img ? asset($client_img->path) : '#' }}" --}}
-               onclick="checkFileAndRedirect(
-                    '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.net/' . $client_img->path : '#' }}',
-                    '{{ $client_img && $client_img->path && $client_img->path !== '0' ? 'https://electron-kw.com/' . $client_img->path : '#' }}'
-                ); return false;"
-               target="_blank">
-                الصورة المدنية
-            </a>
+            <a class="dropdown-item {{ !$client_img || !$client_img->path || $client_img->path == null || $client_img->path == 0 ? 'disabled' : '' }}  "
+               href="{{ route('print_civil_id' ,['item' => $item->id]) }}" target="_blank">
+                الصورة المدنية</a></li>
         </li>
         @if (Str::contains(request()->url(), 'stop_bank'))
             <li>

@@ -237,21 +237,14 @@
                 @endphp
 
                     @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
-                    @if($item->emp_id !=0 || $item->emp_id !=NULL )
+
                         <li>
-                            <a class="btn btn-success rounded-0 w-100 mt-2"
+                            <a class="btn btn-success rounded-0 w-100 mt-2   {{ $item->emp_id == null || $item->emp_id == '' ||  $item->emp_id == 0   ? 'disabled' : '' }}"
                                href="{{url('show_settlement/'.$item->id)}}">
                                 تحويل للتسوية
                             </a>
                         </li>
-                    @else
-                        <li>
-                            <a class="btn btn-success rounded-0 w-100 mt-2"
-                               href="#">
-                                تحويل للتسوية
-                            </a>
-                        </li>
-                    @endif
+
 
                 @endif
 
