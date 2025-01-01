@@ -226,6 +226,7 @@
                                             تحميل QR Code
                                         </a>
                                     @else
+                                    
                                         <span class="text-muted">غير متوفر</span>
                                     @endif
                                 </td>
