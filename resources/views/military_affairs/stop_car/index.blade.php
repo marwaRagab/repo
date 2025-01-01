@@ -1,5 +1,6 @@
 @php
-    ini_set('memory_limit', '256M');
+require_once app_path('Helper.php');
+ini_set('memory_limit', '256M');
     $arr = ['success', 'danger', 'primary', 'secondary', 'info', 'warning'];
     $governateId = request()->get('governate_id');
     $stopCarType = request()->get('stop_car_type');
@@ -13,13 +14,12 @@
         @foreach ($courts as $court)
             <a href="{{ route('stop_car', ['governate_id' => $court->id]) }}"
                 class="btn-filter {{ $court->style }} px-4 fs-4 mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
-                {{ $court->name_ar }} ({{ $count['govern_counter_' . $court->id] ?? 0 }})
+                {{ 'محكمة '.$court->name_ar }} ({{ $count['govern_counter_' . $court->id] ?? 0 }})
             </a>
         @endforeach
     </div>
 </div>
 
-@if ($governateId)
     <div class="card mt-4 py-3">
         <div class="d-flex flex-wrap">
             @foreach ($stop_car_types as $itemType)
@@ -30,7 +30,6 @@
             @endforeach
         </div>
     </div>
-@endif
 
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
@@ -61,14 +60,19 @@
                     @foreach ($transactions as $index => $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td><a href="#">{{ $item->installment->id ?? '' }}</a></td>
+                            <td>
+                            <a href="{{url('installment/show-installment/'.$item->installment->id)}}">
+                                {{$item->installment->id}}</a>
+                                <br/>
+                                {!! getDiffTodayDates($item->date, null) !!} 
+                            </td>
                             <td>
                                 {{ $item->installment->client->name_ar ?? '' }}<br />
                                 {{ $item->installment->client->civil_number ?? '' }}<br />
                                 {{ optional($item->installment->client->client_phone->first())->phone }}
                             </td>
                             <td>
-                                {{ optional($item->installment->client->court)->name_ar }}<br />
+                                {{ optional($item->installment->client->courtNew)->name_ar }}<br />
                                 @include('military_affairs.Execute_alert.print.print')
                             </td>
 
@@ -82,22 +86,32 @@
                             @if ($stopCarType && $stopCarType != 'stop_car_cancel')
                                 <td>
                                     @if ($stopCarType == 'stop_car_finished')
-                                        <a class="btn btn-primary me-6 my-2"
-                                            href="{{ route('send_sms', $item->id) }}">ارسال sms</a><br />
+                                    <a class="btn btn-primary me-6 my-2"
+                                    href="javascript:void(0);"
+                                    onclick="check_delegate({{ $item->emp_id ?? 0 }}, 'send_sms', {{ $item->id }});">
+                                     ارسال sms
+                                 </a><br />
                                     @endif
 
                                     @if ($stopCarType == 'stop_car_doing')
-                                        <a class="btn btn-success me-6 my-2"
-                                            href="{{ route('catch_car_done', $item->id) }}">{{ $col_name }}</a><br />
-                                        <a class="btn btn-info me-6 my-2" href="1700611200"><span class="btn-label"><i
-                                                    class="fa fa-map-marker"></i></span>الموقع</a>
+                                    <a class="btn btn-success me-6 my-2"
+                                    href="javascript:void(0);"
+                                    onclick="check_delegate({{ $item->emp_id  ?? 0 }}, 'catch_car_done', {{ $item->id }});">
+                                     {{ $col_name }}
+                                 </a><br />
+
+                                 <a class="btn btn-info me-6 my-2"
+                                    href="javascript:void(0);"
+                                    onclick="check_delegate({{ $item->emp_id ?? 0 }}, 'location', 1700611200);">
+                                     <span class="btn-label"><i class="fa fa-map-marker"></i></span>الموقع
+                                 </a>
                                     @else
                                         @if ($stopCarType == 'stop_car_cancel_request')
                                             {{ $item->status_all->where('flag', 0)->first()->date }}<br />
                                         @endif
                                         <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
                                             data-bs-target="#convert_command-{{ $item->id }}"
-                                            onclick="check_delegate({{ $item->emp_id }})">
+                                            onclick="check_delegate({{ $item->emp_id  }})">
                                             {{ $col_name }}
                                         </button>
                                     @endif
@@ -110,9 +124,9 @@
                                 </td>
                             @elseif ($stopCarType == 'stop_car_cancel')
                                 <td>
-                                    {{ $item->status_all->where('type', 'stop_cars')->where('type_id', 'stop_car_info')->where('flag', 1)->first()->date ?? '' }}
+                                    {{ $item->status_all->where('type', 'stop_car')->where('type_id', 'stop_car_info')->where('flag', 1)->first()->date ?? '' }}
                                     <br />
-                                    {{ $item->status_all->where('type', 'stop_cars')->where('flag', 0)->first()->date ?? '' }}
+                                    {{ $item->status_all->where('type', 'stop_car')->where('flag', 0)->first()->date ?? '' }}
                                 </td>
                             @endif
                             <td>
@@ -157,10 +171,23 @@
 
 
 <script>
-    function check_delegate(emp_id) {
-        if (!emp_id) {
+    function check_delegate(emp_id='', action='', itemId='') {
+        if (!emp_id || emp_id !=0) {
             alert('يجب تحديد مسئول اولا');
             return false;
+        }
+        switch (action) {
+            case 'catch_car_done':
+                window.location.href = `/catch_car_done/${itemId}`;
+                break;
+            case 'location':
+                window.location.href = `/${itemId}`;
+                break;
+            case 'send_sms':
+                window.location.href = `/send_sms/${itemId}`;
+                break;
+            default:
+                alert('إجراء غير معروف');
         }
     }
 </script>

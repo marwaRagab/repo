@@ -87,13 +87,13 @@ class Stop_carRepository implements Stop_carRepositoryInterface
         foreach ($this->data['types'] as $one) {
             $counts['stop_car_count_' . $one->id] = $this->count_stop_car($governate_id, $one->slug);
         }
-        $transactions = Military_affair::where('archived', '=', 0)
+        $data = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_car' => 1])
             ->with('installment')
             ->with('status_all')
             ->when(request()->has('governate_id'), function ($query) {
                 return $query
-                    ->whereHas('installment.client.court', function ($q) {
+                    ->whereHas('installment.client.courtNew', function ($q) {
                         $q->where('governorate_id', request()->get('governate_id'));
                     });
             })
@@ -103,7 +103,19 @@ class Stop_carRepository implements Stop_carRepositoryInterface
                     ->whereHas('status_all', function ($q) {
                         return $q->where('type', 'stop_car')->where('type_id', request()->get('stop_car_type'))->where('flag', 0);
                     });
-            })->get();
+            });
+            // Always apply the relations even if filters are not provided
+        if (!request()->has('governate_id') && !request()->has('stop_car_type')) {
+            $data->with([
+                'installment.client.courtNew',
+                'installment.client.area.police_station',
+                'status_all' => function ($q) {
+                    $q->where('type', 'stop_car');
+                }
+            ]);
+        }
+        $transactions= $data->get();
+
 /*
 $sql = $query->toSql();
 $bindings = $query->getBindings();
@@ -115,23 +127,7 @@ $sql = preg_replace('/\\?/', $value, $sql, 1);
 dd($sql);
  */
 //dd($transactions);
-      /*  foreach ($transactions as $value) {
 
-            $value->item_old_data = Prev_cols_military_affairs::where('military_affairs_id', $value->id)->first();
-
-            $value->different_date = get_different_dates($value->date, date('Y-m-d'));
-            $value->adress = ($value->installment->client->client_address ? $value->installment->client->client_address->last() : '');
-            $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
-            if ($value->eqrardain_date != null) {
-                $value->type_papar = 'وصل امانة';
-            } elseif ($value->qard_paper != null) {
-                $value->type_papar = 'اقرار دين';
-            } else {
-                $value->type_papar = 'لايوجد';
-            }
-
-        }
-*/
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -294,7 +290,7 @@ if ($isUpdated) {
         ->with('installment')
         ->with('status_all')
         ->when($governate_id != 0, function ($query) use ($governate_id) {
-            return $query->whereHas('installment.client.court', function ($q) use ($governate_id) {
+            return $query->whereHas('installment.client.courtNew', function ($q) use ($governate_id) {
                 $q->where('governorate_id', $governate_id);
             });
         })->when($stop_car_type != 0, function ($query) use ($stop_car_type) {
@@ -302,9 +298,18 @@ if ($isUpdated) {
                 return $q->where('type', 'stop_car')->where('type_id', $stop_car_type)->where('flag', 0);
             })
         ->with('installment.client.area.police_station');
-        })->count();
+        });
+        if (!request()->has('governate_id') && !request()->has('stop_car_type')) {
+            $result->with([
+                'installment.client.courtNew',
+                'installment.client.area.police_station',
+                'status_all' => function ($q) {
+                    $q->where('type', 'stop_car');
+                }
+            ]);
+        }
 
-    return $result;
+    return count($result->get());
 
     }
 
@@ -317,7 +322,7 @@ if ($isUpdated) {
         ->with('installment')
         ->with('status_all')
         ->when($governate_id != 0, function ($query) use ($governate_id) {
-            return $query->whereHas('installment.client.court', function ($q) use ($governate_id) {
+            return $query->whereHas('installment.client.courtNew', function ($q) use ($governate_id) {
                 $q->where('governorate_id', $governate_id);
             });
         }) ->when($stop_car_type != 0, function ($query) use ($stop_car_type) {
@@ -325,7 +330,18 @@ if ($isUpdated) {
                 return $q->where('type', 'stop_car')->where('flag', 0);
             })
         ->with('installment.client.area.police_station');
-        })->count();
+        });
+        ;
+        if (!request()->has('governate_id') && !request()->has('stop_car_type')) {
+            $result->with([
+                'installment.client.courtNew',
+                'installment.client.area.police_station',
+                'status_all' => function ($q) {
+                    $q->where('type', 'stop_car');
+                }
+            ]);
+        }
+        return count($result->get());
    /*     $query=$result;
        $sql = $query->toSql();
 $bindings = $query->getBindings();
@@ -336,7 +352,7 @@ $sql = preg_replace('/\\?/', $value, $sql, 1);
 
 dd($sql);
 */
-    return $result;
+
 
 
     }
