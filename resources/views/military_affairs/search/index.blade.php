@@ -146,9 +146,9 @@
                                                                 </div>
                                                                 <div class="col-md-3 mb-3">
                                                                     @if ($one->test->stop_travel_finished_img )
-                                                                    <a href="{{   $item->stop_travel_finished_img ?? '/' }}"
+                                                                    <a href="{{   $one->stop_travel_finished_img ?? '/' }}"
                                                                         target=" _blank"><img
-                                                                            src="{{ asset( $item->stop_travel_finished_img)}}"
+                                                                            src="{{ asset( $one->stop_travel_finished_img)}}"
                                                                             alt="gallery" class="img-fluid" /> </a>
                                                                     @endif
                                                                 </div>
@@ -208,7 +208,7 @@
                                                                             alt="gallery" class="img-fluid" /> </a>
                                                                     @endif
                                                                 </div>
-                                                           
+
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer d-flex ">

@@ -194,6 +194,7 @@
         <div class="table-responsive pb-4">
             <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
+
                     <tr>
                         <th>الصورة</th>
                         <th>الاسم</th>
@@ -201,6 +202,7 @@
                         <th>الفرع</th>
                         <th>الصورة</th>
                         <th>تحميل QR Code</th>
+                        <th>بروفايل</th>
                         <th>الاجراءات</th>
                     </tr>
                 </thead>
@@ -225,12 +227,19 @@
                                 </td>
                                 <td>
                                     @if ($user->qr_code_path)
-                                        <a href="{{ route('qr-code.download', $user->id) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('qr-code.download', $user->id) }}"
+                                            class="btn btn-sm btn-primary">
                                             تحميل QR Code
                                         </a>
                                     @else
+
                                         <span class="text-muted">غير متوفر</span>
                                     @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('users.edit', Crypt::encryptString($user->id)) }}" class="btn btn-sm btn-warning">
+                                        بروفايل
+                                    </a>
                                 </td>
                                 <td>
                                     <div class="d-block">

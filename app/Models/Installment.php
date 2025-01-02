@@ -26,7 +26,11 @@ class Installment extends Model
 
     }
 
-
+    public function paper()
+    {
+        return $this->hasOne(InstallmentPaper::class, 'installment_id');
+    }
+    
     public function eqrar_not_recieve()
     {
         return $this->belongsTo(Eqrars_details::class,'eqrars_id')->where('paper_received',0);

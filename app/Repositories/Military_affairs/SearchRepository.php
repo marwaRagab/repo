@@ -30,7 +30,7 @@ class SearchRepository implements SearchRepositoryInterface
 
     public function index(Request $request)
     {
-            
+
         $this->data['title'] = 'البحث ';
 
         // dd($request->all());
@@ -53,7 +53,7 @@ class SearchRepository implements SearchRepositoryInterface
         {
             // dd($one);
             $one->test = Prev_cols_military_affairs::with('military_old')->findorfail($one->mil_id);
-            
+
         }
         //  dd($this->data);
         // if ($this->data) {
@@ -71,13 +71,13 @@ class SearchRepository implements SearchRepositoryInterface
         $breadcrumb[1]['url'] = route("military_affairs");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-       
-        $this->data['view'] = 'military_affairs/Search/index';
+
+        $this->data['view'] = 'military_affairs/search/index';
         return view('layout', $this->data, compact('breadcrumb'));
     }
     public function get_searched(Request $request)
     {
-       
+
         $results = DB::table('military_affairs')
         ->join('installment', 'installment.id', '=', 'military_affairs.installment_id')
         ->join('clients', 'clients.id', '=', 'installment.client_id')
@@ -85,9 +85,9 @@ class SearchRepository implements SearchRepositoryInterface
         ->select('clients.name_ar', 'clients.civil_number', 'clients.phone_ids','installment.id as installment_id',
                  'military_affairs.status','issue_id','madionia_amount','reminder_amount','stop_travel','stop_salary',
                  'stop_car','ministry_ids');
-       
- 
-        if ($request->filled('name')) {           
+
+
+        if ($request->filled('name')) {
             $results->where('clients.name_ar', 'like', '%' . $request->name . '%');
         }
         if ($request->filled('civil_id')) {
@@ -99,9 +99,9 @@ class SearchRepository implements SearchRepositoryInterface
         if ($request->filled('phone')) {
             $results->where('phone', $request->phone);
         }
-        
+
         $this->data['results'] = $results->get();
-        
+
         $title = '  البحث';
 
         $breadcrumb = array();
@@ -111,7 +111,7 @@ class SearchRepository implements SearchRepositoryInterface
         $breadcrumb[1]['url'] = route("military_affairs");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-       
+
         $this->data['view'] = 'military_affairs/Search/index';
         return view('layout', $this->data, compact('breadcrumb'));
     }
@@ -121,7 +121,7 @@ class SearchRepository implements SearchRepositoryInterface
         $item_military = Prev_cols_military_affairs::with('military_old')->findorfail($id);
     // dd($item_military);
         return redirect()->route('search.index',  $item_military);
- 
+
 
     }
 
@@ -155,6 +155,6 @@ class SearchRepository implements SearchRepositoryInterface
 
     // }
 
-   
+
 
 }
