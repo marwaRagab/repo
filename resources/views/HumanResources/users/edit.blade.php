@@ -44,16 +44,6 @@
                 <input type="text" name="phone" class="form-control" value="{{ $user->phone }}" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">الصورة الشخصية</label>
-                <input type="file" name="img" class="form-control">
-                <small class="text-muted">إذا كنت تريد تغيير الصورة، قم باختيار صورة جديدة</small>
-                @if ($user->qr_code_path)
-                    <div class="mt-2">
-                        <img src="{{ asset('qr_codes/' . $user->img) }}" alt="User Image" width="100" class="rounded-circle">
-                    </div>
-                @endif
-            </div>
 
             <div class="mb-3">
                 <label class="form-label">الفرع</label>

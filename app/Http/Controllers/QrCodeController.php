@@ -7,6 +7,7 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -35,7 +36,7 @@ class QrCodeController extends Controller
                 ->data( route('users.edit', Crypt::encryptString($user->id)) )
                 ->encoding(new Encoding('UTF-8'))
                 ->size(300)
-                ->margin(10) 
+                ->margin(10)
                 ->build();
 
             $encryptedName = md5(uniqid($user->id, true)) . '.png';
