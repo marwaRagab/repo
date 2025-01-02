@@ -74,8 +74,8 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     {
         //dd($this->data['ministries']->pluck('id'));
 // dd($request->all());
-        $governorate_id = $request->governorate_id;
-        $stop_bank_type = $request->stop_bank_type;
+        $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
         $message = "تم دخول صفحة  حجز بنوك  ";
         $user_id = 1;
         //$user_id =  Auth::user()->id,
@@ -92,14 +92,13 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 //             ->get();
 //   dd( count($this->data['items']));
         $this->data['items'] = Military_affair::where('archived', 0)
-            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1,'bank_archive'=>0])
+            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1, 'bank_archive' => 0])
             ->with('installment.client.get_ministry')
-             ->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+            ->whereHas('installment.client.get_ministry', function ($q) use ($request) {
                 // dd('fff');
-                $q->whereIn('date',$this->data['ministries']->pluck('date'));
+                $q->whereIn('date', $this->data['ministries']->pluck('date'));
             })
-
-           ->with('status_all', function ($query) {
+            ->with('status_all', function ($query) {
                 return $query->where('type', '=', 'stop_bank');
             })
             ->with('installment', function ($query) {
@@ -118,14 +117,16 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             })->when(request()->has('stop_bank_type'), function ($query) use ($request) {
                 $query->whereHas('status_all', function ($q) use ($request) {
 
-                    $q->where('type_id', $request->stop_bank_type)->where('flag',0);
+                    $q->where('type_id', $request->stop_bank_type)->where('flag', 0);
                 });
             })
-
-
-
+            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id',$governorate_id);
+                });
+            })
             ->get();
-       //  dd($this->data['items']);
+        // dd($this->data['items']);
 
         $title = ' حجز بنوك';
 
@@ -165,34 +166,33 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         $mins = collect();
         $array_date = [];
         $array_bank = [];
-        $x=0;
+        $x = 0;
 
         //dd($this->data['items']);
         foreach ($this->data['items'] as $value) {
 
-            if($value->installment && $value->status_all){
-                $value->i=$x+1;
-                $value->all_notes=get_all_notes('stop_bank',$value->id);
-                $value->all_actions=get_all_actions($value->id);
+            if ($value->installment && $value->status_all) {
+                $value->i = $x + 1;
+                $value->all_notes = get_all_notes('stop_bank', $value->id);
+                $value->all_actions = get_all_actions($value->id);
                 $value->get_all_delegations = get_all_delegations($value->id);
-
 
 
                 $ministry = $value->installment->client->ministry->last()->ministry_id;
                 $value->ministry_name = Ministry::findorfail($ministry);
-                $date=date('Y-m-'.$value->ministry_name->date);
+                $date = date('Y-m-' . $value->ministry_name->date);
                 $day_name = Carbon::parse($date)->format('l');
-                if($day_name=='Saturday'){
-                    $value->last_date=date('Y-m-'.$value->ministry_name->date-2);
-                }elseif ($day_name=='Friday'){
-                    $value->last_date=date('Y-m-'.$value->ministry_name->date-1);
+                if ($day_name == 'Saturday') {
+                    $value->last_date = date('Y-m-' . $value->ministry_name->date - 2);
+                } elseif ($day_name == 'Friday') {
+                    $value->last_date = date('Y-m-' . $value->ministry_name->date - 1);
 
-                }else{
-                    $value->last_date=date('Y-m-'.$value->ministry_name->date);
+                } else {
+                    $value->last_date = date('Y-m-' . $value->ministry_name->date);
                 }
-                $x=$x+1;
+                $x = $x + 1;
 
-                $bank = $value->installment->client->client_banks->last();
+                $bank = $value->installment->client->client_banks ? $value->installment->client->client_banks->last()  : '' ;
                 $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last()->phone : '');
 
 
@@ -208,33 +208,30 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
                 if (!in_array($value->ministry_name->date, $array_date)) {
                     array_push($array_date, $value->ministry_name->date);
                 }
-                if ($bank && $bank->bank_name !=0 ) {
-                    if (!in_array($bank->bank_name, $array_bank)){
+                if ($bank && $bank->bank_name != 0) {
+                    if (!in_array($bank->bank_name, $array_bank)) {
                         array_push($array_bank, $bank->bank_name);
                     }
                 }
 
 
-
             }
 
 
-
-
-           // $value->min_id = Ministry::findORFail($value->installment->client->ministry_last)->date;
+            // $value->min_id = Ministry::findORFail($value->installment->client->ministry_last)->date;
             $value->different_date = get_different_dates($value->date, date('Y-m-d'));
 
         }
 
         foreach ($array_bank as $key => $value) {
 
-                // Assuming $value is a string (slug), you fetch the Bank model.
+            // Assuming $value is a string (slug), you fetch the Bank model.
             $bank = Bank::where('slug', $value)
                 ->orWhere('id', $value)
                 ->first();
 
 
-                // Now $value can hold the bank object
+            // Now $value can hold the bank object
             if (!is_array($array_bank[$key])) {
                 $array_bank[$key] = [];
             }
@@ -244,10 +241,9 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         }
 
 
-        $this->data['dates']=$array_date;
-        $this->data['banks']=$array_bank;
+        $this->data['dates'] = $array_date;
+        $this->data['banks'] = $array_bank;
         $this->data['get_responsible'] = get_responsible();
-
 
 
         $this->data['view'] = 'military_affairs/Stop_bank/index';
@@ -260,18 +256,25 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     {
         $governorate_id = $request->governorate_id;
         $message = "تم دخول صفحة  ارشيف حجز بنوك  ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+        $user_id = Auth::user()->id;
+        log_move($user_id, $message);
+
         $this->data['title'] = '    حجز بنوك';
-        $this->data['items'] = Military_affair::where('archived', '=', 1)
+        $this->data['items'] = Military_affair::where('bank_archive', '=', 1)
             ->where([
                 'military_affairs.status' => 'execute',
                 'military_affairs.stop_bank' => 1,
+                'military_affairs.archived' => 0,
             ])
-            ->with('installment')
+            ->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })
             ->with('status_all')
+            ->when(request()->has('governorate_id'), function ($query) use ($request) {
+                $query->whereHas('installment.client', function ($q) use ($request) {
+                    $q->where('governorate_id', $request->governorate_id);
+                });
+            })
             ->get();
         $title = ' حجز بنوك';
 
@@ -303,22 +306,17 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $this->data['item_type_time_old'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $stop_type])->first();
         $this->data['item_type_time_new'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $new_type])->first();
-
+        $x=1;
         foreach ($this->data['items'] as $value) {
+            if($value->installment){
+                $value->different_date = get_different_dates($value->date, date('Y-m-d'));
+                $value->adress = ($value->installment->client->client_address ? $value->installment->client->client_address->last() : '');
+                $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
+                $value->i=$x;
+                $x++;
+            }
 
-            $value->item_old_data = Prev_cols_military_affairs::where('military_affairs_id', $value->id)->first();
-
-            $value->different_date = get_different_dates($value->date, date('Y-m-d'));
-            $value->adress = ($value->installment->client->client_address ? $value->installment->client->client_address->last() : '');
-            $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
-            if ($value->eqrardain_date != NULL) {
-                $value->type_papar = 'وصل امانة';
-            } elseif ($value->qard_paper != NULL) {
-                $value->type_papar = 'اقرار دين';
-            } else
-                $value->type_papar = 'لايوجد';
         }
-        // dd($this->data['items']);
 
         $this->data['view'] = 'military_affairs/Stop_bank/archive';
         return view('layout', $this->data, compact('breadcrumb'));
@@ -429,42 +427,42 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     }
 
 
-public function check_info_in_job  ( $id)
-{
-    $message ="تم دخول صفحة استعلام عمل  " ;
-    $user_id = 1 ;
-    //$user_id =  Auth::user()->id,
-   // $this->log($user_id ,$message);
-   // $user_id =  Auth::user()->id;
-    $this->data['title']='    حجز بنوك';
+    public function check_info_in_job($id)
+    {
+        $message = "تم دخول صفحة استعلام عمل  ";
+        $user_id = 1;
+        //$user_id =  Auth::user()->id,
+        // $this->log($user_id ,$message);
+        // $user_id =  Auth::user()->id;
+        $this->data['title'] = '    حجز بنوك';
 
-    $this->data['items'] = array(
-        0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
-        1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
-        2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
-        3 => array('id' => '46', 'name' => 'التأمينات'),
-        4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
-    );
+        $this->data['items'] = array(
+            0 => array('id' => '5', 'name' => 'وزارة الدفاع'),
+            1 => array('id' => '14', 'name' => 'الحرس الوطنى'),
+            2 => array('id' => '27', 'name' => 'وزارة الداخلية'),
+            3 => array('id' => '46', 'name' => 'التأمينات'),
+            4 => array('id' => '47', 'name' => 'ديوان الخدمة'),
+        );
 
-    $ids = [5, 27, 14, 46, 47];
+        $ids = [5, 27, 14, 46, 47];
 
-    $Military = Military_affair::where('id', $id)
-    ->with('installment')
-    ->with('status_all')
-    ->first();
+        $Military = Military_affair::where('id', $id)
+            ->with('installment')
+            ->with('status_all')
+            ->first();
 
-    $title=' حجز بنوك';
+        $title = ' حجز بنوك';
 
-    $breadcrumb = array();
-    $breadcrumb[0]['title'] = " الرئيسية";
-    $breadcrumb[0]['url'] = route("dashboard");
-    $breadcrumb[1]['title'] = "الشئون القانونية";
-    $breadcrumb[1]['url'] = route("military_affairs");
-    $breadcrumb[2]['title'] = $title;
-    $breadcrumb[2]['url'] = 'javascript:void(0);';
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "الشئون القانونية";
+        $breadcrumb[1]['url'] = route("military_affairs");
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-    $this->data['view']='military_affairs/Stop_bank/check-job';
-    return view('layout',$this->data,compact('breadcrumb','Military'));
+        $this->data['view'] = 'military_affairs/Stop_bank/check-job';
+        return view('layout', $this->data, compact('breadcrumb', 'Military'));
 
     }
 
@@ -549,21 +547,19 @@ public function check_info_in_job  ( $id)
     {
 
 
-
-
         $item_law = Military_affair::findOrFail($request->military_affairs_id);
         $old_time_type = Military_affairs_stop_bank_type::findOrFail($request->old_stop_type);
         $new_time_type = Military_affairs_stop_bank_type::findOrFail($request->new_stop_type);
-        $update_notes_date = Military_affairs_times::where(['times_type_id' => $old_time_type->id,'military_affairs_id'=>$request->military_affairs_id, 'date_end' => NULL]);
+        $update_notes_date = Military_affairs_times::where(['times_type_id' => $old_time_type->id, 'military_affairs_id' => $request->military_affairs_id, 'date_end' => NULL]);
 
         if ($update_notes_date) {
             $data['date_end'] = date('Y-m-d');
             $update_notes_date->update($data);
         }
-        $item_status=Military_affairs_status::where(['type_id'=>$old_time_type->slug,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
-        if($item_status){
+        $item_status = Military_affairs_status::where(['type_id' => $old_time_type->slug, 'military_affairs_id' => $request->military_affairs_id])->orderBy('created_at', 'desc')->first();
+        if ($item_status) {
 
-            $data_status['flag']=1;
+            $data_status['flag'] = 1;
 
             $item_status->update($data_status);
         }
@@ -578,70 +574,86 @@ public function check_info_in_job  ( $id)
     }
 
 
-    public function stop_bank_request_results(Request $request){
+    public function stop_bank_request_results(Request $request)
+    {
 
-      $item =Military_affair::findorfail($request->military_affairs_id);
+        $item = Military_affair::findorfail($request->military_affairs_id);
 
-        $item_request =Military_affairs_bank_request::where(['military_affairs'=>$request->military_affairs_id,'status'=>''])->first();
+        $item_request = Military_affairs_bank_request::where(['military_affairs' => $request->military_affairs_id, 'status' => ''])->first();
 
         if (empty($item_request)) {
             $add_data_2['military_affairs_id'] = $request->military_affairs_id;
             $add_data_2['date'] = time();
-             Military_affairs_bank_request::create($add_data_2);
+            Military_affairs_bank_request::create($add_data_2);
             return redirect()->route('stop_bank')->with('error', '  عفوا يوجد خطأ');
 
         }
 
         $request->validate([
             'date' => 'required| date',
-            'military_affairs_id'=>'required',
-            'type'=>'required',
-            'img_dir'=>'required',
-            'amount'=>'required'
+            'military_affairs_id' => 'required',
+            'type' => 'required',
+            'img_dir' => 'required',
+            'amount' => 'required'
         ]);
 
 
+        $item_request_id = $item_request->id;
 
-            $item_request_id = $item_request->id;
+        $add_data["status"] = $request->military_affairs_id;
 
-            $add_data["status"] = $request->military_affairs_id;
+        $add_data["amount"] = $request->amount;
 
-            $add_data["amount"] = $request->amount;
-
-            $add_data['date'] = $request->date;
+        $add_data['date'] = $request->date;
 
 
-            if ($request->hasFile('img_dir')) {
+        if ($request->hasFile('img_dir')) {
 
-                $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
-                $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
-                $data['img_dir'] = 'military_affairs' . '/' . $filename;
+            $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
+            $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
+            $data['img_dir'] = 'military_affairs' . '/' . $filename;
+        }
+
+
+        if (!empty($data["item_request"]['id'])) {
+            $this->db_get->update_tb('military_affairs_bank_request', $item_request_id, $add_data);
+
+            if ($request->type == 'tahseel' or $request->type == 'not_found') {
+
+                $add_data343["stop_bank_request"] = 1;
+
+                $add_data343["stop_bank_doing"] = 0;
+
+                $add_data343["stop_bank_command"] = 0;
+
+                $this->db_get->update_tb('military_affairs', $id, $add_data343);
+
             }
 
 
+            return redirect()->to(base_url() . 'military_affairs/stop_bank');
+        }
 
 
-                if (!empty($data["item_request"]['id'])) {
-                    $this->db_get->update_tb('military_affairs_bank_request', $item_request_id, $add_data);
+    }
 
-                    if ($request->type == 'tahseel' or $request->type == 'not_found') {
+    public function cancel_archive($id)
+    {
+        $add_data['bank_archive'] = 0;
 
-                        $add_data343["stop_bank_request"] = 1;
+        $add_data['bank_cancel_archive_user_id'] = Auth::user()->id;
 
-                        $add_data343["stop_bank_doing"] = 0;
-
-                        $add_data343["stop_bank_command"] = 0;
-
-                        $this->db_get->update_tb('military_affairs', $id, $add_data343);
-
-                    }
+        $item = Military_affair::findorfail($id);
+        // dd($add_data);
+        $item->update($add_data);
 
 
+        $message = "تم دخول صفحة  حجز بنوك ارشيف ";
+        $user_id = Auth::user()->id;
+        log_move($user_id, $message);
 
-                    return redirect()->to(base_url() . 'military_affairs/stop_bank');
-                }
 
-
+        return redirect()->route('stop_bank.archive')->with('success', 'تمت العملية بنجاح ');
     }
 
     ///////////////////////////////case_proof function

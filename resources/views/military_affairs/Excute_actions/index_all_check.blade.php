@@ -8,10 +8,12 @@
 @endphp
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a  href=" {{route('all_checks')}}"  class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a href=" {{route('all_checks')}}"
+           class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->get('check_type') == '' ? 'active' : '' }}  ">
             الجديدة </a>
-        <a   href="{{route('all_checks',array('check_type' =>1))}}"    class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
-            تم الايداع  </a>
+        <a href="{{route('all_checks',array('check_type' =>1))}}"
+           class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2  {{ request()->get('check_type') == 1 ? 'active' : '' }}">
+            تم الايداع </a>
 
     </div>
 </div>
@@ -28,12 +30,12 @@
 
                     <th> اسم العميل</th>
                     <th>مبلغ المديونية</th>
-                    <th>المحصل </th>
-                    <th> المتبقى </th>
-                    <th> المبلغ </th>
-                    <th> التاريخ </th>
+                    <th>المحصل</th>
+                    <th> المتبقى</th>
+                    <th> المبلغ</th>
+                    <th> التاريخ</th>
                     <th> صورة الشيك</th>
-                    <th> ايداع الشيك  </th>
+                    <th> ايداع الشيك</th>
 
 
                 </tr>
@@ -44,7 +46,6 @@
                 @foreach( $items as $item)
                     @if($item->installment)
                         @if($item->military_check->first())
-
 
                             <tr>
                                 <td>
@@ -67,9 +68,19 @@
                                 <td>{{$item->military_check->first() ?    $item->military_check->first()->date : ''}}  </td>
                                 <td>
 
-                                    <a href=""></a> صورة الشيك  </td>
+
+                                    <a target="_blank"
+                                       onclick="checkFileAndRedirect(
+                            '{{ $item &&  $item->military_check->first() && $item->military_check->first()->img_dir!== '0' ? 'https://electron-kw.net/' . $item->military_check->first()->img_dir : '#' }}',
+                            '{{ $item && $item->military_check->first() && $item->military_check->first()->img_dir !== '0' ? 'https://electron-kw.com/' . $item->military_check->first()->img_dir : '#' }}'
+                        ); return false;">
+
+                                                            <span class="btn btn-info"> صورة الشيك
+                                                                 </span>
+                                    </a>
 
 
+                                </td>
 
 
                                 <td>
@@ -78,7 +89,8 @@
                                             data-bs-target="#add-note-{{$item->id}}">
                                         ايداع الشيك
                                     </button>
-                                    <div id="add-note-{{$item->id}}" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                    <div id="add-note-{{$item->id}}" class="modal fade" tabindex="-1"
+                                         aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                             <form class="mega-vertical"
                                                   action="{{url('add_check_finished')}}" method="post"
@@ -92,27 +104,33 @@
                                                         <h4 class="modal-title" id="myModalLabel">
                                                             {{$item->installment->client->name_ar}}</h4>
 
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         @php
                                                             $check_amount = $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
                                                         @endphp
-                                                        <input type="hidden"  name="military_affairs_id" value="{{$item->id}}"/>
-                                                        <input type="hidden"  name="check_id" value="{{$item->military_check->first()->id}}"/>
-                                                        <input type="hidden"  name="installment_id" value="{{$item->installment->id}}"/>
-                                                        <input type="hidden"  name="client_name" value="{{$item->installment->client->name_ar}}"/>
+                                                        <input type="hidden" name="military_affairs_id"
+                                                               value="{{$item->id}}"/>
+                                                        <input type="hidden" name="check_id"
+                                                               value="{{$item->military_check->first()->id}}"/>
+                                                        <input type="hidden" name="installment_id"
+                                                               value="{{$item->installment->id}}"/>
+                                                        <input type="hidden" name="client_name"
+                                                               value="{{$item->installment->client->name_ar}}"/>
 
                                                         <div class="form-row">
 
                                                             <div class="form-group mb-3">
-                                                                <label class="form-label">تاريخ  </label>
+                                                                <label class="form-label">تاريخ </label>
                                                                 <input type="date" name="date" class="form-control">
                                                             </div>
 
                                                             <div class="form-group my-3">
                                                                 <label for="formFile" class="form-label">الصورة </label>
-                                                                <input class="form-control"  name="img_dir"   accept="image/*" type="file" id="formFile">
+                                                                <input class="form-control" name="img_dir"
+                                                                       accept="image/*" type="file" id="formFile">
                                                             </div>
 
                                                         </div>
@@ -120,7 +138,9 @@
                                                     </div>
                                                     <div class="modal-footer d-flex ">
                                                         <button type="submit" class="btn btn-primary">حفظ</button>
-                                                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
+                                                        <button type="button"
+                                                                class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                data-bs-dismiss="modal">
                                                             الغاء
                                                         </button>
                                                     </div>
@@ -134,7 +154,6 @@
                                 </td>
                             </tr>
 
-
                         @endif
                     @endif
 
@@ -145,6 +164,7 @@
         </div>
     </div>
 </div>
+@include('military_affairs.Execute_alert.print.script')
 
 
 <!-- modals -->
@@ -156,7 +176,6 @@
     function hideInput() {
         document.getElementById('additionalInputs').classList.add('hidden');
     }
-
 
 
 </script>

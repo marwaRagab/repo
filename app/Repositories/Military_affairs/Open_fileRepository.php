@@ -211,7 +211,17 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         $this->data['title']='  اثبات الحالة ';
         $this->data['items']= Military_affair::where('archived','=',0)
             ->where(['military_affairs.status'=>'case_proof','jalasat_alert_status'=>'accepted'])
-            ->with('installment')->with('status_all')->get();
+            ->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })->with('jalasaat_all', function ($query) {
+                return $query->where('status', '=', 'accepted');
+
+            })->when(request()->has('governorate_id'), function ($query) use ($request) {
+                $query->whereHas('installment.client', function ($q) use ($request) {
+                    $q->where('governorate_id', $request->governorate_id);
+                });
+            })
+            ->get();
         $title=' اثبات الحالة';
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -222,7 +232,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $this->data['item_type_time']=Military_affairs_times_type::where(['type'=> 'case_proof','slug'=>'case_proof'])->first();
         $this->data['item_type_travel']=Stop_travel_types::where(['type'=> 'stop_travel','slug'=>'request'])->first();
-        $this->data['item_type_car']=Military_affairs_stop_car_type::where(['type'=> 'stop_cars','slug'=>'stop_car_request'])->first();
+        $this->data['item_type_car']=Military_affairs_stop_car_type::where(['type'=> 'stop_car','slug'=>'stop_car_request'])->first();
 
         $this->data['item_type_bank']=Military_affairs_stop_bank_type::where(['type'=> 'stop_bank','slug'=>'stop_bank_request'])->first();
         $this->data['item_type_salary']=Military_affairs_stop_salary_type::where(['type'=> 'stop_salary','slug'=>'stop_salary_request'])->first();
@@ -248,7 +258,7 @@ class Open_fileRepository implements Open_fileRepositoryInterface
     }
     public function convert_to_execute(Request $request){
 
-         dd($request->all());
+
         $request->validate([
             'date' => 'required| date',
             'img_dir'=>'required|image|mimes:jpg,png,jpeg,gif|max:2048',

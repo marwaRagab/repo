@@ -1,9 +1,9 @@
 
 <tr >
-    <!--    <td>
-        {{ $loop->index + 1 }}
+        <td>
+        {{ $item->i}}
 
-    </td>-->
+    </td>
 
 
     <td>

@@ -66,8 +66,8 @@
                 <!-- start row -->
                 @foreach($settlement as $one)
                     @if($one->military_affair->installment)
-                    <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-                        aria-controls="collapseExample">
+                    <tr>
+
                         <td>{{ $loop->iteration }}</td>
                         <td> {{$one->military_affair->installment->client->name_ar}}
                             <br>
@@ -338,14 +338,14 @@
 
                         </td>
                         <td>
-                            <a class="btn btn-success me-6 my-2 d-block" href="">
+                            <a class="btn btn-success me-6 my-2 d-block" href="{{ url('installment/show-installment/' . $one->military_affair->installment->id) }}">
                                 التفاصيل
                             </a>
                             @php
                                 $all_notes=get_all_notes('settlement',$one->id);
                                 $all_actions=get_all_actions($one->id);
                                 $get_all_delegations = get_all_delegations($one->id);
-                                
+
                             @endphp
                             <button class="btn btn-primary me-6 my-2 d-block" data-bs-toggle="modal"
                                     data-bs-target="#open-details-{{$one->id}}">
@@ -377,7 +377,7 @@
                                                                     <span>تتبع المعاملة</span>
                                                                 </a>
                                                             </li>
-                                                            
+
                                             </ul>
                                             <!-- Tab panes -->
                                             <div class="tab-content border mt-2">
@@ -500,7 +500,7 @@
                                                                     $created_by = DB::table('users')
                                                                         ->where('id', $value->created_by)
                                                                         ->first();
-                                                                    
+
                                                                 @endphp
                                                             <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
                                                             <td> @if ($value->timesType)
@@ -544,7 +544,7 @@
                                                                 {{ $day_end }}
                                                             </td>
                                                             <td>{{ $different_day }}</td>
-                                                            
+
 
                                                         </tr>
                                                         @endforeach
@@ -558,7 +558,7 @@
                                                     </table>
 
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="modal-footer d-flex ">

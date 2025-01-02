@@ -58,9 +58,7 @@
 
 
         @foreach($dates as $one)
-
-
-                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank['slug']))}}"
+                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
                    class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
                     {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
                 </a>
@@ -72,7 +70,6 @@
         <div class="card mt-4 py-3">
             <div class="d-flex flex-wrap ">
                 @foreach($banks as $bank)
-
                     <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank['slug'],'date'=> $date))}}"
                        class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2 {{ request()->get('bank') == $bank['slug'] ? 'active' : '' }}   ">
                         {{$bank['name']}}
@@ -146,57 +143,12 @@
 
 
                 @foreach($items as $item)
-
-
                     @if($item->installment)
 
 
-                        @php
-                            if($item->installment->client->court)
-                            $court_id= \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->id;
-                            else
-                                $court_id='';
-
-
-                             if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type')!= '' ){
-
-
-                                    $array= count($item->status_all->where('type_id',Request::get('stop_bank_type'))->where('flag',0)) ;
-
-
-                                }else{
-                                 $array= count($items);
-                                }
-
-
-                        @endphp
-
-
-
-                        @if( Request::has('governorate_id') && Request::get('governorate_id') ==
-                        $item->installment->client->governorate_id)
-
-
-
                                     @include('military_affairs.Stop_bank.table_details')
 
 
-                        @endif
-
-                        @if(!Request::has('governorate_id') || Request::get('governorate_id') == '' )
-
-
-
-                                    @include('military_affairs.Stop_bank.table_details')
-
-
-
-
-
-
-
-
-                    @endif
                     @endif
 
 

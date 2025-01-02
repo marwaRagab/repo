@@ -92,6 +92,13 @@ class Stop_bankController extends Controller
 
 
     }
+    public function cancel_archive($id)
+    {
+
+        return $this->stop_bankRepository->cancel_archive($id);
+
+
+    }
 
     public function stop_bank_request_results(Request $request)
     {

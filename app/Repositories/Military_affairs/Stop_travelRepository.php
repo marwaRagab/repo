@@ -54,7 +54,13 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
     public function index(Request $request)
     {
 
-        $governorate_id = $request->governorate_id;
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        }
+
         $message = "تم دخول صفحة فتح ملف";
         $stop_travel_type = $request->stop_travel_type;
 
@@ -65,8 +71,15 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         $this->data['items'] = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_travel' => 1])->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
-            })->with('status_all')->get();
-        //dd(  $this->data['items']);
+            })->with('status_all', function ($query) {
+                return $query->where('type', '=', 'stop_travel');
+            })
+            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            })
+            ->get();
 
         $title = ' منع السفر';
 
@@ -83,33 +96,33 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         $this->data['item_type_time3'] = Stop_travel_types::where(['type' => 'stop_travel', 'slug' => 'stop_travel_finished'])->first();
         $this->data['item_type_time4'] = Stop_travel_types::where(['type' => 'stop_travel', 'slug' => 'stop_travel_cancel_request'])->first();
         $this->data['item_type_time5'] = Stop_travel_types::where(['type' => 'stop_travel', 'slug' => 'stop_travel_cancel'])->first();
-
+           $x=1;
         foreach ($this->data['items'] as $value) {
+            if($value->installment){
+                $value->i=$x;
+                $value->different_date_tranfer = get_different_date($value->date, date('Y-m-d'));
+                if ($stop_travel_type == 'command') {
+                    $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 0)->first();
+                    $date_command =$value->item_command   ?  $value->item_command->date : '';
+                    $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
+                    $value->different_date_command  =$value->item_command ?  get_different_date($value->final_date_command[0], date('Y-m-d')) : '';
+                }
+                if ($stop_travel_type == 'stop_travel_finished') {
+                    $value->item_finished_command = $value->status_all->where('type_id', 'command')->where('flag', 1)->first();
+                    $date_finished_command = $value->item_finished_command ?  $value->item_finished_command->date : '';
+                    $value->final_date_finished_command = $value->item_finished_command ?  explode(' ', $date_finished_command) : '';
+                    $value->different_date_finshied_command =  $value->item_finished_command ? get_different_date($value->final_date_finished_command[0], date('Y-m-d')) : '';
+                    $value->item_finished = $value->status_all->where('type_id', 'stop_travel_finished')->first();
+                    $date_finished = $value->item_finished ? $value->item_finished->date : '';
+                    $value->final_date_finished = $value->item_finished ?  explode(' ', $date_finished) : '';
+                    $value->different_date_finshied = $value->item_finished ?  get_different_date($value->final_date_finished[0], date('Y-m-d')) : '';
 
-
-            $value->different_date_tranfer = get_different_date($value->date, date('Y-m-d'));
-            if ($stop_travel_type == 'command') {
-                $value->item_command = $value->status_all->where('type_id', 'command')->where('flag', 0)->first();
-
-                $date_command =$value->item_command   ?  $value->item_command->date : '';
-                $value->final_date_command  =$value->item_command ?    explode(' ', $date_command) : '';
-                $value->different_date_command  =$value->item_command ?  get_different_date($value->final_date_command[0], date('Y-m-d')) : '';
-
-
+                }
+                $x++;
             }
-            if ($stop_travel_type == 'stop_travel_finished') {
-                $value->item_finished_command = $value->status_all->where('type_id', 'command')->where('flag', 1)->first();
-                $date_finished_command = $value->item_finished_command ?  $value->item_finished_command->date : '';
-                $value->final_date_finished_command = $value->item_finished_command ?  explode(' ', $date_finished_command) : '';
-                $value->different_date_finshied_command =  $value->item_finished_command ? get_different_date($value->final_date_finished_command[0], date('Y-m-d')) : '';
 
-                ///finished date
-                $value->item_finished = $value->status_all->where('type_id', 'stop_travel_finished')->first();
-                $date_finished = $value->item_finished ? $value->item_finished->date : '';
-                $value->final_date_finished = $value->item_finished ?  explode(' ', $date_finished) : '';
-                $value->different_date_finshied = $value->item_finished ?  get_different_date($value->final_date_finished[0], date('Y-m-d')) : '';
 
-            }
+
 
 
         }

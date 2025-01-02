@@ -166,9 +166,11 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             'img_dir' => $data_img_dir ?? ' '
 
         ];
+
         Military_affairs_amount::create($array_add);
-        $item_military['excute_actions_amount'] = $item_military['excute_actions_amount'] + $request->amount;
-        $item_military['excute_actions_counter'] = 1 + $item_military['excute_actions_counter'];
+        $update_data['excute_actions_amount'] = $item_military['excute_actions_amount'] + $request->amount;
+
+        $update_data['excute_actions_counter'] = 1 + $item_military['excute_actions_counter'];
 
         $update_data['excute_actions_last_date_check'] = date('Y-m-d H:i:s');
         $item_military->update($update_data);
