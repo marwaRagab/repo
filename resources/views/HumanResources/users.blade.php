@@ -222,7 +222,7 @@
                                 <td>{{ $user->name_ar }}</td>
                                 <td>{{ $user->roles ? $user->roles->name_ar : 'غير محدد' }}</td>
                                 <td>{{ $user->branches ? $user->branches->name_ar : 'غير محدد' }}</td>
-                                <td><a href="www.google.com"><img src="{{ asset($user->qr_code_path) }}"></a>
+                                <td><a href="{{route('users.edit', Crypt::encryptString($user->id))}}"><img width="100" src="{{ asset($user->qr_code_path) }}"></a>
 
                                 </td>
                                 <td>
