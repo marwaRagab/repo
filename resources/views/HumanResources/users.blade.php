@@ -200,6 +200,7 @@
                         <th>الوظيفة</th>
                         <th>الفرع</th>
                         <th>تحميل QR Code</th>
+                        <th>بروفايل</th>
                         <th>الاجراءات</th>
                     </tr>
                 </thead>
@@ -226,9 +227,14 @@
                                             تحميل QR Code
                                         </a>
                                     @else
-                                    
+
                                         <span class="text-muted">غير متوفر</span>
                                     @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('users.edit', Crypt::encryptString($user->id)) }}" class="btn btn-sm btn-warning">
+                                        بروفايل
+                                    </a>
                                 </td>
                                 <td>
                                     <div class="d-block">

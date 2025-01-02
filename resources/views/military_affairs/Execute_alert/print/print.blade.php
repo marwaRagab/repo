@@ -44,7 +44,7 @@
                href="{{ route('print_civil_id' ,['item' => $item->id]) }}" target="_blank">
                 الصورة المدنية</a></li>
         </li>
-        @if (Str::contains(request()->url(), 'stop_bank'))
+        @if (Str::contains(request()->url(), 'stop_bank') || Str::contains(request()->url(), 'stop_car'))
             <li>
                 <a class="dropdown-item {{ $pdf_img->execute_do_img == null || $pdf_img->execute_do_img == '' || $pdf_img->execute_do_img == 0   ? 'disabled' : '' }}"
                    {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}

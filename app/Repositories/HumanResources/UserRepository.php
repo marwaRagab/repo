@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -89,6 +90,37 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
 
         return redirect()->route('users.index')->with('success', 'تم إضافة المستخدم بنجاح');
+    }
+    public function edit($id)
+    {
+
+        $branches = Branch::all();
+        $roles = Role::all();
+        $avatars = File::files(public_path('avatars'));
+
+        try {
+            // فك التشفير
+            $userId = Crypt::decryptString($id);
+        } catch (\Exception $e) {
+            abort(404, 'الرابط غير صالح');
+        }
+  $user = User::findOrFail($userId);
+
+
+        $title = "المستخدمين";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "الموارد البشرية";
+        $breadcrumb[1]['url'] = route("dashboard");
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+
+        $view = 'HumanResources.users.edit';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'user', 'avatars', 'branches', 'roles')
+        );
     }
 
     public function update($request, $id)

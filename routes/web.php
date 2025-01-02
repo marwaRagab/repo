@@ -35,6 +35,7 @@ use App\Http\Controllers\InstallmentIssueController;
 use App\Http\Controllers\InstallmentPercentageController;
 use App\Http\Controllers\InstallmentSubmissionController;
 use App\Http\Controllers\Installment\InstallmentController;
+use App\Http\Controllers\Installment\PapersInstallController;
 use App\Http\Controllers\Military_affairs\CertificateController;
 use App\Http\Controllers\Military_affairs\CheckingController;
 use App\Http\Controllers\Military_affairs\DelegatesController;
@@ -484,6 +485,11 @@ Route::middleware('auth')->group(function () {
         return Excel::download(new ClientsExport, 'clients.xlsx');
     })->name('export.clients');
 
+
+
+Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
+Route::get('/installment/papers', [PapersInstallController::class, 'index'])->name('installment.papers.index');
+
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
     Route::post('installment/pay_part/{id}', [InstallmentController::class, 'pay_part'])->name('installment.pay_part');
@@ -583,6 +589,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/human-resources/users', [UserController::class, 'index'])->name('users.index'); //->middleware('permission:view_users');
     Route::post('/human-resources/users', [UserController::class, 'store'])->name('users.store'); //->middleware('permission:create_users');
     Route::put('/human-resources/users/{id}', [UserController::class, 'update'])->name('users.update'); //->middleware('permission:update_users');
+
+    Route::get('/human-resources/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/human-resources/users-profile/{id}', [UserController::class, 'update'])->name('users.user-profile');
+
 
     //clients
     Route::get('/human-resources/clients', [ClientController::class, 'index'])->name('clients.index'); //->middleware('permission:view_clients');
