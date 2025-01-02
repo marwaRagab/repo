@@ -32,7 +32,7 @@ class QrCodeController extends Controller
             // Generate the QR code
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data("User ID: {$user->id}, Email: {$user->email}")
+                ->data( route('users.edit', Crypt::encryptString($user->id)) )
                 ->encoding(new Encoding('UTF-8'))
                 ->size(300)
                 ->margin(10) 
