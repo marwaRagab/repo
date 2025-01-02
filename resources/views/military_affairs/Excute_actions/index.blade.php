@@ -416,7 +416,7 @@
                                                                     aria-expanded="false"
                                                                     aria-controls="collapseExample">
                                                                     <td>
-                                                                        {{$all_note->created_by}}
+                                                                        {{\App\Models\User::findorfail($all_note->created_by)->first() ?    \App\Models\User::findorfail($all_note->created_by)->first()->name_ar : ''}}
                                                                     </td>
                                                                     <td>
                                                                         @php
@@ -444,7 +444,7 @@
                                                                     @endphp
 
 
-                                                                    <td>{{$time}}}}<span class="d-block"></span></td>
+                                                                    <td>{{$time}}}<span class="d-block"></span></td>
                                                                     <td>{{$day}}</td>
 
                                                                 </tr>
@@ -701,59 +701,6 @@
 
 
 <!-- modals -->
-<div id="add-note" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">
-                    الملاحظة</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-row">
-                        <div class="form-group mb-3">
-                            <label class="form-label">تاريخ فتح الملف</label>
-                            <input type="date" class="form-control">
-                        </div>
-                        <div class="mb-7">
-                            <label>
-                                <input type="radio" name="option" value="option1" onclick="showInputs()"> معاد
-                            </label>
-                            <label>
-                                <input type="radio" name="option" value="option2" onclick="showInputs()"> تم التبليغ
-                            </label>
-
-                            <div id="additionalInputs" class="hidden">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">التاريخ</label>
-                                    <input type="date" class="form-control">
-                                </div>
-                                <div class="form-group my-3">
-                                    <label for="formFile" class="form-label">الصورة </label>
-                                    <input class="form-control" type="file" id="formFile">
-                                </div>
-                                <div class="form-group">
-                                    <div class="my-3">
-                                        <label class="form-label">الملاحظات</label>
-                                        <textarea class="form-control" rows="5"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer d-flex ">
-                <button type="submit" class="btn btn-primary">حفظ</button>
-                <button type="button" class="btn bg-danger-subtle text-danger  waves-effect" data-bs-dismiss="modal">
-                    الغاء
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
 function showInputs() {
     document.getElementById('additionalInputs').classList.remove('hidden');

@@ -1226,6 +1226,21 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                     ->where('military_affairs.stop_bank', '1')
                     ->where('military_affairs.bank_archive', '0');
             }
+            if($stop_type == 'stop_bank_archive')
+            {
+
+                $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.stop_bank', '1')
+                    ->where('military_affairs.bank_archive', '1');
+            }
+
+            if($stop_type == 'stop_travel')
+            {
+
+                $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.stop_travel', '1');
+
+            }
             }, function ($q) use ($stop_type) {
                 if ($stop_type == 'open_file') {
                     $q->where('military_affairs.status', 'military');

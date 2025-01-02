@@ -172,7 +172,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        </div>
+
                         <div class="modal-footer d-flex ">
                             <button type="submit" class="btn btn-primary">حفظ</button>
                             <button type="button" class="btn bg-danger-subtle text-danger waves-effect"
@@ -181,6 +181,7 @@
                             </button>
                         </div>
                         </form>
+                    </div>
                     </div>
                     <!-- /.modal-content -->
                 </div>
@@ -199,6 +200,7 @@
                         <th>الاسم</th>
                         <th>الوظيفة</th>
                         <th>الفرع</th>
+                        <th>الصورة</th>
                         <th>تحميل QR Code</th>
                         <th>بروفايل</th>
                         <th>الاجراءات</th>
@@ -220,6 +222,9 @@
                                 <td>{{ $user->name_ar }}</td>
                                 <td>{{ $user->roles ? $user->roles->name_ar : 'غير محدد' }}</td>
                                 <td>{{ $user->branches ? $user->branches->name_ar : 'غير محدد' }}</td>
+                                <td><a href="www.google.com"><img src="{{ asset($user->qr_code_path) }}"></a>
+
+                                </td>
                                 <td>
                                     @if ($user->qr_code_path)
                                         <a href="{{ route('qr-code.download', $user->id) }}"

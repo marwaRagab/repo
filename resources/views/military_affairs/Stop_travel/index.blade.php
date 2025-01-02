@@ -3,8 +3,8 @@
     <div class="d-flex flex-wrap ">
         <a href="{{route('stop_travel')}}"
 
-           class="btn border border-info font-medium text-info hover:bg-info hover:text-white focus:bg-info focus:text-white active:bg-info/90 ml-3 mt-3">
-            الكلي
+           class=" btn-filter bg-success-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == ''? 'active' : '' }}">
+            الكلي({{ count_court('' ,'stop_travel',null,null) }})
         </a>
         @php
             if(Request::has('governorate_id')){
@@ -24,7 +24,8 @@
         @foreach($courts as $court)
 
             <a href="{{route('stop_travel',array('governorate_id' => $court->id,'stop_travel_type'=>$travel_type))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
+                ({{ count_court($court->id ,'stop_travel',null,null) }})
             </a>
 
         @endforeach
@@ -71,9 +72,8 @@
 
 
                 <tr>
-                    <!--
-                                        <th>#</th>
-                    -->
+
+                    <th>#</th>
                     <th>رقم المعاملة</th>
                     <th>اسم العميل</th>
                     <th> المحكمة</th>
@@ -116,42 +116,30 @@
                     @foreach( $items as $item)
 
                         @if($item->installment)
-                            @php
-                                if($item->installment->client->court)
-                                $court_id= \App\Models\Court::where('governorate_id', $item->installment->client->court->id)->first()->id;
-                                else
-                                    $court_id='';
+
+                                @php
 
 
-                                 if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
+                                     if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
 
 
 
-                                        $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
+                                            $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
 
-                                    }else{
-                                     $array= count($items);
-                                    }
+                                        }else{
+                                         $array= count($items);
+                                        }
 
 
-                            @endphp
+                                @endphp
 
-                            @if( Request::has('governorate_id')&&   Request::get('governorate_id')!= ''  &&  Request::get('governorate_id') == $court_id)
+
 
                                 @if($array>0)
 
                                     @include('military_affairs.Stop_travel.table_details')
 
                                 @endif
-                            @endif
-                            @if(!Request::has('governorate_id') ||  Request::get('governorate_id')== '' )
-
-                                @if($array>0)
-
-                                    @include('military_affairs.Stop_travel.table_details')
-
-                                @endif
-                            @endif
 
                         @endif
                     @endforeach

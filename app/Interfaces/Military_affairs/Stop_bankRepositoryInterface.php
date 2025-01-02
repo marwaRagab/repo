@@ -13,6 +13,7 @@ interface Stop_bankRepositoryInterface
     public function print_archive (Request $request);
 
     public function check_info_in_banks ( $id);
+    public function cancel_archive($id);
 
     public function check_info_in_job ( $id);
     public function saveBanksInfo (Request $request);

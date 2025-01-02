@@ -78,7 +78,7 @@
 
                             </td>
 
-                            <td>{{$item->date}}</td>
+                            <td>{{expolde_date($item->created_at)[0] }}</td>
                             <td>{{$item->eqrar_dain_amount}}</td>
                             <td>{{$item->open_file_date}}</td>
                             <td>{{$item->issue_id}}</td>
