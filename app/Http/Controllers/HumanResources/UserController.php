@@ -52,4 +52,7 @@ class UserController extends Controller
 
         return $data;
     }
+    public function edit($id){
+        return $this->userRepository->edit( $id);
+    }
 }

@@ -1,5 +1,5 @@
 @php
-require_once app_path('Helper.php');
+require_once app_path('helper.php');
 ini_set('memory_limit', '256M');
     $arr = ['success', 'danger', 'primary', 'secondary', 'info', 'warning'];
     $governateId = request()->get('governate_id');
@@ -64,7 +64,11 @@ ini_set('memory_limit', '256M');
                             <a href="{{url('installment/show-installment/'.$item->installment->id)}}">
                                 {{$item->installment->id}}</a>
                                 <br/>
-                                {!! getDiffTodayDates($item->date, null) !!} 
+                                {!! getDiffTodayDates($item->date, null) !!}
+                                   <br/>   <br/>
+                                   @if(optional($item->notes->first())->trans_date)
+                                {!! getDiffTodayDates(optional($item->notes->first())->trans_date, null) !!}
+                                @endif
                             </td>
                             <td>
                                 {{ $item->installment->client->name_ar ?? '' }}<br />
@@ -74,6 +78,7 @@ ini_set('memory_limit', '256M');
                             <td>
                                 {{ optional($item->installment->client->courtNew)->name_ar }}<br />
                                 @include('military_affairs.Execute_alert.print.print')
+
                             </td>
 
                             @if ($stopCarType == 'stop_car_police_station')
@@ -139,6 +144,7 @@ ini_set('memory_limit', '256M');
                                         الإجراءات
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
                                         <li>
                                             <a class="btn btn-success  w-100 mt-2"
                                                 href="{{ route('advanced.archive', $item->installment->id) }}">تحويل
@@ -157,6 +163,12 @@ ini_set('memory_limit', '256M');
                                                 تحويل للتسوية
                                             </a>
                                         </li>
+                                        <li>
+                                            <a class="btn btn-danger rounded-0 w-100 mt-2" data-bs-toggle="modal"
+                                                data-bs-target="#open-file"> رفع الصور
+                                            </a>
+                                        </li>
+                                        <li>
                                     </ul>
                                 </div>
                                 @include('military_affairs/stop_car/partials/car_notes', ['item' => $item])
