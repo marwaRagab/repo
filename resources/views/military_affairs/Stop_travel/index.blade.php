@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap ">
         <a href="{{route('stop_travel')}}"
 
-           class=" btn-filter bg-success-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == ''? 'active' : '' }}">
+           class=" btn-filter bg-success-subtle text-warning px-2  mx-1 mb-2  {{ request()->get('governorate_id') == ''? 'active' : '' }}">
             الكلي({{ count_court('' ,'stop_travel',null,null) }})
         </a>
         @php
@@ -24,7 +24,7 @@
         @foreach($courts as $court)
 
             <a href="{{route('stop_travel',array('governorate_id' => $court->id,'stop_travel_type'=>$travel_type))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
                 ({{ count_court($court->id ,'stop_travel',null,null) }})
             </a>
 
@@ -50,7 +50,7 @@
         @foreach($stop_travel_types as $stop_travel_type)
 
             <a href="{{route('stop_travel',array('stop_travel_type' => $stop_travel_type->slug,'governorate_id'=> $gov ))}}"
-               class="btn-filter {{$stop_travel_type->style}}   px-4 fs-4 mx-1 mb-2">  {{$stop_travel_type->name_ar}}
+               class="btn-filter {{$stop_travel_type->style}}   px-4  mx-1 mb-2">  {{$stop_travel_type->name_ar}}
             </a>
 
         @endforeach

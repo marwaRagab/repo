@@ -1,13 +1,15 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> الوزارات</h4>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+      <div>
+      <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
             href="{{ route('ministry_percentages.index') }}">
             نسب الوزارات </a>
         <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal"
             data-bs-target="#bs-example-modal-md">
             أضف الوزارة
         </button>
+      </div>
 
         <!-- sample modal content -->
         <div id="bs-example-modal-md" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md"

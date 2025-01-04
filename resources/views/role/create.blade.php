@@ -33,7 +33,7 @@
                     <ul class="category-tree">
                         <div class="row">
                             @foreach ($Permissions as $item)
-                                <div class="col-3 my-3">
+                                <div class="col-md-3 col-sm-12 my-3">
                                     <li>
                                         <label class="text-indigo my-2">
                                             {{-- <input type="text" name="permissions[]"

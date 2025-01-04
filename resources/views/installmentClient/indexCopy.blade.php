@@ -1,34 +1,34 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-2  mx-1 mb-2 "
             href="{{ route('myinstall.index', 'advanced') }}">
             المتقدميين ({{ $counts['advancedCount'] }})
         </a>
-        <a class="btn-filter bg-info-subtle text-info  px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter bg-info-subtle text-info  px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'under_inquiry') }}">
             قيد الاستعلام ({{ $counts['under_inquiryCount'] }})
         </a>
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'auditing') }}">
             التدقيق القضائي ({{ $counts['auditingCount'] }})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'car_inquiry') }}">
             استعلام السيارات ({{ $counts['car_inquiryCount'] }})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'inquiry_done') }}">
             تم الاستعلام ({{ $counts['inquiry_doneCount'] }})
         </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'accepted') }}">
 
             مقبول ({{ $counts['acceptedCount'] }}) </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2"
+        <a class="btn-filter px-2 bg-primary-subtle text-primary mx-1 mb-2"
             href="{{ route('myinstall.index', 'accepted_condition') }}">
             مقبول بشرط ({{ $counts['accepted_conditionCount'] }}) </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2"
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2"
             href="{{ route('myinstall.index', 'rejected') }}">
             مرفوض ({{ $counts['rejectedCount'] }}) </a>
 
@@ -39,13 +39,13 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء المتقدمين</h4>
         <div class="d-flex">
-            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 ">
+            <a href="{{ route('advanced.addnew') }}" class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  ">
                 أضف جديد </a>
 
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                 href="{{ route('myinstall.index', ['status' => 'archive']) }}">
                 الارشيف </a>
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('broker.index') }}">
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="{{ route('broker.index') }}">
                 الوسطاء </a>
         </div>
     </div>
@@ -163,7 +163,7 @@
                                 <td>
                                     <div class="d-block">
                                         <div>
-                                            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                                 href="{{ route('advanced.car', $item->id) }}">
                                                 استعلام سيارات
                                                 {{-- ({{ App\Models\InstallmentCar::where('installment_clients_id', $item->id)->count() }}) --}}
@@ -176,7 +176,7 @@
                                             <div>
                                                 {{-- {{ dd($item->installment_car) }} --}}
                                                 @if ($item->installment_car->first()->image != null)
-                                                    <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                                    <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                                         href="{{ $item->installment_car->first()->image }}"
                                                         download="car.jpg">
                                                         صوره الاستعلام </a>
@@ -203,7 +203,7 @@
                                             @endif
                                         </h6>
                                         <div>
-                                            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                                 href="{{ route('advanced.issue', $item->id) }}">
                                                 استعلام قضائي
                                                 {{-- ({{ App\Models\InstallmentIssue::where('installment_clients_id', $item->id)->count() }}) --}}
@@ -212,7 +212,7 @@
                                         </div>
                                         @if ($item->installment_issue->isNotEmpty() || $item->installment_issue->count() > 0)
                                             <div>
-                                                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                                     href="{{ asset($item->issue_pdf) }}" download="issue.pdf">
                                                     صوره الاستعلام </a>
                                             </div>
@@ -314,7 +314,7 @@
                                                 @csrf
                                                 <input type="hidden" name="status" value="archive">
                                                 {{-- <a class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#archive"> --}}
-                                                <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
+                                                <button class="btn btn-success rounded-1 w-100 mt-2" type="submit">
 
                                                     تحويل للارشيف</button>
                                             </form>

@@ -21,7 +21,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                             <i class="ti ti-user-check fs-6 d-block mx-1" style="color: rgb(1, 122, 58);"></i> بيانات
                             العميل <span class="text-gray mx-1">( قم بالضغط هنا لاظهار البيانات العميل)</span>
@@ -232,7 +232,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExampleNotes">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
                             <i class="ti ti-message-2 fs-6 d-block mx-1" style="color: blueviolet;"></i> الملاحظات <span
                                 class="text-gray mx-1">( قم بالضغط هنا لاظهار الملاحظات)</span>
@@ -245,55 +245,55 @@
 
                             <ul class="nav nav-pills" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active bg-info-subtle text-info px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link active bg-info-subtle text-info px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-1" role="tab">
                                         <span> كل الملاحظات </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-warning-subtle text-warning px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-2" role="tab">
                                         <span> ملاحظات التقديم </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-success-subtle text-success px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-3" role="tab">
                                         <span>ملاحظات اقبول </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-danger-subtle text-danger px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-4" role="tab">
                                         <span> SMS </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-primary-subtle text-primary px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-5" role="tab">
                                         <span>السيارات </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-warning-subtle text-warning px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-6" role="tab">
                                         <span>القضايا </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-info-subtle text-info px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-7" role="tab">
                                         <span> قضايا التنفيذ </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-warning-subtle text-warning px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-8" role="tab">
                                         <span> التدقيق </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
+                                    <a class="nav-link bg-success-subtle text-success px-3 mx-1 mb-2"
                                         data-bs-toggle="tab" href="#navpill-9" role="tab">
                                         <span> الشئون القانونية </span>
                                     </a>
@@ -606,25 +606,25 @@
                                 <div class="tab-pane p-3" id="navpill-9" role="tabpanel">
                                     <ul class="nav nav-pills" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2"
+                                            <a class="nav-link active bg-warning-subtle text-warning px-4  mx-1 mb-2"
                                                 data-bs-toggle="tab" href="#navpill-inside-1" role="tab">
                                                 <span>الكل</span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link bg-info-subtle text-info px-4 fs-4 mx-1 mb-2"
+                                            <a class="nav-link bg-info-subtle text-info px-4  mx-1 mb-2"
                                                 data-bs-toggle="tab" href="#navpill-inside-2" role="tab">
                                                 <span> فتح ملف </span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
+                                            <a class="nav-link bg-success-subtle text-success px-4  mx-1 mb-2"
                                                 data-bs-toggle="tab" href="#navpill-inside-3" role="tab">
                                                 <span>اعلان التنفيذ </span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2"
+                                            <a class="nav-link bg-danger-subtle text-danger px-4  mx-1 mb-2"
                                                 data-bs-toggle="tab" href="#navpill-inside-4" role="tab">
                                                 <span> الامج </span>
                                             </a>
@@ -834,7 +834,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExampleTransaction">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseThree" aria-expanded="false"
                             aria-controls="flush-collapseThree">
                             <i class="ti ti-ad-2 fs-6 mx-1" style="color: rgb(245, 105, 18);"></i> تتبع المعاملة
@@ -1002,7 +1002,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExampleItems">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingFour">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseFour" aria-expanded="false"
                             aria-controls="flush-collapseFour">
                             <i class="ti ti-sort-descending-2 fs-6 mx-1" style="color: rgb(245, 18, 18);"></i> عدد
@@ -1073,7 +1073,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExampleFiles">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseFive" aria-expanded="false"
                             aria-controls="flush-collapseFive">
                             <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة
@@ -1617,7 +1617,7 @@
             <div class="accordion accordion-flush" id="accordionFlushExampleFiles">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-headingFive">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        <button class="accordion-button d-flex flex-wrap collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseFive" aria-expanded="false"
                             aria-controls="flush-collapseFive">
                             <i class="ti ti-bookmark fs-6 mx-1" style="color: rgb(245, 234, 18);"></i> الملفات المرفوعة
@@ -2379,7 +2379,7 @@
                             enctype="multipart/form-data">
                             <div class="accordion-body">
                                 <div class="d-flex flex-wrap ">
-                                    <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                                    <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
                                         data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}">
                                         دفع المديونية مع الخصم </a>
                                     <div id="pay-total-discount_{{$id}}" class="modal fade" tabindex="-1"
@@ -2490,7 +2490,7 @@
                                     </div>
 
                                     <a data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}"
-                                        class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0) { disabled } @endif"
+                                        class=" btn-filter bg-info-subtle text-info px-4  mx-1 mb-2  @if($sum == 0) { disabled } @endif"
                                         onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
                                         دفع كامل المديونية
                                     </a>
@@ -2570,7 +2570,7 @@
                                     </div>
 
                                     <a data-bs-toggle="modal" data-bs-target="#pay-some_{{$id}}"
-                                        class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                        class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
                                         دفع جزء </a>
                                     <div id="pay-some_{{$id}}" class="modal fade" tabindex="-1"
                                         aria-labelledby="pay-someLabel{{$id}}" aria-hidden="true">
@@ -2656,7 +2656,7 @@
                                     </div>
 
                                     @if ($Installment['laws'] == 0)
-                                    <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                                    <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
                                         onclick="valthisform()">
                                         دفع </a>
                                     @endif

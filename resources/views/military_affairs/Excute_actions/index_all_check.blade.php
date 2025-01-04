@@ -9,10 +9,10 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a href=" {{route('all_checks')}}"
-           class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->get('check_type') == '' ? 'active' : '' }}  ">
+           class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2  {{ request()->get('check_type') == '' ? 'active' : '' }}  ">
             الجديدة </a>
         <a href="{{route('all_checks',array('check_type' =>1))}}"
-           class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2  {{ request()->get('check_type') == 1 ? 'active' : '' }}">
+           class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2  {{ request()->get('check_type') == 1 ? 'active' : '' }}">
             تم الايداع </a>
 
     </div>

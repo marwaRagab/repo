@@ -139,10 +139,10 @@
                                             icon="solar:alt-arrow-down-line-duotone"></iconify-icon></span>
 
                                     <div class="d-none d-sm-block">
-                                        <h6 class="fs-4 mb-1 profile-name">
+                                        <h6 class=" mb-1 profile-name">
                                             {{ Auth::user()->name_ar }}
                                         </h6>
-                                        <p class="fs-3 lh-base mb-0 profile-subtext">
+                                        <p class=" lh-base mb-0 profile-subtext">
                                             {{ Auth::user()->roles ? Auth::user()->roles->name_ar : '' }}
                                         </p>
                                     </div>

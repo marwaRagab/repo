@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 " href="{{ route('myinstall.index', ['status' => "refused"]) }}">
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 " href="{{ route('myinstall.index', ['status' => "refused"]) }}">
             العدد الكلي ({{ $data['counts']['rejectedCount'] }})
         </a>
     </div>
@@ -11,7 +11,7 @@
         <h4 class="card-title mb-0"> المعاملات المرفوضة</h4>
         <div class="d-flex">
 
-            {{-- <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="./archive.html">
+            {{-- <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="./archive.html">
                 الارشيف </a> --}}
         </div>
     </div>
@@ -55,12 +55,12 @@
                           <h6>لا يوجد استعلام قضائى</h6>
                       @endif
                         <div>
-                          <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+                          <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " data-bs-toggle="modal"
                             data-bs-target="#estlaam-modal-md" data-id="{{ $item->id }}" data-name="{{ $item->name_ar }}">
                             استعلام قضائي </a>
                         </div>
                         <div>
-                          <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="">
+                          <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="">
                             صوره الاستعلام </a>
                         </div>
                       </div> </td>
@@ -135,7 +135,7 @@
                                       @csrf
                                       <input type="hidden" name="status" value="archive">
                                     {{-- <a class="btn btn-secondary w-100 mt-2" data-bs-toggle="modal" data-bs-target="#archive"> --}}
-                                      <button class="btn btn-success rounded-0 w-100 mt-2" type="submit">
+                                      <button class="btn btn-success rounded-1 w-100 mt-2" type="submit">
 
                                   تحويل للارشيف</button> </form>
                               @endif

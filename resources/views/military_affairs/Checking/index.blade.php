@@ -8,19 +8,19 @@
 @endphp
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a  href="{{route('checking')}}"  class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a  href="{{route('checking')}}"  class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             التدقيق </a>
-        <a   href="{{route('checking',array('checking_type' =>'actions_up'))}}"    class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a   href="{{route('checking',array('checking_type' =>'actions_up'))}}"    class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             رفع الإجراءات </a>
-        <a  href="{{route('checking',array('checking_type' =>'all_reminders'))}}"  class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a  href="{{route('checking',array('checking_type' =>'all_reminders'))}}"  class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             مبالغ مسترجعة</a>
 
-        <a    href="{{route('checking',array('checking_type' =>'archive'))}}" class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a    href="{{route('checking',array('checking_type' =>'archive'))}}" class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
             الأرشيف </a>
     </div>
 </div>
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> رفع الإجراءات</h4>
     </div>
     <div class="card-body">
@@ -230,12 +230,14 @@
                                                         التدقيق </h4>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body">
-                                                    <h6>التدقيق
+                                                <div class="modal-body ">
+                                                   <div class="d-flex justify-content-between">
+                                                   <h6>التدقيق
                                                     </h6>
                                                     <a class="btn btn-success me-6"  href="" >
                                                         طباعة
                                                     </a>
+                                                   </div>
 
                                                     <div class="form-row">
                                                         <div class="form-group">

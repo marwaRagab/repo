@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> طرق التواصل </h4>
         <div class="d-flex">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " data-bs-toggle="modal"
                 data-bs-target="#bs-example-modal-md">
                 أضف جديد </button>
             <!-- sample modal content -->
@@ -78,7 +78,7 @@
                                 <div class="d-block">
 
                                     <div>
-                                        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                             data-bs-toggle="modal"
                                             data-bs-target="#edit-example-modal-md-{{ $method->id }}">
                                             تعديل </button>
@@ -142,7 +142,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="btn me-1 mb-1 bg-danger-subtle text-danger px-4 fs-4">
+                                                class="btn me-1 mb-1 bg-danger-subtle text-danger px-4 ">
                                                 حذف
                                             </button>
                                         </form>

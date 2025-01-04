@@ -1,29 +1,29 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-2  mx-1 mb-2 ">
             اجمالي قرارات الدين (1221)
         </a>
-        <a class="btn-filter bg-info-subtle text-info  px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-info-subtle text-info  px-2  mx-1 mb-2">
             اجمالي المبلغ المتبقي (1221)
         </a>
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             اجمالي المبلغ المحصل شيكات (1221)
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             اصل الدين (1221)
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             عدد الاستقطاعات (1221)
         </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
 
             قيمة الاستقطاعات شهريا (1221) </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
+        <a class="btn-filter px-2 bg-primary-subtle text-primary mx-1 mb-2">
             الارباح (1221) </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
             باقي اصل الدين (1221) </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
+        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-2  mx-1 mb-2 ">
             باقي الارباح (1221) </a>
     </div>
 </div>
@@ -33,10 +33,10 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عملاء الاقساط</h4>
         <div class="d-flex">
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                 href="{{ route('installment.finished_installments') }}">
                 الارشيف </a>
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('installment.excel') }}">
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="{{ route('installment.excel') }}">
                 تصدير عملاء الاقساط </a>
         </div>
     </div>
@@ -102,13 +102,13 @@
                                 <div class="d-block">
 {{--                                    @if(auth()->user()->hasPermission('delete_products'))--}}
                                     <div>
-                                        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                             href="{{ route('installment.show-installment', ['id' => $item->id]) }}">
                                             عرض التفاصيل
                                         </a>
                                     </div>
 {{--                                    @endif--}}
-                                    <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                    <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                         data-bs-toggle="modal" data-bs-target="#open-file">
                                         تعديل الرابط </button>
                                     <!-- sample modal content -->

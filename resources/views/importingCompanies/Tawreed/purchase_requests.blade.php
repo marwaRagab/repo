@@ -39,7 +39,7 @@
 
             <input type="text" class="form-control rounded-3 py-2 ps-5 text-dark" placeholder="ابحث هنا ....">
         </form>
-        <a class=" btn-filter  me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 " type="submit"
+        <a class=" btn-filter  me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 " type="submit"
             href="{{ route('tawreed.purchaseOrdersArchive') }}">
             الارشيف </a>
     </div>

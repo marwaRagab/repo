@@ -15,17 +15,17 @@
     @endphp
 
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" href="{{route('settle.index')}}">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2" href="{{route('settle.index')}}">
             العدد الكلي ({{count($settlement_all)}})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" href="{{route('settle.index',array('type' =>'request'))}}">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2" href="{{route('settle.index',array('type' =>'request'))}}">
             طلبات التسوية ({{count($settlement_all->where('type',2))}})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" href="{{route('settle.index',array('type' =>'done'))}}">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2" href="{{route('settle.index',array('type' =>'done'))}}">
             اتمام التسوية
             ({{count($settlement_all->where('type',1))}}) </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" href="{{route('settle.index',array('type' =>'canceled'))}}">
+        <a class="btn-filter bg-danger-subtle text-danger px-2 mx-1 mb-2" href="{{route('settle.index',array('type' =>'canceled'))}}">
             الغاء التسوية ({{count($settlement_all->where('type',3))}}) </a>
     </div>
 

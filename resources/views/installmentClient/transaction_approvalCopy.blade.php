@@ -9,17 +9,17 @@
 <div class="card ">
 <div class="card-body">
 
-    <div class="flex justify-around mt-3">
-        <label class="block mx-1 mt-3">
+    <div class="flex justify-around ">
+        <label class="block mx-1">
             <input type="radio" name="inputType" value="barcode" onclick="toggleInput('barcode')" />
             الباركود
         </label>
-        <label class="block mt-3 mx-1">
+        <label class="block mx-1">
             <input type="radio" name="inputType" value="serial" onclick="toggleInput('serial')" />
             السريال نمبر
         </label>
         <button
-            class="btn mx-1 mt-2 bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
+            class="btn mx-1  bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90"
             type="button" onclick="addItem(event)">
             اضافة
         </button>
@@ -364,19 +364,18 @@
             @enderror
         </div>
         <div class="form-group mb-3 col-lg-5 col-md-7">
-            <div class="row">
-                <div class="col-6">
+            <div class="d-flex flex wrap ">
+                
                     <a href="{{url('installmentApprove/print_eqrardain/'.$data->id.'/'.'0.00')}}"
-                        class="btn btn-primary">
+                        class="btn btn-primary mx-1">
                         طباعة اقرار الدين
                     </a>
-                </div>
-                <div class="col-6">
+               
                     <a  href="{{url('installmentApprove/print_eqrardain_mothaq/0.00')}}"
-                        class="btn btn-primary ">
+                        class="btn btn-primary mx-1">
                         طباعة نموذج للموثق
                     </a>
-                </div>
+              
             </div>
         </div>
 

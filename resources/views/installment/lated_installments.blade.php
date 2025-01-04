@@ -1,12 +1,12 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-2  mx-1 mb-2 ">
             الكل </a>
-        <a class="btn-filter bg-info-subtle text-info  px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-info-subtle text-info  px-2  mx-1 mb-2">
             استقطاع الشركة </a>
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             الاستقطاع الشخصي </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             دفع يدوي </a>
 
 
@@ -17,9 +17,9 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء المتأخرون</h4>
         <!-- <div class="d-flex">
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="./installment-archive.html">
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="./installment-archive.html">
           الارشيف </a>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
           href="./transfer-admin-installments.html">
           تصدير عملاء الاقساط </a>
       </div> -->
@@ -92,12 +92,12 @@
                         <td>
                             {{-- <div class="d-block">
                                 <div>
-                                    <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                    <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                         href="./show-installment.html">
                                         عرض التفاصيل
                                     </a>
                                 </div>
-                                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                     data-bs-toggle="modal" data-bs-target="#bs-example-modal-md">
                                     تعديل الرابط </button>
                                 <!-- sample modal content -->

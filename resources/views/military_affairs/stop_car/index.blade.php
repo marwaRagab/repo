@@ -8,12 +8,12 @@ ini_set('memory_limit', '256M');
 
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap">
-        <a href="{{ route('stop_car') }}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a href="{{ route('stop_car') }}" class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             الكل
         </a>
         @foreach ($courts as $court)
             <a href="{{ route('stop_car', ['governate_id' => $court->id]) }}"
-                class="btn-filter {{ $court->style }} px-4 fs-4 mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
+                class="btn-filter {{ $court->style }} px-2  mx-1 mb-2 {{ $governateId == $court->id ? 'active' : '' }}">
                 {{ 'محكمة '.$court->name_ar }} ({{ $count['govern_counter_' . $court->id] ?? 0 }})
             </a>
         @endforeach
@@ -24,7 +24,7 @@ ini_set('memory_limit', '256M');
         <div class="d-flex flex-wrap">
             @foreach ($stop_car_types as $itemType)
                 <a href="{{ route('stop_car', ['stop_car_type' => $itemType->slug, 'governate_id' => $governateId]) }}"
-                    class="btn-filter {{ $itemType->style }} px-4 fs-4 mx-1 mb-2 {{ $stopCarType == $itemType->slug ? 'active' : '' }}">
+                    class="btn-filter {{ $itemType->style }} px-2  mx-1 mb-2 {{ $stopCarType == $itemType->slug ? 'active' : '' }}">
                     {{ $itemType->name_ar }} ({{ $counts['stop_car_count_' . $itemType->id] ?? 0 }})
                 </a>
             @endforeach
@@ -32,7 +32,7 @@ ini_set('memory_limit', '256M');
     </div>
 
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0">حجز السيارات</h4>
     </div>
     <div class="card-body">

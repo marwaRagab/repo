@@ -2,11 +2,11 @@
 
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a   class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a   class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
             فعال </a>
-        <a   href="{{route('checking',array('eqrardain_type' =>'requre_cancel'))}}"   class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a   href="{{route('checking',array('eqrardain_type' =>'requre_cancel'))}}"   class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2">
             مطلوب إلغاؤه </a>
-        <a   href="{{route('checking',array('eqrardain_type' =>'canceled'))}}"  class="btn-filter  bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2">
+        <a   href="{{route('checking',array('eqrardain_type' =>'canceled'))}}"  class="btn-filter  bg-primary-subtle text-primary px-4  mx-1 mb-2">
             ملغي </a>
     </div>
 </div>
@@ -14,10 +14,10 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">إقرارات الدين </h4>
         <div class="button-group">
-            {{--<button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+            {{--<button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " data-bs-toggle="modal"
                     data-bs-target="#add">
                 أضف إقرار دين </button>--}}
-            <button class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 " data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-success-subtle text-success px-4  " data-bs-toggle="modal"
                     data-bs-target="#data">
                 الإحصائيات</button>
         </div>
@@ -142,35 +142,35 @@
             </div>
             <div class="modal-body">
                 <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <div class="p-3 border rounded-2 mb-3 bg-success-subtle text-success">
+                <div class="p-3 border rounded-2 mb-3 bg-success-subtle text-success w-25">
                         <p> {{$eqrar_all}} د.ك </p>
                         <h6>اجمالى اقرارات الدين
                         </h6>
                     </div>
-                    <div class="p-3 border rounded-2 mb-3 bg-warning-subtle text-warning">
+                    <div class="p-3 border rounded-2 mb-3 bg-warning-subtle text-warning  w-25">
                         <p> {{$reminder}} د.ك </p>
                         <h6>اجمالى المبلغ المتبقى
 
                         </h6>
                     </div>
-                    <div class="p-3 border rounded-2 mb-3 bg-primary-subtle text-primary">
+                    <div class="p-3 border rounded-2 mb-3 bg-primary-subtle text-primary  w-25">
                         <p> {{$eqrar_2023}} د.ك </p>
                         <h6>اجمالى اقرارات الدين 2023
 
                         </h6>
                     </div>
-                    <div class="p-3 border rounded-2 mb-3 bg-danger-subtle text-danger">
+                    <div class="p-3 border rounded-2 mb-3 bg-danger-subtle text-danger  w-25">
                         <p> {{$amount_military_affairs}} د.ك </p>
                         <h6>اجمالى مبالغ المحولين للشئون
 
                         </h6>
                     </div>
-                    <div class="p-3 border rounded-2 mb-3 bg-info-subtle text-info">
+                    <div class="p-3 border rounded-2 mb-3 bg-info-subtle text-info  w-25">
                         <p> {{$installment_military_affairs_2023}} د.ك </p>
                         <h6>اجمالى مبالغ المحولين للشئون2023
                         </h6>
                     </div>
-                    <div class="p-3 border rounded-2 mb-3 bg-success-subtle text-success">
+                    <div class="p-3 border rounded-2 mb-3 bg-success-subtle text-success  w-25">
                         <p>  {{$items_not_laws}} د.ك </p>
                         <h6> اجمالى مبالغ غير المحولين للشئون
                         </h6>2023

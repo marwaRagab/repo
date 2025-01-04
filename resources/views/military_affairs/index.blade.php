@@ -1,51 +1,51 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             العدد الكلي ({{ $count['all_military_affairs_count'] }})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" href="{{ route('open_file') }}">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2" href="{{ route('open_file') }}">
             فتح ملف ({{ $count['open_file_count'] }})
         </a>
-        <a class="btn-filter  bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2" href="{{ route('image') }}">
+        <a class="btn-filter  bg-primary-subtle text-primary px-2  mx-1 mb-2" href="{{ route('image') }}">
             الايمج
             ({{ $count['images_count'] }}) </a>
 
-        <a class="btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" href="{{ route('execute_alert') }}">
+        <a class="btn-filter bg-info-subtle text-info px-2  mx-1 mb-2" href="{{ route('execute_alert') }}">
 
             أعلان التنفيذ
             ({{ $count['execute_alert_count'] }}) </a>
-        <a class="btn-filter px-4 bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" href="{{ route('case_proof') }}">
+        <a class="btn-filter px-2 bg-danger-subtle text-danger px-2  mx-1 mb-2" href="{{ route('case_proof') }}">
             أثبات الحالة ({{ $count['case_proof_count'] }})
         </a>
-        <a class="btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" href="{{ route('Certificate') }}">
+        <a class="btn-filter bg-info-subtle text-info px-2  mx-1 mb-2" href="{{ route('Certificate') }}">
             أصدار الشهادة العسكرية ({{ $count['Military_certificate_count'] }})
         </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 "
+        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-2  mx-1 mb-2 "
             href="{{ route('stop_travel') }}">
             منع السفر ({{ $count['stop_travel_count'] }})
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" href="{{ route('stop_car') }}">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2" href="{{ route('stop_car') }}">
             حجز السيارات
             ({{ $count['stop_car_count'] }}) </a>
 
-        <a class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2" href="{{ route('stop_salary') }}">
+        <a class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2" href="{{ route('stop_salary') }}">
 
             حجز راتب
             ({{ $count['stop_salary_count'] }}) </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2" href="{{ route('stop_bank') }}">
+        <a class="btn-filter px-2 bg-primary-subtle text-primary  mx-1 mb-2" href="{{ route('stop_bank') }}">
             حجز بنوك ({{ $count['stop_bank_count'] }})
         </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2" href="{{ route('papers.eqrar_dain') }}">
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2" href="{{ route('papers.eqrar_dain') }}">
             اقرارات الدين غير مستلمة ({{ $count['eqrar_dain_count'] }})
         </a>
-        <a class="btn-filter px-4 bg-warning-subtle text-pwarningfs-4 mx-1 mb-2"
+        <a class="btn-filter px-2 bg-warning-subtle text-pwarning  mx-1 mb-2"
             href="{{ route('papers.eqrar_dain_received') }}">
             اقرارات الدين مستلمة ({{ $count['eqrar_dain_received_count'] }})
         </a>
-        <a class="btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2" href="{{ route('settle.index') }}">
+        <a class="btn-filter bg-info-subtle text-info px-2  mx-1 mb-2" href="{{ route('settle.index') }}">
             رصيد التنفيذ ({{ $count['excute_actions_count'] }})
         </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 "
+        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-2  mx-1 mb-2 "
             href="{{ route('excute_actions') }}">
             التسوية ({{ $count['settlement_count'] }})
         </a>

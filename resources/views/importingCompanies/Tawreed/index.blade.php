@@ -1,11 +1,11 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <!-- <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+        <!-- <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
             href="./sending-archive.html">
             الارشيف
         </a> -->
 
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
             href="{{ route('tawreed.purchaseOrders') }}">
             ارسال طلبات التوريد
         </a>
@@ -33,7 +33,7 @@
                     @foreach ($data as $company)
                         <tr>
                             <td> {{ $company->name_ar }}</td>
-                            <td> <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                            <td> <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
                                     href="{{ route('tawreed.searchForm', $company->id) }}">
                                     طلب شراء جديد
                                 </a></td>

@@ -1,7 +1,7 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a href="{{route('case_proof')}}"
-           class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+           class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             العدد الكلي ({{ count_court('' ,'case_proof',null,null) }})
         </a>
 
@@ -9,14 +9,14 @@
 
 
             <a href="{{route('case_proof',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"   > {{$court->name_ar}} ({{ count_court($court->id ,'case_proof',null,null) }})
+               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2"   > {{$court->name_ar}} ({{ count_court($court->id ,'case_proof',null,null) }})
             </a>
 
         @endforeach
     </div>
 </div>
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> اثبات الحالة </h4>
     </div>
     <div class="card-body">
@@ -27,41 +27,41 @@
 
                 <tr>
                     <th
-                        class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         #
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         رقم المعاملة
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         اسم العميل
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تاريخ البدء
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تاريخ فتح الملف
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         المبلغ
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الرقم الآلي
                     </th>
 
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تاريخ النتيجة
                     </th>
 
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         المحكمة
                     </th>
 
@@ -70,7 +70,7 @@
                     </th>
 
                     <th
-                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الإجراءات
                     </th>
                 </tr>

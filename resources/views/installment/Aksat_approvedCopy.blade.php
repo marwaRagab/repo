@@ -523,13 +523,13 @@
                         aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExampleItems">
                         <div class="accordion-body">
                             <div class="d-flex flex-wrap ">
-                                <a class="  me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+                                <a class="  me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 ">
                                     المفتوحة : 0.000 د.ك
                                 </a>
-                                <a class=" bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
+                                <a class=" bg-success-subtle text-success  px-4  mx-1 mb-2">
                                     المغلقة : 2276.000 د.ك
                                 </a>
-                                <a class=" bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                <a class=" bg-warning-subtle text-warning px-4  mx-1 mb-2">
                                     الإجمالي : 2276.000 د.ك
                                 </a>
                             </div>
@@ -579,7 +579,7 @@
                             {{-- <div class="d-flex my-2 ">
                                 <h5>قضايا التنفيذ</h5>
                                 <div class="my-1">
-                                    <a class="  me-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+                                    <a class="  me-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 ">
                                         الإجمالي : 0 د.ك
                                     </a>
                                 </div>

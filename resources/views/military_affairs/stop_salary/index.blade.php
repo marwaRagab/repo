@@ -1,13 +1,13 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2" href="{{route('stop_salary')}}">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2" href="{{route('stop_salary')}}">
             الكل ({{ $total_count}})
         </a>
 
         @foreach($courts as $court)
 
         <a href="{{route('stop_salary',array('court' => $court->id ))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2"> {{$court->name_ar}} ({{ $court->counter}})
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2"> {{$court->name_ar}} ({{ $court->counter}})
         </a>
 
         @endforeach
@@ -20,7 +20,7 @@
         @foreach($ministries as $one)
 
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => $one->id ))}}"
-            class="btn-filter bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2"> {{$one->name_ar}}
+            class="btn-filter bg-primary-subtle text-primary px-2  mx-1 mb-2"> {{$one->name_ar}}
             ({{ $one->counter}})
         </a>
 
@@ -34,7 +34,7 @@
 
         @foreach($item_type_time as $item_type)
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->slug ))}}"
-            class="btn-filter bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
+            class="btn-filter bg-success-subtle text-success  px-2  mx-1 mb-2">
             {{$item_type->name_ar}} ({{ $item_type->counter}})
         </a>
         @endforeach
@@ -42,7 +42,7 @@
 </div>
 @endif
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> حجز راتب </h4>
     </div>
     <div class="card-body">

@@ -1,32 +1,32 @@
 <div class="card mt-4 py-3">
   <div class="d-flex flex-wrap ">
-    <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+    <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
       العدد الكلي (5857)
     </a>
-    <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+    <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
       محكمة الجهراء (5)
     </a>
-    <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+    <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
       محكمة مبارك الكبير
       (0) </a>
 
-    <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+    <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
 
       محكمة الأحمدي
       (0) </a>
-    <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
+    <a class="btn-filter  bg-primary-subtle text-primary mx-1 px-2 mb-2">
       محكمة حولي (1)
     </a>
-    <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+    <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
       محكمةالرقعي (1)
     </a>
-    <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
+    <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-2  mx-1 mb-2 ">
       محكمة قصر العدل (2)
     </a>
   </div>
 </div>
 <div class="card">
-  <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+  <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
     <h4 class="card-title mb-0">فتح ملف</h4>
   </div>
 <div class="card-body">
@@ -70,7 +70,7 @@
 
           <td>
 
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " data-bs-toggle="modal"
               data-bs-target="#open-file">
               فتح ملف </button>
             <!-- sample modal content -->

@@ -1,16 +1,16 @@
 
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-static bg-warning-subtle text-warning px-4 fs-4 mx-2 mb-2">
+        <a class="btn-static bg-warning-subtle text-warning px-4  mx-2 mb-2">
             <h5> {{ $newOrdersCount }}</h5>
             عدد طلبات الشراء الجديدة
         </a>
-        <a class="btn-static bg-success-subtle text-success px-4 fs-4 mx-2 mb-2">
+        <a class="btn-static bg-success-subtle text-success px-4  mx-2 mb-2">
             <h5> 717,803.945
             </h5>
             المدفوعات
         </a>
-        <a class="btn-static bg-primary-subtle text-primary px-4 fs-4 mx-2 mb-2">
+        <a class="btn-static bg-primary-subtle text-primary px-4  mx-2 mb-2">
 
             <h5>152,029.950</h5>
             الديون
@@ -20,7 +20,7 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">الشركات الموردة</h4>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('company.create') }}">
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="{{ route('company.create') }}">
             أضف شركة جديدة </a>
     </div>
     <div class="card-body">

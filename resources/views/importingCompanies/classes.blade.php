@@ -1,10 +1,10 @@
 <div class="card mt-4 py-3">
     <div class="d-flex align-items-center justify-content-between px-4  ">
         <h4 class="card-title mb-0"> الصنف</h4>
-        <div class="d-flex">
+        <div class="d-flex flex-wrap">
             <a href=" {{ route('products.print_all') }}"
-                    class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "> طباعه </a>
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+                    class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "> طباعه </a>
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 " data-bs-toggle="modal"
                 data-bs-target="#bs-example-modal-md">
                 أضف صنف جديد </button>
         </div>
@@ -77,7 +77,7 @@
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $class->name_ar }}</td>
                             <td>
-                                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 "
                                     data-bs-toggle="modal" data-bs-target="#bs-example-modal-edit-{{ $class->id }}">
                                     تعديل </button>
                                 <!-- edit model  -->

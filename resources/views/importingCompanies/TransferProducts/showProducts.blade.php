@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+        <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 "
             href="{{ route('transferProduct.index') }}">
             المنتجات المتوفرة
         </a>

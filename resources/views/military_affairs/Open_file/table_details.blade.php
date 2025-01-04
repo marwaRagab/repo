@@ -23,7 +23,7 @@
 
     <td>
 
-        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4" data-bs-toggle="modal"
             data-bs-target="#open-file-{{ $item->id }}"
             {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
             فتح ملف
@@ -130,7 +130,7 @@
             <!-- /.modal-dialog -->
         </div>
         <br>
-        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4" data-bs-toggle="modal"
             data-bs-target="#return_to_lated-{{ $item->id }}">
             الرجوع الى العملاء المتاخرين
         </button>

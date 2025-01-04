@@ -1,8 +1,8 @@
 <div class="card mt-4 p-4">
-    <h5 class="pb-3">البحث</h5>
+    <h5 class="">البحث</h5>
     <form class="mega-vertical" action="{{ route('search.get_searched')}}" method="post" enctype="multipart/form-data">
         @csrf
-        <div class="form-rows row align-items-end justify-content-center">
+        <div class="form-rows row align-items-end justify-content-center pb-3">
             <div class="form-group col-md-3">
                 <label for="name" class="form-label">الاسم</label>
                 <input type="text" class="form-control" name="name">
@@ -23,25 +23,25 @@
 </div>
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a href="?" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a href="?" class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
             العدد الكلي (5857)
         </a>
 
-        <a href="?" class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a href="?" class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             محكمة الجهراء (5)
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2">
             محكمة مبارك الكبير
             (0) </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-2  mx-1 mb-2">
 
             محكمة الأحمدي
             (0) </a>
     </div>
 </div>
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> الإجراءات</h4>
     </div>
     <div class="card-body">

@@ -23,7 +23,7 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <h5 class="mb-3">معاملة جديدة <span class="text-info"></span></h5>
+                    <h5 class="my-3">معاملة جديدة <span class="text-info"></span></h5>
                     <input type="hidden" name="installment_clients_id" id="installment_clients_id"
                         value="{{ $Installment_client }}">
                     <div class="form-group col-12">
@@ -64,9 +64,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer d-flex ">
-                    <button type="button" class="btn btn-secondary" id="addRowBtn2">اضافة سيارة جديدة</button>
-                    <button type="button" class="btn btn-primary" id="savecar"
+                <div class="modal-footer d-flex flex-wrap ">
+                    <button type="button" class="btn btn-secondary mx-1" id="addRowBtn2">اضافة سيارة جديدة</button>
+                    <button type="button" class="btn btn-primary mx-1" id="savecar"
                         onclick="validateCarModalForm()">حفظ</button>
                     <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
                         data-bs-dismiss="modal">

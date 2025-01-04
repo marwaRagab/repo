@@ -1,16 +1,16 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+        <a class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-2 fs-4 mx-1 mb-2 ">
             عدد المنتجات ({{ $totalProducts }})
         </a>
-        <a class="btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-info-subtle text-info px-2 fs-4 mx-1 mb-2">
             اجمالي صافي التكلفة ({{ number_format($totalNetPrice, 2) }})
         </a>
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2 fs-4 mx-1 mb-2">
             اجمالي سعر البيع ({{ number_format($totalPrice, 2) }})
         </a>
     </div>
-
+</div>
     <div class="card">
         <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
             <h4 class="card-title mb-0"> المنتجات</h4>

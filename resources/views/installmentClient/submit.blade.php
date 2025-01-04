@@ -1,12 +1,12 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         @if (request()->route('status') === 'submit_archive')
-            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 mx-1 mb-2 "
                 href="{{ route('myinstall.index', ['status' => 'submit_archive']) }}">
                 العدد الكلي ({{ App\Models\Installment_Client::where('status', 'submit_archive')->count() }})
             </a>
         @else
-            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 mx-1 mb-2 "
                 href="{{ route('myinstall.index', ['status' => 'transaction_submited']) }}">
                 العدد الكلي ({{ $data['counts']['transaction_submitedCount'] }})
             </a>
@@ -20,7 +20,7 @@
         <div class="d-flex">
             @if (request()->route('status') === 'submit_archive')
             @else
-                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 "
                     href="{{ route('myinstall.index', ['status' => 'submit_archive']) }}">
                     الارشيف </a>
             @endif

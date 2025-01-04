@@ -35,7 +35,7 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> طلبات الشراء المرسلة </h4>
-        <a class=" btn-filter  me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 " type="submit"
+        <a class=" btn-filter  me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 " type="submit"
             href="{{ route('tawreed.purchaseOrders') }}">
             طلبات الشراء الجديدة
         </a>

@@ -76,13 +76,13 @@
                         <h3>ملاحظات القضايا</h3>
                         <div class="d-flex flex-wrap ">
                             <a id="openIssueCount"
-                                class="me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2">
+                                class="me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2">
                                 المفتوحة : {{ $opening_amount }}د.ك
                             </a>
-                            <a id="closeIssueCount" class="bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+                            <a id="closeIssueCount" class="bg-success-subtle text-success px-4  mx-1 mb-2">
                                 المغلقة : {{ $closing_amount }} د.ك
                             </a>
-                            <a id="totalIssueCount" class="bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                            <a id="totalIssueCount" class="bg-warning-subtle text-warning px-4  mx-1 mb-2">
                                 الإجمالي : {{ $totalissue }} د.ك
                             </a>
                         </div>

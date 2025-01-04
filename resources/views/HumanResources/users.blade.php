@@ -20,7 +20,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> المستخدمين</h4>
         <div class="d-flex">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4" data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 " data-bs-toggle="modal"
                 data-bs-target="#add-user-modal">
                 أضف جديد
             </button>
@@ -243,7 +243,7 @@
                                 </td>
                                 <td>
                                     <div class="d-block">
-                                        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4"
+                                        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 "
                                             data-bs-toggle="modal"
                                             data-bs-target="#edit-example-modal-md-{{ $user->id }}">
                                             تعديل

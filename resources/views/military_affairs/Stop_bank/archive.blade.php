@@ -12,13 +12,13 @@
 
     <div class="d-flex flex-wrap ">
         <a href="{{route('stop_bank.archive')}}"
-           class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2   {{ request()->get('governorate_id') == '' ? 'active' : '' }} ">
+           class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2   {{ request()->get('governorate_id') == '' ? 'active' : '' }} ">
             العدد الكلي ({{ count_court('' ,'stop_bank_archive',null,null) }})
         </a>
         @foreach($courts as $court)
 
             <a href="{{route('stop_bank.archive',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}
+               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}
                 ({{ count_court($court->id ,'stop_bank_archive',null,null) }})
             </a>
 
@@ -29,7 +29,7 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> حجز بنوك </h4>
-        <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 " href="{{route('stop_bank.print_archive')}}">
+        <a class="btn me-1 mb-1 bg-success-subtle text-success px-4  " href="{{route('stop_bank.print_archive')}}">
             طباعة الإرشيف </a>
     </div>
     <div class="card-body">

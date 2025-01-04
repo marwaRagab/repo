@@ -28,7 +28,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3 mb-4">
               <img class="logo-data" src="{{ asset('assets/images/logos/logo.jpg')}}" height="120"  alt="Logo">
               <div class="d-flex">
                 <button class="btn btn-primary text-white mx-1">
@@ -115,7 +115,7 @@
                  <div class="alert alert-danger">{{ $message }}</div>
              @enderror
                 </div>
-                <div class="col-6 mb-3">
+                <div class="col-md-6  mb-3">
                   <label for="area" class="form-label">اختار المنطقة</label>
                   <select class="form-select"  name="area_id">
                     @foreach ($region as $item)
@@ -126,7 +126,7 @@
                  <div class="alert alert-danger">{{ $message }}</div>
              @enderror
                 </div>
-                <div class="col-6 mb-3">
+                <div class="col-md-6 mb-3">
 
                       <label class="form-label"> مجموع الاقساط </label>
                       <input type="text" name="installment_total"  class="form-control" />

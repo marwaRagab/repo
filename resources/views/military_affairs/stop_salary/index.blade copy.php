@@ -4,7 +4,7 @@ $arr=['success','danger','primary','secondary','info','warning'];
 @endphp
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
 
             العدد الكلي ({{ count($govern_count_total) }})
         </a>
@@ -16,31 +16,31 @@ $arr=['success','danger','primary','secondary','info','warning'];
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
 
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2">
             طلب حجز الراتب ()
         </a>
-        <a class="btn-filter  bg-success-subtle text-success px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2">
             أمر حجز الراتب
             () </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-4  mx-1 mb-2">
 
             صباح السالم
             () </a>
-        <a class="btn-filter px-4 bg-primary-subtle text-primaryfs-4 mx-1 mb-2">
+        <a class="btn-filter px-4 bg-primary-subtle text-primary mx-1 mb-2">
             شئون القوة ()
         </a>
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-4  mx-1 mb-2">
             المالية ()
         </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
+        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4  mx-1 mb-2 ">
             الاستقطاع ()
         </a>
 
-        <a class="btn-filter bg-danger-subtle text-danger px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-danger-subtle text-danger px-4  mx-1 mb-2">
             طلب رفع الحجز ()
         </a>
-        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4 fs-4 mx-1 mb-2 ">
+        <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-4  mx-1 mb-2 ">
             رفع الحجز ()
         </a>
     </div>

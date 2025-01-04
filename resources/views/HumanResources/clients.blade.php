@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العملاء</h4>
         <div class="d-flex">
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 " data-bs-toggle="modal"
                 data-bs-target="#bs-example-modal-md">
                 أضف جديد
             </button>
@@ -328,7 +328,7 @@
                                 <div class="d-block">
 
                                     <div>
-                                        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                                        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 "
                                             href="{{ route('clients.show', $client->id) }}">
                                             تعديل
                                         </a>
@@ -340,7 +340,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="btn me-1 mb-1 bg-danger-subtle text-danger px-4 fs-4">
+                                                class="btn me-1 mb-1 bg-danger-subtle text-danger px-4 ">
                                                 حذف
                                             </button>
                                         </form>

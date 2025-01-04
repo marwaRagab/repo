@@ -6,13 +6,13 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
 
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
             العدد الكلي ({{ count_court('' ,'images',null,null) }})
         </a>
 
         @for ($i=0;$i<count($governorates);$i++)
 
-            <a  href="{{ route('image',$governorates[$i]->id) }}" class="btn-filter  bg-{{ $arr[$i] }}-subtle text-{{ $arr[$i] }} px-4 fs-4 mx-1 mb-2">
+            <a  href="{{ route('image',$governorates[$i]->id) }}" class="btn-filter  bg-{{ $arr[$i] }}-subtle text-{{ $arr[$i] }} px-4  mx-1 mb-2">
                 محكمة {{ $governorates[$i]->name_ar }}
                 ({{ count_court($governorates[$i]->id ,'images',null,null) }})
             </a>

@@ -18,7 +18,7 @@
         }
     @endphp
     <div class="d-flex flex-wrap ">
-        <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ !$gov && !$certificate_id && !$ministry ? 'active' : '' }}">
+        <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2 {{ !$gov && !$certificate_id && !$ministry ? 'active' : '' }}">
             العدد الكلي ({{ count_court('' ,'Certificate',null,null) }})
         </a>
 
@@ -26,21 +26,21 @@
 
             <a href="{{route('Certificate',array('governorate_id' => $court->id))}} "
 
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} ({{ count_court($court->id ,'Certificate',null,null) }}) </a>
+               class="btn-filter {{$court->style}}   px-4  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} ({{ count_court($court->id ,'Certificate',null,null) }}) </a>
 
         @endforeach
     </div>
     @if(Request::has('governorate_id'))
         <div class="d-flex flex-wrap ">
             <a href="{{route('Certificate',array('governorate_id' =>$gov))}}"
-               class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ !$ministry && !$certificate_id ? 'active' : '' }}">
+               class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2  {{ !$ministry && !$certificate_id ? 'active' : '' }}">
                 العدد الكلي ({{count($items)}})
             </a>
 
             @foreach($ministries as $ministie)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id'=> $ministie->id))}}"
-                   class="btn-filter {{$ministie->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('ministry_id') == $ministie->id ? 'active' : '' }}  "> {{$ministie->name_ar}}
+                   class="btn-filter {{$ministie->style}}   px-4  mx-1 mb-2 {{ request()->get('ministry_id') == $ministie->id ? 'active' : '' }}  "> {{$ministie->name_ar}}
                 </a>
 
             @endforeach
@@ -50,14 +50,14 @@
 
     @if(Request::has('ministry_id'))
         <div class="d-flex flex-wrap ">
-            <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ !$certificate_id ? 'active' : '' }}">
+            <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2 {{ !$certificate_id ? 'active' : '' }}">
                 العدد الكلي ({{count($items)}})
             </a>
 
             @foreach($Certificate_types as $Certificate_type)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
-                   class="btn-filter {{$Certificate_type->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
+                   class="btn-filter {{$Certificate_type->style}}   px-4  mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
                 </a>
 
             @endforeach

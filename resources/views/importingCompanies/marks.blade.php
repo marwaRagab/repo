@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+        <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-2  " data-bs-toggle="modal"
             data-bs-target="#bs-example-modal-md">
             أضف ماركة جديدة </button>
         <!-- sample modal content -->
@@ -109,7 +109,7 @@
                                 style="max-width: 100px; max-height: 100px;" />
                         </td>
                         <td>
-                            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 "
+                            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  "
                                 data-bs-toggle="modal" data-bs-target="#bs-example-modal-edit-{{ $mark->id }}">
                                 تعديل </button>
                             <!-- edit model  -->

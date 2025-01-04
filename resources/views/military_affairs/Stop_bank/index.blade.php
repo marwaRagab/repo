@@ -24,14 +24,14 @@
     @endphp
     <div class="d-flex flex-wrap ">
         <a href="{{route('stop_bank')}}"
-           class="btn-filter bg-success-subtle text-warning px-4 fs-4 mx-1 mb-2  {{ request()->has('governorate_id') == 0 ? 'active' : '' }}  ">
+           class="btn-filter bg-success-subtle text-warning px-2  mx-1 mb-2  {{ request()->has('governorate_id') == 0 ? 'active' : '' }}  ">
             العدد الكلي ({{ count_court('' ,'stop_bank',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
             <a href="{{route('stop_bank',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}({{ count_court($court->id ,'stop_bank',null,null) }})
+               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}({{ count_court($court->id ,'stop_bank',null,null) }})
             </a>
 
         @endforeach
@@ -44,7 +44,7 @@
         @foreach($stop_bank_types as $stop_bank_type)
 
             <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $stop_bank_type->slug))}}"
-               class="btn-filter {{$stop_bank_type->style}}   px-4 fs-4 mx-1 mb-2  {{ request()->get('stop_bank_type') == $stop_bank_type->id ? 'active' : '' }} "> {{$stop_bank_type->name_ar}}
+               class="btn-filter {{$stop_bank_type->style}}   px-2  mx-1 mb-2  {{ request()->get('stop_bank_type') == $stop_bank_type->id ? 'active' : '' }} "> {{$stop_bank_type->name_ar}}
             </a>
 
         @endforeach
@@ -59,7 +59,7 @@
 
         @foreach($dates as $one)
                 <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
-                   class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
+                   class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
                     {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
                 </a>
             @endforeach
@@ -71,7 +71,7 @@
             <div class="d-flex flex-wrap ">
                 @foreach($banks as $bank)
                     <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank['slug'],'date'=> $date))}}"
-                       class="btn-filter bg-success-subtle text-success px-4 fs-4 mx-1 mb-2 {{ request()->get('bank') == $bank['slug'] ? 'active' : '' }}   ">
+                       class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2 {{ request()->get('bank') == $bank['slug'] ? 'active' : '' }}   ">
                         {{$bank['name']}}
                     </a>
                 @endforeach
@@ -81,9 +81,9 @@
 @endif
 
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0">حجز بنوك </h4>
-        <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 " href="{{ route('stop_bank.archive') }}">
+        <a class="btn me-1 mb-1 bg-success-subtle text-success px-2  " href="{{ route('stop_bank.archive') }}">
             الإرشيف </a>
     </div>
     <div class="card-body">
@@ -94,46 +94,46 @@
 
                 <tr>
                     <th
-                        class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap rounded-tr-lg bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         #
                     </th>
 
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         اسم العميل
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         المحكمة
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         المبلغ
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تاريخ الحجز
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تاريخ اخر طلب
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الوزارة
                     </th>
                     <th
-                        class="whitespace-nowrap bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         تحديد مسئول
                     </th>
 
                     <th
-                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الحساب
                     </th>
 
                     <th
-                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-4 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
+                        class="whitespace-nowrap rounded-tl-lg bg-slate-200 px-2 py-3 font-semibold uppercase text-slate-800 dark:bg-navy-800 dark:text-navy-100 lg:px-5">
                         الإجراءات
                     </th>
                 </tr>

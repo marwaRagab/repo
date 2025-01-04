@@ -58,13 +58,13 @@
                                 <form method="GET"
                                     action="{{ route('tawreed.searchForm', ['companyId' => $items->first()->product->company_id]) }}">
                                     <button type="submit"
-                                        class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2">
+                                        class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2">
                                         متــابعة الشراء
                                     </button>
                                 </form>
                             @else
                                 <a href="{{ route('tawreed.index') }}"
-                                    class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2">
+                                    class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2">
                                     العودة إلى قائمة المنتجات
                                 </a>
                             @endif

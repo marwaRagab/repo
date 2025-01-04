@@ -1,12 +1,12 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
             الكل
         </a>
         @foreach($courts as $court)
 
         <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
         </a>
 
         @endforeach
@@ -14,9 +14,9 @@
 </div>
 
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> الشيكات المستلمة</h4>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{route('all_checks')}}">
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-2  " href="{{route('all_checks')}}">
             الشيكات المستلمة</a>
     </div>
 

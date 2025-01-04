@@ -1,14 +1,14 @@
 <div class="card mt-4 py-3">
-    <div class="row pt-3 px-4">
+
         <form method="POST" action="{{ route('tawreed.searchResults', $companyId) }}" class="w-100">
-            @csrf
-            <div class="col-md-2 mb-3">
+            @csrf    <div class="row pt-3 ">
+            <div class="col-md-6 col-sm-12 mb-3">
                 <input type="text" class="form-control" placeholder="الموديل" name="model">
             </div>
-            <div class="col-md-2 mb-3">
+            <div class="col-md-6 col-sm-12 mb-3">
                 <input type="text" class="form-control" placeholder="السريال/الباركود" name="number">
             </div>
-            <div class="col-md-2 mb-3">
+            <div class="col-md-6 col-sm-12 mb-3">
                 <select class="form-select" name="mark_id">
                     <option selected disabled>الماركة</option>
                     @foreach ($marks as $mark)
@@ -16,7 +16,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2 mb-3">
+            <div class="col-md-6 col-sm-12 mb-3">
                 <select class="form-select" name="class_id">
                     <option selected disabled>الصنف</option>
                     @foreach ($classes as $class)
@@ -24,18 +24,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2 mb-3">
-                <button class="btn btn-primary px-4" type="submit">بحث</button>
-            </div>
+            <div class="col-12">
+                <button class="btn btn-primary w-100" type="submit">بحث</button>
+            </div> </div>
         </form>
-        <div class="col-md-2 mb-3">
-            <div class="row pt-3 px-4">
+        <div class="col-12 my-3">
                 <a href=" {{ route('tawreed.cart') }}"
-                    class="btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2">
+                    class=" btn btn-info  mb-1 bg-primary-subtle text-primary w-100  mb-2">
                     متــابعة
                 </a>
-            </div>
-        </div>
+           
+       
     </div>
 </div>
 

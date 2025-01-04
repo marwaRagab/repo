@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card mt-4 py-3">
         <div class="d-flex flex-wrap ">
-            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+            <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 ">
 
                 @if (request()->route('status') === 'submit_archiveCount')
                     العدد الكلي ({{ $data['counts']['submit_archiveCount'] }})
@@ -19,7 +19,7 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> الارشيف </h4>
         <div class="d-flex">
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="./intermediaries.html">
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="./intermediaries.html">
                 الوسطاء </a>
         </div>
     </div>
@@ -84,17 +84,17 @@
                                                     <h5 class="mb-4 text-warning"> عفوا لا يوجد قضايا</h5>
                                                     <div class="d-flex flex-wrap ">
                                                         <a
-                                                            class="  me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+                                                            class="  me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 ">
                                                             المفتوحة :
                                                             {{ $item->installment_issue->sum('opening_amount') }}
                                                             د.ك
                                                         </a>
-                                                        <a class=" bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
+                                                        <a class=" bg-success-subtle text-success  px-4  mx-1 mb-2">
                                                             المغلقة :
                                                             {{ $item->installment_issue->sum('closing_amount') }}
                                                             د.ك
                                                         </a>
-                                                        <a class=" bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                                        <a class=" bg-warning-subtle text-warning px-4  mx-1 mb-2">
                                                             الإجمالي :
                                                             {{ $item->installment_issue->sum('closing_amount') + $item->installment_issue->sum('opening_amount') }}
                                                             د.ك
@@ -196,13 +196,13 @@
                                                     <h5 class="mb-4 text-warning"> عفوا لا يوجد سيارات</h5>
                                                     <div class="d-flex flex-wrap ">
                                                         {{-- <a
-                                                    class="  me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 ">
+                                                    class="  me-1 mb-1 bg-primary-subtle text-primary px-4  mx-1 mb-2 ">
                                                     المفتوحة : {{$item->installment_car->sum('opening_amount')}} د.ك
                                                 </a>
-                                                <a class=" bg-success-subtle text-success  px-4 fs-4 mx-1 mb-2">
+                                                <a class=" bg-success-subtle text-success  px-4  mx-1 mb-2">
                                                     المغلقة : 2276.000 د.ك
                                                 </a> --}}
-                                                        <a class=" bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+                                                        <a class=" bg-warning-subtle text-warning px-4  mx-1 mb-2">
                                                             الإجمالي :
                                                             {{ $item->installment_car->sum('average_price') }}
                                                             د.ك

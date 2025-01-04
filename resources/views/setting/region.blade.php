@@ -53,7 +53,7 @@
         </div>
     </div>
 
-</div>
+
 <div class="card-body">
     <div class="table-responsive pb-4">
         <table id="all-student" class="table table-bordered border text-nowrap align-middle">

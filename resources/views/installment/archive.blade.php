@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between px-4 py-1 border-bottom">
       <h4 class="card-title mb-0">ارشيف المعاملات</h4>
     </div>
     <div class="card-body">
@@ -57,7 +57,7 @@
               <td>
                 <div class="d-block">
                   <div>
-                    <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 ">
+                    <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  ">
                       عرض التفاصيل
                     </button>
                   </div>

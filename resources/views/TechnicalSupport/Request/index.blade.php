@@ -65,7 +65,7 @@
                             <td>{{ $request->user->name_ar }}</td>
                             <td> <a href="{{ $request->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
                             <td>
-                                <div class="btn-group dropup mb-6 me-6 d-block">
+                                <div class="btn-group dropup mb-6 me-sm-6  d-block">
                                     @if (auth()->user()->support == 1)
                                         <form
                                             action="{{ route('supportRequest.updateStatus', ['id' => $request->id]) }}"
@@ -122,7 +122,7 @@
                                         </form>
                                     @endif
                                 </div>
-                                <a class="btn btn-success btn-sm rounded me-6"
+                                <a class="btn btn-success btn-sm rounded me-sm-6 "
                                     href="{{ route('supportRequest.show', $request->id) }}">مشاهدة
                                     التفاصيل</a>
                             </td>

@@ -2,11 +2,11 @@
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0"> العهده <span class="text-info"> (تامر عبدالعظيم )</span></h4>
         <div class="d-flex">
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="./invoices.html">
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="./invoices.html">
                 الرسوم الادارية </a>
-            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="./fees.html">
+            <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " href="./fees.html">
                 العهد </a>
-            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
+            <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4  " data-bs-toggle="modal"
                 data-bs-target="#bs-example-modal-md">
                 أضف مبلغ جديد </button>
         </div>

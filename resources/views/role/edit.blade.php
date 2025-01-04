@@ -39,8 +39,8 @@
                             {{-- {{ dd($assignedPermissions) }} --}}
                             {{-- @foreach ($roles->permissions as $child) --}}
                             @foreach ($Permissions as $item)
-                                <div class="col-3 my-3">
-                                    <li>
+                            <div class="col-md-3 col-sm-12 my-3">
+                            <li>
                                         <label class="text-indigo my-2">
                                             {{-- <input type="checkbox" name="permissions[]"
                                             value="{{ $item->id }}" class="m-2" {{ in_array($item->id, $assignedPermissions) ? "checked" : "" }}> --}}

@@ -3,13 +3,13 @@
     <div class="d-flex flex-wrap ">
 
 
-        <a   href="{{route('open_file')}}" class="btn-filter bg-warning-subtle text-warning px-4 fs-4 mx-1 mb-2">
+        <a   href="{{route('open_file')}}" class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
             العدد الكلي ({{ count_court('' ,'open_file',null,null) }})
         </a>
 
         @foreach($courts as $court)
             <a href="{{route('open_file',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-4 fs-4 mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "  > {{$court->name_ar}}({{ count_court($court->id ,'open_file',null,null) }})
+               class="btn-filter {{$court->style}}   px-4  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "  > {{$court->name_ar}}({{ count_court($court->id ,'open_file',null,null) }})
             </a>
         @endforeach
     </div>
