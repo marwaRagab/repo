@@ -30,7 +30,7 @@ class Installment extends Model
     {
         return $this->hasOne(InstallmentPaper::class, 'installment_id');
     }
-    
+
     public function eqrar_not_recieve()
     {
         return $this->belongsTo(Eqrars_details::class,'eqrars_id')->where('paper_received',0);
@@ -102,6 +102,11 @@ class Installment extends Model
     public function orders()
     {
         return $this->hasMany(Order::class, 'client_id', 'client_id');
+    }
+
+    public function eqrarsDetail()
+    {
+        return $this->hasOne(Eqrars_details::class, 'id', 'eqrars_id');
     }
 
 

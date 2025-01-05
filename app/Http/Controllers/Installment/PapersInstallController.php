@@ -9,26 +9,70 @@ use App\Models\Eqrars_details;
 
 class PapersInstallController extends Controller
 {
-    public function index()
+    public function index (Request $request, $status)
     {
         // عرض جميع الأوراق
 
         $title = 'المحفوظات';
         $all_counters = [
             'not_finished_counter' => Eqrars_details::where('paper_received_checked', 0)->count(),
+
             'received_counter' => Eqrars_details::where('paper_received_checked', 1)->count(),
-            'tadqeeq_counter' => Eqrars_details::whereHas('installment', function ($q) {
-                $q->where('slug', 'tadqeeq')->where('tadqeeq', 1);
-            })->count(),
-            'manage_review_counter' => Eqrars_details::whereHas('installment', function ($q) {
-                $q->where('slug', 'manage_review')->where('manage_review', 1);
-            })->count(),
-            'archive_counter' => Eqrars_details::whereHas('installment', function ($q) {
-                $q->where('slug', 'archive');
-            })->count(),
-            'archive_finished_counter' => Eqrars_details::whereHas('installment', function ($q) {
-                $q->where('slug', 'archive_finished');
-            })->count(),
+
+            'tadqeeq_counter' => Installment::with(['client', 'paper','eqrarsDetail'])
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'my_index');
+            }) ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 1);
+            })
+            ->where('type', 'installment')
+            ->where('tadqeeq', 1)
+            ->where('manage_review', 0)
+            ->where('status', 'finished')->count(),
+
+            'manage_review_counter' =>Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'tadqeeq');
+            })
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 1);
+            })
+            ->where('type', 'installment')
+            ->where('tadqeeq', 1)
+            ->where('manage_review', 1)
+            ->where('status', 'finished')
+            ->where('tadqeeq_archive', 0)->count(),
+
+            'archive_counter' => Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'manage_review');
+            })
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 1)->where('paper_received', 1);
+            })
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+
+            ->where('tadqeeq', 1)
+            ->where('manage_review', 1)
+            ->where('tadqeeq_archive', 1)
+            ->where('archive_finished', 0)->count(),
+
+            'archive_finished_counter' =>Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'manage_review');
+            })
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 1)->where('paper_received', 1);
+            })
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+
+            ->where('tadqeeq', 1)
+            ->where('manage_review', 1)
+            ->where('tadqeeq_archive', 1)
+            ->where('archive_finished', 1)
+            ->where('archive_received', 0)->count(),
         ];
         $papers = []; // Fetch data from the database
 

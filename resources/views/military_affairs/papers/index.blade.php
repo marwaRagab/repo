@@ -16,8 +16,6 @@
                         <th>رقم الملف </th>
                         <th>تسليم إقرار الدين</th>
 
-ffffff
-                        ssss
                     </tr>
                     <!-- end row -->
                 </thead>

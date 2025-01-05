@@ -489,7 +489,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
-Route::get('/installment/papers', [PapersInstallController::class, 'index'])->name('installment.papers.index');
+Route::get('installment/papers/{status}', [PapersInstallController::class, 'index'])->name('installment.papers.status');
 
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
