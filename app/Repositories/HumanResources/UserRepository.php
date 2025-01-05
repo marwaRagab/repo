@@ -54,6 +54,7 @@ class UserRepository implements UserRepositoryInterface
         ]);
 
         // Create the new user
+        //dd($request->name);
         $user = User::where('name_ar', $request->name)->firstOrFail();
         $user->username = $validatedData['username'];
         $user->branch_id = $validatedData['branch_id'];
@@ -69,27 +70,49 @@ class UserRepository implements UserRepositoryInterface
         $user->img = $filename;
         }
          */
-        if ($request->avatar) {
-            $originalPath = $request->avatar;
-            $newDirectory = public_path('user_profile'); // Specify the new directory
+        /* if ($request->avatar) {
+             $originalPath = $request->avatar;
+             $newDirectory = public_path('user_profile'); // Specify the new directory
 
-            $originalName = pathinfo($originalPath, PATHINFO_FILENAME);
-            $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
-            $encryptedName = Str::random(20) . '.' . $extension;
+             $originalName = pathinfo($originalPath, PATHINFO_FILENAME);
+             $extension = pathinfo($originalPath, PATHINFO_EXTENSION);
+             $encryptedName = Str::random(20) . '.' . $extension;
 
-            $newPath = $newDirectory . '/' . $encryptedName;
+             $newPath = $newDirectory . '/' . $encryptedName;
 
-            if (!File::exists($newDirectory)) {
-                File::makeDirectory($newDirectory, 0755, true);
+             if (!File::exists($newDirectory)) {
+                 File::makeDirectory($newDirectory, 0755, true);
+             }
+
+              File::copy($originalPath, $newPath);
+
+             $user->img = $encryptedName;
+         }
+         */
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $extension = $avatar->getClientOriginalExtension();
+            $filename = Str::random(20) . '.' . $extension;
+            $path = public_path('user_profile/' . $filename);
+
+            // Make sure the directory exists
+            if (!File::exists(public_path('user_profile'))) {
+                File::makeDirectory(public_path('user_profile'), 0755, true);
             }
 
-            File::copy($originalPath, $newPath);
+            // Move the uploaded file
+            $avatar->move(public_path('user_profile'), $filename);
 
-            $user->img = $encryptedName;
+            // Save the filename to the user record
+            $user->img = $filename;
         }
+
+
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'تم إضافة المستخدم بنجاح');
+        // url('qr-code/generate/'.$user->id);
+
+        return redirect()->to('qr-code/generate/'.$user->id);
     }
     public function edit($id)
     {
