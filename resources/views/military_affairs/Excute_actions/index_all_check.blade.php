@@ -34,8 +34,13 @@
                     <th> المتبقى</th>
                     <th> المبلغ</th>
                     <th> التاريخ</th>
+                    @if(request()->get('check_type') == '')
                     <th> صورة الشيك</th>
                     <th> ايداع الشيك</th>
+                    @endif
+                    @if(request()->get('check_type') == 1)
+                        <th> صورة الايداع</th>
+                    @endif
 
 
                 </tr>
@@ -66,6 +71,8 @@
 
                                 <td>{{ $item->military_check->first() ?         $item->military_check->first()->amount : ''}}  </td>
                                 <td>{{$item->military_check->first() ?    $item->military_check->first()->date : ''}}  </td>
+
+                                @if(request()->get('check_type') == '')
                                 <td>
 
 
@@ -152,6 +159,24 @@
 
 
                                 </td>
+                                @endif
+                                @if(request()->get('check_type') == 1)
+                                    <td>
+
+
+                                        <a target="_blank"
+                                           onclick="checkFileAndRedirect(
+                            '{{ $item &&  $item->military_check->first() && $item->military_check->first()->deposit_img!== '0' ? 'https://electron-kw.net/' . $item->military_check->first()->deposit_img : '#' }}',
+                            '{{ $item && $item->military_check->first() && $item->military_check->first()->deposit_img !== '0' ? 'https://electron-kw.com/' . $item->military_check->first()->deposit_img : '#' }}'
+                        ); return false;">
+
+                                                            <span class="btn btn-info"> صورة الايداع
+                                                                 </span>
+                                        </a>
+
+
+                                    </td>
+                                @endif
                             </tr>
 
                         @endif
