@@ -121,12 +121,18 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         // dd($checking_type);
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
-            ->with('installment', function ($query) {
-                return $query->where('status', '=', 'finished');
-            })->with('military_amount')->with('military_check', function ($query) use ($checking_type) {
-                return $query->where('deposit', '=', $checking_type);
-            })
+        $this->data['items'] = Military_affair::where([
+            'military_affairs.archived' => 0,
+            'military_affairs.status' => 'execute'
+        ])
+            ->with(['installment' => function ($query) {
+                $query->where('status', 'finished');
+            }])
+            ->with('military_amount')
+            ->with(['military_check' => function ($query) use ($checking_type) {
+                $query->where('deposit', $checking_type)->orderBy('military_affairs_check.id');
+            }])
+            // Corrected to "orderBy" instead of "orderdBY"
             ->get();
 
 

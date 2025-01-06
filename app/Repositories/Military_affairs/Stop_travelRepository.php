@@ -58,8 +58,9 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
             $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
 
         }else{
-            $governorate_id='';
+            $governorate_id ='';
         }
+
 
         $message = "تم دخول صفحة فتح ملف";
         $stop_travel_type = $request->stop_travel_type;
@@ -69,17 +70,26 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
 
         $this->data['title'] = '   منع سفر';
         $this->data['items'] = Military_affair::where('archived', '=', 0)
-            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_travel' => 1])->with('installment', function ($query) {
+            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_travel' => 1])
+            ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
-            })->with('status_all', function ($query) {
+            })
+            ->with('status_all', function ($query) {
                 return $query->where('type', '=', 'stop_travel');
             })
-            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+            ->when($governorate_id, function ($query) use ($governorate_id) {
                 $query->whereHas('installment.client', function ($q) use ($governorate_id) {
                     $q->where('governorate_id', $governorate_id);
                 });
-            })
+            })->when(request()->has('stop_travel_type'), function ($query) use ($request) {
+                $query->whereHas('status_all', function ($q) use ($request) {
+
+                  return  $q->where('type_id','=', $request->stop_travel_type)->where('flag',0);
+                });
+})
             ->get();
+
+     //   dd( $this->data['items']);
 
         $title = ' منع السفر';
 
@@ -99,6 +109,9 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
            $x=1;
         foreach ($this->data['items'] as $value) {
             if($value->installment){
+                $value->all_notes=$value->notes->where('type','stop_travel');
+                $value->all_actions=get_all_actions($value->id);
+                $value->get_all_delegations=get_all_delegations($value->id);
                 $value->i=$x;
                 $value->different_date_tranfer = get_different_date($value->date, date('Y-m-d'));
                 if ($stop_travel_type == 'command') {
@@ -121,10 +134,6 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
                 $x++;
             }
 
-
-
-
-
         }
         $this->data['get_responsible'] = get_responsible();
         $this->data['view'] = 'military_affairs/Stop_travel/index';
@@ -135,6 +144,7 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
 
     public function stop_travel_convert(Request $request)
     {
+
 
         $request->validate([
             'date' => 'required| date',
@@ -147,6 +157,8 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
         // $array_old->update($data);
         $item_time=Military_affairs_times::where(['times_type_id'=>$request->item_type_old,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
         $item_status=Military_affairs_status::where(['type_id'=>$array_old->slug,'military_affairs_id'=>$request->military_affairs_id])->orderBy('created_at', 'desc')->first();
+
+
         if($item_status){
 
             $data_status['flag']=1;

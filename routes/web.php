@@ -489,7 +489,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
-Route::get('/installment/papers', [PapersInstallController::class, 'index'])->name('installment.papers.index');
+Route::get('installment/papers/{status}', [PapersInstallController::class, 'index'])->name('installment.papers.status');
 
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
@@ -678,6 +678,6 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::post('/technical-support/Requests/update/{id}', [RequestController::class, 'updateStatus'])->name('supportRequest.updateStatus');
     Route::post('/technical-support/Requests/{id}', [RequestController::class, 'addReply'])->name('supportRequest.addReply');
 
-    Route::get('/qr-code/generate', [QrCodeController::class, 'generate'])->name('qr-code.generate');
+    Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });

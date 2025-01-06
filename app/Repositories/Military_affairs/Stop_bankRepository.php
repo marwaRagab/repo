@@ -73,14 +73,18 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     public function index(Request $request)
     {
         //dd($this->data['ministries']->pluck('id'));
-// dd($request->all());
-        $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        };
 
         $message = "تم دخول صفحة  حجز بنوك  ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+
+        $user_id =  Auth::user()->id;
+        log_move($user_id ,$message);
+
         $this->data['title'] = '    حجز بنوك';
 //         $this->data['items'] = Military_affair::where('archived','=',0)
 //             ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])
