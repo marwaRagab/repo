@@ -50,7 +50,7 @@
         @foreach($stop_travel_types as $stop_travel_type)
 
             <a href="{{route('stop_travel',array('stop_travel_type' => $stop_travel_type->slug,'governorate_id'=> $gov ))}}"
-               class="btn-filter {{$stop_travel_type->style}}   px-4  mx-1 mb-2">  {{$stop_travel_type->name_ar}}
+               class="btn-filter {{$stop_travel_type->style}}   px-4  mx-1 mb-2   {{ request()->get('stop_travel_type') == $stop_travel_type->slug ? 'active' : '' }}">  {{$stop_travel_type->name_ar}}
             </a>
 
         @endforeach
@@ -135,11 +135,8 @@
 
 
 
-                                @if($array>0)
-
                                     @include('military_affairs.Stop_travel.table_details')
 
-                                @endif
 
                         @endif
                     @endforeach

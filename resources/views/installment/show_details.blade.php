@@ -2242,70 +2242,7 @@
                                         $total_checkat=0;
                                         @endphp
 
-                                    @if (!empty($mil_amount))
 
-                                        @foreach($mil_amount as $military_affairs_amount)
-                                        @php
-                                        $total_amounts = $total_amounts + $military_affairs_amount->amount;
-                                        $total_diff = $total_amounts - $total_checkat;
-
-
-                                        @endphp
-                                        @if($military_affairs_amount->military_affairs_check_id !=-1)
-
-                                        @if($total_diff>0)
-                                        @php
-                                        $total_madionia = $total_madionia - $military_affairs_amount->amount;
-                                        @endphp
-                                        <tr>
-                                            <td> {{ $loop->iteration }} </td>
-                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ $military_affairs_amount->amount }}
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($military_affairs_amount->date)->format('Y-m-d')}}
-                                            </td>
-                                            <td>
-                                                <span class="btn btn-danger font-weight-100 ">
-
-                                                    @if($military_affairs_amount->check_type=='salary' )
-
-                                                    حجز راتب
-
-                                                    @elseif($military_affairs_amount->check_type=='banks' )
-                                                    حجز بنوك
-
-                                                    @elseif($military_affairs_amount->check_type=='cars' )
-                                                    حجز سيارة
-
-                                                    @elseif($military_affairs_amount->check_type=='mahkama_installment'
-                                                    )
-                                                    تقسيط محكمة
-
-                                                    @elseif($military_affairs_amount->check_type=='mahkama_madionia_sadad'
-                                                    )
-                                                    سداد مديونية محكمة
-                                                    @else
-                                                    رصيد تنفيذ
-                                                    @endif
-
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endif
-                                        @endif
-
-                                        @endforeach
-                                    @endif
                                     @if (!empty($mil_check) && count($mil_check) > 0 )
 
                                         @foreach($mil_check as $military_affairs_check)
@@ -2347,6 +2284,70 @@
                                         @endif
                                         @endforeach
                                         @endif
+                                        @if (!empty($mil_amount))
+
+                                            @foreach($mil_amount as $military_affairs_amount)
+                                                @php
+                                                    $total_amounts = $total_amounts + $military_affairs_amount->amount;
+                                                    $total_diff = $total_amounts - $total_checkat;
+
+
+                                                @endphp
+                                                @if($military_affairs_amount->military_affairs_check_id !=-1)
+
+                                                    @if($total_diff>0)
+                                                        @php
+                                                            $total_madionia = $total_madionia - $military_affairs_amount->amount;
+                                                        @endphp
+                                                        <tr>
+                                                            <td> {{ $loop->iteration }} </td>
+                                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
+                                                            </td>
+                                                            <td>-</td>
+                                                            <td>{{ $military_affairs_amount->amount }}
+                                                            </td>
+                                                            <td>{{ \Carbon\Carbon::parse($military_affairs_amount->date)->format('Y-m-d')}}
+                                                            </td>
+                                                            <td>
+                                                <span class="btn btn-danger font-weight-100 ">
+
+                                                    @if($military_affairs_amount->check_type=='salary' )
+
+                                                        حجز راتب
+
+                                                    @elseif($military_affairs_amount->check_type=='banks' )
+                                                        حجز بنوك
+
+                                                    @elseif($military_affairs_amount->check_type=='cars' )
+                                                        حجز سيارة
+
+                                                    @elseif($military_affairs_amount->check_type=='mahkama_installment'
+                                                    )
+                                                        تقسيط محكمة
+
+                                                    @elseif($military_affairs_amount->check_type=='mahkama_madionia_sadad'
+                                                    )
+                                                        سداد مديونية محكمة
+                                                    @else
+                                                        رصيد تنفيذ
+                                                    @endif
+
+                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <a target="_blank"
+                                                                   onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
+                                                                   title="Download the file from the primary or fallback server.">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endif
+
+                                            @endforeach
+                                        @endif
 
 
                                     </tbody>
@@ -2361,6 +2362,7 @@
 </div>
 
 <div class="card">
+
     <div class="card-body">
         <div class="table-responsive">
             <div class="accordion accordion-flush" id="accordionFlushExampleInstallments">
