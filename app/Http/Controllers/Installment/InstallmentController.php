@@ -1237,6 +1237,7 @@ class InstallmentController extends Controller
     public function pay_some_of_amount($installment_id, Request $request)
     {
 
+       
         $messages = [
             'some_amount.required' => 'القيمة مطلوبة',
             'pay_way.required' => 'القيمة مطلوبة',
@@ -1283,6 +1284,18 @@ class InstallmentController extends Controller
                         'created_by' => Auth::user()->id ?? null,
                     ]);
             }
+            
+            $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->first();
+           
+            if ($installment->laws == 1 ) {
+           
+                $military_affairs_item_1->update([
+                    'reminder_amount' => $military_affairs_item_1->reminder_amount - $request->some_amount ,
+                    'payment_done' => $military_affairs_item_1->reminder_amount + $request->some_amount    
+                ]);
+                
+            }
+            
             for ($i = 0; $i < count($installments); $i++)
             {
                 if ($request->some_amount >= $installments[$i]['amount']) {
@@ -1352,15 +1365,6 @@ class InstallmentController extends Controller
                 // dd($request->some_amount);
             }
 
-           $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->first();
-            if ($installment->laws == 1 ) {
-           
-                $military_affairs_item_1->update([
-                    'reminder_amount' => $military_affairs_item_1->reminder_amount - $request->some_amount ,
-                    'payment_done' => $military_affairs_item_1->reminder_amount + $request->some_amount    
-                ]);
-                
-            }
             if (empty($months)) {
 
                 $installment->update([
@@ -1393,6 +1397,7 @@ class InstallmentController extends Controller
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
     }
+
 
     public function do_pay_to_bank($installment_month_id, $amount, $payment_type)
     {
