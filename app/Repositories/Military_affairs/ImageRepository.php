@@ -27,6 +27,15 @@ class ImageRepository implements ImageRepositoryInterface
     }
     public function index(Request $request)
     {
+        
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        }
+
+        // dd($request);
         $message = "تم دخول صفحة  الايمج";
         $user_id =  Auth::user()->id;
 
@@ -42,7 +51,7 @@ class ImageRepository implements ImageRepositoryInterface
 
         $jalasat_dd = Military_affairs_jalasaat::where(['type' => 'images', 'military_affairs_id' => $request->military_affairs_id, 'status' => 'accepted'])->first();
 
-        $governorate_id = $request->governorate_id;
+        // $governorate_id = $request->governorate_id;
 
       /*  $transactions = Military_affair::where('archived', '=', 0)
             ->where(['military_affairs.status' => 'execute'])
@@ -65,7 +74,16 @@ class ImageRepository implements ImageRepositoryInterface
                 return $query->where('finished','=', 0);
             })->with('jalasaat_all', function ($query) {
                 return $query->where('status', '=', 'accepted');
-            })->get();
+            })
+            ->when($request->governorate_id, function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            }
+            )->get();
+
+          
+
         foreach ( $transactions as $value) {
 
 

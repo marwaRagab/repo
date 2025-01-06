@@ -678,6 +678,6 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::post('/technical-support/Requests/update/{id}', [RequestController::class, 'updateStatus'])->name('supportRequest.updateStatus');
     Route::post('/technical-support/Requests/{id}', [RequestController::class, 'addReply'])->name('supportRequest.addReply');
 
-    Route::get('/qr-code/generate', [QrCodeController::class, 'generate'])->name('qr-code.generate');
+    Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });

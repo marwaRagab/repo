@@ -47,19 +47,37 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $checking_type = $request->checking_type;
         $message = "تم دخول صفحة فتح  رصيد التنفيذ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        }
+        $user_id =  Auth::user()->id;
+         log_move($user_id ,$message);
+
         $this->data['title'] = 'رصيد التنفيذ ';
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
+        $data  = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
             ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
             })->with('military_amount')
+            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            })
             ->orderBy('excute_actions_amount', 'desc')
             ->get();
+            
+            
+
+            $this->data['items'] = $data->filter(function ($item) use ($request) {
+                return $item->installment && 
+                       (!$request->has('governorate_id') || 
+                        $request->get('governorate_id') == $item->installment->client->governorate_id);
+            });
 
 
         $title = '   رصيد التنفيذ';
@@ -103,12 +121,18 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         // dd($checking_type);
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
-            ->with('installment', function ($query) {
-                return $query->where('status', '=', 'finished');
-            })->with('military_amount')->with('military_check', function ($query) use ($checking_type) {
-                return $query->where('deposit', '=', $checking_type);
-            })
+        $this->data['items'] = Military_affair::where([
+            'military_affairs.archived' => 0,
+            'military_affairs.status' => 'execute'
+        ])
+            ->with(['installment' => function ($query) {
+                $query->where('status', 'finished');
+            }])
+            ->with('military_amount')
+            ->with(['military_check' => function ($query) use ($checking_type) {
+                $query->where('deposit', $checking_type)->orderBy('military_affairs_check.id');
+            }])
+            // Corrected to "orderBy" instead of "orderdBY"
             ->get();
 
 
