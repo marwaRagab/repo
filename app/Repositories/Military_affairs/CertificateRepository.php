@@ -56,8 +56,16 @@ class CertificateRepository implements CertificateRepositoryInterface
 
     public function index(Request $request)
     {
+
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        }
         $certificate_type = $request->certificate_type;
         $message = "تم دخول صفحة الشهادة العسكرية";
+        $minstry_id = $request->ministry_id;
 
         $user_id = Auth::user()->id;
         log_move($user_id, $message);
@@ -88,15 +96,39 @@ class CertificateRepository implements CertificateRepositoryInterface
 
                 }
             })
-            ->with('installment')->with('status_all')->get();
+            ->with('installment')->with('status_all')
+            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            })
+            ->when(request()->has('ministry_id'), function ($query) use ($minstry_id) {
+                $query->whereHas('installment.client.get_ministry', function ($q) use ($minstry_id) {
+                    $q->where('ministry_last', $minstry_id);
+                });
+            })
+            ->get();
 
             $this->data['items'] = $data->filter(function ($item) use ($request) {
-                return 
-                       $item->installment->finished == 0 &&
-                       (!$request->has('governorate_id') || 
-                        $request->get('governorate_id') == $item->installment->client->court->id) &&
-                       !$request->has('ministry_id');
+                return $item->installment->finished == 0 && (
+                    // Case 1: governorate_id matches and ministry_id is not present
+                    ($request->has('governorate_id') && 
+                     $request->get('governorate_id') == $item->installment->client->court->id && 
+                     !$request->has('ministry_id')) ||
+            
+                    // Case 2: governorate_id and ministry_id both match
+                    ($request->has('governorate_id') && 
+                     $request->get('governorate_id') == $item->installment->client->court->id && 
+                     $request->has('ministry_id') 
+                     
+                    ) ||
+            
+                    // Case 3: governorate_id is not present
+                    !$request->has('governorate_id')
+                );
             });
+            
+            // dd($this->data['items']);
         $title = 'اصدار الشهادة العسكرية ';
 
         foreach ($this->data['items'] as $value) {
