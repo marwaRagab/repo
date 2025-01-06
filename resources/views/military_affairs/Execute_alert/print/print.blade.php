@@ -2,6 +2,7 @@
     $qrareldin = DB::table('installment')->where('id', $item->installment->id)->first();
     $client_img = DB::table('client_imgs')->where('client_id', $qrareldin->client_id)->where('type','cid_img1')->first();
     $pdf_img =\App\Models\Military_affairs\Military_affair::where('id', $item->id)->first();
+    $case_img =\App\Models\Military_affairs\Military_affairs_status::where('military_affairs_id', $item->id)->where('flag','=','0')->where('type_id','=','request')->first();
 @endphp
 
 <style>
@@ -58,6 +59,24 @@
             </li>
 
         @endif
+            @if (Str::contains(request()->url(), 'stop_travel') || Str::contains(request()->url(), 'stop_travel'))
+                <li>
+                    <a class="dropdown-item {{  $case_img !=null ??   $case_img->img_dir == null || $case_img->img_dir == '' || $case_img->img_dir == 0   ? 'disabled' : '' }}"
+                       {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+                       onclick="checkFileAndRedirect(
+                    '{{ $case_img && $case_img->img_dir  && $case_img->img_dir !== '0' ? 'https://electron-kw.net/' . $case_img->img_dir: '#' }}',
+                    '{{ $case_img && $pdf_img->img_dir && $case_img->img_dir!== '0' ? 'https://electron-kw.com/' . $case_img->img_dir: '#' }}'
+                ); return false;"
+                       target="_blank">
+                        صورة الايمج
+                    </a>
+                </li>
+
+            @endif
+
+
+
+
     </ul>
 </div>
 

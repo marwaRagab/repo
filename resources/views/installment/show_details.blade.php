@@ -2244,6 +2244,48 @@
                                         $total_checkat=0;
                                         @endphp
 
+                                        
+                                        @if (!empty($mil_check) && count($mil_check) > 0 )
+
+                                        @foreach($mil_check as $military_affairs_check)
+                                        @php
+                                        $total_amounts = $total_amounts + $military_affairs_check->amount;
+                                        $total_diff = $total_amounts - $total_checkat;
+
+
+                                        @endphp
+                                        @if($military_affairs_check->military_affairs_check_id !=-1)
+
+                                        @if($total_diff>0)
+                                        @php
+                                        $total_madionia = $total_madionia - $military_affairs_check->amount;
+                                        @endphp
+                                        <tr>
+                                            <td> {{ $loop->iteration }} </td>
+                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
+                                            </td>
+                                            <td>-</td>
+                                            <td>{{ $military_affairs_check->amount }}
+                                            </td>
+                                            <td>{{ \Carbon\Carbon::parse($military_affairs_check->date)->format('Y-m-d') }}
+                                            </td>
+                                            <td>
+                                                <span class="btn btn-success font-weight-100 "> شيك</span>
+                                            </td>
+                                            <td>
+
+                                                <a target="_blank"
+                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                    title="Download the file from the primary or fallback server.">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                        @endif
+                                        @endforeach
+                                        @endif
                                         @if (!empty($mil_amount))
 
                                         @foreach($mil_amount as $military_affairs_amount)
@@ -2306,47 +2348,6 @@
                                         @endif
                                         @endif
 
-                                        @endforeach
-                                        @endif
-                                        @if (!empty($mil_check) && count($mil_check) > 0 )
-
-                                        @foreach($mil_check as $military_affairs_check)
-                                        @php
-                                        $total_amounts = $total_amounts + $military_affairs_check->amount;
-                                        $total_diff = $total_amounts - $total_checkat;
-
-
-                                        @endphp
-                                        @if($military_affairs_check->military_affairs_check_id !=-1)
-
-                                        @if($total_diff>0)
-                                        @php
-                                        $total_madionia = $total_madionia - $military_affairs_check->amount;
-                                        @endphp
-                                        <tr>
-                                            <td> {{ $loop->iteration }} </td>
-                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ $military_affairs_check->amount }}
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($military_affairs_check->date)->format('Y-m-d') }}
-                                            </td>
-                                            <td>
-                                                <span class="btn btn-success font-weight-100 "> شيك</span>
-                                            </td>
-                                            <td>
-
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endif
-                                        @endif
                                         @endforeach
                                         @endif
 
