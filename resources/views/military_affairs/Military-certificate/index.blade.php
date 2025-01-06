@@ -34,13 +34,13 @@
         <div class="d-flex flex-wrap ">
             <a href="{{route('Certificate',array('governorate_id' =>$gov))}}"
                class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2  {{ !$ministry && !$certificate_id ? 'active' : '' }}">
-                العدد الكلي ({{count($items)}})
+                العدد الكلي  ({{ count_court($gov ,'Certificate',null,null) }})
             </a>
 
             @foreach($ministries as $ministie)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id'=> $ministie->id))}}"
-                   class="btn-filter {{$ministie->style}}   px-4  mx-1 mb-2 {{ request()->get('ministry_id') == $ministie->id ? 'active' : '' }}  "> {{$ministie->name_ar}}
+                   class="btn-filter {{$ministie->style}}   px-4  mx-1 mb-2 {{ request()->get('ministry_id') == $ministie->id ? 'active' : '' }}  "> {{$ministie->name_ar}}  ({{ count_minstry($gov ,'Certificate',$ministie->id) }})
                 </a>
 
             @endforeach
@@ -51,13 +51,16 @@
     @if(Request::has('ministry_id'))
         <div class="d-flex flex-wrap ">
             <a href="{{route('Certificate')}}" class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2 {{ !$certificate_id ? 'active' : '' }}">
-                العدد الكلي ({{count($items)}})
+                {{-- العدد الكلي ({{count($items)}})    --}}
+                العدد الكلي  ({{ count_minstry($gov ,'Certificate',$ministry) }})
+
             </a>
 
             @foreach($Certificate_types as $Certificate_type)
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
-                   class="btn-filter {{$Certificate_type->style}}   px-4  mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}
+                   class="btn-filter {{$Certificate_type->style}}   px-4  mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}  ({{ count_status($gov, 'Certificate', $Certificate_type->name_en, $ministry) }})
+                  
                 </a>
 
             @endforeach
