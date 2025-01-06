@@ -63,7 +63,7 @@ class CertificateRepository implements CertificateRepositoryInterface
         log_move($user_id, $message);
         $user_id = Auth::user()->id;
         $this->data['title'] = '   اصدار الشهادة العسكرية';
-        $this->data['items'] = Military_affair::where('archived', '=', 0)->where(['military_affairs.status' => 'execute', 'military_affairs.certificate' => 1, 'stop_salary' => 0])
+        $data = Military_affair::where('archived', '=', 0)->where(['military_affairs.status' => 'execute', 'military_affairs.certificate' => 1, 'stop_salary' => 0])
             ->when('certificate_type', function ($q) use ($certificate_type) {
 
                 if ($certificate_type == 'money') {
@@ -89,6 +89,14 @@ class CertificateRepository implements CertificateRepositoryInterface
                 }
             })
             ->with('installment')->with('status_all')->get();
+
+            $this->data['items'] = $data->filter(function ($item) use ($request) {
+                return 
+                       $item->installment->finished == 0 &&
+                       (!$request->has('governorate_id') || 
+                        $request->get('governorate_id') == $item->installment->client->court->id) &&
+                       !$request->has('ministry_id');
+            });
         $title = 'اصدار الشهادة العسكرية ';
 
         foreach ($this->data['items'] as $value) {

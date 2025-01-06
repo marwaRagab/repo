@@ -1,13 +1,15 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
-            الكل  ({{ count_court('' ,'excute_actions',null,null) }})
+            الكل ({{ count_court('' ,'excute_actions',null,null) }})
         </a>
         @foreach($courts as $court)
-            <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-                class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
-                ({{ count_court($court->id ,'excute_actions',null,null) }})
-            </a>
+
+        <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} 
+            ({{ count_court($court->id ,'excute_actions',null,null) }})
+        </a>
+
         @endforeach
     </div>
 </div>
@@ -48,72 +50,11 @@
                     <!-- start row -->
                     @foreach( $items as $item)
                     @if($item->installment)
-                    @if( Request::has('governorate_id') && Request::get('governorate_id') ==
-                    $item->installment->client->governorate_id)
+
 
                     <tr>
                         <td>
-                            {{ $loop->index + 1 }}
-
-                        </td>
-                        <td>
-                            {{$item->installment->client->name_ar}}
-                            <br>
-                            ({{$item->installment->id}})
-                            <br>
-                            {{$item->installment->client-> civil_number}}
-                        </td>
-                        <td>{{$item->issue_id}}</td>
-                        <td>{{$item->madionia_amount}}</td>
-                        <td>{{$item->excute_actions_check_amount}} </td>
-                        <td>{{$item->excute_actions_amount}} </td>
-                        <td> {{$item->military_amount ? count($item->military_amount->where('check_type',1)) : 0 }} </td>
-                        <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
-                        <td> {{$item->reminder_amount}} </td>
-                        <td>{{$item->excute_actions_last_date_check}} </td>
-                        <td>
-                            <div class="btn-group dropup mb-6 me-6 d-block ">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    الإجراءات
-                                </button>
-                                <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
-                                    <li>
-                                        <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#open-file"> رفع الصور
-                                        </a>
-                                    </li>
-                                    <li>
-
-
-                                        <a class="btn btn-warning rounded-0 w-100 mt-2"
-                                            href="{{ route('installment.show-installment', ['id' => $item->id]) }}">
-                                        </a> التفاصيل
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-success rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#add-note"> اضافة استعلام
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#open-settle">
-                                            تحويل للتسوية </a>
-                                    </li>
-                                </ul>
-
-
-                            </div>
-                            <button class="btn btn-success me-6" data-bs-toggle="modal" data-bs-target="#add-note">
-                                ملاحظة
-                            </button>
-                        </td>
-                    </tr>
-                    @endif
-                    @if(!Request::has('governorate_id'))
-                    <tr>
-                        <td>
-                            {{ $loop->index + 1 }}
+                             {{ $loop->iteration }}
 
                         </td>
                         <td>
@@ -191,15 +132,15 @@
                                                     <div class="mb-7">
                                                         <label>
                                                             <input type="radio" name="check_found" value="1"
-                                                                onclick="showInputs()"> يوجد
+                                                                onclick="showInputs({{$item->id}})"> يوجد
                                                         </label>
                                                         <label>
                                                             <input type="radio" name="check_found" value="0"
-                                                                onclick="hideInput()"> لا يوجد
+                                                                onclick="hideInput({{$item->id}})"> لا يوجد
                                                         </label>
                                                         <input type="hidden" name="military_affairs_id"
                                                             value="{{$item->id}}">
-                                                        <div id="additionalInputs" class="hidden">
+                                                        <div id="additionalInputs-{{$item->id}}" class="hidden">
                                                             <div class="form-group mb-3">
                                                                 <label class="form-label"> المبلغ </label>
                                                                 <input type="text" name="amount" class="form-control">
@@ -687,7 +628,7 @@
                         </td>
                     </tr>
 
-                    @endif
+
                     @endif
 
                     @endforeach
@@ -701,12 +642,12 @@
 
 <!-- modals -->
 <script>
-function showInputs() {
-    document.getElementById('additionalInputs').classList.remove('hidden');
+function showInputs(id) {
+    document.getElementById('additionalInputs-'+id).classList.remove('hidden');
 }
 
-function hideInput() {
-    document.getElementById('additionalInputs').classList.add('hidden');
+function hideInput(id) {
+    document.getElementById('additionalInputs-'+id).classList.add('hidden');
 }
 
 function check(id) {

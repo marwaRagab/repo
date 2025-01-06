@@ -141,9 +141,7 @@
 
 
                 @foreach($items as $item)
-                    @php
-                        $x=0;
-                    @endphp
+                   
 
                     @if($item->installment->finished==0)
                         @if( Request::has('governorate_id') &&  Request::get('governorate_id') == $item->installment->client->court->id && ! Request::has('ministry_id'))

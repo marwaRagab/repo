@@ -186,25 +186,25 @@ if (!function_exists('send_sms_code')) {
 // }
 if (!function_exists('UploadImage')) {
 
-function UploadImage($path, $image, $model, $file)
-{
-    // Ensure the directory exists
-    // if (!file_exists($path)) {
-    //     mkdir($path, 0755, true);
-    // }
+    function UploadImage($path, $image, $model, $file)
+    {
+        // Ensure the directory exists
+        // if (!file_exists($path)) {
+        //     mkdir($path, 0755, true);
+        // }
 
-    // Generate a unique filename
-    $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
+        // Generate a unique filename
+        $filename = time() . '-' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-    // Move the uploaded file to the specified directory
-    $file->move(public_path($path), $filename);
+        // Move the uploaded file to the specified directory
+        $file->move(public_path($path), $filename);
 
-    // Set the file path in the model
-    $model->$image = $path . '/' . $filename;
+        // Set the file path in the model
+        $model->$image = $path . '/' . $filename;
 
-    // Save the model
-    $model->save();
-}
+        // Save the model
+        $model->save();
+    }
 }
 // function UploadImage($path, $field, $model, $file)
 // {
@@ -266,308 +266,302 @@ function UploadImage($path, $image, $model, $file)
 //     return $toDay;
 // }
 if (!function_exists('formatTime')) {
-function formatTime($time)
-{
-    if (!preg_match('/^\d{2}:\d{2}:\d{2}$/', $time)) {
-        return '';
+    function formatTime($time)
+    {
+        if (!preg_match('/^\d{2}:\d{2}:\d{2}$/', $time)) {
+            return '';
+        }
+        $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
+        $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
+        return $toDay;
     }
-    $to = Carbon::createFromFormat('H:i:s', $time)->format('h:i A');
-    $toDay = str_replace(['AM', 'PM'], ['ص', 'م'], $to);
-    return $toDay;
-}
 }
 if (!function_exists('expolde_date')) {
 
-function expolde_date($date){
-    $new_date= explode(' ',$date);
-    return  $new_date;
-
-}
+    function expolde_date($date)
+    {
+        $new_date = explode(' ', $date);
+        return  $new_date;
+    }
 }
 if (!function_exists('Add_note')) {
 
-function Add_note($array_old, $array_new, $id)
-{
+    function Add_note($array_old, $array_new, $id)
+    {
 
-    $notesData = [
-        'note' => " تم التحويل من قسم $array_old->name_ar  الى قسم $array_new->name_ar",
-        'type' => $array_new->type,
-        'date' => date('Y-m-d H:i:s'),
-        'military_affairs_id' => $id,
-        'times_type_id' => $array_new->id,
-        'cat2' => $array_new->slug,
-        'created_at' => date('Y-m-d H:i:s'),
-        'created_by' => Auth::user() ? Auth::user()->id : null,
-        'updated_at' => date('Y-m-d H:i:s'),
+        $notesData = [
+            'note' => " تم التحويل من قسم $array_old->name_ar  الى قسم $array_new->name_ar",
+            'type' => $array_new->type,
+            'date' => date('Y-m-d H:i:s'),
+            'military_affairs_id' => $id,
+            'times_type_id' => $array_new->id,
+            'cat2' => $array_new->slug,
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => Auth::user() ? Auth::user()->id : null,
+            'updated_at' => date('Y-m-d H:i:s'),
 
 
-    ];
+        ];
 
-    $res = Military_affairs_notes::create($notesData);
-    // dd($res);
-}
+        $res = Military_affairs_notes::create($notesData);
+        // dd($res);
+    }
 }
 if (!function_exists('Add_note_time')) {
 
-function Add_note_time($array_new, $id)
-{
+    function Add_note_time($array_new, $id)
+    {
 
-    $notesData = [
+        $notesData = [
 
-        'date_start' => date('Y-m-d H:i:s'),
-        'military_affairs_id' => $id,
-        'times_type_id' => $array_new->id,
-        'created_at' => date('Y-m-d H:i:s'),
-        'created_by' =>Auth::user() ? Auth::user()->id : null,
-        'updated_at' => date('Y-m-d H:i:s'),
-        'updated_by' => Auth::user() ? Auth::user()->id : null,
+            'date_start' => date('Y-m-d H:i:s'),
+            'military_affairs_id' => $id,
+            'times_type_id' => $array_new->id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => Auth::user() ? Auth::user()->id : null,
+            'updated_at' => date('Y-m-d H:i:s'),
+            'updated_by' => Auth::user() ? Auth::user()->id : null,
 
 
-    ];
+        ];
 
-    $res = Military_affairs_times::create($notesData);
-    // dd($res);
-}
+        $res = Military_affairs_times::create($notesData);
+        // dd($res);
+    }
 }
 if (!function_exists('Add_note_general')) {
 
-function Add_note_general($array)
-{
+    function Add_note_general($array)
+    {
 
-    $notesData = [
-        'note' => $array->note,
-        'type' => $array->type,
-        'notes_type' => $array->notes_type,
-        'date' => date('Y-m-d H:i:s'),
-        'military_affairs_id' => $array->military_affairs_id,
-        'created_at' => date('Y-m-d H:i:s'),
-        'created_by' => Auth::user() ? Auth::user()->id : null,
-        'updated_at' => Auth::user() ? Auth::user()->id : null,
+        $notesData = [
+            'note' => $array->note,
+            'type' => $array->type,
+            'notes_type' => $array->notes_type,
+            'date' => date('Y-m-d H:i:s'),
+            'military_affairs_id' => $array->military_affairs_id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => Auth::user() ? Auth::user()->id : null,
+            'updated_at' => Auth::user() ? Auth::user()->id : null,
 
-    ];
-    //dd($notesData);
-    \App\Models\Military_affairs\Military_affairs_notes::create($notesData);
-}
+        ];
+        //dd($notesData);
+        \App\Models\Military_affairs\Military_affairs_notes::create($notesData);
+    }
 }
 
 if (!function_exists('log_move')) {
 
-function log_move($user_id, $message)
-{
-    // dd($user_id);
-    $log = new Log;
-    $log->user_id = $user_id;
-    $log->date = now()->format('Y-m-d');
-    $log->time = now()->format('h:i:s');
-    $log->description = $message;
-    $log->save();
-}
+    function log_move($user_id, $message)
+    {
+        // dd($user_id);
+        $log = new Log;
+        $log->user_id = $user_id;
+        $log->date = now()->format('Y-m-d');
+        $log->time = now()->format('h:i:s');
+        $log->description = $message;
+        $log->save();
+    }
 }
 if (!function_exists('change_status')) {
 
-function change_status($array_status, $id)
-{
+    function change_status($array_status, $id)
+    {
 
 
-    //dd($array_status);
-    if ($array_status->hasFile('img_dir')) {
-        $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
-        $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
-        $data_img_dir = 'military_affairs' . '/' . $filename;
-//        $data_img_dir = $array_status->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
-    } else {
-        $data_img_dir = '';
+        //dd($array_status);
+        if ($array_status->hasFile('img_dir')) {
+            $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
+            $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
+            $data_img_dir = 'military_affairs' . '/' . $filename;
+            //        $data_img_dir = $array_status->file('img_dir')->store('military_affairs', 'public'); // Store in the 'products' directory
+        } else {
+            $data_img_dir = '';
+        }
+
+        $array_status = [
+            'type' => $array_status->type,
+            'type_id' => $array_status->type_id,
+            'date' => $array_status->date,
+            'note' => $array_status->note ?? $array_status->note,
+            'military_affairs_id' => $id,
+            'img_dir' => $data_img_dir,
+            'created_at' => date('Y-m-d H:i:s'),
+            'created_by' => Auth::user() ? Auth::user()->id : null,
+        ];
+
+        \App\Models\Military_affairs\Military_affairs_status::create($array_status);
     }
-
-    $array_status = [
-        'type' => $array_status->type,
-        'type_id' => $array_status->type_id,
-        'date' => $array_status->date,
-        'note' => $array_status->note ?? $array_status->note,
-        'military_affairs_id' => $id,
-        'img_dir' => $data_img_dir,
-        'created_at' => date('Y-m-d H:i:s'),
-        'created_by' => Auth::user() ? Auth::user()->id : null,
-    ];
-
-    \App\Models\Military_affairs\Military_affairs_status::create($array_status);
-}
 }
 if (!function_exists('get_all_notes')) {
 
-function get_all_notes($type, $military_affairs_id)
-{
+    function get_all_notes($type, $military_affairs_id)
+    {
 
-    $notes = Military_affairs_notes::where(['military_affairs_id' => $military_affairs_id, 'type' => $type])->get();
-    // dd($notes);
-    return $notes;
-
-}
+        $notes = Military_affairs_notes::where(['military_affairs_id' => $military_affairs_id, 'type' => $type])->get();
+        // dd($notes);
+        return $notes;
+    }
 }
 if (!function_exists('get_all_actions')) {
 
-function get_all_actions($military_affairs_id)
-{
+    function get_all_actions($military_affairs_id)
+    {
 
 
-    $notes = Military_affairs_times::where(['military_affairs_id' => $military_affairs_id])->get();
+        $notes = Military_affairs_times::where(['military_affairs_id' => $military_affairs_id])->get();
 
-    //dd($notes);
-    return $notes;
-
-}
+        //dd($notes);
+        return $notes;
+    }
 }
 if (!function_exists('get_all_delegations')) {
 
-function get_all_delegations($military_affairs_id)
-{
+    function get_all_delegations($military_affairs_id)
+    {
 
 
-    $notes = military_affairs_deligation::where(['military_affairs_id' => $military_affairs_id])->get();
+        $notes = military_affairs_deligation::where(['military_affairs_id' => $military_affairs_id])->get();
 
-    //dd($notes);
-    return $notes;
-
-}
+        //dd($notes);
+        return $notes;
+    }
 }
 if (!function_exists('get_all_banks')) {
 
-function get_all_banks($military_affairs_id)
-{
+    function get_all_banks($military_affairs_id)
+    {
 
-    $notes = DB::table('military_affairs_bank_info')
-        ->where('military_affairs_id', $military_affairs_id)
-        ->get();
+        $notes = DB::table('military_affairs_bank_info')
+            ->where('military_affairs_id', $military_affairs_id)
+            ->get();
 
-    return $notes;
-
-}
+        return $notes;
+    }
 }
 if (!function_exists('get_all_jobs')) {
 
-function get_all_jobs($military_affairs_id)
-{
+    function get_all_jobs($military_affairs_id)
+    {
 
-    $notes = DB::table('military_affairs_job_info')
-        ->where('military_affairs_id', $military_affairs_id)
-        ->get();
+        $notes = DB::table('military_affairs_job_info')
+            ->where('military_affairs_id', $military_affairs_id)
+            ->get();
 
-    return $notes;
-
-}
+        return $notes;
+    }
 }
 if (!function_exists('get_modal_name')) {
 
-function get_modal_name($id)
-{
-    $item_bank = new \App\Models\Military_affairs\Military_affairs_stop_bank_type();
-    $item_car = new \App\Models\Military_affairs\Military_affairs_stop_car_type();
-    $item_salary = new \App\Models\Military_affairs\Military_affairs_stop_salary_type();
-    $item_travel = new \App\Models\Military_affairs\Stop_travel_types();
-    $item_settlement = new \App\Models\Military_affairs\Military_affairs_settlement_type();
-    $item_certificate = new \App\Models\Military_affairs\Military_affairs_certificate_type();
-    $item_types = new \App\Models\Military_affairs\Military_affairs_times_type();
+    function get_modal_name($id)
+    {
+        $item_bank = new \App\Models\Military_affairs\Military_affairs_stop_bank_type();
+        $item_car = new \App\Models\Military_affairs\Military_affairs_stop_car_type();
+        $item_salary = new \App\Models\Military_affairs\Military_affairs_stop_salary_type();
+        $item_travel = new \App\Models\Military_affairs\Stop_travel_types();
+        $item_settlement = new \App\Models\Military_affairs\Military_affairs_settlement_type();
+        $item_certificate = new \App\Models\Military_affairs\Military_affairs_certificate_type();
+        $item_types = new \App\Models\Military_affairs\Military_affairs_times_type();
 
-    // Array of all item models
-    $array_types = [
-        'bank' => $item_bank,
-        'car' => $item_car,
-        'salary' => $item_salary,
-        'travel' => $item_travel,
-        'settlement' => $item_settlement,
-        'certificate' => $item_certificate,
-        'times' => $item_types
-    ];
+        // Array of all item models
+        $array_types = [
+            'bank' => $item_bank,
+            'car' => $item_car,
+            'salary' => $item_salary,
+            'travel' => $item_travel,
+            'settlement' => $item_settlement,
+            'certificate' => $item_certificate,
+            'times' => $item_types
+        ];
 
-    // Iterate over the array and check if the ID exists
-    foreach ($array_types as $key => $item) {
-        try {
-            $item_time = $item::findOrFail($id);
-            return $item_time;  // Return the key (model type) as the modal name
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // If the model is not found, continue to the next one
-            continue;
+        // Iterate over the array and check if the ID exists
+        foreach ($array_types as $key => $item) {
+            try {
+                $item_time = $item::findOrFail($id);
+                return $item_time;  // Return the key (model type) as the modal name
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                // If the model is not found, continue to the next one
+                continue;
+            }
         }
-    }
 
-    // If no model was found, return null or an error message
-    return null;
-}
+        // If no model was found, return null or an error message
+        return null;
+    }
 }
 if (!function_exists('get_by_dates')) {
 
-function get_by_dates($type_id)
-{
-    $date_arr = Military_affairs_times::where(['times_type_id' => $type_id])->whereYear('date_start',now()->year)
-        ->whereMonth('date_start', now()->month)
-        ->selectRaw('DAY(date_start) as day, count(*) as count')
-        ->groupBy(DB::raw('DAY(date_start)'))
-        ->get();
-    // dd($date_arr);
-    return $date_arr;
-}
+    function get_by_dates($type_id)
+    {
+        $date_arr = Military_affairs_times::where(['times_type_id' => $type_id])->whereYear('date_start', now()->year)
+            ->whereMonth('date_start', now()->month)
+            ->selectRaw('DAY(date_start) as day, count(*) as count')
+            ->groupBy(DB::raw('DAY(date_start)'))
+            ->get();
+        // dd($date_arr);
+        return $date_arr;
+    }
 }
 if (!function_exists('count_client')) {
 
-function count_client($array_data)
-{
-    $governorates = Governorate::with('clients')->get();
-
-}
+    function count_client($array_data)
+    {
+        $governorates = Governorate::with('clients')->get();
+    }
 }
 if (!function_exists('get_different_dates')) {
 
-function get_different_dates($first_end_date, $second_end_date)
-{
-    // Validate and parse the first date
-    $datetime1 = is_numeric($first_end_date) ? date_create(date('Y-m-d', $first_end_date)) : date_create($first_end_date);
+    function get_different_dates($first_end_date, $second_end_date)
+    {
+        // Validate and parse the first date
+        $datetime1 = is_numeric($first_end_date) ? date_create(date('Y-m-d', $first_end_date)) : date_create($first_end_date);
 
-    // Validate and parse the second date
-    $datetime2 = is_numeric($second_end_date) ? date_create(date('Y-m-d', $second_end_date)) : date_create($second_end_date);
+        // Validate and parse the second date
+        $datetime2 = is_numeric($second_end_date) ? date_create(date('Y-m-d', $second_end_date)) : date_create($second_end_date);
 
-    // Ensure both dates are valid
-    if (!$datetime1 || !$datetime2) {
-        return 'تاريخ غير صالح'; // Return a friendly error message
+        // Ensure both dates are valid
+        if (!$datetime1 || !$datetime2) {
+            return 'تاريخ غير صالح'; // Return a friendly error message
+        }
+
+        // Calculate the difference
+        $interval = date_diff($datetime1, $datetime2);
+
+        // Format and return the difference
+        $days = $interval->format('%d يوم');
+        $months = $interval->format('%m شهر');
+        $years = $interval->format('%y سنة');
+
+        // Return combined result if needed, or just days
+        return $years . ', ' . $months . ', ' . $days;
     }
-
-    // Calculate the difference
-    $interval = date_diff($datetime1, $datetime2);
-
-    // Format and return the difference
-    $days = $interval->format('%d يوم');
-    $months = $interval->format('%m شهر');
-    $years = $interval->format('%y سنة');
-
-    // Return combined result if needed, or just days
-    return $years . ', ' . $months . ', ' . $days;
-}
 }
 if (!function_exists('get_different_date')) {
 
-function get_different_date($first_end_date, $second_end_date)
-{
-    // Convert timestamps to DateTime strings if necessary
-    if (is_numeric($first_end_date)) {
-        $first_end_date = date('Y-m-d', $first_end_date);
+    function get_different_date($first_end_date, $second_end_date)
+    {
+        // Convert timestamps to DateTime strings if necessary
+        if (is_numeric($first_end_date)) {
+            $first_end_date = date('Y-m-d', $first_end_date);
+        }
+        if (is_numeric($second_end_date)) {
+            $second_end_date = date('Y-m-d', $second_end_date);
+        }
+
+        // Ensure both dates are valid
+        $datetime1 = date_create($first_end_date);
+        $datetime2 = date_create($second_end_date);
+
+        if (!$datetime1 || !$datetime2) {
+            return 'تاريخ غير صالح';
+        }
+
+        // Calculate the difference
+        $interval = date_diff($datetime1, $datetime2);
+
+        // Format the output
+        return $interval->days . ' يوم';
     }
-    if (is_numeric($second_end_date)) {
-        $second_end_date = date('Y-m-d', $second_end_date);
-    }
-
-    // Ensure both dates are valid
-    $datetime1 = date_create($first_end_date);
-    $datetime2 = date_create($second_end_date);
-
-    if (!$datetime1 || !$datetime2) {
-        return 'تاريخ غير صالح';
-    }
-
-    // Calculate the difference
-    $interval = date_diff($datetime1, $datetime2);
-
-    // Format the output
-    return $interval->days . ' يوم';
-}
 }
 if (!function_exists('add_money_to_bank')) {
     function add_money_to_bank($bank_id, $installment_id, $amount, $come_from, $description, $process_type, $payment_type)
@@ -743,8 +737,7 @@ if (!function_exists('increase_decrease_slug')) {
 if (!function_exists('all_eqrardeain_sql_for_year')) {
     function all_eqrardeain_sql_for_year($year, $status)
     {
-        $query = \App\Models\Installment::selectRaw('SUM(eqrardain_amount) as sum_amount')->
-        join('clients', 'installment.client_id', '=', 'clients.id')
+        $query = \App\Models\Installment::selectRaw('SUM(eqrardain_amount) as sum_amount')->join('clients', 'installment.client_id', '=', 'clients.id')
             ->where('installment.finished', 0)
             ->where('installment.type', 'installment')
             ->where('installment.status', 'finished');
@@ -865,8 +858,7 @@ if (!function_exists('numberToArabicWords')) {
 if (!function_exists('getOrderDetails')) {
     function getOrderDetails($id)
     {
-        $query = \App\Models\Order::
-        join('orders_items', 'orders.id', '=', 'orders_items.order_id')
+        $query = \App\Models\Order::join('orders_items', 'orders.id', '=', 'orders_items.order_id')
             ->join('products', 'products.id', '=', 'orders_items.product_id')
             ->join('classes', 'classes.id', '=', 'products.class')
             ->join('marks', 'marks.id', '=', 'products.mark')
@@ -894,7 +886,6 @@ if (!function_exists('all_previous_invoices')) {
     {
         if ($type) {
             $payment_type = $type;
-
         } else {
             $payment_type = '!=part';
         }
@@ -962,8 +953,7 @@ if (!function_exists('all_invoices')) {
     {
         $branch_id = Auth::user()->branch_id;
 
-        $query = Invoices_installment::
-        join('installment', 'invoices_installment.installment_id', '=', 'installment.id')
+        $query = Invoices_installment::join('installment', 'invoices_installment.installment_id', '=', 'installment.id')
             ->join('clients', 'installment.client_id', '=', 'clients.id')
             ->select('invoices_installment.*', 'clients.name as client_name')
             ->where('invoices_installment.type', '=', $type)
@@ -1043,213 +1033,153 @@ if (!function_exists('update_big_invoice_knet')) {
 }
 if (!function_exists('update_invoice_central_bank')) {
     function update_invoice_central_bank($col, $operation, $val, $slug)
-    {
-        ;
+    {;
 
         increase_decrease_slug('invoices_central_bank', $col, $operation, $val, 'slug', $slug);
     }
 }
 if (!function_exists('allInvoicesLimit')) {
 
-function allInvoicesLimit($start_id, $end_id, $type, $payment_type)
-{
-    $branch_id = Auth::user()->branch_id; // Retrieve the branch_id from the session
+    function allInvoicesLimit($start_id, $end_id, $type, $payment_type)
+    {
+        $branch_id = Auth::user()->branch_id; // Retrieve the branch_id from the session
 
-    // Start building the query using the InvoiceInstallment model
-    $query = Invoices_installment::join('installment', 'invoices_installment.installment_id', '=', 'installment.id')
-        ->join('clients', 'clients.id', '=', 'installment.client_id')
-        ->where('invoices_installment.branch_id', $branch_id) // Filter by branch_id
-        ->where('invoices_installment.type', $type) // Filter by type
-        ->whereBetween('invoices_installment.id', [$start_id, $end_id]); // Filter by id range
+        // Start building the query using the InvoiceInstallment model
+        $query = Invoices_installment::join('installment', 'invoices_installment.installment_id', '=', 'installment.id')
+            ->join('clients', 'clients.id', '=', 'installment.client_id')
+            ->where('invoices_installment.branch_id', $branch_id) // Filter by branch_id
+            ->where('invoices_installment.type', $type) // Filter by type
+            ->whereBetween('invoices_installment.id', [$start_id, $end_id]); // Filter by id range
 
-    // If payment_type is provided, add an additional condition
-    if (!empty($payment_type)) {
-        $query->where('invoices_installment.payment_type', $payment_type);
+        // If payment_type is provided, add an additional condition
+        if (!empty($payment_type)) {
+            $query->where('invoices_installment.payment_type', $payment_type);
+        }
+
+        // Select the columns you need, including client name
+        $result = $query->select('invoices_installment.*', 'clients.name as client_name')
+            ->get(); // Execute the query and get the result
+
+        return $result;
     }
-
-    // Select the columns you need, including client name
-    $result = $query->select('invoices_installment.*', 'clients.name as client_name')
-        ->get(); // Execute the query and get the result
-
-    return $result;
-}
 }
 
 if (!function_exists('get_responsible')) {
 
-function get_responsible()
-{
-    $users = User::where('set_delegate',1)->get();
-    return $users;
-}
+    function get_responsible()
+    {
+        $users = User::where('set_delegate', 1)->get();
+        return $users;
+    }
 }
 if (!function_exists('update_responsible')) {
 
-function update_responsible($user_id, $military_id, $status)
-{
+    function update_responsible($user_id, $military_id, $status)
+    {
 
-    // dd($user_id);
+        // dd($user_id);
 
-    $dateFields = [
-        'open_file' => 'open_file_date',
-        'execute' => 'execute_date',
-        'image' => 'image_date',
-        'case_proof' => 'case_proof_date',
-        'travel' => 'travel_date',
-        'certificate' => 'certificate_date',
-        'salary' => 'salary_date',
-        'car' => 'car_date',
-        'bank' => 'bank_date',
-    ];
+        $dateFields = [
+            'open_file' => 'open_file_date',
+            'execute' => 'execute_date',
+            'image' => 'image_date',
+            'case_proof' => 'case_proof_date',
+            'travel' => 'travel_date',
+            'certificate' => 'certificate_date',
+            'salary' => 'salary_date',
+            'car' => 'car_date',
+            'bank' => 'bank_date',
+        ];
 
-    $up = Military_affair::where('id',$military_id)->first();
-    $up->emp_id = $user_id;
-    $up->save();
+        $up = Military_affair::where('id', $military_id)->first();
+        $up->emp_id = $user_id;
+        $up->save();
 
-    $check = military_affairs_deligation::where([
-        'military_affairs_id' => $military_id,
-        'emp_id' => $user_id,
-        'end_date' => NULL,
-    ])->first();
+        $check = military_affairs_deligation::where([
+            'military_affairs_id' => $military_id,
+            'emp_id' => $user_id,
+            'end_date' => NULL,
+        ])->first();
 
-    if ($check) {
-        if (array_key_exists($status, $dateFields)) {
-            $check->{$dateFields[$status]} = Carbon::now();
-            $check->save();
+        if ($check) {
+            if (array_key_exists($status, $dateFields)) {
+                $check->{$dateFields[$status]} = Carbon::now();
+                $check->save();
+            }
+            return true;
+        } else {
+            $lastRecord = military_affairs_deligation::where('military_affairs_id', $military_id)
+                ->orderBy('id', 'desc')
+                ->first();
+            if ($lastRecord) {
+                $lastRecord->end_date = Carbon::now();
+                $lastRecord->save();
+            }
+            $newRecord = new military_affairs_deligation();
+            $newRecord->military_affairs_id = $military_id;
+            $newRecord->assign_date = Carbon::now();
+            $newRecord->emp_id = $user_id;
+            if (array_key_exists($status, $dateFields)) {
+                $newRecord->{$dateFields[$status]} = Carbon::now();
+            }
+            $newRecord->save();
+            return true;
         }
-        return true;
-    } else {
-        $lastRecord = military_affairs_deligation::where('military_affairs_id', $military_id)
-            ->orderBy('id', 'desc')
-            ->first();
-        if ($lastRecord) {
-            $lastRecord->end_date = Carbon::now();
-            $lastRecord->save();
-        }
-        $newRecord = new military_affairs_deligation();
-        $newRecord->military_affairs_id = $military_id;
-        $newRecord->assign_date = Carbon::now();
-        $newRecord->emp_id = $user_id;
-        if (array_key_exists($status, $dateFields)) {
-            $newRecord->{$dateFields[$status]} = Carbon::now();
-        }
-        $newRecord->save();
-        return true;
     }
-
-}
-
 }
 if (!function_exists('get_fixed_prin_data')) {
 
-function get_fixed_prin_data()
-{
-    return FixedPrintData::all();
-}
+    function get_fixed_prin_data()
+    {
+        return FixedPrintData::all();
+    }
 }
 if (!function_exists('specific_fixed_prin_data')) {
 
-function specific_fixed_prin_data($id)
-{
-    return FixedPrintData::find($id);
-}
+    function specific_fixed_prin_data($id)
+    {
+        return FixedPrintData::find($id);
+    }
 }
 if (!function_exists('count_court')) {
 
-function count_court($court_id, $stop_type,$minst_id,$time_type)
-{
+    function count_court($court_id, $stop_type, $minst_id, $time_type)
+    {
 
 
-    return Military_affair::with('installment')->with('installment.client')
-        ->with('status_all')->with('mil_times.salaryType')
-        ->whereHas('installment.client', function ($q) use ($court_id, $stop_type, $minst_id) {
-            if ($stop_type == 'stop_salary') {
-                $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27]);
-            }
-            if ($court_id != '') {
-                $q->where('governorate_id', $court_id);
-            }
-
-        })
-        ->whereHas('installment', function ($q) {
-            return $q->where('finished', 0);
-        })
-        ->when($stop_type === "stop_salary"  , function ($query) use ($time_type, $minst_id, $court_id,$stop_type) {
-            $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id ,$stop_type) {
-                if ($minst_id && $court_id) {
-                    $q->where('type', $stop_type)
-                        ->where('ministry', $minst_id)
-                        ->where('type_id', $time_type)
-                        ->where('flag', 0);
+        return Military_affair::with('installment')->with('installment.client')
+            ->with('status_all')->with('mil_times.salaryType')
+            ->whereHas('installment.client', function ($q) use ($court_id, $stop_type, $minst_id) {
+                if ($stop_type == 'stop_salary') {
+                    $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27]);
                 }
-            });
-        })
-        //  ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
-        //     if($minst_id && $court_id)
-        //     {
-        //       $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
-        //     }
-        //     })
-        ->where('archived', operator: 0)
-        ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
-            $q->where('military_affairs.status', 'execute')
-                ->where($stop_type, 1);
-
-        }, function ($q) use ($stop_type) {
-            if ($stop_type == 'open_file') {
-                $q->where('military_affairs.status', 'military');
-            }
-            if ($stop_type == 'case_proof') {
-                $q->where('military_affairs.status', 'case_proof');
-            }
-            if($stop_type == 'execute_alert')
-            {
-
-                $q->where('military_affairs.status', 'execute_alert');
-            }
-            if($stop_type == 'images')
-            {
-
-                $q->where('military_affairs.status', 'images');
-            }
-            if($stop_type == 'Certificate')
-            {
-
+                if ($court_id != '') {
+                    $q->where('governorate_id', $court_id);
+                }
+            })
+            ->whereHas('installment', function ($q) {
+                return $q->where('finished', 0);
+            })
+            ->when($stop_type === "stop_salary", function ($query) use ($time_type, $minst_id, $court_id, $stop_type) {
+                $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id, $stop_type) {
+                    if ($minst_id && $court_id) {
+                        $q->where('type', $stop_type)
+                            ->where('ministry', $minst_id)
+                            ->where('type_id', $time_type)
+                            ->where('flag', 0);
+                    }
+                });
+            })
+            //  ->whereHas('status_all', function ($q) use($time_type, $minst_id, $court_id) {
+            //     if($minst_id && $court_id)
+            //     {
+            //       $q->where('type','stop_salary')->where('ministry',$minst_id)->where('type_id',$time_type)->where('flag',0);
+            //     }
+            //     })
+            ->where('archived', operator: 0)
+            ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
                 $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.certificate', '1')
-                    ->where('military_affairs.stop_salary', '0');
-            }
-            if($stop_type == 'stop_bank')
-            {
-
-                  $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.stop_bank', '1')
-                    ->where('military_affairs.bank_archive', '0');
-            }
-            if($stop_type == 'stop_bank_archive')
-            {
-
-                $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.stop_bank', '1')
-                    ->where('military_affairs.bank_archive', '1');
-            }
-
-            if($stop_type == 'stop_travel')
-            {
-
-                $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.stop_travel', '1');
-
-            }
-            // excute_actions
-            if($stop_type == 'excute_actions')
-            {
-
-                $q->where('military_affairs.status', 'execute')
-                    // ->where('military_affairs.stop_travel', '1')
-                    ;
-
-            }
+                    ->where($stop_type, 1);
             }, function ($q) use ($stop_type) {
                 if ($stop_type == 'open_file') {
                     $q->where('military_affairs.status', 'military');
@@ -1257,105 +1187,96 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                 if ($stop_type == 'case_proof') {
                     $q->where('military_affairs.status', 'case_proof');
                 }
-                if($stop_type == 'execute_alert')
-                {
+                if ($stop_type == 'execute_alert') {
 
                     $q->where('military_affairs.status', 'execute_alert');
                 }
-                if($stop_type == 'images')
-                {
+                if ($stop_type == 'images') {
 
                     $q->where('military_affairs.status', 'images');
                 }
-                if($stop_type == 'Certificate')
-                {
+                if ($stop_type == 'Certificate') {
 
                     $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.certificate', 1)
-                    ->where('military_affairs.stop_salary', 0);
+                        ->where('military_affairs.certificate', '1')
+                        ->where('military_affairs.stop_salary', '0');
+                }
+                if ($stop_type == 'stop_bank') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.stop_bank', '1')
+                        ->where('military_affairs.bank_archive', '0');
+                }
+                if ($stop_type == 'stop_bank_archive') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.stop_bank', '1')
+                        ->where('military_affairs.bank_archive', '1');
                 }
 
-                if($stop_type == 'excute_actions')
-                {
+                if ($stop_type == 'stop_travel') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.stop_travel', '1');
+                }
+                // excute_actions
+                if ($stop_type == 'excute_actions') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        // ->where('military_affairs.stop_travel', '1')
+                    ;
+                }
+            }, function ($q) use ($stop_type) {
+                if ($stop_type == 'open_file') {
+                    $q->where('military_affairs.status', 'military');
+                }
+                if ($stop_type == 'case_proof') {
+                    $q->where('military_affairs.status', 'case_proof');
+                }
+                if ($stop_type == 'execute_alert') {
+
+                    $q->where('military_affairs.status', 'execute_alert');
+                }
+                if ($stop_type == 'images') {
+
+                    $q->where('military_affairs.status', 'images');
+                }
+                if ($stop_type == 'Certificate') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.certificate', 1)
+                        ->where('military_affairs.stop_salary', 0);
+                }
+
+                if ($stop_type == 'excute_actions') {
 
                     $q->where('military_affairs.status', 'execute');
                 }
-
-
-        })
-        ->count();
-
-
-}
+            })
+            ->count();
+    }
 }
 if (!function_exists('count_minstry')) {
 
-function count_minstry($id, $stop_type, $minst_id)
-{
-    return Military_affair::with('installment.client')->with('installment')
-        ->whereHas('installment.client', function ($q) use($minst_id, $id) {
-            $q->where('job_type','military')->whereIN('ministry_last',[5,14,27])
-                ->where('governorate_id', $id);
-        })
-        ->whereHas('installment.client.get_ministry', function ($q) use($minst_id) {
-            $q->where('id', $minst_id);
-        })
-        ->whereHas('installment', function ($q){
-            $q->where('finished',0);
-        })
-        ->where('archived',0)
-        // ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])
+    function count_minstry($id, $stop_type, $minst_id)
+    {
+        return Military_affair::with('installment.client')->with('installment')
+            ->whereHas('installment.client', function ($q) use ($minst_id, $id) {
+                $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27])
+                    ->where('governorate_id', $id);
+            })
+            ->whereHas('installment.client.get_ministry', function ($q) use ($minst_id) {
+                $q->where('id', $minst_id);
+            })
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
+            })
+            ->where('archived', 0)
+            // ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])
 
-        ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
-            $q->where('military_affairs.status', 'execute')
-                ->where($stop_type, 1);
-
-        }, function ($q) use ($stop_type) {
-            // if ($stop_type == 'open_file') {
-            //     $q->where('military_affairs.status', 'military');
-            // }
-            // if ($stop_type == 'case_proof') {
-            //     $q->where('military_affairs.status', 'case_proof');
-            // }
-            // if($stop_type == 'execute_alert')
-            // {
-
-            //     $q->where('military_affairs.status', 'execute_alert');
-            // }
-            // if($stop_type == 'images')
-            // {
-
-            //     $q->where('military_affairs.status', 'images');
-            // }
-            if($stop_type == 'Certificate')
-            {
-
+            ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
                 $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.certificate', '1')
-                    ->where('military_affairs.stop_salary', '0');
-            }
-            // if($stop_type == 'stop_bank')
-            // {
-
-            //       $q->where('military_affairs.status', 'execute')
-            //         ->where('military_affairs.stop_bank', '1')
-            //         ->where('military_affairs.bank_archive', '0');
-            // }
-            // if($stop_type == 'stop_bank_archive')
-            // {
-
-            //     $q->where('military_affairs.status', 'execute')
-            //         ->where('military_affairs.stop_bank', '1')
-            //         ->where('military_affairs.bank_archive', '1');
-            // }
-
-            // if($stop_type == 'stop_travel')
-            // {
-
-            //     $q->where('military_affairs.status', 'execute')
-            //         ->where('military_affairs.stop_travel', '1');
-
-            // }
+                    ->where($stop_type, 1);
             }, function ($q) use ($stop_type) {
                 // if ($stop_type == 'open_file') {
                 //     $q->where('military_affairs.status', 'military');
@@ -1373,128 +1294,169 @@ function count_minstry($id, $stop_type, $minst_id)
 
                 //     $q->where('military_affairs.status', 'images');
                 // }
-                if($stop_type == 'Certificate')
-                {
+                if ($stop_type == 'Certificate') {
 
                     $q->where('military_affairs.status', 'execute')
-                    ->where('military_affairs.certificate', 1)
-                    ->where('military_affairs.stop_salary', 0);
+                        ->where('military_affairs.certificate', '1')
+                        ->where('military_affairs.stop_salary', '0');
                 }
+                // if($stop_type == 'stop_bank')
+                // {
 
+                //       $q->where('military_affairs.status', 'execute')
+                //         ->where('military_affairs.stop_bank', '1')
+                //         ->where('military_affairs.bank_archive', '0');
+                // }
+                // if($stop_type == 'stop_bank_archive')
+                // {
 
-        })
-        ->count();
+                //     $q->where('military_affairs.status', 'execute')
+                //         ->where('military_affairs.stop_bank', '1')
+                //         ->where('military_affairs.bank_archive', '1');
+                // }
 
-}
+                // if($stop_type == 'stop_travel')
+                // {
+
+                //     $q->where('military_affairs.status', 'execute')
+                //         ->where('military_affairs.stop_travel', '1');
+
+                // }
+            }, function ($q) use ($stop_type) {
+                // if ($stop_type == 'open_file') {
+                //     $q->where('military_affairs.status', 'military');
+                // }
+                // if ($stop_type == 'case_proof') {
+                //     $q->where('military_affairs.status', 'case_proof');
+                // }
+                // if($stop_type == 'execute_alert')
+                // {
+
+                //     $q->where('military_affairs.status', 'execute_alert');
+                // }
+                // if($stop_type == 'images')
+                // {
+
+                //     $q->where('military_affairs.status', 'images');
+                // }
+                if ($stop_type == 'Certificate') {
+
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.certificate', 1)
+                        ->where('military_affairs.stop_salary', 0);
+                }
+            })
+            ->count();
+    }
 }
 if (!function_exists('get_diff_date')) {
 
-function get_diff_date($date1,$date2){
+    function get_diff_date($date1, $date2)
+    {
 
-    $date1 = new DateTime($date1); // First date
-    $date2 = new DateTime($date2); // Second date
+        $date1 = new DateTime($date1); // First date
+        $date2 = new DateTime($date2); // Second date
 
-// Get the difference
-    $interval = $date1->diff($date2);
+        // Get the difference
+        $interval = $date1->diff($date2);
 
-// Output the difference in days
-    return  $interval->days;
-
-
-}
+        // Output the difference in days
+        return  $interval->days;
+    }
 }
 if (!function_exists('sendSmsHelper')) {
 
- function sendSmsHelper($message, $phones)
-{
-    $url = "http://62.150.26.41/SmsWebService.asmx/send";
-    $params = [
-        'username' => 'Electron',
-        'password' => 'rRrRNcAe',
-        'token' => 'hjazfzzKhahF3MHj5fznngsb',
-        'sender' => 'Electron',
-        'message' => $message,
-        'dst' => $phones,
-        'type' => 'text',
-        'coding' => 'unicode',
-        'datetime' => 'now',
-    ];
+    function sendSmsHelper($message, $phones)
+    {
+        $url = "http://62.150.26.41/SmsWebService.asmx/send";
+        $params = [
+            'username' => 'Electron',
+            'password' => 'rRrRNcAe',
+            'token' => 'hjazfzzKhahF3MHj5fznngsb',
+            'sender' => 'Electron',
+            'message' => $message,
+            'dst' => $phones,
+            'type' => 'text',
+            'coding' => 'unicode',
+            'datetime' => 'now',
+        ];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 
-    $result = curl_exec($ch);
+        $result = curl_exec($ch);
 
-    if (curl_errno($ch)) {
-        LaravelLog::error('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
+        if (curl_errno($ch)) {
+            LaravelLog::error('cURL error when connecting to ' . $url . ': ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        return $result;
     }
-
-    curl_close($ch);
-
-    return $result;
-}
 }
 if (!function_exists('buildMessage')) {
 
- function buildMessage($slug, $item)
-{
-    switch ($slug) {
+    function buildMessage($slug, $item)
+    {
+        switch ($slug) {
 
-        case 'stop_car':
-            return "عزيزي العميل / {$item->installment->client->name_ar}\n"
-                . "تم إتخاذ الإجراءات القانونية بحقكم\n"
-                . "1- منع سفر\n"
-                . "2- حجز سيارات\n"
-                . "3- حجز بنوك\n"
-                . "4- حجز عقار\n"
-                . "لمشاهدة صور مستندات الإجراءات\n"
-                . "اضغط على الرابط\n"
-                . url('pub/show_action/scar/' . $item->id . '/' . $item->code);
-        default:
-            return null;
+            case 'stop_car':
+                return "عزيزي العميل / {$item->installment->client->name_ar}\n"
+                    . "تم إتخاذ الإجراءات القانونية بحقكم\n"
+                    . "1- منع سفر\n"
+                    . "2- حجز سيارات\n"
+                    . "3- حجز بنوك\n"
+                    . "4- حجز عقار\n"
+                    . "لمشاهدة صور مستندات الإجراءات\n"
+                    . "اضغط على الرابط\n"
+                    . url('pub/show_action/scar/' . $item->id . '/' . $item->code);
+            default:
+                return null;
+        }
     }
-}
 }
 if (!function_exists('getDiffTodayDates')) {
 
-function getDiffTodayDates($start_date, $end_date = null)
-{
-    $the_color = '';
-    $differenceInDays = '';
-    $counter = '';
+    function getDiffTodayDates($start_date, $end_date = null)
+    {
+        $the_color = '';
+        $differenceInDays = '';
+        $counter = '';
 
-    $today_date = Carbon::today(); // Current date
+        $today_date = Carbon::today(); // Current date
 
-    if (empty($start_date) || $start_date < 1) {
-        $the_color = 'danger';
-    } else {
-        $date1 = Carbon::parse($start_date); // Parse start_date
-
-        if (!empty($end_date) && $end_date > 0) {
-            $date2 = Carbon::parse($end_date);
+        if (empty($start_date) || $start_date < 1) {
+            $the_color = 'danger';
         } else {
-            $date2 = $today_date;
+            $date1 = Carbon::parse($start_date); // Parse start_date
+
+            if (!empty($end_date) && $end_date > 0) {
+                $date2 = Carbon::parse($end_date);
+            } else {
+                $date2 = $today_date;
+            }
+
+            $differenceInDays = $date2->diffInDays($date1, false); // Calculate difference with sign
+
+            if ($differenceInDays > 0) {
+                $the_color = 'info';
+            } else {
+                $the_color = 'success';
+                $differenceInDays = abs($differenceInDays); // Make positive
+            }
+
+            $counter = "<span class=\"btn btn-{$the_color} btn-rounded\">{$differenceInDays} يوم</span>";
         }
 
-        $differenceInDays = $date2->diffInDays($date1, false); // Calculate difference with sign
-
-        if ($differenceInDays > 0) {
-            $the_color = 'info';
-        } else {
-            $the_color = 'success';
-            $differenceInDays = abs($differenceInDays); // Make positive
-        }
-
-        $counter = "<span class=\"btn btn-{$the_color} btn-rounded\">{$differenceInDays} يوم</span>";
+        return $counter;
     }
-
-    return $counter;
-}}
+}
 
 // count certificate type
 if (!function_exists('count_status')) {
@@ -1503,24 +1465,23 @@ if (!function_exists('count_status')) {
     {
         // dd($subtype);
         return Military_affair::with('installment.client')->with('installment')
-            ->whereHas('installment.client', function ($q) use($minst_id, $id) {
-                $q->where('job_type','military')->whereIN('ministry_last',[5,14,27])
+            ->whereHas('installment.client', function ($q) use ($minst_id, $id) {
+                $q->where('job_type', 'military')->whereIN('ministry_last', [5, 14, 27])
                     ->where('governorate_id', $id);
             })
-            ->whereHas('installment.client.get_ministry', function ($q) use($minst_id) {
+            ->whereHas('installment.client.get_ministry', function ($q) use ($minst_id) {
                 $q->where('id', $minst_id);
             })
-            ->whereHas('installment', function ($q){
-                $q->where('finished',0);
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
             })
-            ->where('archived',0)
+            ->where('archived', 0)
             // ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])
-    
+
             ->when($stop_type === 'Certificate', function ($q) use ($stop_type) {
-                    $q->where('military_affairs.status', 'execute')
-                        ->where('military_affairs.certificate', '1')
-                        ->where('military_affairs.stop_salary', '0');
-    
+                $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.certificate', '1')
+                    ->where('military_affairs.stop_salary', '0');
             })
             ->when($subtype === 'info_request', function ($q) use ($stop_type) {
                 $q->where('military_affairs.certificate_info_request', '0');
@@ -1529,22 +1490,21 @@ if (!function_exists('count_status')) {
             ->when($subtype === 'info_book', function ($q) use ($stop_type) {
                 // $q->where('military_affairs.certificate_info_request', '0')
                 $q->where('certificate_info_book', 1)
-                ->where('certificate_info_request', 1)
-                ->where('certificate_export', 0);
+                    ->where('certificate_info_request', 1)
+                    ->where('certificate_export', 0);
             })
             ->when($subtype === 'export', function ($q) use ($stop_type) {
                 $q->where('certificate_info_book', 1)
-                ->where('certificate_info_request', 1)
-                ->where('certificate_export', 1)
-                ->where('certificate_no', '=', NULL);
+                    ->where('certificate_info_request', 1)
+                    ->where('certificate_export', 1)
+                    ->where('certificate_no', '=', NULL);
             })
             ->when($subtype === 'money', function ($q) use ($stop_type) {
                 $q->where('certificate_info_book', 1)
-                ->where('certificate_info_request', 1)
-                ->where('certificate_export', 1)
-                ->where('certificate_no', '!=', NULL);
+                    ->where('certificate_info_request', 1)
+                    ->where('certificate_export', 1)
+                    ->where('certificate_no', '!=', NULL);
             })
             ->count();
-    
     }
-    }
+}
