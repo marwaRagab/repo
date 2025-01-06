@@ -19,40 +19,67 @@ class QrCodeController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function generate()
+    public function generate($user_id=null)
     {
         $users = User::all();
+
 
         $destinationPath = public_path('qr_codes');
 
         if (!File::exists($destinationPath)) {
             File::makeDirectory($destinationPath, 0755, true);
         }
+        if(!$user_id){
+            foreach ($users as $user) {
+                // Generate the QR code
+                $qrCode = Builder::create()
+                    ->writer(new PngWriter())
+                    ->data( route('elec/users.edit', Crypt::encryptString($user->id)) )
+                    ->encoding(new Encoding('UTF-8'))
+                    ->size(300)
+                    ->margin(10)
+                    ->build();
 
-        foreach ($users as $user) {
+                $encryptedName = md5(uniqid($user->id, true)) . '.png';
+
+                $filePath = $destinationPath . '/' . $encryptedName;
+
+                $qrCode->saveToFile($filePath);
+
+                DB::table('users')->where('id', $user->id)->update(['qr_code_path' => "qr_codes/{$encryptedName}"]);
+
+            }
+        }else{
+
+
+
+            $user_new=User::findorfail($user_id);
+
             // Generate the QR code
             $qrCode = Builder::create()
                 ->writer(new PngWriter())
-                ->data( route('users.edit', Crypt::encryptString($user->id)) )
+                ->data( route('users.edit', Crypt::encryptString($user_new->id)) )
                 ->encoding(new Encoding('UTF-8'))
                 ->size(300)
                 ->margin(10)
                 ->build();
 
-            $encryptedName = md5(uniqid($user->id, true)) . '.png';
+            $encryptedName_user = md5(uniqid($user_new->id, true)) . '.png';
 
-            $filePath = $destinationPath . '/' . $encryptedName;
+            $filePath = $destinationPath . '/' . $encryptedName_user;
 
             $qrCode->saveToFile($filePath);
+            // $data['qr_code_path']='qr_codes/'.$encryptedName;
 
-            DB::table('users')->where('id', $user->id)->update(['qr_code_path' => "qr_codes/{$encryptedName}"]);
+            DB::table('users')->where('id', $user_new->id)->update(['qr_code_path' => "qr_codes/{$encryptedName_user}"]);
 
         }
+        return redirect()->route('users.index')->with('success', 'تم إضافة المستخدم بنجاح');
 
-        return "QR codes generated successfully!";
+
+        //return "QR codes generated successfully!";
 
     }
-
     public function download($userId)
     {
         $user = User::findOrFail($userId);

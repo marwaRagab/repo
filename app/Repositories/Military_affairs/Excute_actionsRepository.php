@@ -47,10 +47,15 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $checking_type = $request->checking_type;
         $message = "تم دخول صفحة فتح  رصيد التنفيذ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+        if($request->governorate_id){
+            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+
+        }else{
+            $governorate_id='';
+        }
+        $user_id =  Auth::user()->id;
+         log_move($user_id ,$message);
+
         $this->data['title'] = 'رصيد التنفيذ ';
 
 
@@ -58,6 +63,11 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
             })->with('military_amount')
+            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            })
             ->orderBy('excute_actions_amount', 'desc')
             ->get();
 

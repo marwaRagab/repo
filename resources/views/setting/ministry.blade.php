@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="date">التاريخ</label>
-                                    <input type="date" name="date" class="form-control mb-2" id="date">
+                                    <input type="text" name="date" class="form-control mb-2" id="date">
                                     <small id="date-error" class="text-danger"></small>
                                 </div>
                                 <div class="form-group">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="edit_date">تاريخ الراتب</label>
-                                <input type="date" name="date" class="form-control mb-2" id="edit_date">
+                                <input type="text" name="date" class="form-control mb-2" id="edit_date">
                             </div>
                             <div class="form-group">
                                 <label for="edit_ministry_percentage">النسبة</label>

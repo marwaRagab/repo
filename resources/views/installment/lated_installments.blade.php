@@ -70,7 +70,7 @@
                             </div>
                             </td>
                         <td>{{$item->client->bank->name_ar ?? 'لايوجد'}}</td>
-                        <td> {{$item->client->ministry->name_ar ?? 'لايوجد'}}</td>
+                        <td> {{$item->client->get_ministry->name_ar ?? 'لايوجد'}}</td>
                        {{-- {{ dd($item->installment_months)}} --}}
                         <td>
                             {{$item->installment_months['0']->date ?? 'لايوجد'}}
