@@ -1,14 +1,13 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
         <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
-            الكل
+            الكل  ({{ count_court('' ,'excute_actions',null,null) }})
         </a>
         @foreach($courts as $court)
-
-        <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
-        </a>
-
+            <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
+                class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
+                ({{ count_court($court->id ,'excute_actions',null,null) }})
+            </a>
         @endforeach
     </div>
 </div>

@@ -1174,10 +1174,10 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
         ->whereHas('installment', function ($q) {
             return $q->where('finished', 0);
         })
-        ->when($stop_type === "stop_salary", function ($query) use ($time_type, $minst_id, $court_id) {
-            $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id) {
+        ->when($stop_type === "stop_salary"  , function ($query) use ($time_type, $minst_id, $court_id,$stop_type) {
+            $query->whereHas('status_all', function ($q) use ($time_type, $minst_id, $court_id ,$stop_type) {
                 if ($minst_id && $court_id) {
-                    $q->where('type', 'stop_salary')
+                    $q->where('type', $stop_type)
                         ->where('ministry', $minst_id)
                         ->where('type_id', $time_type)
                         ->where('flag', 0);
@@ -1241,6 +1241,15 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                     ->where('military_affairs.stop_travel', '1');
 
             }
+            // excute_actions
+            if($stop_type == 'excute_actions')
+            {
+
+                $q->where('military_affairs.status', 'execute')
+                    // ->where('military_affairs.stop_travel', '1')
+                    ;
+
+            }
             }, function ($q) use ($stop_type) {
                 if ($stop_type == 'open_file') {
                     $q->where('military_affairs.status', 'military');
@@ -1266,6 +1275,12 @@ function count_court($court_id, $stop_type,$minst_id,$time_type)
                     ->where('military_affairs.stop_salary', 0);
                 }
 
+                if($stop_type == 'excute_actions')
+                {
+
+                    $q->where('military_affairs.status', 'execute');
+                }
+
 
         })
         ->count();
@@ -1289,7 +1304,87 @@ function count_minstry($id, $stop_type, $minst_id)
             $q->where('finished',0);
         })
         ->where('archived',0)
-        ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])->count();
+        // ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])
+
+        ->when($stop_type == 'stop_salary', function ($q) use ($stop_type) {
+            $q->where('military_affairs.status', 'execute')
+                ->where($stop_type, 1);
+
+        }, function ($q) use ($stop_type) {
+            // if ($stop_type == 'open_file') {
+            //     $q->where('military_affairs.status', 'military');
+            // }
+            // if ($stop_type == 'case_proof') {
+            //     $q->where('military_affairs.status', 'case_proof');
+            // }
+            // if($stop_type == 'execute_alert')
+            // {
+
+            //     $q->where('military_affairs.status', 'execute_alert');
+            // }
+            // if($stop_type == 'images')
+            // {
+
+            //     $q->where('military_affairs.status', 'images');
+            // }
+            if($stop_type == 'Certificate')
+            {
+
+                $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.certificate', '1')
+                    ->where('military_affairs.stop_salary', '0');
+            }
+            // if($stop_type == 'stop_bank')
+            // {
+
+            //       $q->where('military_affairs.status', 'execute')
+            //         ->where('military_affairs.stop_bank', '1')
+            //         ->where('military_affairs.bank_archive', '0');
+            // }
+            // if($stop_type == 'stop_bank_archive')
+            // {
+
+            //     $q->where('military_affairs.status', 'execute')
+            //         ->where('military_affairs.stop_bank', '1')
+            //         ->where('military_affairs.bank_archive', '1');
+            // }
+
+            // if($stop_type == 'stop_travel')
+            // {
+
+            //     $q->where('military_affairs.status', 'execute')
+            //         ->where('military_affairs.stop_travel', '1');
+
+            // }
+            }, function ($q) use ($stop_type) {
+                // if ($stop_type == 'open_file') {
+                //     $q->where('military_affairs.status', 'military');
+                // }
+                // if ($stop_type == 'case_proof') {
+                //     $q->where('military_affairs.status', 'case_proof');
+                // }
+                // if($stop_type == 'execute_alert')
+                // {
+
+                //     $q->where('military_affairs.status', 'execute_alert');
+                // }
+                // if($stop_type == 'images')
+                // {
+
+                //     $q->where('military_affairs.status', 'images');
+                // }
+                if($stop_type == 'Certificate')
+                {
+
+                    $q->where('military_affairs.status', 'execute')
+                    ->where('military_affairs.certificate', 1)
+                    ->where('military_affairs.stop_salary', 0);
+                }
+
+
+        })
+        ->count();
+
 }
 }
 if (!function_exists('get_diff_date')) {
@@ -1400,3 +1495,56 @@ function getDiffTodayDates($start_date, $end_date = null)
 
     return $counter;
 }}
+
+// count certificate type
+if (!function_exists('count_status')) {
+
+    function count_status($id, $stop_type, $subtype, $minst_id)
+    {
+        // dd($subtype);
+        return Military_affair::with('installment.client')->with('installment')
+            ->whereHas('installment.client', function ($q) use($minst_id, $id) {
+                $q->where('job_type','military')->whereIN('ministry_last',[5,14,27])
+                    ->where('governorate_id', $id);
+            })
+            ->whereHas('installment.client.get_ministry', function ($q) use($minst_id) {
+                $q->where('id', $minst_id);
+            })
+            ->whereHas('installment', function ($q){
+                $q->where('finished',0);
+            })
+            ->where('archived',0)
+            // ->where(['military_affairs.status' => 'execute', $stop_type => 1  ])
+    
+            ->when($stop_type === 'Certificate', function ($q) use ($stop_type) {
+                    $q->where('military_affairs.status', 'execute')
+                        ->where('military_affairs.certificate', '1')
+                        ->where('military_affairs.stop_salary', '0');
+    
+            })
+            ->when($subtype === 'info_request', function ($q) use ($stop_type) {
+                $q->where('military_affairs.certificate_info_request', '0');
+            })
+            // info_book
+            ->when($subtype === 'info_book', function ($q) use ($stop_type) {
+                // $q->where('military_affairs.certificate_info_request', '0')
+                $q->where('certificate_info_book', 1)
+                ->where('certificate_info_request', 1)
+                ->where('certificate_export', 0);
+            })
+            ->when($subtype === 'export', function ($q) use ($stop_type) {
+                $q->where('certificate_info_book', 1)
+                ->where('certificate_info_request', 1)
+                ->where('certificate_export', 1)
+                ->where('certificate_no', '=', NULL);
+            })
+            ->when($subtype === 'money', function ($q) use ($stop_type) {
+                $q->where('certificate_info_book', 1)
+                ->where('certificate_info_request', 1)
+                ->where('certificate_export', 1)
+                ->where('certificate_no', '!=', NULL);
+            })
+            ->count();
+    
+    }
+    }

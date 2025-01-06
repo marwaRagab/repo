@@ -10,13 +10,24 @@
             العدد الكلي ({{ count_court('' ,'images',null,null) }})
         </a>
 
-        @for ($i=0;$i<count($governorates);$i++)
+        {{-- @for ($i=0;$i<count($governorates);$i++)
 
-            <a  href="{{ route('image',$governorates[$i]->id) }}" class="btn-filter  bg-{{ $arr[$i] }}-subtle text-{{ $arr[$i] }} px-4  mx-1 mb-2">
+            <a  href=" {{route('image',array('governorate_id' => $governorates[$i]->id))}} " class="btn-filter  bg-{{ $arr[$i] }}-subtle text-{{ $arr[$i] }} px-4  mx-1 mb-2">
                 محكمة {{ $governorates[$i]->name_ar }}
                 ({{ count_court($governorates[$i]->id ,'images',null,null) }})
             </a>
-        @endfor
+        @endfor --}}
+
+       
+
+        @foreach($governorates as $court)
+
+        <a href="{{ route('image',['governorate_id' => $court->id]) }}"
+           class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
+            ({{ count_court($court->id ,'images',null,null) }})
+        </a>
+
+    @endforeach
 
 
 
