@@ -115,6 +115,13 @@ Route::get('/', function () {
 
     return view('login');
 });
+
+
+Route::get('/noimage', function () {
+   
+
+    return view('noimage');
+})->name('noimage');
 Route::get('/db/{type}', [old_dbController::class, 'index']);
 Route::get('/get_reminder_all', [old_dbController::class, 'get_reminder']);
 Route::get('/linkstorage', function () {
@@ -328,6 +335,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/change_states', [Stop_bankController::class, 'change_states']);
     Route::get('/payments', [PaymentsController::class, 'index'])->name('payments');
     Route::get('/payments/data', [PaymentsController::class, 'getPaymentsData'])->name('payments.data');
+    // collect_affairs
+    Route::get('/collect_affairs', [PaymentsController::class, 'collect_affairs'])->name('payments.collect_affairs');
+    Route::get('/getcollect_affairsData', [PaymentsController::class, 'getcollect_affairsData'])->name('payments.getcollect_affairsData');
 
     Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice');
     Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief'])->name('set_archief.data');
@@ -338,6 +348,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/installment/invoices_installment/print_invoice/{id1}/{id2}', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/export_all', [PaymentsController::class, 'export_all']);
     Route::get('/print_invoice_export/{id1}/{id2}', [PaymentsController::class, 'print_invoice']);
+
+    
 
     // Route::Resource('branches', BranchController::class);
     // Route::get('branches/getall', [BranchController::class, 'getall'])->name('branches.getall');

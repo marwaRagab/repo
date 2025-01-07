@@ -2228,12 +2228,20 @@
                                                             الايصال </span>
                                                     </a>-->
 
-                                                <a target="_blank"
+                                                    @if(!empty($one->img))
+                                                    <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
+                                                    @else
+                                                    <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
+                                                    @endif
+                                                
 
                                             </td>
                                         </tr>
@@ -2274,12 +2282,21 @@
                                             </td>
                                             <td>
 
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
+                                               
+
+                                                @if(!empty($military_affairs_check->img_dir))
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                        title="Download the file from the primary or fallback server.">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
+                                                    @else
+                                                    <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                         @endif
@@ -2337,12 +2354,21 @@
                                                 </span>
                                             </td>
                                             <td>
+                                                
+
+                                                @if(!empty($military_affairs_amount->img_dir))
                                                 <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
+                                                @else
+                                                <a href="{{ route('noimage') }}" target=" _blank">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+                                            @endif
                                             </td>
                                         </tr>
                                         @endif
@@ -2951,10 +2977,23 @@
                                             <td>
 
                                                 <h6>{{ $month->payment_date }}</h6>
-                                                <h6><a href="{{ asset($month->img_dir ?? '/') }}" target=" _blank">
+                                                <h6>
+                                                    
+
+                                                    @if(!empty($month->img_dir))
+                                                    <a href="{{ asset($month->img_dir) }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
-                                                    </a></h6>
+                                                    </a>
+                                                    @else
+                                                    <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
+                                                    @endif
+                                                
+                                                
+                                                </h6>
 
                                                 <a target="_blank"
                                                     href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
