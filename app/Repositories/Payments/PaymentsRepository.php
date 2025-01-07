@@ -106,8 +106,8 @@ class PaymentsRepository implements PaymentsRepositoryInterface
         $pay_date = $request->month;
     
         // Query the database with necessary filters and relationships
-        $payments = Invoices_installment::where('arch', 0)->whereNot('payment_type' , 'check')
-        ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
+        $payments = Invoices_installment::where('arch', 0)
+        // ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
             ->when($pay_date, function ($query) use ($pay_date) {
                 $date = new DateTime($pay_date);
                 $year = $date->format('Y');
@@ -116,15 +116,13 @@ class PaymentsRepository implements PaymentsRepositoryInterface
             })
             ->where('branch_id', Auth::user()->branch_id)
             ->with([
-                'installment' => function ($query) {
-                    $query->where('laws', 0);
-                },
+                'installment',
                 'install_month',
             ])
             ->select([
-                'invoices_installment.id', 'payment_type', 'invoices_installment.date', 'branch_id', 
-                'invoices_installment.installment_id', 'install_month_id', 
-                'description', 'invoices_installment.amount', 'print_status'
+                'id', 'payment_type', 'date', 'branch_id', 
+                'installment_id', 'install_month_id', 
+                'description', 'amount', 'print_status'
             ]);
     
         // Process data for DataTables
@@ -629,6 +627,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                         'view2' => $view2,
                         'view3' => $view3,
                         'view4' => $view4,
+                        
                     ],
                     'redirect' => route('print_all_in'), // This route should work now
                 ]);
@@ -1031,7 +1030,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
             ->where('branch_id', Auth::user()->branch_id)
             ->where('payment_type' ,'!=','check')
             ->get();
-            
+
         // Process data for DataTables
         return DataTables::of($payments)
         ->addColumn('pay_method', function ($payment) {
