@@ -1,3 +1,5 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
@@ -33,6 +35,9 @@
                 </thead>
                 
             </table>
+
+            <button   class="btn btn-success test" value="1"    style="margin-right: 900px;     margin-bottom: -50px;"    onclick="valthisform(this);"  >طباعة</button>
+                    <button   class="btn btn-danger test"  value="2"  style="margin-right: 1000px"  onclick="valthisform(this);"   >ارشفة</button>
         </div>
     </div>
 </div>
@@ -48,26 +53,37 @@
 
     document.getElementById('select-all').addEventListener('change', function () {
     // Select all checkboxes within the table
-    const checkboxes = document.querySelectorAll('#users-table input[name="action[]"]');
+    const checkboxes = document.querySelectorAll('#users-table input[name="checkAll[]"]');
     checkboxes.forEach(checkbox => {
         checkbox.checked = this.checked; // Set checkbox state based on "select-all"
     });
 });
 
-// Ensure new rows are bound correctly after DataTable redraw
 $('#users-table').on('draw.dt', function () {
     const selectAllCheckbox = document.getElementById('select-all');
-    const checkboxes = document.querySelectorAll('#users-table input[name="action[]"]');
-
+    const checkboxes = document.querySelectorAll('#users-table input[name="checkAll[]"]');
+    
     // Sync "select-all" state with individual checkboxes
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = selectAllCheckbox.checked;
-    });
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    selectAllCheckbox.checked = allChecked; // Check the "select-all" if all checkboxes are selected
+
+    // Optionally, you can disable "select-all" if there are no rows or rows without checkboxes
+    selectAllCheckbox.disabled = checkboxes.length === 0;
+});
+
+// Ensure "select-all" checkbox works when the table is redrawn
+$('#users-table').on('draw.dt', function () {
+    const selectAllCheckbox = document.getElementById('select-all');
+    const checkboxes = document.querySelectorAll('#users-table input[name="checkAll[]"]');
+    
+    // Sync the select-all checkbox with individual checkboxes
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    selectAllCheckbox.checked = allChecked;
 });
 
 function handleBulkAction(button) {
     const actionValue = button.value;
-    const selectedItems = Array.from(document.querySelectorAll('input[name="action[]"]:checked'))
+    const selectedItems = Array.from(document.querySelectorAll('input[name="checkAll[]"]:checked'))
         .map(checkbox => checkbox.value);
 
     if (selectedItems.length === 0) {
@@ -92,8 +108,94 @@ function handleBulkAction(button) {
         }
     });
 }
-</script>
+// ///////////////////////////////////
+function valthisform(button) {
+    const checkboxes = document.getElementsByName("checkAll[]");
+    const selectedCheckboxes = $('input[name="checkAll[]"]:checked');
 
+    // Ensure at least one checkbox is selected
+    if (selectedCheckboxes.length === 0) {
+        alert("يجب اختيار عميل واحد على الاقل");
+        return;
+    }
+
+    const arr = [];       // Array for items to print
+    const arr_arch = [];  // Array for items to archive
+    const allserials = []; // Array for all selected serials
+
+    // Loop through selected checkboxes
+    selectedCheckboxes.each(function () {
+        const checkbox = $(this);
+        const value = Number(checkbox.val());
+        const typeIdPrint = checkbox.data('print'); // Use data attribute
+
+        if (!isNaN(value)) {
+            if (typeIdPrint !== 'done') {
+                arr.push(value);
+                allserials.push(Number(checkbox.attr('id')));
+            } else {
+                arr_arch.push(value);
+            }
+        }
+    });
+
+    if (button.value == 1) {
+        // Handle Print Action
+        if (arr.length === 0) {
+            alert("لا يوجد عناصر للطباعة");
+            return;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: `/print_all/${arr}/${allserials.join(',')}`, // Construct URL dynamically
+            headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    },
+            success: function (response) {
+                if (response.success) {
+            // Optionally, render the views in the DOM if needed
+            $('#view1-container').html(response.views.view1);
+            $('#view2-container').html(response.views.view2);
+            $('#view3-container').html(response.views.view3);
+            $('#view4-container').html(response.views.view4);
+
+            // Redirect to the print invoice page
+            window.location.href = response.redirect; // This should now redirect correctly
+        } else {
+            alert("حدث خطأ أثناء الطباعة");
+        }
+            },
+            error: function (error) {
+                console.error("Error in Print All:", error.responseText);
+                alert("حدث خطأ أثناء الطباعة");
+            },
+        });
+    } else if (button.value == 2) {
+        // Handle Archive Action
+        if (arr_arch.length === 0) {
+            alert("لا يمكن الارشفة قبل الطباعة");
+            return;
+        }
+
+        $.ajax({
+            type: 'get',
+            url: `/archieve_all/${arr_arch.join(',')}`, // Construct URL dynamically
+            success: function (response) {
+                const data = JSON.parse(response);
+                console.log(data);
+                window.location.href = data.redirect;
+            },
+            error: function (error) {
+                console.error("Error in Archive All:", error.responseText);
+                alert("حدث خطأ أثناء الأرشفة");
+            },
+        });
+    }
+}
+///////////////////////////////
+
+</script>
 
 <script type="text/javascript">
         $(document).ready(function() {
@@ -112,9 +214,13 @@ function handleBulkAction(button) {
                 }
                 },
                 columns: [{
-                        data: 'id',
-                        name: 'id',
-                        className: 'text-center'
+                    data: 'installment_id',
+                    name: 'id',
+                    className: 'text-center',
+                    render: function(data, type, row) {
+                        var url = 'installment/show-installment/' + data;
+                        return `<a href="${url}">${data}</a>`;
+                    }
                     },
                     {
                         data: 'installment_name',
@@ -166,10 +272,19 @@ function handleBulkAction(button) {
                     //     name: 'archive_button',
                     //     className: 'text-center'
                     // },
+                    
                     {
-                        data: 'select_checkbox',
-                        name: 'select_checkbox',
-                        className: 'text-center'
+                        // data: 'select_checkbox',
+                        // name: 'select_checkbox',
+                        // className: 'text-center'
+                        data: null,
+            name: 'select_checkbox', 
+            className: 'text-center',
+            orderable: false,
+            searchable: false,
+                    render: function(data, type, row) {
+                        return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`; 
+                    }
                     },
                     
                 ],
