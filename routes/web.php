@@ -692,6 +692,10 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::post('/technical-support/problems/update/{id}', [ProblemController::class, 'updateStatus'])->name('supportProblem.updateStatus');
     Route::post('/technical-support/problems/{id}', [ProblemController::class, 'addReply'])->name('supportProblem.addReply');
 
+    // deparment
+    Route::get('/get-sub-departments/{departmentId}', [ProblemController::class, 'getSubDepartments']);
+
+
     Route::get('/technical-support/Requests', [RequestController::class, 'index'])->name('supportRequest.index');
     Route::post('/technical-support/Requests', [RequestController::class, 'store'])->name('supportRequest.store');
     Route::get('/technical-support/Requests/{id}', [RequestController::class, 'show'])->name('supportRequest.show');

@@ -58,7 +58,7 @@
                         <td><strong>الحالة</strong></td>
 
                         <td> {{ $statusMapping[$data->status] }}<br>
-                            @if (auth()->user()->support == 1)
+                            {{-- @if (auth()->user()->support == 1) --}}
                                 <form action="{{ route('supportProblem.updateStatus', ['id' => $data->id]) }}"
                                     method="POST">
                                     @csrf
@@ -98,7 +98,7 @@
                                         </li>
                                     </ul>
                                 </form>
-                            @endif
+                            {{-- @endif --}}
                         </td>
                     </tr>
                 </tbody>
