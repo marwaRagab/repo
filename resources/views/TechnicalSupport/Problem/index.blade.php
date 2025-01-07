@@ -44,9 +44,12 @@
                     <tr>
                         <th>م</th>
                         <th>رقم المعاملة</th>
+                        <th>القسم</th>
+                        <th>القسم الفرعى</th>
                         <th>العنوان</th>
                         <th>التاريخ</th>
                         <th>الحالة</th>
+                        
                         <th>اسم المستخدم</th>
                         <th>الرابط</th>
                         <th>الإعدادات</th>
@@ -55,8 +58,23 @@
                 <tbody>
                     @foreach ($data as $problem)
                         <tr>
+                            
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ $problem->installement_id }}</td>
+                            <td>
+                                @if($problem->department != NuLL)
+                                    {{ $problem->department->name_ar  }}
+                                @else
+                                   لا يوجد
+                                @endif
+                            </td>
+                            <td>
+                                @if($problem->department && $problem->department->subdepartment)
+                                    {{ $problem->department->subdepartment->first()->name_ar }}
+                                @else
+                                    لا يوجد
+                                @endif
+                            </td>
                             <td>{{ $problem->title }}</td>
                             <td>
                                 <p class="m-0">{{ \Carbon\Carbon::parse($problem->created_at)->format('Y/m/d') }}
@@ -115,6 +133,23 @@
                             <input type="text" class="form-control mb-2" id="input1" name="installement_id">
                         </div>
                         <div class="form-group">
+                            <label class="form-label" for="input1 "> القسم </label>
+                            <select id="department"  class="form-control mb-2" name="department">
+                                <option selected disabled>اختر</option>
+                                @foreach ($department as $dep)
+                                <option value="{{ $dep->id }}">{{ $dep->name_ar }}</option>
+                                @endforeach
+                                
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="display: none" id="sub-department-group">
+                            <label class="form-label" for="sub_department">الأقسام الفرعية</label>
+                            <select id="sub_department" name="sub_department" class="form-select mb-2">
+                                <!-- Sub-departments will be populated here -->
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label" for="input2 "> العنوان</label>
                             <input type="text" class="form-control mb-2" id="input2" name="title">
                         </div>
@@ -148,3 +183,36 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
+<script>
+    document.getElementById('department').addEventListener('change', function() {
+    let departmentId = this.value;
+    
+    // If no department is selected, hide the sub-department select field
+    if (!departmentId) {
+        document.getElementById('sub-department-group').style.display = 'none';
+        return;
+    }
+
+    // Show the sub-department select field
+    document.getElementById('sub-department-group').style.display = 'block';
+    
+    // Make an AJAX request to fetch the sub-departments
+    fetch(`/get-sub-departments/${departmentId}`)
+        .then(response => response.json())
+        .then(data => {
+            let subDepartmentSelect = document.getElementById('sub_department');
+            subDepartmentSelect.innerHTML = ''; // Clear the previous options
+            subDepartmentSelect.innerHTML = '<option selected disabled>اختر القسم الفرعي</option>';
+
+            data.subDepartments.forEach(subDept => {
+                let option = document.createElement('option');
+                option.value = subDept.id;
+                option.textContent = subDept.name_ar;
+                subDepartmentSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching sub-departments:', error));
+});
+
+</script>

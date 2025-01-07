@@ -3,6 +3,7 @@
 namespace App\Repositories\TechnicalSupport;
 
 use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
+use App\Models\Department;
 use App\Models\Notification;
 use App\Models\TechnicalSupport\Problem;
 use App\Models\TechnicalSupport\ProblemReply;
@@ -48,10 +49,12 @@ class ProblemRepository implements ProblemRepositoryInterface
         $breadcrumb[1]['title'] = $title;
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
+        $department = Department::all();
+
         $view = 'TechnicalSupport.Problem.index';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status')
+            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status','department')
         );
     }
 
@@ -93,6 +96,8 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function store($request)
     {
 
+
+        // dd($request);
         $messages = [
             'title.required' => 'عنوان المشكلة اجباري.',
             'link.required' => 'رابط المشكلة اجباري',
@@ -119,6 +124,8 @@ class ProblemRepository implements ProblemRepositoryInterface
             if ($request->hasFile('file')) {
                 $data->file = $request->file('file')->store('uploads/new_photos', 'public');
             }
+            $data->department_id = $request->department;
+            $data->sub_department_id = $request->sub_department;
             $data->user_id = Auth::user()->id;
             $data->save();
         }

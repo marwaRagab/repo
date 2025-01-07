@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\TechnicalSupport;
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Models\SubDepartment;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
 
 class ProblemController extends Controller
 {
@@ -78,5 +79,16 @@ class ProblemController extends Controller
         }
 
         return $data;
+    }
+
+    public function getSubDepartments($departmentId)
+    {
+        // Assuming you have a relationship between departments and sub-departments
+        $subDepartments = SubDepartment::where('department_id', $departmentId)->get();
+
+        // Return the sub-departments in a JSON response
+        return response()->json([
+            'subDepartments' => $subDepartments
+        ]);
     }
 }
