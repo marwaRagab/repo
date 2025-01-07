@@ -53,7 +53,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($data as $problem)
+                    @foreach ($data as $problem)
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ $problem->installement_id }}</td>
@@ -77,11 +77,11 @@
                                     التفاصيل</a>
                             </td>
                         </tr>
-                    @empty
+                    {{-- @empty
                         <tr>
-                            <td colspan="6" class="text-center">لا يوجد مشكلات</td>
-                        </tr>
-                    @endforelse
+                            <td colspan="8" class="text-center">لا يوجد مشكلات</td>
+                        </tr> --}}
+                    @endforeach
                 </tbody>
             </table>
         </div>
