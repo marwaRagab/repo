@@ -1,3 +1,5 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
@@ -145,12 +147,24 @@ function valthisform(button) {
         }
 
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: `/print_all/${arr}/${allserials.join(',')}`, // Construct URL dynamically
+            headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    },
             success: function (response) {
-                const data = JSON.parse(response);
-                console.log(data);
-                window.location.href = data.redirect;
+                if (response.success) {
+            // Optionally, render the views in the DOM if needed
+            $('#view1-container').html(response.views.view1);
+            $('#view2-container').html(response.views.view2);
+            $('#view3-container').html(response.views.view3);
+            $('#view4-container').html(response.views.view4);
+
+            // Redirect to the print invoice page
+            window.location.href = response.redirect; // This should now redirect correctly
+        } else {
+            alert("حدث خطأ أثناء الطباعة");
+        }
             },
             error: function (error) {
                 console.error("Error in Print All:", error.responseText);
@@ -165,7 +179,7 @@ function valthisform(button) {
         }
 
         $.ajax({
-            type: 'POST',
+            type: 'get',
             url: `/archieve_all/${arr_arch.join(',')}`, // Construct URL dynamically
             success: function (response) {
                 const data = JSON.parse(response);
@@ -264,7 +278,10 @@ function valthisform(button) {
                         // name: 'select_checkbox',
                         // className: 'text-center'
                         data: null,
-                    className: 'text-center',
+            name: 'select_checkbox', 
+            className: 'text-center',
+            orderable: false,
+            searchable: false,
                     render: function(data, type, row) {
                         return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`; 
                     }
