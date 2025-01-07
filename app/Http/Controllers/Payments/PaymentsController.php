@@ -97,5 +97,21 @@ class PaymentsController extends Controller
 
     }
 
+    // collect_affairs
+    public function collect_affairs(Request $request)
+    {
+        //
+        return $this->paymentRepository->collect_affairs($request);
+
+    }
+
+    public function getcollect_affairsData(Request $request)
+    {
+        return $this->paymentRepository->getcollect_affairsData($request);
+
+    }
+
+
+
 
 }

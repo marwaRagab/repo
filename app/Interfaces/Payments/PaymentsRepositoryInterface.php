@@ -18,4 +18,7 @@ interface PaymentsRepositoryInterface
     public function print_invoice_export($id1,$id2);
     public function getPaymentsData(Request $request);
 
+    public function collect_affairs (Request $request);
+    public function getcollect_affairsData (Request $request);
+
 }

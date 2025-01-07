@@ -973,4 +973,92 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     }
 
 
+    // collect_affairs
+
+    
+    public function collect_affairs(Request $request)
+    {
+
+        // dd("ss");
+        $title = 'التحصيل';
+        // $pay_date = $request->month;
+        // $this->data['items'] = Invoices_installment::where('arch', 0)->when($pay_date, function ($q) use ($pay_date) {
+        //     $date = new DateTime($pay_date);
+        //     $year = $date->format('Y');
+        //     $month = $date->format('m');
+        //     return $q->whereyear('date', $year)->wheremonth('date', $month);
+        // })->where('branch_id', Auth::user()->branch_id)
+        //     ->with('installment', function ($query) {
+        //         return $query->where('installment.laws', '=', 0);
+        //     })->with('install_month')->get();
+        // foreach ($this->data['items'] as $item) {
+        //     if ($item->payment_type == 'cash') {
+        //         $item->pay_method = 'كاش';
+        //     } elseif ($item->payment_type == 'part') {
+        //         $item->pay_method = 'روابط';
+        //     } elseif ($item->payment_type == 'check') {
+        //         $item->pay_method = 'شيك';
+        //     } else {
+        //         $item->pay_method = 'كى نت';
+        //     }
+        // }
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "التحصيل ";
+        $breadcrumb[1]['url'] = route("payments.collect_affairs");
+
+
+        $this->data['view'] = 'Payments/collect_affairs';
+        return view('layout', $this->data, compact('breadcrumb'));
+
+    }
+
+    public function getcollect_affairsData(Request $request)
+    {
+        // Retrieve the selected month from the request
+
+    
+        $pay_date = $request->month;
+
+        // Query the database with necessary filcolumn: column: ters and relationships
+        $payments = Invoices_installment::where('arch',  0)
+            ->when($pay_date, function ($query) use ($pay_date) {
+                $startDate = Carbon::parse($pay_date . '-01')->startOfMonth();
+                 $endDate = Carbon::parse($pay_date . '-01')->endOfMonth();
+                return $query->whereBetween('date', [$startDate ,$endDate ]);
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->where('payment_type' ,'!=','check')
+            ->get();
+            
+        // Process data for DataTables
+        return DataTables::of($payments)
+        ->addColumn('pay_method', function ($payment) {
+            return match ($payment->payment_type) {
+                'cash' => 'كاش',
+                'part' => 'روابط',
+                'check' => 'شيك',
+                default => 'كى نت',
+            };
+        })
+        ->addColumn('installment_name', function ($payment) {
+            $id = route('installment.show-installment', ['id' => $payment->installment_id]);
+
+            if ($payment->installment) {
+                return $payment->installment->client->name_ar . 
+                       ' (' . 
+                       '<a href="' . $id . '">' . $payment->installment_id . '</a>' . 
+                       ')';
+            } else {
+                return 'لايوجد';
+            }
+        })    
+        ->rawColumns(['installment_name']) // Allow HTML for certain columns
+        ->addIndexColumn() // Add an auto-incrementing index column
+        ->make(true); // Generate JSON response for DataTables
+        // dd(DataTables::of($payments)->toArray());
+
+    }
+
 }
