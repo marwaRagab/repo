@@ -2175,20 +2175,21 @@
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                        @if(isset($first_invoice)  &&   $first_invoice ==null && isset($first_amount) && $first_amount->amount != 0)
-                                         
-                                            <tr>
-                                                <td> {{$i+1}} </td>
-                                                <td>{{ (number_format($total_madionia1 - $first_amount->amount,3) )}}
-                                                </td>
-                                                <td>{{ number_format($first_amount->amount,3) }}
-                                                </td>
-                                                <td>-</td>
+                                        @if(isset($first_invoice) && $first_invoice ==null && isset($first_amount) &&
+                                        $first_amount->amount != 0)
 
-                                                <td>{{ $first_amount->payment_date }}</td>
-                                                <td><span class="btn btn-success">كاش </span></td>
-                                                <td><span class="btn btn-danger">  لا يوجد  </span></td>
-                                            </tr>
+                                        <tr>
+                                            <td> {{$i+1}} </td>
+                                            <td>{{ (number_format($total_madionia1 - $first_amount->amount,3) )}}
+                                            </td>
+                                            <td>{{ number_format($first_amount->amount,3) }}
+                                            </td>
+                                            <td>-</td>
+
+                                            <td>{{ $first_amount->payment_date }}</td>
+                                            <td><span class="btn btn-success">كاش </span></td>
+                                            <td><span class="btn btn-danger"> لا يوجد </span></td>
+                                        </tr>
                                         @endif
                                         @if($Installment->months == 24 && $Installment->laws==1 )
                                         <tr>
@@ -2208,7 +2209,7 @@
 
                                         @endphp
                                         @foreach($invoices as $one)
-                                         @if($one->amount !=0 )
+                                        @if($one->amount !=0 )
                                         <tr>
                                             <td>{{$i+1 }}</td>
                                             <td>
@@ -2244,20 +2245,21 @@
                                                             الايصال </span>
                                                     </a>-->
 
-                                                 @if(!empty($one->img))
-                                                    <a target="_blank"
+                                                @if(!empty($one->img))
+
+                                                <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
-                                                    @else
-                                                    <a href="{{ route('noimage') }}" target=" _blank">
-                                                        <span class="btn btn-info"> صورة
-                                                            الايصال </span>
-                                                    </a>
-                                                    @endif
-                                                
+                                                @else
+                                                <a href="{{ route('noimage') }}" target=" _blank">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+                                                @endif
+
                                             </td>
                                         </tr>
                                         @endif
@@ -2268,7 +2270,7 @@
                                         $total_checkat=0;
                                         @endphp
 
-                                        
+
                                         @if (!empty($mil_check) && count($mil_check) > 0 )
 
                                         @foreach($mil_check as $military_affairs_check)
@@ -2298,18 +2300,19 @@
                                             </td>
                                             <td>
 
-                                                 @if(!empty($military_affairs_check->img_dir))
-                                                    <a target="_blank"
-                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
-                                                        title="Download the file from the primary or fallback server.">
-                                                        <span class="btn btn-info"> صورة
-                                                            الايصال </span>
-                                                    </a>
-                                                    @else
-                                                    <a href="{{ route('noimage') }}" target=" _blank">
-                                                        <span class="btn btn-info"> صورة
-                                                            الايصال </span>
-                                                    </a>
+                                                @if(!empty($military_affairs_check->img_dir))
+
+                                                <a target="_blank"
+                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                    title="Download the file from the primary or fallback server.">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
+                                                @else
+                                                <a href="{{ route('noimage') }}" target=" _blank">
+                                                    <span class="btn btn-info"> صورة
+                                                        الايصال </span>
+                                                </a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -2368,7 +2371,8 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                
+
+
                                                 @if(!empty($military_affairs_amount->img_dir))
                                                 <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
@@ -2378,23 +2382,18 @@
                                                 </a>
                                                 @else
                                                 <a href="{{ route('noimage') }}" target=" _blank">
-                                                @else
-                                                <a href="{{ route('noimage') }}" target=" _blank">
+
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
-                                            @endif
-                                            @endif
+                                                @endif
+                                                @endif
+
                                             </td>
                                         </tr>
                                         @endif
-                                        @endif
-
-
                                         @endforeach
                                         @endif
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -2424,8 +2423,9 @@
 
                         <div class="accordion-body">
                             <div class="d-flex flex-wrap ">
-                                <a  class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
-                                    @if($sum != 0) data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}" @endif>
+                                <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                                    @if($sum !=0) data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}"
+                                    @endif>
                                     دفع المديونية مع الخصم </a>
                                 <div id="pay-total-discount_{{$id}}" class="modal fade" tabindex="-1"
                                     aria-labelledby="pay-total-discountLabel{{$id}}" aria-hidden="true">
@@ -2481,7 +2481,7 @@
                                                             النقدي
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="discount_cash"
-                                                            name="discount_cash"  value="{{ $sum }}"
+                                                            name="discount_cash" value="{{ $sum }}"
                                                             onchange="calculate_2(this.value,'discount_cash');">
                                                         @error('discount_cash')
                                                         <div style='color:red'>{{$message}}</div>
@@ -2535,9 +2535,9 @@
                                     <!-- /.modal-dialog -->
                                 </div>
 
-                                <a @if($sum != 0) data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}" @endif
+                                <a @if($sum !=0) data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}" @endif
                                     class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0)  disabled  @endif"
-                                     onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');"  >
+                                    onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
                                     دفع كامل المديونية
                                 </a>
                                 <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
@@ -2661,12 +2661,13 @@
                                                         <div style='color:red'>{{$message}}</div>
                                                         @enderror
                                                     </div>
-                                                    <div class="form-group mb-3" style="display:none;" id="some_code_div">
+                                                    <div class="form-group mb-3" style="display:none;"
+                                                        id="some_code_div">
                                                         <label class="form-label" for="some_code">
                                                             رقم وصل الكي نت
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="some_code"
-                                                            name="some_code" >
+                                                            name="some_code">
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <input type="file" name="img_dir" class="form-control" />
@@ -2706,10 +2707,10 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-header">
-                                                    <label class="form-label" for="input1"> المبلغ
-                                                        المطلوب : {{   request()->has('payment_order_id')}} دينار
-                                                    </label>
-                                                </div>
+                                                <label class="form-label" for="input1"> المبلغ
+                                                    المطلوب : {{ request()->has('payment_order_id')}} دينار
+                                                </label>
+                                            </div>
                                             <div class="modal-body">
                                                 <form action="{{ route('installment.pay_all',$id) }}" method="POST"
                                                     enctype="multipart/form-data">
@@ -2996,7 +2997,7 @@
 
                                                 <h6>{{ $month->payment_date }}</h6>
                                                 <h6>
-                                                     @if(!empty($month->img_dir))
+                                                    @if(!empty($month->img_dir))
                                                     <a href="{{ asset($month->img_dir) }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
@@ -3007,7 +3008,7 @@
                                                             الايصال </span>
                                                     </a>
                                                     @endif
-                                                    </h6>
+                                                </h6>
 
                                                 <a target="_blank"
                                                     href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
@@ -3022,9 +3023,8 @@
                                             <td>
                                                 @if ($month->status == "not_done" && $Installment->law == 0)
                                                 <input type="checkbox" disc="{{ $month->amout}}"
-                                                    class="form-check-input"
-                                                    id="payment_order_id_{{$month->id}}" name="payment_order_id[]"
-                                                    value="{{ $month->id }}">
+                                                    class="form-check-input" id="payment_order_id_{{$month->id}}"
+                                                    name="payment_order_id[]" value="{{ $month->id }}">
                                                 <input type="hidden" name="sum_check" id="sum_check">
                                                 @endif
                                             </td>
@@ -3067,7 +3067,7 @@ function valthisform() {
     var okay = false;
     for (var i = 0, l = checkboxs.length; i < l; i++) {
         if (checkboxs[i].checked) {
-           
+
             arr.push(checkboxs[i].value);
             okay = true;
             // break;
@@ -3163,7 +3163,7 @@ function calculate(value, type) {
         var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
         $('#knet_total').val(knet_n);
     }
-    
+
 
 
     return false;
@@ -3181,35 +3181,35 @@ function convert(val) {
 function calculate_2(value, type) {
     var real_price = parseFloat($('#amount').val()).toFixed(3);
     var discount = parseFloat($('#discount').val()).toFixed(3);
-   
+
     if (discount == 'NaN') {
         alert('برجاء ادخال قيمة الخصم');
         return false;
         // $('#knet').val('0.000');
     } else {
-    if (type == "discount_cash") {
-        var cash = parseFloat($('#discount_cash').val()).toFixed(3);
-        var cash = convert(cash);
-        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-        $('#discount_knet').val(knet_n);
+        if (type == "discount_cash") {
+            var cash = parseFloat($('#discount_cash').val()).toFixed(3);
+            var cash = convert(cash);
+            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+            $('#discount_knet').val(knet_n);
 
-    }
-    if (type == "discount_knet") {
-        var knet = parseFloat($('#discount_knet').val()).toFixed(3);
-        var knet = convert(knet);
-        var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
-        $('#discount_cash').val(cash_n);
+        }
+        if (type == "discount_knet") {
+            var knet = parseFloat($('#discount_knet').val()).toFixed(3);
+            var knet = convert(knet);
+            var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
+            $('#discount_cash').val(cash_n);
 
-    }
+        }
     }
     return false;
 }
 
 function show_knet_code(val) {
     if (val == 'knet') {
-      $("#some_code_div").show();
+        $("#some_code_div").show();
     } else {
-      $("#some_code_div").hide();
-    }   
+        $("#some_code_div").hide();
+    }
 }
 </script>
