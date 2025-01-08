@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\SubDepartment;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TechnicalSupport\Problem;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
@@ -13,5 +15,10 @@ class Department extends Model
     public function subdepartment()
     {
         return $this->hasMany(SubDepartment::class, 'department_id');
+    }
+
+    public function problems()
+    {
+        return $this->hasMany(Problem::class, 'department_id');
     }
 }

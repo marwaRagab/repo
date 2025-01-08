@@ -28,7 +28,6 @@
                     <tr>
                         <th>م</th>
                         <th>اسم القسم</th>
-                        <th>عدد الاقسام الفرعية</th>
                         <th>عدد التذاكر </th>
                         
                     </tr>
@@ -46,9 +45,8 @@
                                 @endif
                             </td>
                                                         
-                            <td> <a href="{{ route('supportProblem.getSubDepartments', $problem->id) }}"><span class="badge bg-primary">{{ $problem->subdepartment->count() }}</span></a>
+                            <td> <a href="{{ route('supportProblem.getSubproblems', $problem->id) }}"><span class="badge bg-primary">{{ $problem->problems->count() }}</span></a>
                             </td>
-                            <td><a><span class="badge bg-success">{{ $problem->problems->count() }}</span></a></td>
                             
                         </tr>
                    
