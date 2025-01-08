@@ -11,4 +11,6 @@ interface ProblemRepositoryInterface
     public function store(Request $request);
     public function updateStatus($id, Request $request);
     public function addReply(Request $request);
+
+    public function updatedeveloper($id, Request $request);
 }

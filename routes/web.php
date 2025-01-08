@@ -694,6 +694,7 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
 
     // deparment
     Route::get('/get-sub-departments/{departmentId}', [ProblemController::class, 'getSubDepartments']);
+    Route::post('/develper/{id}', [ProblemController::class, 'updatedeveloper'])->name('updatedeveloper');
 
 
     Route::get('/technical-support/Requests', [RequestController::class, 'index'])->name('supportRequest.index');
