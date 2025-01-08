@@ -152,19 +152,10 @@ function valthisform(button) {
             headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     },
-            success: function (response) {
-                if (response.success) {
-            // Optionally, render the views in the DOM if needed
-            $('#view1-container').html(response.views.view1);
-            $('#view2-container').html(response.views.view2);
-            $('#view3-container').html(response.views.view3);
-            $('#view4-container').html(response.views.view4);
-
-            // Redirect to the print invoice page
-            window.location.href = response.redirect; // This should now redirect correctly
-        } else {
-            alert("حدث خطأ أثناء الطباعة");
-        }
+    success: function (response) {
+                // const data = JSON.parse(response);
+                // console.log(data);
+                window.location.href = response.redirect;
             },
             error: function (error) {
                 console.error("Error in Print All:", error.responseText);

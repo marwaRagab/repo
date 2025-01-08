@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\TechnicalSupport;
 
+use App\Models\User;
+use App\Models\Department;
 use Illuminate\Http\Request;
+
 use App\Models\SubDepartment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TechnicalSupport\Problem;
 use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
 
 class ProblemController extends Controller
@@ -80,18 +84,85 @@ class ProblemController extends Controller
 
         return $data;
     }
+    
+    public function getDepartment()
+    {
+
+        $title = "الدعم الفني";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+
+        $data = Department::all();
+
+        $view = 'TechnicalSupport.Problem.department';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data')
+        );
+    }
 
     public function getSubDepartments($departmentId)
     {
         // Assuming you have a relationship between departments and sub-departments
-        $subDepartments = SubDepartment::where('department_id', $departmentId)->get();
+        $data = SubDepartment::where('department_id', $departmentId)->get();
+        $department = Department::find($departmentId);
 
-        // Return the sub-departments in a JSON response
-        return response()->json([
-            'subDepartments' => $subDepartments
-        ]);
+        $title = "الدعم الفني";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+
+        $view = 'TechnicalSupport.Problem.subdepartment';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data','department')
+        );
     }
 
+    public function getSubproblems($departmentId ,Request $request)
+    {
+        // $data = Problem::where('sub_department_id', $departmentId)->get();
+        $status = $request->input('status', '1');
+
+        $data = ($status === 'all')
+
+        ? Problem::with('user')->where('sub_department_id', $departmentId)->orderBy('created_at', 'desc')->get()
+        : Problem::with('user')->where('sub_department_id', $departmentId)->where('status', $status)
+            ->orderBy('created_at', 'desc')->get();
+// dd($data );
+        $statusMapping = [
+            1 => 'جديد',
+            2 => 'قيد التدقيق',
+            3 => 'قيد العمل',
+            4 => 'بانتظار الرد',
+            5 => 'قيد المراجعة',
+            6 => 'منجزة',
+            7 => 'مغلقة',
+        ];
+
+        $statusCounts = [];
+        foreach ($statusMapping as $status => $label) {
+            $statusCounts[$status] = Problem::where('status', $status)->count();
+        }
+        $title = "الدعم الفني";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+        $department = Department::all();
+        $developer = User::where('developer','=','1')->get();
+        $view = 'TechnicalSupport.Problem.subindex';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status','department','developer')
+        );
+    }
 
     public function updatedeveloper($id, Request $request)
     {
@@ -103,5 +174,15 @@ class ProblemController extends Controller
             $this->log($user_id, $message);
         }
         return $data;
+    }
+    public function getSubDepartments_Json($departmentId)
+    {
+        // Assuming you have a relationship between departments and sub-departments
+        $subDepartments = SubDepartment::where('department_id', $departmentId)->get();
+
+        // Return the sub-departments in a JSON response
+        return response()->json([
+            'subDepartments' => $subDepartments
+        ]);
     }
 }

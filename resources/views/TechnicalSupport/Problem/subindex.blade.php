@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
-        <a href="{{ route('supportProblem.index', ['status' => 'all' ,'department_id'=> $request->department_id ,'sub_department_id'=> $request->sub_department_id]) }}"
+        <a href="{{ route('supportProblem.getSubproblems', ['status' => 'all']) }}"
             class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
             style="display:none;">الكل</a>
         @php
@@ -15,7 +15,7 @@
             ];
         @endphp
         @foreach ($statusMapping as $key => $label)
-            <a href="{{ route('supportProblem.index', ['status' => $key ,'department_id'=> $request->department_id ,'sub_department_id'=> $request->sub_department_id]) }}"
+            <a href="{{ route('supportProblem.getSubproblems', ['status' => $key]) }}"
                 class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
                 {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
             </a>
@@ -24,18 +24,9 @@
 </div>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-        <h4 class="card-title mb-0">{{ $title }} 
+        <h4 class="card-title mb-0">الدعم الفني
         </h4>
-        <div class="button-group">
-            @if (Auth::user()->support != 1)
-                <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
-                    data-bs-target="#add">
-                    أضف مشكلة جديدة </button>
-            @endif
-            <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 "
-                href="{{ route('supportRequest.index') }}">
-                التطوير</a>
-        </div>
+        
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
@@ -52,10 +43,8 @@
                         <th>الحالة</th>
                         <th>اسم المستخدم</th>
                         <th>الرابط</th>
-                        @if (request('status') != "1")
+                        @if (request('status') == "2")
                         <th>المبرمج</th>   
-                        <th>عدد الايام</th>  
-                        <th>الاولوية</th>  
                         @endif
                         <th>الإعدادات</th>
                     </tr>
@@ -98,7 +87,7 @@
                             <td> <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
 
                            
-                            @if (request('status') != "1")
+                            @if (request('status') == "2")
                                 <td>
                                     <form action="{{ route('updatedeveloper', ['id' => $problem->id]) }}" method="POST" id="developerForm">
                                         @csrf
@@ -118,29 +107,7 @@
                                         </select>
                                     </form>
                                 </td>
-
-                                <td>
-                                    @if ($problem->assign_date)
-                                        <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('Y/m/d') }}
-                                        </p>
-                                        <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('h:i:s A') }}
-                                        </p>
-                                        <span class="badge bg-success">
-                                            {{ \Carbon\Carbon::parse($problem->assign_date)->diffForHumans(null, true, true, 2) }}
-                                        </span>
-                                    @else
-                                        لم يتم تحديد مبرمج
-                                    @endif
-                                </td>
-                                <td>
-                                    {{ $problem->priority == "high" 
-                                    ? "مرتفعة" 
-                                    : ($problem->priority == "medium" 
-                                        ? "متوسطة" 
-                                        : "منخفضة") 
-                                }}
-                                </td>
-
+                                
                             @endif
 
                             <td>
@@ -203,16 +170,6 @@
                                 <!-- Sub-departments will be populated here -->
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="input1 "> الاولوية </label>
-                            <select id="priority"  class="form-control mb-2" name="priority">
-                                <option selected disabled>اختر</option>
-                                <option value="high">عالية</option>
-                                <option value="medium">متوسطة</option>
-                                <option value="low">منخفضة</option>
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label class="form-label" for="input2 "> العنوان</label>
                             <input type="text" class="form-control mb-2" id="input2" name="title">
@@ -262,7 +219,7 @@
     document.getElementById('sub-department-group').style.display = 'block';
     
     // Make an AJAX request to fetch the sub-departments
-    fetch(`/getSubDepartments_Json/${departmentId}`)
+    fetch(`/get-sub-departments/${departmentId}`)
         .then(response => response.json())
         .then(data => {
             let subDepartmentSelect = document.getElementById('sub_department');

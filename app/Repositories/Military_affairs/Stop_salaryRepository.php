@@ -66,7 +66,10 @@ class Stop_salaryRepository implements Stop_salaryRepositoryInterface
                                                 ->when(request()->has('type'), function ($query) {
                                                      $query
                                                         ->whereHas('status_all', function ($q){
-                                                           return $q->where('type','stop_salary')->where('type_id',request()->get('type'))->where('flag',0);
+                                                           return $q->where('type','stop_salary')
+                                                                    ->where('type_id',request()->get('type'))
+                                                                    ->where('flag',0)
+                                                                    ->where('ministry', request()->get('minsitry_id'));
                                                        });
                                                 })
                                                 ->whereHas('installment', function ($q){
