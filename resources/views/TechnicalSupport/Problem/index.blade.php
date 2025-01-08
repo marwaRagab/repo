@@ -52,8 +52,10 @@
                         <th>الحالة</th>
                         <th>اسم المستخدم</th>
                         <th>الرابط</th>
-                        @if (request('status') == "2")
+                        @if (request('status') != "1")
                         <th>المبرمج</th>   
+                        <th>عدد الايام</th>  
+                        <th>الاولوية</th>  
                         @endif
                         <th>الإعدادات</th>
                     </tr>
@@ -96,7 +98,7 @@
                             <td> <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
 
                            
-                            @if (request('status') == "2")
+                            @if (request('status') != "1")
                                 <td>
                                     <form action="{{ route('updatedeveloper', ['id' => $problem->id]) }}" method="POST" id="developerForm">
                                         @csrf
@@ -116,7 +118,29 @@
                                         </select>
                                     </form>
                                 </td>
-                                
+
+                                <td>
+                                    @if ($problem->assign_date)
+                                        <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('Y/m/d') }}
+                                        </p>
+                                        <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('h:i:s A') }}
+                                        </p>
+                                        <span class="badge bg-success">
+                                            {{ \Carbon\Carbon::parse($problem->assign_date)->diffForHumans(null, true, true, 2) }}
+                                        </span>
+                                    @else
+                                        لم يتم تحديد مبرمج
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $problem->priority == "high" 
+                                    ? "مرتفعة" 
+                                    : ($problem->priority == "medium" 
+                                        ? "متوسطة" 
+                                        : "منخفضة") 
+                                }}
+                                </td>
+
                             @endif
 
                             <td>
@@ -177,6 +201,16 @@
                             <label class="form-label" for="sub_department">الأقسام الفرعية</label>
                             <select id="sub_department" name="sub_department" class="form-select mb-2">
                                 <!-- Sub-departments will be populated here -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="input1 "> الاولوية </label>
+                            <select id="priority"  class="form-control mb-2" name="priority ">
+                                <option selected disabled>اختر</option>
+                                <option value="high">عالية</option>
+                                <option value="medium">متوسطة</option>
+                                <option value="low">منخفضة</option>
                             </select>
                         </div>
                         <div class="form-group">

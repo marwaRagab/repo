@@ -127,6 +127,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             }
             $data->department_id = $request->department;
             $data->sub_department_id = $request->sub_department;
+            $data->priority =  $request->priority;
             $data->user_id = Auth::user()->id;
             $data->save();
         }
@@ -227,7 +228,7 @@ class ProblemRepository implements ProblemRepositoryInterface
 
         $data = Problem::findOrFail($id);
         $data->developer_id = $request->dev;
-        $data->updated_at = now();
+        $data->assign_date = now();
         $data->save();
 
         return redirect()->back()->with('success', 'تم تحديث   بنجاح');

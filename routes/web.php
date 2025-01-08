@@ -17,13 +17,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\advancedController;
 use App\Http\Controllers\MinistryController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\DepartmentController;
 // use App\Exports\ClientsExport;
 //// use Maatwebsite\Excel\Facades\Excel;
 
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\GovernorateController;
-use App\Http\Controllers\NationalityController;
 // use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\OttuPaymentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PoliceStationController;
@@ -44,41 +45,41 @@ use App\Http\Controllers\InstallmentPercentageController;
 use App\Http\Controllers\InstallmentSubmissionController;
 use App\Http\Controllers\Military_affairs\ImageController;
 use App\Http\Controllers\ImportingCompanies\MarkController;
-use App\Http\Controllers\Installment\InstallmentController;
 
 // use App\Http\Controllers\Showroom\ShowroomController;
+use App\Http\Controllers\Installment\InstallmentController;
 use App\Http\Controllers\Military_affairs\PapersController;
-use App\Http\Controllers\Military_affairs\SearchController;
 // use App\Http\Controllers\Military_affairs\CheckingController;
 
+use App\Http\Controllers\Military_affairs\SearchController;
 use App\Http\Controllers\ImportingCompanies\ClassController;
-use App\Http\Controllers\TechnicalSupport\ProblemController;
 
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
+use App\Http\Controllers\TechnicalSupport\ProblemController;
 use App\Http\Controllers\TechnicalSupport\RequestController;
-use App\Http\Controllers\Installment\PapersInstallController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Transfer\TransferController;
 
+use App\Http\Controllers\Installment\PapersInstallController;
 use App\Http\Controllers\Military_affairs\CheckingController;
-use App\Http\Controllers\Military_affairs\Stop_carController;
 // use App\Http\Controllers\Military_affairs\Stop_bankController;
+use App\Http\Controllers\Military_affairs\Stop_carController;
 use App\Http\Controllers\ImportingCompanies\CompanyController;
-use App\Http\Controllers\ImportingCompanies\ProductController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
+use App\Http\Controllers\ImportingCompanies\ProductController;
 use App\Http\Controllers\ImportingCompanies\TawreedController;
 use App\Http\Controllers\Military_affairs\DelegatesController;
-use App\Http\Controllers\Military_affairs\EqrardainController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
-use App\Http\Controllers\Military_affairs\Open_fileController;
+use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Military_affairs\Excute_actionsController;
 
+use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\Stop_bankController;
 use App\Http\Controllers\Military_affairs\SettlementController;
 use App\Http\Controllers\Military_affairs\CertificateController;
@@ -698,7 +699,7 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::get('/getSubproblems/{subdepartmentId}', [ProblemController::class, 'getSubproblems'])->name('supportProblem.getSubproblems');
 
     Route::post('/develper/{id}', [ProblemController::class, 'updatedeveloper'])->name('updatedeveloper');
-
+    Route::resource('departments', DepartmentController::class);
 
     Route::get('/technical-support/Requests', [RequestController::class, 'index'])->name('supportRequest.index');
     Route::post('/technical-support/Requests', [RequestController::class, 'store'])->name('supportRequest.store');
