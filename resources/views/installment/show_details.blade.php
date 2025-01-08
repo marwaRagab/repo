@@ -2175,6 +2175,21 @@
                                             <td></td>
                                             <td></td>
                                         </tr>
+                                        @if(isset($first_invoice)  &&   $first_invoice ==null && isset($first_amount) && $first_amount->amount != 0)
+                                         
+                                            <tr>
+                                                <td> {{$i+1}} </td>
+                                                <td>{{ (number_format($total_madionia1 - $first_amount->amount,3) )}}
+                                                </td>
+                                                <td>{{ number_format($first_amount->amount,3) }}
+                                                </td>
+                                                <td>-</td>
+
+                                                <td>{{ $first_amount->payment_date }}</td>
+                                                <td><span class="btn btn-success">كاش </span></td>
+                                                <td><span class="btn btn-danger">  لا يوجد  </span></td>
+                                            </tr>
+                                        @endif
                                         @if($Installment->months == 24 && $Installment->laws==1 )
                                         <tr>
                                             <td> {{$i+1}} </td>
@@ -2193,6 +2208,7 @@
 
                                         @endphp
                                         @foreach($invoices as $one)
+                                         @if($one->amount !=0 )
                                         <tr>
                                             <td>{{$i+1 }}</td>
                                             <td>
@@ -2228,7 +2244,8 @@
                                                             الايصال </span>
                                                     </a>-->
 
-                                                    @if(!empty($one->img))
+                                                 @if(!empty($one->img))
+
                                                     <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
@@ -2242,9 +2259,9 @@
                                                     </a>
                                                     @endif
                                                 
-
                                             </td>
                                         </tr>
+                                        @endif
                                         @php $i++ @endphp
                                         @endforeach
 
@@ -2282,9 +2299,8 @@
                                             </td>
                                             <td>
 
-                                               
+                                                 @if(!empty($military_affairs_check->img_dir))
 
-                                                @if(!empty($military_affairs_check->img_dir))
                                                     <a target="_blank"
                                                         onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
                                                         title="Download the file from the primary or fallback server.">
@@ -2365,10 +2381,13 @@
                                                 </a>
                                                 @else
                                                 <a href="{{ route('noimage') }}" target=" _blank">
+
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
                                             @endif
+                                            @endif
+
                                             </td>
                                         </tr>
                                         @endif
@@ -2781,6 +2800,7 @@
                                     <tbody>
                                         <!-- start row -->
                                         @foreach($installment_months as $month)
+                                        @if($month->amount !=0 )
                                         <tr>
                                             <td> {{ $loop->index + 1 }} </td>
                                             <td>{{ $month->date }} </td>
@@ -2978,9 +2998,7 @@
 
                                                 <h6>{{ $month->payment_date }}</h6>
                                                 <h6>
-                                                    
-
-                                                    @if(!empty($month->img_dir))
+                                                     @if(!empty($month->img_dir))
                                                     <a href="{{ asset($month->img_dir) }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
@@ -2991,9 +3009,7 @@
                                                             الايصال </span>
                                                     </a>
                                                     @endif
-                                                
-                                                
-                                                </h6>
+                                                    </h6>
 
                                                 <a target="_blank"
                                                     href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
@@ -3015,6 +3031,7 @@
                                                 @endif
                                             </td>
                                         </tr>
+                                        @endif
                                         @endforeach
                                     </tbody>
                                 </table>
