@@ -47,7 +47,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+            <table id="all-student" class="table table-bordered border text-center text-nowrap align-middle">
                 <thead>
                     <!-- start row -->
                     @php
@@ -79,14 +79,20 @@
 
                     <!-- start row -->
                     @foreach ($items as $item)
-
+                   
                     <tr>
                         <td>
                             {{ $loop->iteration }}
                         </td>
                         <td>
-                            <a href="{{url('installment/show-installment/'.$item->installment->id)}}">
+                            <a href="{{url('installment/show-installment/'.$item->installment->id)}}" >
                                 {{$item->installment->id}}</a>
+                                <br/>
+                                {!! getDiffTodayDates($item->open_file_date, null) !!}
+                                <br/>   <br/>
+                                @if(optional($item->notes->first())->date)
+                                 {!! getDiffTodayDates(optional($item->notes->first())->date, null) !!}
+                                @endif
                         </td>
                         <td>{{$item->installment->client->name_ar}}
                         </td>
