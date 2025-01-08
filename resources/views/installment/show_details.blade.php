@@ -2248,6 +2248,9 @@
                                                 @if(!empty($one->img))
 
                                                 <a target="_blank"
+                                                 @if(!empty($one->img))
+
+                                                    <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
@@ -2313,6 +2316,19 @@
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
+                                                 @if(!empty($military_affairs_check->img_dir))
+
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                        title="Download the file from the primary or fallback server.">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
+                                                    @else
+                                                    <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                    </a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -2371,7 +2387,7 @@
                                                 </span>
                                             </td>
                                             <td>
-
+                                                
 
                                                 @if(!empty($military_affairs_amount->img_dir))
                                                 <a target="_blank"
@@ -2389,9 +2405,14 @@
                                                 @endif
                                                 @endif
 
+                                            @endif
+                                            @endif
+
                                             </td>
                                         </tr>
                                         @endif
+                                        @endif
+
                                         @endforeach
                                         @endif
                                     </tbody>
