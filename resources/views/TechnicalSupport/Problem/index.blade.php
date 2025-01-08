@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap mb-3">
-        <a href="{{ route('supportProblem.index', ['status' => 'all']) }}"
+        <a href="{{ route('supportProblem.index', ['status' => 'all' ,'department_id'=> $request->department_id ,'sub_department_id'=> $request->sub_department_id]) }}"
             class="btn btn-secondary {{ $status === 'all' ? 'active' : '' }} px-4 fs-4 mx-1 mb-2"
             style="display:none;">الكل</a>
         @php
@@ -15,7 +15,7 @@
             ];
         @endphp
         @foreach ($statusMapping as $key => $label)
-            <a href="{{ route('supportProblem.index', ['status' => $key]) }}"
+            <a href="{{ route('supportProblem.index', ['status' => $key ,'department_id'=> $request->department_id ,'sub_department_id'=> $request->sub_department_id]) }}"
                 class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
                 {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
             </a>
@@ -24,7 +24,7 @@
 </div>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-        <h4 class="card-title mb-0">الدعم الفني
+        <h4 class="card-title mb-0">{{ $title }} 
         </h4>
         <div class="button-group">
             @if (Auth::user()->support != 1)
@@ -206,7 +206,9 @@
 
                         <div class="form-group">
                             <label class="form-label" for="input1 "> الاولوية </label>
-                            <select id="priority"  class="form-control mb-2" name="priority ">
+
+                            <select id="priority"  class="form-control mb-2" name="priority">
+
                                 <option selected disabled>اختر</option>
                                 <option value="high">عالية</option>
                                 <option value="medium">متوسطة</option>
@@ -262,7 +264,7 @@
     document.getElementById('sub-department-group').style.display = 'block';
     
     // Make an AJAX request to fetch the sub-departments
-    fetch(`/get-sub-departments/${departmentId}`)
+    fetch(`/getSubDepartments_Json/${departmentId}`)
         .then(response => response.json())
         .then(data => {
             let subDepartmentSelect = document.getElementById('sub_department');

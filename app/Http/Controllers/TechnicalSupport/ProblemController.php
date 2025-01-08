@@ -108,6 +108,7 @@ class ProblemController extends Controller
     {
         // Assuming you have a relationship between departments and sub-departments
         $data = SubDepartment::where('department_id', $departmentId)->get();
+        $department = Department::find($departmentId);
 
         $title = "الدعم الفني";
         $breadcrumb = array();
@@ -119,7 +120,7 @@ class ProblemController extends Controller
         $view = 'TechnicalSupport.Problem.subdepartment';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'data')
+            compact('title', 'view', 'breadcrumb', 'data','department')
         );
     }
 
@@ -173,5 +174,15 @@ class ProblemController extends Controller
             $this->log($user_id, $message);
         }
         return $data;
+    }
+    public function getSubDepartments_Json($departmentId)
+    {
+        // Assuming you have a relationship between departments and sub-departments
+        $subDepartments = SubDepartment::where('department_id', $departmentId)->get();
+
+        // Return the sub-departments in a JSON response
+        return response()->json([
+            'subDepartments' => $subDepartments
+        ]);
     }
 }

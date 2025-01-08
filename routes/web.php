@@ -92,6 +92,7 @@ use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\HumanResources\TransactionsCompletedController;
+use App\Http\Controllers\SubDepartmentController;
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -696,10 +697,13 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
 
     // deparment
     Route::get('/get-sub-departments/{departmentId}', [ProblemController::class, 'getSubDepartments'])->name('supportProblem.getSubDepartments');
+    Route::get('/getSubDepartments_Json/{departmentId}', [ProblemController::class, 'getSubDepartments_Json'])->name('supportProblem.getSubDepartments_Json');
     Route::get('/getSubproblems/{subdepartmentId}', [ProblemController::class, 'getSubproblems'])->name('supportProblem.getSubproblems');
 
     Route::post('/develper/{id}', [ProblemController::class, 'updatedeveloper'])->name('updatedeveloper');
     Route::resource('departments', DepartmentController::class);
+    Route::resource('subdepartments', SubDepartmentController::class);
+
 
     Route::get('/technical-support/Requests', [RequestController::class, 'index'])->name('supportRequest.index');
     Route::post('/technical-support/Requests', [RequestController::class, 'store'])->name('supportRequest.store');

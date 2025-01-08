@@ -15,28 +15,27 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $title='الاقسام';
+        // $title='الاقسام';
+        // $breadcrumb = array();
+        // $breadcrumb[0]['title'] = " الرئيسية";
+        // $breadcrumb[0]['url'] = route("dashboard");
+        // $breadcrumb[1]['title'] = $title;
+        // $breadcrumb[1]['url'] = 'javascript:void(0);';
 
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route("dashboard");
-   
-        $breadcrumb[1]['title'] = $title;
-        $breadcrumb[1]['url'] = 'javascript:void(0);';
+        // $data['department']=Department::with('user')->get();
 
-        $data['department']=Department::with('user')->get();
+        // if ($data) {
+        //     // $user_id = 1;
+        //     $user_id =  Auth::user()->id;
+        //     $message = "تم الدخول لصفحة الاقسام ";
+        //     $this->log($user_id, $message);
+        // }
 
-        if ($data) {
-            // $user_id = 1;
-            $user_id =  Auth::user()->id;
-            $message = "تم الدخول لصفحة الاقسام ";
-            $this->log($user_id, $message);
-        }
+        // // dd($data);
 
-        // dd($data);
+        // $data['view'] = 'setting/department';
+        // return view('layout', $data, compact('breadcrumb','data'));
 
-        $data['view'] = 'setting/department';
-        return view('layout', $data, compact('breadcrumb','data'));
     }
 
     /**
@@ -57,7 +56,22 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+
+        $new = new Department;
+        $new->name_ar = $request->name_ar;
+        $new->name_en = $request->name_en;
+        $new->created_by = Auth::user()->id;
+        $new->save();
+        if ($new) {
+                // $user_id = 1;
+                $user_id =  Auth::user()->id;
+                $message = "تم الدخول لصفحة الاقسام ";
+                $this->log($user_id, $message);
+            }
+
+        return redirect()->back()->with('success','تم الاضافة بنجاح');
+
     }
 
     /**
