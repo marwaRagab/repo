@@ -11,7 +11,6 @@
         @endforeach
     </div>
 </div>
-
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
         <h4 class="card-title mb-0"> الشيكات المستلمة</h4>
@@ -64,9 +63,9 @@
                         </td>
                         <td>{{$item->issue_id}}</td>
                         <td>{{$item->eqrar_dain_amount}}</td>
-                        <td>{{$item->excute_actions_check_amount}} </td>
-                        <td>{{$item->excute_actions_amount}} </td>
-                        <td> {{$item->excute_actions_counter}}</td>
+                        <td>{{$item->military_check->sum('amount')}} </td>
+                        <td>{{$item->military_amount->where('military_affairs_check_id',0)->sum('amount')}} </td>
+                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->count()}}</td>
                         <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
