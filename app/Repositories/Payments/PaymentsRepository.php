@@ -112,7 +112,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 $date = new DateTime($pay_date);
                 $year = $date->format('Y');
                 $month = $date->format('m');
-                return $query->whereYear('date', $year)->whereMonth('date', $month);
+                return $query->whereYear('invoices_installment.date', $year)->whereMonth('invoices_installment.date', $month);
             })
             ->where('branch_id', Auth::user()->branch_id)
             ->with([

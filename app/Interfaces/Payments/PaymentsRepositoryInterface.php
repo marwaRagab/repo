@@ -5,7 +5,7 @@ namespace App\Interfaces\Payments;
 use Illuminate\Http\Request;
 
 interface PaymentsRepositoryInterface
-{
+{ 
     public function index (Request $request);
 
     public function print_invoice($invoice_id,$installment_id,$id,$serial);
