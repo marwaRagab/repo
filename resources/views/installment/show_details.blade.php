@@ -2245,6 +2245,7 @@
                                                     </a>-->
 
                                                  @if(!empty($one->img))
+
                                                     <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
                                                     title="Download the file from the primary or fallback server.">
@@ -2299,6 +2300,7 @@
                                             <td>
 
                                                  @if(!empty($military_affairs_check->img_dir))
+
                                                     <a target="_blank"
                                                         onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
                                                         title="Download the file from the primary or fallback server.">
@@ -2369,6 +2371,7 @@
                                             </td>
                                             <td>
                                                 
+
                                                 @if(!empty($military_affairs_amount->img_dir))
                                                 <a target="_blank"
                                                     onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
@@ -2378,18 +2381,17 @@
                                                 </a>
                                                 @else
                                                 <a href="{{ route('noimage') }}" target=" _blank">
-                                                @else
-                                                <a href="{{ route('noimage') }}" target=" _blank">
+
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
                                             @endif
                                             @endif
+
                                             </td>
                                         </tr>
                                         @endif
                                         @endif
-
 
                                         @endforeach
                                         @endif
