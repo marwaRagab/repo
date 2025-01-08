@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\TechnicalSupport;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\SubDepartment;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
@@ -79,6 +81,25 @@ class ProblemController extends Controller
         }
 
         return $data;
+    }
+    
+    public function getDepartment()
+    {
+
+        $title = "الدعم الفني";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+
+        $data = Department::all();
+
+        $view = 'TechnicalSupport.Problem.department';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data')
+        );
     }
 
     public function getSubDepartments($departmentId)
