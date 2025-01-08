@@ -43,24 +43,29 @@
                 <thead>
                     <tr>
                         <th>م</th>
-                        <th>رقم المعاملة</th>
+                        {{-- <th>رقم المعاملة</th> --}}
+                        <th>رقم التذكرة</th>
                         <th>القسم</th>
                         <th>القسم الفرعى</th>
                         <th>العنوان</th>
                         <th>التاريخ</th>
                         <th>الحالة</th>
-                        
                         <th>اسم المستخدم</th>
                         <th>الرابط</th>
+                        @if (request('status') == "2")
+                        <th>المبرمج</th>   
+                        @endif
                         <th>الإعدادات</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $problem)
+                    
                         <tr>
                             
                             <td>{{ $loop->index + 1 }}</td>
-                            <td>{{ $problem->installement_id }}</td>
+                            {{-- <td>{{ $problem->installement_id }}</td> --}}
+                            <td>{{ $problem->id }}</td>
                             <td>
                                 @if($problem->department != NuLL)
                                     {{ $problem->department->name_ar  }}
@@ -89,6 +94,31 @@
                             </td>
                             <td>{{ $problem->user->name_ar }}</td>
                             <td> <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
+
+                           
+                            @if (request('status') == "2")
+                                <td>
+                                    <form action="{{ route('updatedeveloper', ['id' => $problem->id]) }}" method="POST" id="developerForm">
+                                        @csrf
+                                        <select name="dev" id="dev" class="form-control"   @if (Auth::user()->developer == "3") onchange="this.form.submit()" @else disabled @endif>
+                                            @if ($problem->developer_id !== null)
+                                                @foreach ($developer as $dev)
+                                                    <option value="{{ $dev->id }}" {{ $dev->id == $problem->developer_id ? 'selected' : '' }}>
+                                                        {{ $dev->name_ar }}
+                                                    </option>
+                                                @endforeach
+                                            @else
+                                                <option selected disabled>اختر</option>
+                                                @foreach ($developer as $dev)
+                                                    <option value="{{ $dev->id }}">{{ $dev->name_ar }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </form>
+                                </td>
+                                
+                            @endif
+
                             <td>
                                 <a class="btn btn-success btn-sm rounded me-6"
                                     href="{{ route('supportProblem.show', $problem->id) }}">مشاهدة

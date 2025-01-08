@@ -91,4 +91,17 @@ class ProblemController extends Controller
             'subDepartments' => $subDepartments
         ]);
     }
+
+
+    public function updatedeveloper($id, Request $request)
+    {
+        $data = $this->problemRepository->updatedeveloper($id, $request);
+
+        if ($data) {
+            $user_id = Auth::user()->id ?? null;
+            $message = ":تم تحديث مشكلة {$id} ";
+            $this->log($user_id, $message);
+        }
+        return $data;
+    }
 }

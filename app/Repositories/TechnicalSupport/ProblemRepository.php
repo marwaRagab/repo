@@ -50,11 +50,12 @@ class ProblemRepository implements ProblemRepositoryInterface
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
         $department = Department::all();
+        $developer = User::where('developer','=','1')->get();
 
         $view = 'TechnicalSupport.Problem.index';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status','department')
+            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status','department','developer')
         );
     }
 
@@ -215,5 +216,20 @@ class ProblemRepository implements ProblemRepositoryInterface
 
         return redirect()->route('supportProblem.show', ['id' => $request->problem_id])
             ->with('success', 'تم إضافة رد على المشكلة بنجاح');
+    }
+
+
+    public function updatedeveloper($id, Request $request)
+    {
+        $request->validate([
+            'dev' => 'required',
+        ]);
+
+        $data = Problem::findOrFail($id);
+        $data->developer_id = $request->dev;
+        $data->updated_at = now();
+        $data->save();
+
+        return redirect()->back()->with('success', 'تم تحديث   بنجاح');
     }
 }
