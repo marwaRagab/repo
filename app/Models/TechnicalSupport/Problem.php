@@ -2,12 +2,12 @@
 
 namespace App\Models\TechnicalSupport;
 
+use App\Models\User;
 use App\Models\Client;
 use App\Models\Department;
 use App\Models\Installment;
-use App\Models\Installment_Client;
 use App\Models\SubDepartment;
-use App\Models\User;
+use App\Models\Installment_Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +31,11 @@ class Problem extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function subdepartment()
+    {
+        return $this->belongsTo(SubDepartment::class, 'sub_department_id');
     }
     
 }
