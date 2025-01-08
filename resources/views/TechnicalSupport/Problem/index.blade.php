@@ -206,7 +206,9 @@
 
                         <div class="form-group">
                             <label class="form-label" for="input1 "> الاولوية </label>
+
                             <select id="priority"  class="form-control mb-2" name="priority">
+
                                 <option selected disabled>اختر</option>
                                 <option value="high">عالية</option>
                                 <option value="medium">متوسطة</option>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SubDepartment;
 use Illuminate\Support\Facades\Auth;
 
+
 class SubDepartmentController extends Controller
 {
     /**
@@ -50,6 +51,7 @@ class SubDepartmentController extends Controller
             }
 
         return redirect()->back()->with('success','تم الاضافة بنجاح');
+
     }
 
     /**

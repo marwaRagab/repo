@@ -704,6 +704,7 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::resource('departments', DepartmentController::class);
     Route::resource('subdepartments', SubDepartmentController::class);
 
+
     Route::get('/technical-support/Requests', [RequestController::class, 'index'])->name('supportRequest.index');
     Route::post('/technical-support/Requests', [RequestController::class, 'store'])->name('supportRequest.store');
     Route::get('/technical-support/Requests/{id}', [RequestController::class, 'show'])->name('supportRequest.show');

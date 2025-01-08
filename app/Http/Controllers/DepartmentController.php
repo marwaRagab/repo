@@ -16,11 +16,9 @@ class DepartmentController extends Controller
     public function index()
     {
         // $title='الاقسام';
-
         // $breadcrumb = array();
         // $breadcrumb[0]['title'] = " الرئيسية";
         // $breadcrumb[0]['url'] = route("dashboard");
-   
         // $breadcrumb[1]['title'] = $title;
         // $breadcrumb[1]['url'] = 'javascript:void(0);';
 
@@ -37,6 +35,7 @@ class DepartmentController extends Controller
 
         // $data['view'] = 'setting/department';
         // return view('layout', $data, compact('breadcrumb','data'));
+
     }
 
     /**
@@ -57,7 +56,7 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
 
         $new = new Department;
         $new->name_ar = $request->name_ar;
@@ -72,6 +71,7 @@ class DepartmentController extends Controller
             }
 
         return redirect()->back()->with('success','تم الاضافة بنجاح');
+
     }
 
     /**
