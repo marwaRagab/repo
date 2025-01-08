@@ -100,105 +100,94 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
     }
 
-public function getPaymentsData(Request $request)
-{
-    // Retrieve the selected month from the request
-    $pay_date = $request->month;
-
-    // Query the database with necessary filcolumn: column: ters and relationships
-    $payments = Invoices_installment::where('arch', 0)
-        ->when($pay_date, function ($query) use ($pay_date) {
-            $date = new DateTime($pay_date);
-            $year = $date->format('Y');
-            $month = $date->format('m');
-            return $query->whereYear('date', $year)->whereMonth('date', $month);
-        })
-        ->where('branch_id', Auth::user()->branch_id)
-        ->with([
-            'installment' => function ($query) {
-                $query->where('laws', 0);
-            },
-            'install_month',
-        ])
-        ->select([
-            'id', 'payment_type', 'date', 'branch_id', 
-            'installment_id', 'install_month_id', 
-            'description', 'amount', 'print_status'
-        ]);
-
-    // Process data for DataTables
-    return DataTables::of($payments)
-    ->addColumn('pay_method', function ($payment) {
-        return match ($payment->payment_type) {
-            'cash' => 'كاش',
-            'part' => 'روابط',
-            'check' => 'شيك',
-            default => 'كى نت',
-        };
-    })
-    ->addColumn('installment_name', function ($payment) {
-        return $payment->installment->client->name_ar ?? 'لايوجد';
-    })
-    ->addColumn('serial_no', function ($payment) {
-        $current_month_year = now()->format('Ym');
-        $total_items = Invoices_installment::count();
-        return $current_month_year . ($total_items - $payment->id); // Example calculation
-    })
-    ->addColumn('print_status_label', function ($payment) {
-        return $payment->print_status == 'done' 
-            ? '<span class="text-success">تم الطباعة</span>' 
-            : '<span class="text-danger">لم يتم الطباعة</span>';
-    })
-    ->addColumn('final_date_formatted', function ($payment) {
-        $finalDate = $payment->date ?? null;
+    public function getPaymentsData(Request $request)
+    {
+        // Retrieve the selected month from the request
+        $pay_date = $request->month;
     
-        if ($finalDate) {
-            try {
-                return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
-            } catch (\Exception $e) {
-                // Handle invalid date format gracefully
-                return $finalDate;
-            }
-        }
+        // Query the database with necessary filters and relationships
+        $payments = Invoices_installment::where('arch', 0)
+        // ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
+            ->when($pay_date, function ($query) use ($pay_date) {
+                $date = new DateTime($pay_date);
+                $year = $date->format('Y');
+                $month = $date->format('m');
+                return $query->whereYear('invoices_installment.date', $year)->whereMonth('invoices_installment.date', $month);
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->with([
+                'installment',
+                'install_month',
+            ])
+            ->select([
+                'id', 'payment_type', 'date', 'branch_id', 
+                'installment_id', 'install_month_id', 
+                'description', 'amount', 'print_status'
+            ]);
     
-        return 'N/A'; // Return a default value if the date is null or invalid
-    })
-    ->addColumn('actions', function ($payment) {
-        $printUrl = route('print_invoice', [
-            'id' => $payment->id,
-            'id1' => $payment->installment_id,
-            'id2' => $payment->install_month_id,
-            'id3' => $payment->id,
-        ]);
-
-        $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
-
-        $printButton = $payment->print_status == 'done' 
-            ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
-            : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
-
-        $archiveButton = $payment->print_status == 'done' 
-            ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
-            : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
-
-        return $printButton . ' ' . $archiveButton;
-    })
-    // ->addColumn('archive_button', function ($payment) {
-    //     return "<button class="btn btn-secondary btn-sm rounded-pill" value="2" onclick="handleBulkAction(this)">
-    //                             تحويل الجميع للأرشيف</button>"; 
-    // })
-    ->addColumn('archive_button', function ($payment) {
-        return "<button class='btn btn-secondary btn-sm rounded-pill' value='2' onclick='handleBulkAction(this)'>
-                    تحويل الجميع للأرشيف
-                </button>";
-    })
+        // Process data for DataTables
+        return DataTables::of($payments)
+            ->addColumn('pay_method', function ($payment) {
+                return match ($payment->payment_type) {
+                    'cash' => 'كاش',
+                    'part' => 'روابط',
+                    'check' => 'شيك',
+                    default => 'كى نت',
+                };
+            })
+            ->addColumn('installment_name', function ($payment) {
+                return $payment->installment && $payment->installment->client
+                    ? $payment->installment->client->name_ar
+                    : 'لايوجد';
+            })
+            ->addColumn('serial_no', function ($payment) {
+                $current_month_year = now()->format('Ym');
+                $total_items = Invoices_installment::count();
+                return $current_month_year . ($total_items - $payment->id); // Example calculation
+            })
+            ->addColumn('print_status_label', function ($payment) {
+                return $payment->print_status == 'done' 
+                    ? '<span class="text-success">تم الطباعة</span>' 
+                    : '<span class="text-danger">لم يتم الطباعة</span>';
+            })
+            ->addColumn('final_date_formatted', function ($payment) {
+                $finalDate = $payment->date ?? null;
+            
+                if ($finalDate) {
+                    try {
+                        return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
+                    } catch (\Exception $e) {
+                        return $finalDate; // Handle invalid date gracefully
+                    }
+                }
+            
+                return 'N/A'; // Return default if date is null or invalid
+            })
+            ->addColumn('actions', function ($payment) {
+                $printUrl = route('print_invoice', [
+                    'id' => $payment->id,
+                    'id1' => $payment->installment_id,
+                    'id2' => $payment->install_month_id,
+                    'id3' => $payment->id,
+                ]);
+                $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
     
-    ->addColumn('select_checkbox', function ($payment) {
-        return '<input type="checkbox">'; // Provide the checkbox column data
-    })
-    ->rawColumns(['print_status_label', 'actions','select_checkbox','archive_button']) // Allow HTML for certain columns
-    ->addIndexColumn() // Add an auto-incrementing index column
-    ->make(true); // Generate JSON response for DataTables
+                $printButton = $payment->print_status == 'done' 
+                    ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
+                    : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
+    
+                $archiveButton = $payment->print_status == 'done' 
+                    ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
+                    : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
+    
+                return $printButton . ' ' . $archiveButton;
+            })
+            ->addColumn('select_checkbox', function ($payment) {
+                return '<input type="checkbox" name="checkAll[]" value="' . $payment->id . '" class="form-check-input">'; // Checkbox for bulk actions
+            })
+            ->rawColumns(['print_status_label', 'actions', 'select_checkbox']) // Allow HTML for specific columns
+            ->addIndexColumn() // Add an auto-incrementing index column
+            ->make(true); // Generate JSON response for DataTables
     // dd(DataTables::of($payments)->toArray());
 
 }
@@ -322,19 +311,21 @@ public function getPaymentsData(Request $request)
             $conditions_laws_per['installment_type'] = 'law_percent';
 
             $conditions_laws_per['installment_id'] = $id;
-
-            $conditions_laws_item = Installment_month::where(['installment_type' => 'law_percent', ''])->get();
+            $conditions_laws_item = Installment_month::where('installment_type', 'law_percent')
+            ->where('installment_id', $id)
+            ->get();
+            // $conditions_laws_item = Installment_month::where(['installment_type' => 'law_percent', ''])->get();
             if (!empty($conditions_laws_item)) {
-                $data['laws_item_amount'] = $conditions_laws_item['amount'];
+                $data['laws_item_amount'] = $conditions_laws_item->first()->amount ?? 0;
             } else {
                 $data['laws_item_amount'] = 0;
             }
 
-            $data["military_affairs_item"] = $item_law = Military_affair::where('installment_id', $installment_id)->get();
+            $data["military_affairs_item"] = Military_affair::where('installment_id', $installment_id)->get();
 
-            if (!empty($data["military_affairs_item"])) {
-
-                $data['military_affairs_amounts'] = Military_affairs_check::where('military_affairs_id', $item_law->id)->orderBy('id', 'asc')->get();
+            if (!$data["military_affairs_item"]->isEmpty()) {
+                $item_law = $data["military_affairs_item"]->first();
+                $data['military_affairs_amounts'] = Military_affairs_check::where('military_affairs_id', $item_law->id)->orderBy('id', 'asc')->first();
 
                 /*$cond_679['military_affairs_id'] = $data["military_affairs_item"]['id'];
                 $cond_del['military_affairs_id'] = $data["military_affairs_item"]['id'];
@@ -342,7 +333,7 @@ public function getPaymentsData(Request $request)
 
                 $data['military_affairs_checks'] = Military_affairs_check::where('military_affairs_id', $item_law->id)->get();
 
-                $military_affairs_id = $data["military_affairs_item"]['id'];
+                $military_affairs_id = $item_law->id;
 
                 // $data['all_cars_times'] = $this->all_military_affairs_times_sql($military_affairs_id);
 
@@ -513,272 +504,136 @@ public function getPaymentsData(Request $request)
         echo view("Payments/print_invoice", $data);
     }
 
-    public function print_all($ids, $allserials)
-    {
-        $invoices = explode(',', $ids);
-        $serials = explode(',', $allserials);
+    public function print_all($ids, $serial_nos)
+{
+    // dd($ids, $serial_nos);
+    $serial_nos = explode(',', $serial_nos);
 
-        $output = '';
-        $print_i = 0;
+    $data['user_name'] = Auth::user()->name_ar;
+    $data['title'] = 'نظام الأقساط';
+    $data['add_title'] = 'الأقساط';
+    
+    $data_update['print_status'] = 'done';
+    if (is_string($ids)) {
+        $ids = explode(',', $ids); // تحويل السلسلة إلى مصفوفة
+    }
+        foreach ($ids as $index => $id) {
+            $invoice = Invoices_installment::findorfail($id);
+            $invoice->update($data_update);
 
-        foreach ($invoices as $invoice_id) {
+            $data["item"] = $installment_item = Installment::findorfail($id);
 
-            $conds['id'] = $invoice_id;
-            $print_data['print_status'] = 'done';
-            $detailaaaa = $this->db_get->get_where_conditions('invoices_installment', $conds);
-            $item_invoice = Invoices_installment::findorfail($invoice_id);
-            $item_invoice->update($print_data);
-
-
-            $installment_id = $item_invoice->installment_id;
-            $id = $item_invoice->install_month_id;
-
-            // $data['slug_page'] = $this->slug_page;
-
-            $data['title'] = 'نظام الأقساط';
-
-            $data['add_title'] = 'الأقساط';
-
-            $data["item"] = $insallment_item = Installment::findorfail($installment_id);
-
-            $data["item"]['not_done_count'] = $insallment_item->getCountAttribute('not_done');
-            $data['serial'] = $serials[$print_i];
-            $print_i++;
-
-            $data["item"]['not_done_count_lated'] = $insallment_item->count_installment_lated();
+            // حساب عدد المدفوعات غير المكتملة وغيرها من الحقول لهذا القسط
+            $data["item"]['not_done_count'] = $installment_item->get_total_amount('not_done');
+            $data["item"]['not_done_count_lated'] = $installment_item->count_installment_lated();
 
             $data["installment_month"] = Installment_month::findorfail($id);
-
-
-            $total = (isset($data["item"]['installment']) ? explode(".", $data["item"]['installment']) : '');
-            $data["item"]['first_ar_amount'] = ($total ? english_to_arabic($total[0]) : '');
-
-            $data["item"]['secound_ar_amount'] = ($total ? english_to_arabic($total[1]) : '');
-
+            $total = explode(".", $data["item"]['installment']);
+            
             $explode = explode('.', $data["installment_month"]['amount']);
-
             $data['first_sum'] = numberToArabicWords($explode[0]);
+            $data['secound_sum'] = empty($explode[1]) ? "" : '';
 
-            if (empty($explode[1])) {
-                $data['secound_sum'] = "";
-            } else {
-                $data['secound_sum'] = numberToArabicWords($explode[1]);
-            }
+            $data["client"] = $client = $installment_item->client;
 
-            $data["client"] = Client::findorfail($data["item"]['client_id']);
-
-            $data["item_images"] = array();
-
+            // حسابات إضافية للقوانين والشؤون العسكرية
             if ($data["item"]['laws'] == 1) {
-
-                $conditions_laws_per['installment_type'] = 'law_percent';
-
-                $conditions_laws_per['installment_id'] = $id;
-
-                //  $conditions_laws_item = $this->db_get->get_where_conditions_r('installment_months', $conditions_laws_per);
-                $conditions_laws_item = Installment_month::where(['installment_id' => $id, 'installment_type' => 'law_percent'])->get();
-                if (!empty($conditions_laws_item)) {
-                    $data['laws_item_amount'] = $conditions_laws_item['amount'];
-                } else {
-                    $data['laws_item_amount'] = 0;
-                }
-
-                $data["military_affairs_item"] = Military_affair::where('installment_id', '=', $data["item"]['id'])->get();
-
-                if (!empty($data["military_affairs_item"])) {
-                    $cond_676['military_affairs_id'] = $data["military_affairs_item"]['id'];
-
-                    $data['military_affairs_amounts'] = Military_affairs_amount::where('military_affairs_id', '=', $data["military_affairs_item"]['id'])->orderBY('id', 'asc')->get();
-
-                    $cond_679['military_affairs_id'] = $data["military_affairs_item"]['id'];
-                    $cond_del['military_affairs_id'] = $data["military_affairs_item"]['id'];
-                    //$data["item_deligate"]['deligation_notes'] = $this->db_get->get_where_conditions('military_affairs_deligations', $cond_del);
-
-                    $data['military_affairs_checks'] = Military_affairs_check::where('military_affairs_id', '=', $data["military_affairs_item"]['id'])->get();
-
-                    $military_affairs_id = $data["military_affairs_item"]['id'];
-
-                    // $data['all_cars_times'] = $this->all_military_affairs_times_sql($military_affairs_id);
-
-                    // $data['all_salary_times'] = $this->all_stop_salary_times_sql($military_affairs_id);
-
-                    $cond300['military_affairs_id'] = $military_affairs_id;
-                    $cond345['military_affairs_id'] = $military_affairs_id;
-                    //  $data['the_military_affairs_type_cars'] = $this->all_stop_cars_times_id('stop_cars');
-                    // $data['the_military_affairs_type_salary'] = $this->all_stop_cars_times_id('stop_salary');
-                    //$data['the_military_affairs_type_travel'] = $this->all_stop_cars_times_id('stop_travel');
-
-                    // $data['the_military_affairs_type_images'] = $this->all_stop_cars_times_id('images');
-                    // $data['the_military_affairs_type_alert'] = $this->all_stop_cars_times_id('execute_alert');
-
-                    // $data['the_military_affairs_notes'] = $this->db_get->get_where_conditions('military_affairs_notes', $cond345);
-                    $data['the_military_affairs_notes'] = Military_affairs_notes::where('military_affairs_id', '=', $data["military_affairs_item"]['id'])->get();;
-                } else {
-                    $data["military_affairs_item"] = '';
-                    $data['military_affairs_amounts'] = '';
-                    $data['military_affairs_checks'] = '';
-                }
-
+                // منطق مشابه لمعالجة 'laws' والشؤون العسكرية
             } else {
-
                 $data["military_affairs_item"] = '';
                 $data['military_affairs_amounts'] = '';
                 $data['military_affairs_checks'] = '';
                 $data['laws_item_amount'] = 0;
             }
 
+            // إعدادات القسط والبنك
             $data['installment_bank_2'] = $data["item"]['installment_bank'];
-
-            $data["client"] = Client::findorfail($data["item"]['client_id'])->with('ministry');
-
             if ($data["item"]['installment_clients'] > 0) {
-                // $data["installment_clients"] = $this->db_get->get_by_id('installment_clients', $data["item"]['installment_clients']);
-                $data["installment_clients"] = Installment_Client::findorfail($data["item"]['installment_clients']);
-                $data["client"] = $this->client_detail__install_clients_sql($data["item"]['client_id']);
-                $data["client"] = Client::findorfail($data["item"]['client_id'])->with('area')->with('ministry');
+                $data["installment_clients"] = Invoices_installment::findorfail($data["item"]['installment_clients']);
             } else {
                 $data["installment_clients"] = 0;
             }
 
-            $ministries_income = $this->db_get->get_by_id('ministries_income', $data["client"]['ministries_income_id']);
-            if (isset($ministries_income)) {
-                $data["client"]['ministry_percent'] = $ministries_income['percent'];
-                $data["client"]['ministry_name'] = $ministries_income['name'];
-                $data["client"]['ministry_date'] = $ministries_income['date'];
-            } else {
-                $data["client"]['ministry_percent'] = '';
-                $data["client"]['ministry_name'] = '';
-                $data["client"]['ministry_date'] = '';
+            // منطق وزارة وغير ذلك من تفاصيل العميل
+            if ($client->get_ministry) {
+                $ministries_income = $client->get_ministry;
+                if (isset($ministries_income)) {
+                    $data["client"]['ministry_percent'] = $ministries_income['percent'];
+                    $data["client"]['ministry_name'] = $ministries_income['name'];
+                    $data["client"]['ministry_date'] = $ministries_income['date'];
+                } else {
+                    $data["client"]['ministry_percent'] = '';
+                    $data["client"]['ministry_name'] = '';
+                    $data["client"]['ministry_date'] = '';
+                }
             }
 
-            /* if ($data["client"]['ministry_2'] > 0) {
-                 $my_cl_ministry_2 = $this->db_get->get_by_id('ministries', $data["client"]['ministry_2']);
-                 $data["client"]['ministry_2_name'] = $my_cl_ministry_2['name'];
-
-                 $bank_2 = $this->db_get->get_by_id('bank', $data["client"]['bank_name_2']);
-                 $data["client"]['bank_2_name'] = $bank_2['name'];
-             }*/
-
-            /*if ($data["client"]['ministry_3'] > 0) {
-                $my_cl_ministry_3 = $this->db_get->get_by_id('ministries', $data["client"]['ministry_3']);
-                $data["client"]['ministry_3_name'] = $my_cl_ministry_3['name'];
-                $bank_3 = $this->db_get->get_by_id('bank', $data["client"]['bank_name_3']);
-                $data["client"]['bank_3_name'] = $bank_3['name'];
-            }*/
-            /*$data["kafil"] = $this->client_detail($data["item"]['kafil_id']);
-            if ($data["item"]['installment_clients'] > 0) {
-                $data["bank"] = $this->db_get->get_by_id('bank', $data["client"]['bank_name']);
-            } else {
-                $data["bank"] = $this->db_get->get_where_r('bank', 'slug', $data["client"]['bank_name']);
-            }*/
-
-            if (empty($data["bank"])) {
-                $data["bank_name"] = " لا يوجد بنك للعميل";
-            } else {
-                $data["bank_name"] = $data["bank"]['name'];
-            }
-
-            $data['done_amount'] = $insallment_item->get_total_amount('done');
-            $data['not_done_amount'] = $insallment_item->get_total_amount('not_done');
+            $data['done_amount'] = $installment_item->get_total_amount('done');
+            $data['not_done_amount'] = $installment_item->get_total_amount('not_done');
             $data['total_madionia'] = $data['done_amount'] + $data['not_done_amount'];
-            $data['installment_id'] = $installment_id;
-            $conditions['installment_id'] = $installment_id;
-            $data["items"] = Installment_month::where('installment_id', '=', $installment_id)->orderBY('date', 'asc')->get();
-            $conditions['installment_id'] = $installment_id;
+            $data['installment_id'] = $id;
 
-            // $conditions['hesab_file'] = 1;
+            // استرجاع شهور الأقساط والفواتير
+            $data["items"] = Installment_month::where('installment_id', $id)->orderBy('date', 'asc')->get();
+            $data["items_done"] = Installment_month::where('installment_id', $id)->where('status', 'done')->orderBy('date', 'asc')->get();
 
-            //$conditions['installment_type !='] = 'first_amount';
-            $conditions['status'] = 'done';
+            $data["items_invoices_installment"] = Invoices_installment::where('installment_id', $id)->get();
 
-            $data["items_done"] = Installment_month::where(['installment_id' => $installment_id, 'status' => 'done'])->orderBY('id', 'asc')->get();
-
-            $cond_67777['installment_id'] = $installment_id;
-            //$cond_67777['knet_code != '] = '';
-            //    $cond_67777['install_month_id'] = 0;
-
-            // $data["items_invoices_installment"] = $this->db_get->get_where_conditions('invoices_installment', $cond_67777);
-            $data["items_invoices_installment"] = Invoices_installment::where('installment_id', '=', $installment_id)->get();
-            // echo '<pre>';print_r($data['items_done']);exit;
+            // تطابق العناصر مع الفواتير
             for ($i = 0; $i < count($data['items_done']); $i++) {
-                // $whr ="installment_id='".$installment_id."'and ".$data['items_done'][$i]['id']." = ". $data['items_invoices_installment'][$i]['install_month_id'];
-                //  $knet = $this->db_get->get_where_conditions('invoices_installment',$whr );
-                $knet = Invoices_installment::where(['installment_id' => $installment_id, $data['items_done'][$i]['id'] => $data['items_invoices_installment'][$i]['install_month_id']]);
-                // print_r($knet);exit;
-                $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
+                if (isset($data['items_invoices_installment'][$i])) {
+                    $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
+                } else {
+                    $data['items_done'][$i]['knet'] = null;
+                }
             }
-            // echo '<pre>';print_r($data['items_done']);exit;
-            $cond['client_id'] = $data["client"]['id'];
-
-            $cond['installment_id'] = $installment_id;
-
-            //  $data['the_notes'] = $this->db_get->get_where_conditions('installment_notes', $cond);
-            $data['the_notes'] = InstallmentNote::where(['installment_id' => $installment_id, 'client_id' => $data["client"]['id']])->get();
-
-            $cond3599['installment_id'] = $data["item"]['installment_clients'];
-
-            // $data['installment_clients_notes'] = $this->db_get->get_where_conditions('installment_clients_notes', $cond3599);
-            $data['installment_clients_notes'] = InstallmentClientNote::where(['installment_id' => $data["item"]['installment_clients']])->get();
-
-            $data["items_products"] = getOrderDetails($data["item"]['order_id']);
 
             $total_amount_and_lawyer_percent = 0;
             for ($i = 0; $i < count($data["items"]); $i++) {
                 if ($data["items"][$i]['status'] == 'not_done') {
-                    $total_amount_and_lawyer_percent = $total_amount_and_lawyer_percent + $data["items"][$i]['amout'];
+                    $total_amount_and_lawyer_percent += $data["items"][$i]['amount'];
                 }
             }
-            $data['first_amount'] = $insallment_item->first_amount;
-
             $data["total_amount_and_lawyer_percent"] = $total_amount_and_lawyer_percent;
 
-            //   $data["sum_paid_unstallment_months"] = $this->money_gets_4_install('done', $id);
+            $nstallment_discount = Invoices_installment::where(['type' => 'expenses_pending', 'installment_id' => $id])->get();
+            $data['nstallment_discount'] = count($nstallment_discount) == 0 ? 0 : $nstallment_discount['amount'];
 
-            //  $data["sum_un_paid_unstallment_months"] = $this->money_gets_4_install('not_done', $id);
+            // إعداد الرقم التسلسلي والخصم
+            $data['serial'] = $serial_nos[$index];
+            $nstallment_discount_amount = Invoices_installment::where(['type' => 'income', 'installment_id' => $id])->get();
 
-            $cond_67943['installment_id'] = $id;
-
-            $cond_67943['type'] = 'expenses_pending';
-
-            //$nstallment_discount = $this->db_get->get_where_conditions_r('invoices_installment', $cond_67943);
-
-            $nstallment_discount = Invoices_installment::where(['installment_id' => $id, 'type' => 'expenses_pending'])->get();
-
-            if (empty($nstallment_discount)) {
-                $data['nstallment_discount'] = 0;
-            } else {
-                $data['nstallment_discount'] = $nstallment_discount['amount'];
-            }
-
-            $cond_67943['type'] = 'income';
-            //  $nstallment_discount_amount = $this->db_get->get_where_conditions_r('invoices_installment', $cond_67943);
-            $nstallment_discount_amount = Invoices_installment::where(['installment_id' => $id, 'type' => 'income'])->get();
-            if (empty($nstallment_discount_amount)) {
-                $data['nstallment_discount_amount'] = 0;
-            } else {
-                $data['nstallment_discount_amount'] = $nstallment_discount_amount['amount'];
-            }
-            $data['title1'] = 'نسخة ملف العميل (1)';
-            $br1 = view("payments/views/print_invoice", $data);
-
-            $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
-            $br2 = view("payments/views/print_invoice", $data);
-
-            $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
-            $br3 = view("payments/views/print_invoice", $data);
-
-            $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
-            $br4 = view("payments/views/print_invoice", $data);
-            $output .= $br1 . $br2 . $br3 . $br4;
-            //return redirect()->to(base_url() . 'webadmin/payments/show_all/'.$output);
+            $data['nstallment_discount_amount'] = count($nstallment_discount_amount) == 0 || !isset($nstallment_discount_amount[0]['amount']) 
+                ? 0 
+                : $nstallment_discount_amount[0]['amount'];
+                $data['serial'] = $serial_nos[$index];
+                $data['title1'] = 'نسخة ملف العميل (1)';
+                $view1 = view("Payments.print_invoice", $data)->render();
+            
+                $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
+                $view2 = view("Payments.print_invoice", $data)->render();
+            
+                $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
+                $view3 = view("Payments.print_invoice", $data)->render();
+            
+                $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
+                $view4 = view("Payments.print_invoice", $data)->render();
+            
+                // Return the views and the redirect route
+                return response()->json([
+                    'success' => true,
+                    'views' => [
+                        'view1' => $view1,
+                        'view2' => $view2,
+                        'view3' => $view3,
+                        'view4' => $view4,
+                        
+                    ],
+                    'redirect' => route('print_all_in'), // This route should work now
+                ]);
         }
-        $this->session->set('out', $output);
-        $response['output'] = $output;
-        $response['redirect'] = url('/payments');
-        echo json_encode($response);
+}
 
-
-    }
 
     public function archieve_all($ids)
     {
@@ -1116,5 +971,93 @@ public function getPaymentsData(Request $request)
 
     }
 
+
+    // collect_affairs
+
+    
+    public function collect_affairs(Request $request)
+    {
+
+        // dd("ss");
+        $title = 'التحصيل';
+        // $pay_date = $request->month;
+        // $this->data['items'] = Invoices_installment::where('arch', 0)->when($pay_date, function ($q) use ($pay_date) {
+        //     $date = new DateTime($pay_date);
+        //     $year = $date->format('Y');
+        //     $month = $date->format('m');
+        //     return $q->whereyear('date', $year)->wheremonth('date', $month);
+        // })->where('branch_id', Auth::user()->branch_id)
+        //     ->with('installment', function ($query) {
+        //         return $query->where('installment.laws', '=', 0);
+        //     })->with('install_month')->get();
+        // foreach ($this->data['items'] as $item) {
+        //     if ($item->payment_type == 'cash') {
+        //         $item->pay_method = 'كاش';
+        //     } elseif ($item->payment_type == 'part') {
+        //         $item->pay_method = 'روابط';
+        //     } elseif ($item->payment_type == 'check') {
+        //         $item->pay_method = 'شيك';
+        //     } else {
+        //         $item->pay_method = 'كى نت';
+        //     }
+        // }
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "التحصيل ";
+        $breadcrumb[1]['url'] = route("payments.collect_affairs");
+
+
+        $this->data['view'] = 'Payments/collect_affairs';
+        return view('layout', $this->data, compact('breadcrumb'));
+
+    }
+
+    public function getcollect_affairsData(Request $request)
+    {
+        // Retrieve the selected month from the request
+
+    
+        $pay_date = $request->month;
+
+        // Query the database with necessary filcolumn: column: ters and relationships
+        $payments = Invoices_installment::where('arch',  0)
+            ->when($pay_date, function ($query) use ($pay_date) {
+                $startDate = Carbon::parse($pay_date . '-01')->startOfMonth();
+                 $endDate = Carbon::parse($pay_date . '-01')->endOfMonth();
+                return $query->whereBetween('date', [$startDate ,$endDate ]);
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->where('payment_type' ,'!=','check')
+            ->get();
+
+        // Process data for DataTables
+        return DataTables::of($payments)
+        ->addColumn('pay_method', function ($payment) {
+            return match ($payment->payment_type) {
+                'cash' => 'كاش',
+                'part' => 'روابط',
+                'check' => 'شيك',
+                default => 'كى نت',
+            };
+        })
+        ->addColumn('installment_name', function ($payment) {
+            $id = route('installment.show-installment', ['id' => $payment->installment_id]);
+
+            if ($payment->installment) {
+                return $payment->installment->client->name_ar . 
+                       ' (' . 
+                       '<a href="' . $id . '">' . $payment->installment_id . '</a>' . 
+                       ')';
+            } else {
+                return 'لايوجد';
+            }
+        })    
+        ->rawColumns(['installment_name']) // Allow HTML for certain columns
+        ->addIndexColumn() // Add an auto-incrementing index column
+        ->make(true); // Generate JSON response for DataTables
+        // dd(DataTables::of($payments)->toArray());
+
+    }
 
 }

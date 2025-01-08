@@ -2378,14 +2378,18 @@
                                                 </a>
                                                 @else
                                                 <a href="{{ route('noimage') }}" target=" _blank">
+                                                @else
+                                                <a href="{{ route('noimage') }}" target=" _blank">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
                                                 </a>
+                                            @endif
                                             @endif
                                             </td>
                                         </tr>
                                         @endif
                                         @endif
+
 
                                         @endforeach
                                         @endif

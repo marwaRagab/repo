@@ -172,7 +172,7 @@
                                                                                         @endphp
 
 
-                                                                                        <td>{{ $time }}}}<span
+                                                                                        <td>{{ $time }}<span
                                                                                                 class="d-block"></span>
                                                                                         </td>
                                                                                         <td>{{ $day }}</td>
@@ -268,17 +268,13 @@
                                                                                         <td>
                                                                                             @if ($value->timesType)
                                                                                                 {{ $value->timesType->name_ar }}
-                                                                                                @elseif
-                                                                                                ($value->bankType)
+                                                                                            @elseif($value->bankType)
                                                                                                 {{ $value->bankType->name_ar }}
-                                                                                                @elseif
-                                                                                                ($value->carType)
+                                                                                            @elseif($value->carType)
                                                                                                 {{ $value->carType->name_ar }}
-                                                                                                @elseif
-                                                                                                ($value->salaryType)
+                                                                                            @elseif($value->salaryType)
                                                                                                 {{ $value->salaryType->name_ar }}
-                                                                                                @elseif
-                                                                                                ($value->travelType)
+                                                                                            @elseif($value->travelType)
                                                                                                 {{ $value->travelType->name_ar }}
                                                                                             @else
                                                                                                 لا يوجد

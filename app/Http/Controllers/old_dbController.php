@@ -354,9 +354,8 @@ class old_dbController extends Controller
                     $obj->created_by = Auth::user()->id ?? null;
                     $obj->updated_by = Auth::user()->id ?? null;
                     if ($key == "request") {
-//
-                        $obj->img_dir = null;
-                        $obj->date = null;
+                        $obj->img_dir = $item->caseProof_img ?? null;
+                        $obj->date =  $item->caseProof_date ?? null;
                         $obj->note = null;
                     } elseif ($key == "command") {
                         $obj->img_dir = $item->command_img;

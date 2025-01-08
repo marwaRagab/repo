@@ -30,7 +30,11 @@ class PaymentsController extends Controller
         return $this->paymentRepository->index($request);
 
     }
-
+ public function print_all_in()
+    {
+        // Logic for displaying the print invoice
+        return view('Payments.print_invoice');
+    }
     public function getPaymentsData(Request $request)
     {
         return $this->paymentRepository->getPaymentsData($request);
@@ -92,6 +96,22 @@ class PaymentsController extends Controller
         return $this->paymentRepository->print_invoice_export($id1,$id2);
 
     }
+
+    // collect_affairs
+    public function collect_affairs(Request $request)
+    {
+        //
+        return $this->paymentRepository->collect_affairs($request);
+
+    }
+
+    public function getcollect_affairsData(Request $request)
+    {
+        return $this->paymentRepository->getcollect_affairsData($request);
+
+    }
+
+
 
 
 }

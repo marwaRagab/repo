@@ -32,7 +32,8 @@
                                 @endphp
                                 @if (in_array($fileExtension, ['mp4', 'webm', 'ogg']))
                                     <video width="200" controls>
-                                        <source src="{{ asset($data->file) }}" type="video/{{ $fileExtension }}">
+                                        <source src="{{ asset($data->file) }}"
+                                            type="video/{{ $fileExtension }}">
                                         متصفحك لا يدعم الفيديو.
                                     </video>
                                 @elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif']))
@@ -40,7 +41,8 @@
                                     <img src="{{ asset($data->file) }}" alt="Attachment" width="200">
                                 @elseif ($fileExtension === 'pdf')
                                     <!-- PDF -->
-                                    <a href="{{ asset($data->file) }}" target="_blank" class="btn btn-primary btn-sm">
+                                    <a href="{{ asset($data->file) }}" target="_blank"
+                                        class="btn btn-primary btn-sm">
                                         عرض الملف
                                     </a>
                                 @else
@@ -56,7 +58,7 @@
                         <td><strong>الحالة</strong></td>
 
                         <td> {{ $statusMapping[$data->status] }}<br>
-                            @if (auth()->user()->support == 1)
+                            {{-- @if (auth()->user()->support == 1) --}}
                                 <form action="{{ route('supportProblem.updateStatus', ['id' => $data->id]) }}"
                                     method="POST">
                                     @csrf
@@ -96,7 +98,7 @@
                                         </li>
                                     </ul>
                                 </form>
-                            @endif
+                            {{-- @endif --}}
                         </td>
                     </tr>
                 </tbody>
@@ -129,15 +131,16 @@
                                 @endphp
                                 @if (in_array($fileExtension, ['mp4', 'webm', 'ogg']))
                                     <video width="200" controls>
-                                        <source src="{{ asset($reply->file) }}" type="video/{{ $fileExtension }}">
+                                        <source src="{{ asset( $reply->file) }}"
+                                            type="video/{{ $fileExtension }}">
                                         متصفحك لا يدعم الفيديو.
                                     </video>
-                                @elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'PNG']))
+                                @elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif','PNG','JPG']))
                                     <!-- Image -->
-                                    <img src="{{ asset($reply->file) }}" alt="Attachment" width="200">
+                                    <img src="{{ asset( $reply->file) }}" alt="Attachment" width="200">
                                 @elseif ($fileExtension === 'pdf')
                                     <!-- PDF -->
-                                    <a href="{{ asset($reply->file) }}" target="_blank"
+                                    <a href="{{ asset( $reply->file) }}" target="_blank"
                                         class="btn btn-primary btn-sm">
                                         عرض الملف
                                     </a>

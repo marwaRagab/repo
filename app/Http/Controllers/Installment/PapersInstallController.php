@@ -6,20 +6,26 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Installment;
 use App\Models\Eqrars_details;
+use App\Models\Paperstype;
 
 class PapersInstallController extends Controller
 {
+    public function __construct()
+    {
+
+
+    }
     public function index (Request $request, $status)
     {
-        // عرض جميع الأوراق
+
 
         $title = 'المحفوظات';
         $all_counters = [
-            'not_finished_counter' => Eqrars_details::where('paper_received_checked', 0)->count(),
+            'not_finished' => Eqrars_details::where('paper_received_checked', 0)->count(), // Count of not finished papers
 
-            'received_counter' => Eqrars_details::where('paper_received_checked', 1)->count(),
+            'received' => Eqrars_details::where('paper_received_checked', 1)->count(), // Count of received papers
 
-            'tadqeeq_counter' => Installment::with(['client', 'paper','eqrarsDetail'])
+            'tadqeeq' => Installment::with(['client', 'paper','eqrarsDetail'])
             ->whereHas('paper', function ($query) {
                 $query->where('slug', 'my_index');
             }) ->whereHas('eqrarsDetail', function ($query) {
@@ -28,9 +34,9 @@ class PapersInstallController extends Controller
             ->where('type', 'installment')
             ->where('tadqeeq', 1)
             ->where('manage_review', 0)
-            ->where('status', 'finished')->count(),
+            ->where('status', 'finished')->count(), // Count of papers in tadqeeq
 
-            'manage_review_counter' =>Installment::with(['client', 'paper', 'eqrarsDetail'])
+            'manage_review' => Installment::with(['client', 'paper', 'eqrarsDetail'])
             ->whereHas('paper', function ($query) {
                 $query->where('slug', 'tadqeeq');
             })
@@ -41,9 +47,9 @@ class PapersInstallController extends Controller
             ->where('tadqeeq', 1)
             ->where('manage_review', 1)
             ->where('status', 'finished')
-            ->where('tadqeeq_archive', 0)->count(),
+            ->where('tadqeeq_archive', 0)->count(), // Count of papers in manage review
 
-            'archive_counter' => Installment::with(['client', 'paper', 'eqrarsDetail'])
+            'archive' => Installment::with(['client', 'paper', 'eqrarsDetail'])
             ->whereHas('paper', function ($query) {
                 $query->where('slug', 'manage_review');
             })
@@ -52,13 +58,12 @@ class PapersInstallController extends Controller
             })
             ->where('type', 'installment')
             ->where('status', 'finished')
-
             ->where('tadqeeq', 1)
             ->where('manage_review', 1)
             ->where('tadqeeq_archive', 1)
-            ->where('archive_finished', 0)->count(),
+            ->where('archive_finished', 0)->count(), // Count of papers in archive
 
-            'archive_finished_counter' =>Installment::with(['client', 'paper', 'eqrarsDetail'])
+            'archive_finished' => Installment::with(['client', 'paper', 'eqrarsDetail'])
             ->whereHas('paper', function ($query) {
                 $query->where('slug', 'manage_review');
             })
@@ -67,15 +72,25 @@ class PapersInstallController extends Controller
             })
             ->where('type', 'installment')
             ->where('status', 'finished')
-
             ->where('tadqeeq', 1)
             ->where('manage_review', 1)
             ->where('tadqeeq_archive', 1)
             ->where('archive_finished', 1)
-            ->where('archive_received', 0)->count(),
+            ->where('archive_received', 0)->count(), // Count of finished papers in archive
+            'eqrar_dain' => 0,
+            'eqrar_dain_recieved' => 0,
+            'archive_received'=> 0
         ];
         $papers = []; // Fetch data from the database
+        $papers_type = PapersType::all();
+        $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
+        'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
+        'bg-warning-subtle text-warning', 'px-4 bg-primary-subtle text-primary', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger'];
 
+        foreach ($papers_type as $key => $paper_type) {
+         $papers_type[$key]->style = $color_array[array_rand($color_array)];
+         $papers_type[$key]->count = $all_counters[$papers_type[$key]->slug];
+        }
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -83,7 +98,7 @@ class PapersInstallController extends Controller
         $breadcrumb[1]['url'] = 'javascript:void(0);';
         $data['view'] = 'installment.papers.index';
 
-        return view('layout', $data, compact('breadcrumb','papers','title','all_counters'));
+        return view('layout', $data, compact('breadcrumb','papers','title','all_counters','papers_type'));
     }
     public function getAllData(Request $request, $slug = null)
     {

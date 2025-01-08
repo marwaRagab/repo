@@ -59,7 +59,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $this->data['title'] = 'رصيد التنفيذ ';
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
+        $data  = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
             ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
             })->with('military_amount')
@@ -70,6 +70,14 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             })
             ->orderBy('excute_actions_amount', 'desc')
             ->get();
+            
+            
+
+            $this->data['items'] = $data->filter(function ($item) use ($request) {
+                return $item->installment && 
+                       (!$request->has('governorate_id') || 
+                        $request->get('governorate_id') == $item->installment->client->governorate_id);
+            });
 
 
         $title = '   رصيد التنفيذ';
@@ -113,12 +121,18 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         // dd($checking_type);
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
-            ->with('installment', function ($query) {
-                return $query->where('status', '=', 'finished');
-            })->with('military_amount')->with('military_check', function ($query) use ($checking_type) {
-                return $query->where('deposit', '=', $checking_type);
-            })
+        $this->data['items'] = Military_affair::where([
+            'military_affairs.archived' => 0,
+            'military_affairs.status' => 'execute'
+        ])
+            ->with(['installment' => function ($query) {
+                $query->where('status', 'finished');
+            }])
+            ->with('military_amount')
+            ->with(['military_check' => function ($query) use ($checking_type) {
+                $query->where('deposit', $checking_type)->orderBy('military_affairs_check.id');
+            }])
+            // Corrected to "orderBy" instead of "orderdBY"
             ->get();
 
 

@@ -9,7 +9,7 @@
     </div>
 
     <div class="card-body">
-        @include('installment.papers.links')
+        @include('installment.papers.links', $papers_type)
 
 <table class="table table-bordered" id="papersTable">
                         <thead>
