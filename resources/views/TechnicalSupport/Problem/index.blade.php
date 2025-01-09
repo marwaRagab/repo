@@ -12,6 +12,7 @@
                 5 => 'secondary',
                 6 => 'success',
                 7 => 'dark',
+                8 => 'primary',
             ];
         @endphp
         @foreach ($statusMapping as $key => $label)
@@ -27,11 +28,11 @@
         <h4 class="card-title mb-0">{{ $title }} 
         </h4>
         <div class="button-group">
-            @if (Auth::user()->support != 1)
+            {{-- @if (Auth::user()->support != 1) --}}
                 <button class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " data-bs-toggle="modal"
                     data-bs-target="#add">
                     أضف مشكلة جديدة </button>
-            @endif
+            {{-- @endif --}}
             <a class="btn me-1 mb-1 bg-success-subtle text-success px-4 fs-4 "
                 href="{{ route('supportRequest.index') }}">
                 التطوير</a>
@@ -56,6 +57,9 @@
                         <th>المبرمج</th>   
                         <th>عدد الايام</th>  
                         <th>الاولوية</th>  
+                        @endif
+                        @if (request('status') == "6" || request('status') == "7" || request('status') == "8")
+                        <th>تاريخ الانتهاء</th>   
                         @endif
                         <th>الإعدادات</th>
                     </tr>
@@ -143,6 +147,10 @@
 
                             @endif
 
+
+                            @if (request('status') == "6" || request('status') == "7" || request('status') == "8")
+                                 <td> {{ $problem->end_task ?? 'لا يوجد' }}</td>   
+                            @endif
                             <td>
                                 <a class="btn btn-success btn-sm rounded me-6"
                                     href="{{ route('supportProblem.show', $problem->id) }}">مشاهدة

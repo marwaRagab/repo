@@ -37,5 +37,10 @@ class Problem extends Model
     {
         return $this->belongsTo(SubDepartment::class, 'sub_department_id');
     }
+
+    public function developer()
+    {
+        return $this->belongsTo(user::class, 'developer_id');
+    }
     
 }

@@ -121,9 +121,11 @@ function valthisform(button) {
 
     const arr = [];       // Array for items to print
     const arr_arch = [];  // Array for items to archive
-    const allserials = []; // Array for all selected serials
+    // const allserials = []; // Array for all selected serials
 
     // Loop through selected checkboxes
+    let allserials = []; // Use let to allow reassignment
+
     selectedCheckboxes.each(function () {
         const checkbox = $(this);
         const value = Number(checkbox.val());
@@ -132,13 +134,15 @@ function valthisform(button) {
         if (!isNaN(value)) {
             if (typeIdPrint !== 'done') {
                 arr.push(value);
-                allserials.push(Number(checkbox.attr('id')));
+                allserials.push(checkbox.attr('id')); // Push ID directly as string
             } else {
                 arr_arch.push(value);
             }
         }
     });
 
+    // Ensure all elements in allserials are strings (if needed)
+    allserials = allserials.map(String);
     if (button.value == 1) {
         // Handle Print Action
         if (arr.length === 0) {
@@ -146,16 +150,20 @@ function valthisform(button) {
             return;
         }
 
+        console.log(allserials);
+
         $.ajax({
             type: 'GET',
-            url: `/print_all/${arr}/${allserials.join(',')}`, // Construct URL dynamically
+            url: `print_all/${arr.join(',')}/${allserials.join(',')}`, // Construct URL dynamically
             headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     },
     success: function (response) {
                 // const data = JSON.parse(response);
-                // console.log(data);
-                window.location.href = response.redirect;
+                console.log(response);
+                if (response.redirect_url) {
+                        window.location.href = response.redirect_url; // Redirect to the URL from the response
+                    }
             },
             error: function (error) {
                 console.error("Error in Print All:", error.responseText);
