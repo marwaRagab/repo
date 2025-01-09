@@ -245,7 +245,9 @@ class InstallmentController extends Controller
 
         }
 
-        $data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
+        //$data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
+
+        $data['total_madionia1'] =$installment->eqrardain_amount ;
         $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type', 'income');
         $data['not_done_count'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
         $current_date = now(); // Use Carbon to get the current date and time
@@ -292,9 +294,9 @@ class InstallmentController extends Controller
         // $military_affair = null; // Default initialization
         $military_affair = Military_affair::where('installment_id', $id)->first();
 
-        
+
        if ($installment->laws == 1  ) {
-           
+
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
@@ -315,18 +317,18 @@ class InstallmentController extends Controller
             ->where('installment_id', $id)->where('payment_type','!=','check')->get();*/
 
         $data['invoices'] = Installment_month::
-            where('installment_id', $id)->where('status','=','done')->where('installment_type','!=','first_amount')->groupBy('payment_date')->get();
+            where('installment_id', $id)->where('status','=','done')->groupBy('payment_date')->get();
 
         foreach ($data['invoices'] as $value){
 
             $value->sum_amount = Installment_month::where('installment_id', $id)
                 ->where('status', '=', 'done')
-                ->where('installment_type', '!=', 'first_amount')
+
                 ->where('payment_date', $value->payment_date) // This ensures the sum is calculated for that specific payment_date
                 ->sum('amount'); // This will return the sum directly
         }
 
-      //  dd($data['invoices']);
+
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
         if ($military_affair) {
             $data['get_all_delegations'] = get_all_delegations($military_affair->id);
@@ -579,7 +581,7 @@ class InstallmentController extends Controller
                 'payment_type' => "part",
             ]);
 
-             
+
 
             if ($installment_item->laws == 1 ) {
 
@@ -610,7 +612,7 @@ class InstallmentController extends Controller
                 ]);
                 // }
             }
-            
+
             if(empty($month))
             {
                 $installment_item->update([
@@ -1176,8 +1178,8 @@ class InstallmentController extends Controller
                         'payment_done' => $military_affair->reminder_amount + $request->discount_cash ?? $military_affair->reminder_amount + $request->discount_knet
                     ]);
                 }
-                
-               
+
+
 
                 // $lawsaffair = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
                 // if (!empty($lawsaffair)) {

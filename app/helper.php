@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Court;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
@@ -1514,12 +1515,18 @@ if (!function_exists('count_status_stop_travel')) {
 
     function count_status_stop_travel($id, $subtype)
     {
+        if($id){
+            $governorate_id =Court::findorfail($id)->governorate_id  ;
+
+        }else{
+            $governorate_id ='';
+        }
         return Military_affair::where(['military_affairs.status' => 'execute','military_affairs.stop_travel'=>'1','archived'=> 0 ])
             ->whereHas('installment', function ($q) {
                 $q->where('finished', 0);
-            })->when($id, function ($query) use ($id) {
-                $query->whereHas('installment.client', function ($q) use ($id) {
-                    $q->where('governorate_id', $id);
+            })->when($id, function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
                 });
             })
             ->when($subtype, function ($q) use ($subtype) {
