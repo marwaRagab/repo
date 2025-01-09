@@ -507,13 +507,16 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     public function print_all($ids, $serial_nos)
 {
     // dd($ids, $serial_nos);
+    // dd($serial_nos);
     $serial_nos = explode(',', $serial_nos);
-
+    
+    // dd($ids);
     $data['user_name'] = Auth::user()->name_ar;
     $data['title'] = 'نظام الأقساط';
     $data['add_title'] = 'الأقساط';
     
     $data_update['print_status'] = 'done';
+    
     if (is_string($ids)) {
         $ids = explode(',', $ids); // تحويل السلسلة إلى مصفوفة
     }
@@ -606,32 +609,31 @@ class PaymentsRepository implements PaymentsRepositoryInterface
             $data['nstallment_discount_amount'] = count($nstallment_discount_amount) == 0 || !isset($nstallment_discount_amount[0]['amount']) 
                 ? 0 
                 : $nstallment_discount_amount[0]['amount'];
+                
                 $data['serial'] = $serial_nos[$index];
                 $data['title1'] = 'نسخة ملف العميل (1)';
-                $view1 = view("Payments.print_invoice", $data)->render();
+                // echo view("Payments/print_invoice", $data);
+
+                // $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
+                // echo view("Payments/print_invoice", $data);
+
+                // $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
+                // echo view("Payments/print_invoice", $data);
+
+                // $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
+                // echo view("Payments/print_invoice", $data);
+                 $url = route('print_all_in') . '?' . http_build_query($data);
+            }
+
+            // $redirectUrl = url("/print_all/" . implode(',', $ids) . "/" . implode(',', $serial_nos));
+            // return response()->json([
+            //     'status' => 'success',
+            //     'redirect' => $redirectUrl,
+            // ]);
+
+            // return  redirect()->route('noimage');
             
-                $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
-                $view2 = view("Payments.print_invoice", $data)->render();
-            
-                $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
-                $view3 = view("Payments.print_invoice", $data)->render();
-            
-                $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
-                $view4 = view("Payments.print_invoice", $data)->render();
-            
-                // Return the views and the redirect route
-                return response()->json([
-                    'success' => true,
-                    'views' => [
-                        'view1' => $view1,
-                        'view2' => $view2,
-                        'view3' => $view3,
-                        'view4' => $view4,
-                        
-                    ],
-                    'redirect' => route('print_all_in'), // This route should work now
-                ]);
-        }
+            return response()->json(['redirect_url' => $url]);
 }
 
 

@@ -975,8 +975,7 @@ class old_dbController extends Controller
 
        $check_pay = '(SELECT SUM(military_affairs_check.amount)
                FROM military_affairs_check
-               WHERE military_affairs_check.deposit = 1
-               AND military_affairs_check.military_affairs_id  =  military_affairs.id)';
+              WHERE   military_affairs_check.military_affairs_id  =  military_affairs.id)';
 
        $amount_pay = '(SELECT SUM(military_affairs_amounts.amount)
                 FROM military_affairs_amounts
