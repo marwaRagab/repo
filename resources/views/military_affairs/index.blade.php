@@ -68,6 +68,7 @@
                         <th> الهاتف </th>
                         <th> المحكمة</th>
                         <th> التاريخ</th>
+
                     </tr>
                     <!-- end row -->
                 </thead>
@@ -75,10 +76,10 @@
                     @php $i=1; @endphp
                     @foreach ($transactions as $one_1)
                         <!-- start row -->
-
+                         {{ dd($one_1)}}
                         <tr>
                             <td>{{ $i }}</td>
-                            <td><a href="#">{{ $one_1->id }}</a></td>
+                            <td><a href="{{ route('installment.show-installment', ['id' => $one_1->id]) }}">{{ $one_1->id }}</a></td>
                             <td>{{ $one_1->name_ar }}</td>
                             <td>{{ $one_1->civil_number }}</td>
                             <td>{{ $one_1->phone_ids }}</td>
