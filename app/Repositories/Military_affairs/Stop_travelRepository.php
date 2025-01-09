@@ -81,15 +81,15 @@ class Stop_travelRepository implements Stop_travelRepositoryInterface
                 $query->whereHas('installment.client', function ($q) use ($governorate_id) {
                     $q->where('governorate_id', $governorate_id);
                 });
-            })->when(request()->has('stop_travel_type'), function ($query) use ($request) {
+            })
+            ->when(request()->has('stop_travel_type'), function ($query) use ($request) {
                 $query->whereHas('status_all', function ($q) use ($request) {
-
                   return  $q->where('type_id','=', $request->stop_travel_type)->where('flag',0);
                 });
 })
             ->get();
 
-     //   dd( $this->data['items']);
+      // dd( $this->data['items']);
 
         $title = ' منع السفر';
 

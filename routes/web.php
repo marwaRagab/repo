@@ -131,6 +131,18 @@ Route::get('/linkstorage', function () {
     return 'Storage link created successfully!';
 });
 
+Route::get('/noimage', function () {
+
+
+    return view('noimage');
+})->name('noimage');
+Route::get('/db/{type}', [old_dbController::class, 'index']);
+Route::get('/get_reminder_all', [old_dbController::class, 'get_reminder']);
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully!';
+});
+
 Route::get('/run-artisan-commands', function () {
     // Run the Artisan commands
     Artisan::call('config:cache');

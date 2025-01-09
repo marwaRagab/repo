@@ -19,6 +19,7 @@ use App\Models\Military_affairs\Military_affairs_check;
 use App\Models\Military_affairs\Military_affairs_times_type;
 use App\Models\Military_affairs\Stop_travel_types;
 
+use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -182,6 +183,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
 
         }
+
         $array_add = [
             'date' => $request->date ?? date('Y-m-d H:i:s'),
             'check_type' => $request->check_type ?? '',

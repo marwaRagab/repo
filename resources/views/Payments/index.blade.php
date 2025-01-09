@@ -164,6 +164,7 @@ function valthisform(button) {
                 if (response.redirect_url) {
                         window.location.href = response.redirect_url; // Redirect to the URL from the response
                     }
+
             },
             error: function (error) {
                 console.error("Error in Print All:", error.responseText);

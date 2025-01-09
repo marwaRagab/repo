@@ -122,6 +122,12 @@
                                 <span class="hide-menu">جهات العمل</span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('supportProblem.department') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu">الاقسام</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
