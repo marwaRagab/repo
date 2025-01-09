@@ -153,8 +153,8 @@ function valthisform(button) {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
     },
     success: function (response) {
-                // const data = JSON.parse(response);
-                // console.log(data);
+                const data = JSON.parse(response);
+                console.log(data);
                 window.location.href = response.redirect;
             },
             error: function (error) {
