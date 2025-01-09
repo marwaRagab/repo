@@ -27,7 +27,7 @@ class ImageRepository implements ImageRepositoryInterface
     }
     public function index(Request $request)
     {
-        // dd($request->governorate_id);
+        
         if($request->governorate_id){
             $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
 
@@ -35,7 +35,7 @@ class ImageRepository implements ImageRepositoryInterface
             $governorate_id='';
         }
 
-        // dd($governorate_id);
+        // dd($request);
         $message = "تم دخول صفحة  الايمج";
         $user_id =  Auth::user()->id;
 
@@ -75,7 +75,7 @@ class ImageRepository implements ImageRepositoryInterface
             })->with('jalasaat_all', function ($query) {
                 return $query->where('status', '=', 'accepted');
             })
-            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
+            ->when($request->governorate_id, function ($query) use ($governorate_id) {
                 $query->whereHas('installment.client', function ($q) use ($governorate_id) {
                     $q->where('governorate_id', $governorate_id);
                 });

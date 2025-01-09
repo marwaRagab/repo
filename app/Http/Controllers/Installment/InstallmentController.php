@@ -46,7 +46,8 @@ class InstallmentController extends Controller
         $breadcrumb[1]['title'] = $title;
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
-        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->OrderBy('installment.id', 'desc')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
+                                            ->where('finished',0)->OrderBy('installment.id', 'desc')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
         if ($data) {
@@ -130,7 +131,8 @@ class InstallmentController extends Controller
 
       //  $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
 
-        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->where('finished', '1')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
+                              ->where('finished', '1')->get();
         // $data['preclient'] = Prev_cols_clients::with('client_old')->where('id', $data['Installment']->client_id)->first();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
@@ -243,9 +245,6 @@ class InstallmentController extends Controller
 
         }
 
-
-
-
         $data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
         $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type', 'income');
         $data['not_done_count'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
@@ -293,8 +292,9 @@ class InstallmentController extends Controller
         // $military_affair = null; // Default initialization
         $military_affair = Military_affair::where('installment_id', $id)->first();
 
-       if ($installment->laws == 1  && ($data['not_done_amount'] != 0)) {
-
+        
+       if ($installment->laws == 1  ) {
+           
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
@@ -579,10 +579,7 @@ class InstallmentController extends Controller
                 'payment_type' => "part",
             ]);
 
-            $installment_item->update([
-                'finished' => 1,
-            ]);
-
+             
 
             if ($installment_item->laws == 1 ) {
 
@@ -612,6 +609,13 @@ class InstallmentController extends Controller
                     'created_by' => Auth::user()->id ?? null,
                 ]);
                 // }
+            }
+            
+            if(empty($month))
+            {
+                $installment_item->update([
+                    'finished' => 1,
+                ]);
             }
 
             return redirect()->back()->with('message', 'تم الدفع بنجاح');
@@ -1172,6 +1176,8 @@ class InstallmentController extends Controller
                         'payment_done' => $military_affair->reminder_amount + $request->discount_cash ?? $military_affair->reminder_amount + $request->discount_knet
                     ]);
                 }
+                
+               
 
                 // $lawsaffair = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
                 // if (!empty($lawsaffair)) {
@@ -1422,7 +1428,6 @@ class InstallmentController extends Controller
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
     }
-
 
     public function do_pay_to_bank($installment_month_id, $amount, $payment_type)
     {

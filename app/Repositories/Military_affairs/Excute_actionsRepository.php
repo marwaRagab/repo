@@ -60,7 +60,7 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $this->data['title'] = 'رصيد التنفيذ ';
 
 
-        $this->data['items'] = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
+        $data  = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
             ->with('installment', function ($query) {
                 return $query->where('finished', '=', 0);
             })->with('military_amount')
@@ -71,6 +71,14 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             })
             ->orderBy('excute_actions_amount', 'desc')
             ->get();
+            
+            
+
+            $this->data['items'] = $data->filter(function ($item) use ($request) {
+                return $item->installment && 
+                       (!$request->has('governorate_id') || 
+                        $request->get('governorate_id') == $item->installment->client->governorate_id);
+            });
 
 
         $title = '   رصيد التنفيذ';
