@@ -2161,9 +2161,12 @@
                                     </thead>
                                     <tbody>
                                     <!-- start row -->
-                                    @php $i=1; $the_balance = $total_madionia1;
+                                    @php
+                                        $total_madionia1= $total_madionia1+ $Installment->extra_first_amount+  $Installment->first_amount;
+                                             $i=1; $the_balance = $total_madionia1 ;
 
-                                        ; @endphp
+                                             ; @endphp
+
                                     <tr>
                                         <td>{{ $i }}</td>
                                         <td>{{ number_format($total_madionia1  ,3)}}
@@ -2176,6 +2179,7 @@
                                         <td></td>
                                         <td></td>
                                     </tr>
+
                                     @if(  $first_invoice ==null && isset($first_amount) && $first_amount->amount != 0)
                                         @php
                                             $total_madionia1 = $total_madionia1 - $first_amount->amount;
@@ -2196,8 +2200,8 @@
                                     @php $i++ @endphp
                                     @if($Installment->months == 24 && $Installment->laws==1 )
                                         <tr>
-                                            <td> {{$i+1}} </td>
-                                            <td>{{ ($total_madionia1 )}}
+                                            <td> {{$i}} </td>
+                                            <td>{{ number_format($total_madionia1,3)}}
                                             </td>
                                             <td>{{ $Installment->installment_months->firstWhere('installment_type','law_percent')->amount }}
                                             </td>
@@ -2213,11 +2217,12 @@
 
                                     @endphp
                                     @foreach($invoices as $one)
+
                                         @if($one->amount !=0 )
                                             <tr>
-                                                <td>{{$i+1 }}</td>
+                                                <td>{{$i }}</td>
                                                 <td>
-                                                    @php $total_madionia = $total_madionia - $one->amount; @endphp
+                                                    @php $total_madionia = $total_madionia - $one->sum_amount; @endphp
                                                     {{ number_format(($total_madionia), 3, '.', ',') }}
                                                 </td>
                                                 <td>-</td>
@@ -2289,7 +2294,7 @@
                                                         $total_madionia = $total_madionia - $military_affairs_check->amount;
                                                     @endphp
                                                     <tr>
-                                                        <td> {{ $loop->iteration }} </td>
+                                                        <td> {{ $i }} </td>
                                                         <td> {{ number_format(($total_madionia), 3, '.', ',') }}
                                                         </td>
                                                         <td>-</td>
@@ -2338,7 +2343,7 @@
                                                         $total_madionia = $total_madionia - $military_affairs_amount->amount;
                                                     @endphp
                                                     <tr>
-                                                        <td> {{$i+1}} </td>
+                                                        <td> {{$i}} </td>
                                                         <td> {{ number_format(($total_madionia), 3, '.', ',') }}
                                                         </td>
                                                         <td>-</td>
