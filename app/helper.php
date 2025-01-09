@@ -1508,3 +1508,28 @@ if (!function_exists('count_status')) {
             ->count();
     }
 }
+
+
+if (!function_exists('count_status_stop_travel')) {
+
+    function count_status_stop_travel($id, $subtype)
+    {
+        return Military_affair::where(['military_affairs.status' => 'execute','military_affairs.stop_travel'=>'1','archived'=> 0 ])
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
+            })->when($id, function ($query) use ($id) {
+                $query->whereHas('installment.client', function ($q) use ($id) {
+                    $q->where('governorate_id', $id);
+                });
+            })
+            ->when($subtype, function ($q) use ($subtype) {
+                $q->whereHas('status_all', function ($q) use ($subtype) {
+                   // dd($subtype);
+                    return  $q->where('type_id','=', $subtype)->where('flag',0);
+                });
+            })
+
+            ->count();
+    }
+}
+
