@@ -259,7 +259,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link bg-success-subtle text-success px-4 fs-4 mx-1 mb-2"
                                        data-bs-toggle="tab" href="#navpill-3" role="tab">
-                                        <span>ملاحظات اقبول </span>
+                                        <span>ملاحظات القبول </span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
