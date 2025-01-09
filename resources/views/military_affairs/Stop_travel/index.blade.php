@@ -23,7 +23,7 @@
 
         @foreach($courts as $court)
 
-            <a href="{{route('stop_travel',array('governorate_id' => $court->id,'stop_travel_type'=>$travel_type))}}"
+            <a href="{{route('stop_travel',array('governorate_id' => $court->id))}}"
                class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
                 ({{ count_court($court->id ,'stop_travel',null,null) }})
             </a>
