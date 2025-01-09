@@ -53,6 +53,7 @@ class ProblemRepository implements ProblemRepositoryInterface
         5 => 'قيد المراجعة',
         6 => 'منجزة',
         7 => 'مغلقة',
+        8 => 'تم الانتهاء منها',
     ];
 
          $statusCounts = [];
@@ -120,7 +121,7 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     public function show($id)
     {
-        $pr = Problem::with('user')->where('id', $id)->first();
+        $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $id)->first();
         if ($pr == null) {
             return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
 
@@ -136,6 +137,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             5 => 'قيد المراجعة',
             6 => 'منجزة',
             7 => 'مغلقة',
+            8 => 'تم الانتهاء منها',
         ];
         $title = "مشاهدة المشكلة";
         $breadcrumb = array();
@@ -213,12 +215,16 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function updateStatus($id, Request $request)
     {
         $request->validate([
-            'status' => 'required|in:1,2,3,4,5,6,7',
+            'status' => 'required|in:1,2,3,4,5,6,7,8',
         ]);
 
         $data = Problem::findOrFail($id);
         $data->status = $request->status;
         $data->updated_at = now();
+        if($request->status == "8")
+        {
+            $data->end_task = now();
+        }
         $data->save();
 
         return redirect()->route('supportProblem.show', $data->id)->with('success', 'تم تحديث حالة المشكلة بنجاح');
