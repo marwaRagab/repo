@@ -60,7 +60,7 @@
 
                 <a href="{{route('Certificate',array('governorate_id' => $gov,'ministry_id' =>$ministry,'certificate_type' => $Certificate_type->name_en))}}"
                    class="btn-filter {{$Certificate_type->style}}   px-4  mx-1 mb-2 {{ request()->get('certificate_type') == $Certificate_type->name_en ? 'active' : '' }} "> {{$Certificate_type->name_ar}}  ({{ count_status($gov, 'Certificate', $Certificate_type->name_en, $ministry) }})
-                  
+
                 </a>
 
             @endforeach
@@ -141,10 +141,10 @@
 
 
                 @foreach($items as $item)
-                   
+
 
                     @if($item->installment->finished==0)
-                    
+
 
                             <tr>
 
@@ -413,13 +413,13 @@
                                                                                         $value->date_end != '0000-00-00 00:00:00'
                                                                                     ) {
                                                                                         $day_end = explode(' ', $value->date_end)[0];
-                                                                                        $different_day = get_different_dates(
+                                                                                        $different_day = get_different_date(
                                                                                             $day_start,
                                                                                             $day_end,
                                                                                         );
                                                                                     } else {
                                                                                         $day_end = 'لم تنتهى';
-                                                                                        $different_day = get_different_dates(
+                                                                                        $different_day = get_different_date(
                                                                                             $day_start,
                                                                                             now(),
                                                                                         );
