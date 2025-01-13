@@ -236,10 +236,12 @@
 
                 </h1>
                 <tr class="table-data">
-                    {{ dd(optional(request()->query('installment_month'))['id']) }}
+                    {{-- {{ dd(optional(request()->query('installment_month'))['id']) }} --}}
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?= $installment_month['id'] ?? request()->query('installment_month')->id ?>                                    </p>
+                            <?= $installment_month['id'] ?? (is_array(request()->query('installment_month')) 
+                            ? request()->query('installment_month')['id'] ?? null 
+                            : request()->query('installment_month')->id ?? null) ?>                                 </p>
                     </td>
                     <td class="item" colspan=3>
                         <h2> رقم السند </h2>

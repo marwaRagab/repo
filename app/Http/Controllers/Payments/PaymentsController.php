@@ -30,10 +30,10 @@ class PaymentsController extends Controller
         return $this->paymentRepository->index($request);
 
     }
- public function print_all_in()
+    public function print_all_in(Request $request)
     {
-        // Logic for displaying the print invoice
-        return view('Payments.print_invoice');
+        $data = $request->all(); // Retrieve all query parameters
+        return view('Payments.print_invoice', $data);
     }
     public function getPaymentsData(Request $request)
     {

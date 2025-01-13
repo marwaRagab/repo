@@ -38,6 +38,9 @@
 
             <button   class="btn btn-success test" value="1"    style="margin-right: 900px;     margin-bottom: -50px;"    onclick="valthisform(this);"  >طباعة</button>
                     <button   class="btn btn-danger test"  value="2"  style="margin-right: 1000px"  onclick="valthisform(this);"   >ارشفة</button>
+
+
+                    <button id="print-selected" class="btn btn-primary">Print Selected</button>
         </div>
     </div>
 </div>
@@ -282,10 +285,14 @@ function valthisform(button) {
             className: 'text-center',
             orderable: false,
             searchable: false,
-                    render: function(data, type, row) {
-                        return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`; 
+                //    render: function(data, type, row) {
+                    //    return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`;  
+                    //},
+
+                    render: function (data, type, row) {
+                        return `<input type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}">`;
                     }
-                    },
+            }
                     
                 ],
                 // language: {
@@ -314,4 +321,54 @@ function valthisform(button) {
         });
         });
            
-    </script>
+</script>
+
+<script>
+    $('#print-selected').on('click', function () {
+    // const selectedIds = [];
+    // $('.row-select:checked').each(function () {
+    //     selectedIds.push($(this).val());
+    // });
+
+    const selectedIds = []; // Collect selected IDs from checkboxes
+const serialNumbers = []; // Collect serial numbers if needed
+
+$('.row-select:checked').each(function () {
+    selectedIds.push($(this).val());
+    serialNumbers.push($(this).data('serial'));
+});
+
+// Make sure there are selected IDs
+if (selectedIds.length === 0) {
+    alert('No rows selected.');
+    return;
+}
+
+const ids = selectedIds.join(',');
+const seriall = serialNumbers.join(',');
+
+    // Send selected rows to the server or handle them on the client
+    $.ajax({
+        url: `/print_all/${ids}/${seriall}`, // Define the print route in your backend
+        type: 'GET',
+        success: function (response) {
+            console.log(response);
+
+            // Open a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(response);
+            // response.forEach(row => {
+            //     printWindow.document.write(`<p>ID: ${row.installment_id}, Name: ${row.installment_name}, Amount: ${row.amount}</p>`);
+            // });
+            // printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            // printWindow.print();
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            alert('An error occurred while processing the request.');
+        }
+    });
+});
+
+</script>
