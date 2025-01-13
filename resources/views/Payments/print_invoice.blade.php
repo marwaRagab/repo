@@ -205,6 +205,7 @@
 </style>
 <div class="page" >
     <main>
+    
 
         <!-- hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh -->
         <header>
@@ -212,12 +213,12 @@
 
             <div class="all d-flex justify-content-between">
                 <div class="first">
-                    <br> رقم العملية :  <?=   $serial  ?> <br>وقت الطباعة : <?= date('H:i:s')?>
+                    <br> رقم العملية :  <?=   $serial ?? request()->query('serial')  ?> <br>وقت الطباعة : <?= date('H:i:s')?>
                 </div>
 
-                <div class="second"> <?=$title1?></div>
+                <div class="second"> <?= $title1 ?? request()->query('title1')  ?></div>
                 <div class="first">
-                    شركة الكترون <br> تاريخ : <?= date('d-m-Y') ?> <br> <?php  echo $user_name; ?> : اسم المستخدم
+                    شركة الكترون <br> تاريخ : <?= date('d-m-Y') ?> <br> <?= $user_name ?? request()->query('user_name') ?> : اسم المستخدم
                 </div>
 
 
@@ -235,10 +236,10 @@
 
                 </h1>
                 <tr class="table-data">
-
+                    {{ dd(optional(request()->query('installment_month'))['id']) }}
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?php echo $installment_month['id'] ?>                                    </p>
+                            <?= $installment_month['id'] ?? request()->query('installment_month')->id ?>                                    </p>
                     </td>
                     <td class="item" colspan=3>
                         <h2> رقم السند </h2>
