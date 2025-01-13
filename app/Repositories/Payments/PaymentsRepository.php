@@ -506,136 +506,62 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
     public function print_all($ids, $serial_nos)
 {
-    // dd($ids, $serial_nos);
-    // dd($serial_nos);
+
+    // dd("ss"); 
     $serial_nos = explode(',', $serial_nos);
-    
-    // dd($ids);
+    $ids = is_string($ids) ? explode(',', $ids) : $ids;
+
     $data['user_name'] = Auth::user()->name_ar;
     $data['title'] = 'نظام الأقساط';
     $data['add_title'] = 'الأقساط';
-    
+
     $data_update['print_status'] = 'done';
-    
-    if (is_string($ids)) {
-        $ids = explode(',', $ids); // تحويل السلسلة إلى مصفوفة
+    $invoices = Invoices_installment::whereIn('id', $ids)->get()->keyBy('id');
+    $installments = Installment::whereIn('id', $ids)->get()->keyBy('id');
+
+    foreach ($ids as $index => $id) {
+        $invoice = $invoices[$id] ?? abort(404);
+        $invoice->update($data_update);
+
+        $installment_item = $installments[$id] ?? abort(404);
+        $data["item"] = $installment_item;
+
+        $data["installment_month"] = Installment_month::findorfail($id);
+        $explode = explode('.', $data["installment_month"]['amount']);
+        $data['first_sum'] = numberToArabicWords($explode[0]);
+        $data['secound_sum'] = $explode[1] ?? '';
+
+        $data["client"] = $client = $installment_item->client;
+
+        $data['done_amount'] = $installment_item->get_total_amount('done');
+        $data['not_done_amount'] = $installment_item->get_total_amount('not_done');
+        $data['total_madionia'] = $data['done_amount'] + $data['not_done_amount'];
+        $data['installment_id'] = $id;
+
+        $data['items'] = Installment_month::where('installment_id', $id)->orderBy('date', 'asc')->get();
+        $data['items_done'] = Installment_month::where('installment_id', $id)->where('status', 'done')->orderBy('date', 'asc')->get();
+
+        $data['serial'] = $serial_nos[$index];
+        // $data['title1'] = 'نسخة ملف العميل (1)';
+
+        $data['title1'] = 'نسخة ملف العميل (1)';
+        echo view("Payments/print_invoice", $data);
+
+        $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
+        echo view("Payments/print_invoice", $data);
+
+        $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
+        echo view("Payments/print_invoice", $data);
+
+        $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
+        echo view("Payments/print_invoice", $data);
+
+        // $url = route('print_all_in') . '?' . http_build_query($data);
+        // return true;
     }
-        foreach ($ids as $index => $id) {
-            $invoice = Invoices_installment::findorfail($id);
-            $invoice->update($data_update);
 
-            $data["item"] = $installment_item = Installment::findorfail($id);
-
-            // حساب عدد المدفوعات غير المكتملة وغيرها من الحقول لهذا القسط
-            $data["item"]['not_done_count'] = $installment_item->get_total_amount('not_done');
-            $data["item"]['not_done_count_lated'] = $installment_item->count_installment_lated();
-
-            $data["installment_month"] = Installment_month::findorfail($id);
-            $total = explode(".", $data["item"]['installment']);
-            
-            $explode = explode('.', $data["installment_month"]['amount']);
-            $data['first_sum'] = numberToArabicWords($explode[0]);
-            $data['secound_sum'] = empty($explode[1]) ? "" : '';
-
-            $data["client"] = $client = $installment_item->client;
-
-            // حسابات إضافية للقوانين والشؤون العسكرية
-            if ($data["item"]['laws'] == 1) {
-                // منطق مشابه لمعالجة 'laws' والشؤون العسكرية
-            } else {
-                $data["military_affairs_item"] = '';
-                $data['military_affairs_amounts'] = '';
-                $data['military_affairs_checks'] = '';
-                $data['laws_item_amount'] = 0;
-            }
-
-            // إعدادات القسط والبنك
-            $data['installment_bank_2'] = $data["item"]['installment_bank'];
-            if ($data["item"]['installment_clients'] > 0) {
-                $data["installment_clients"] = Invoices_installment::findorfail($data["item"]['installment_clients']);
-            } else {
-                $data["installment_clients"] = 0;
-            }
-
-            // منطق وزارة وغير ذلك من تفاصيل العميل
-            if ($client->get_ministry) {
-                $ministries_income = $client->get_ministry;
-                if (isset($ministries_income)) {
-                    $data["client"]['ministry_percent'] = $ministries_income['percent'];
-                    $data["client"]['ministry_name'] = $ministries_income['name'];
-                    $data["client"]['ministry_date'] = $ministries_income['date'];
-                } else {
-                    $data["client"]['ministry_percent'] = '';
-                    $data["client"]['ministry_name'] = '';
-                    $data["client"]['ministry_date'] = '';
-                }
-            }
-
-            $data['done_amount'] = $installment_item->get_total_amount('done');
-            $data['not_done_amount'] = $installment_item->get_total_amount('not_done');
-            $data['total_madionia'] = $data['done_amount'] + $data['not_done_amount'];
-            $data['installment_id'] = $id;
-
-            // استرجاع شهور الأقساط والفواتير
-            $data["items"] = Installment_month::where('installment_id', $id)->orderBy('date', 'asc')->get();
-            $data["items_done"] = Installment_month::where('installment_id', $id)->where('status', 'done')->orderBy('date', 'asc')->get();
-
-            $data["items_invoices_installment"] = Invoices_installment::where('installment_id', $id)->get();
-
-            // تطابق العناصر مع الفواتير
-            for ($i = 0; $i < count($data['items_done']); $i++) {
-                if (isset($data['items_invoices_installment'][$i])) {
-                    $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
-                } else {
-                    $data['items_done'][$i]['knet'] = null;
-                }
-            }
-
-            $total_amount_and_lawyer_percent = 0;
-            for ($i = 0; $i < count($data["items"]); $i++) {
-                if ($data["items"][$i]['status'] == 'not_done') {
-                    $total_amount_and_lawyer_percent += $data["items"][$i]['amount'];
-                }
-            }
-            $data["total_amount_and_lawyer_percent"] = $total_amount_and_lawyer_percent;
-
-            $nstallment_discount = Invoices_installment::where(['type' => 'expenses_pending', 'installment_id' => $id])->get();
-            $data['nstallment_discount'] = count($nstallment_discount) == 0 ? 0 : $nstallment_discount['amount'];
-
-            // إعداد الرقم التسلسلي والخصم
-            $data['serial'] = $serial_nos[$index];
-            $nstallment_discount_amount = Invoices_installment::where(['type' => 'income', 'installment_id' => $id])->get();
-
-            $data['nstallment_discount_amount'] = count($nstallment_discount_amount) == 0 || !isset($nstallment_discount_amount[0]['amount']) 
-                ? 0 
-                : $nstallment_discount_amount[0]['amount'];
-                
-                $data['serial'] = $serial_nos[$index];
-                $data['title1'] = 'نسخة ملف العميل (1)';
-                // echo view("Payments/print_invoice", $data);
-
-                // $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
-                // echo view("Payments/print_invoice", $data);
-
-                // $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
-                // echo view("Payments/print_invoice", $data);
-
-                // $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
-                // echo view("Payments/print_invoice", $data);
-                 $url = route('print_all_in') . '?' . http_build_query($data);
-            }
-
-            // $redirectUrl = url("/print_all/" . implode(',', $ids) . "/" . implode(',', $serial_nos));
-            // return response()->json([
-            //     'status' => 'success',
-            //     'redirect' => $redirectUrl,
-            // ]);
-
-            // return  redirect()->route('noimage');
-            
-            return response()->json(['redirect_url' => $url]);
+    return;
 }
-
 
     public function archieve_all($ids)
     {
