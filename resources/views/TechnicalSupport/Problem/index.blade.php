@@ -12,7 +12,7 @@
                 5 => 'secondary',
                 6 => 'success',
                 7 => 'dark',
-                8 => 'primary',
+                // 8 => 'primary',
             ];
         @endphp
        @foreach ($statusMapping as $key => $label)

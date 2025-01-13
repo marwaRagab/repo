@@ -51,9 +51,9 @@ class ProblemRepository implements ProblemRepositoryInterface
         3 => 'قيد العمل',
         4 => 'بانتظار الرد',
         5 => 'قيد المراجعة',
-        6 => 'منجزة',
-        7 => 'مغلقة',
-        8 => 'تم الانتهاء منها',
+        6 => 'تم الانتهاء منها',
+        7 => 'منجزة',
+        // 8 => 'تم الانتهاء منها',
     ];
 
          $statusCounts = [];
@@ -135,9 +135,9 @@ class ProblemRepository implements ProblemRepositoryInterface
             3 => 'قيد العمل',
             4 => 'بانتظار الرد',
             5 => 'قيد المراجعة',
-            6 => 'منجزة',
-            7 => 'مغلقة',
-            8 => 'تم الانتهاء منها',
+            6 => 'تم الانتهاء منها',
+            7 => 'منجزة',
+            // 8 => 'تم الانتهاء منها',
         ];
         $title = "مشاهدة المشكلة";
         $breadcrumb = array();
@@ -226,7 +226,7 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data = Problem::findOrFail($id);
         $data->status = $request->status;
         $data->updated_at = now();
-        if($request->status == "8")
+        if($request->status == "6")
         {
             $data->end_task = now();
         }
