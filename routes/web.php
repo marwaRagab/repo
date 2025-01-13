@@ -120,7 +120,7 @@ Route::get('/', function () {
 
 
 Route::get('/noimage', function () {
-   
+
 
     return view('noimage');
 })->name('noimage');
@@ -359,7 +359,7 @@ Route::middleware('auth')->group(function () {
 
     // // Route for archiving selected clients
     // Route::post('/archive-all', [PaymentsController::class, 'archiveAll'])->name('archive.all');
-    
+
     Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice');
     Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief'])->name('set_archief.data');
     Route::get('/print_all/{ids}/{seriall}', [PaymentsController::class, 'print_all'])->name('print_all');
@@ -371,7 +371,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/export_all', [PaymentsController::class, 'export_all']);
     Route::get('/print_invoice_export/{id1}/{id2}', [PaymentsController::class, 'print_invoice']);
 
-    
+
 
     // Route::Resource('branches', BranchController::class);
     // Route::get('branches/getall', [BranchController::class, 'getall'])->name('branches.getall');
@@ -524,6 +524,9 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
 Route::get('installment/papers/{status}', [PapersInstallController::class, 'index'])->name('installment.papers.status');
+Route::get('installment/papers/recieve_install/{id}', [PapersInstallController::class, 'recieve_install'])->name('installment.papers.recieve_install');
+Route::match(['get', 'post'], 'installment/papers/add/{slug}/{id}', [PapersInstallController::class, 'addToInstallmentPapers'])->name('installment.papers.addToInstallmentPapers');
+Route::get('installment/papers/recieve_install_paper/{id}', [PapersInstallController::class, 'recieveInstallPaper'])->name('installment.papers.recieveInstallPaper');
 
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
     Route::post('installment/pay_from/{id}', [InstallmentController::class, 'pay_from'])->name('installment.pay_one');
