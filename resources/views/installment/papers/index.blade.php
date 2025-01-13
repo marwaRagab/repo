@@ -47,7 +47,7 @@
                 },
                 {
                     data: 'actions',
-                    name: 'actions',
+                    name: 'actions', 
                     orderable: false,
                     searchable: false,
                     render: function(data) {

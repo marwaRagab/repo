@@ -29,42 +29,55 @@
                     <tbody>
                         <tr>
                             <th scope="row">المدعي </th>
-                            <td colspan="3">شركة الكترون للأجهزة الالكترونية </td>
+                            <td colspan="9">شركة الكترون للأجهزة الالكترونية </td>
                         </tr>
                         <tr>
                             <th scope="row">المدعى عليه </th>
-                            <td colspan="3">{{ $item->installment->client->name_ar }}</td>
+                            <td colspan="9">{{ $item->installment->client->name_ar }}</td>
                         </tr>
                         <tr>
                             <th scope="row">الرقم الآلي </th>
                             <td></td>
                             <td> </td>
                             <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+
                         </tr>
                         <tr>
                             <th scope="row">رقم الإعلان </th>
                             <td></td>
                             <td> </td>
                             <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th scope="row">المندوب </th>
-                            <td colspan="3"> </td>
+                            <td colspan="9"> </td>
                         </tr>
                         <tr>
                             <th scope="row">عنوان السكن </th>
-                            <td colspan="3">
-                                القطعه {{  $item->installment->client->client_address->last()->block  ?? ''}} 
+                            <td colspan="9">
+                                القطعه {{ $item->installment->client->client_address->last()->block ?? '' }}
                                 -
-                                الشارع {{  $item->installment->client->client_address->last()->street ?? '' }}
+                                الشارع {{ $item->installment->client->client_address->last()->street ?? '' }}
                                 -
-                                جاده {{  $item->installment->client->client_address->last()->jada ?? '' }}
+                                جاده {{ $item->installment->client->client_address->last()->jada ?? '' }}
                                 -
-                                المبنى {{  $item->installment->client->client_address->last()->building ?? '' }}
+                                المبنى {{ $item->installment->client->client_address->last()->building ?? '' }}
                                 -
-                                الدور {{  $item->installment->client->client_address->last()->floor ?? '' }}
+                                الدور {{ $item->installment->client->client_address->last()->floor ?? '' }}
                                 -
-                                الشقة {{  $item->installment->client->client_address->last()->flat ?? '' }}
+                                الشقة {{ $item->installment->client->client_address->last()->flat ?? '' }}
                             </td>
                         </tr>
 
@@ -75,12 +88,12 @@
                 </table>
             </div>
 
-            
+
 
 
 
         </div>
-        
+
         <div class="row">
 
             <div class="col-12 py-5  ">
@@ -89,14 +102,20 @@
                     <tbody>
                         <tr>
                             <th scope="row">المدعي </th>
-                            <td colspan="3">شركة الكترون للأجهزة الالكترونية </td>
+                            <td colspan="9">شركة الكترون للأجهزة الالكترونية </td>
                         </tr>
                         <tr>
                             <th scope="row">المدعى عليه </th>
-                            <td colspan="3">{{ $item->installment->client->name_ar }}</td>
+                            <td colspan="9">{{ $item->installment->client->name_ar }}</td>
                         </tr>
                         <tr>
                             <th scope="row">الرقم الآلي </th>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
                             <td></td>
                             <td> </td>
                             <td></td>
@@ -106,25 +125,31 @@
                             <td></td>
                             <td> </td>
                             <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                            <td> </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th scope="row">المندوب </th>
-                            <td colspan="3"> </td>
+                            <td colspan="9"> </td>
                         </tr>
                         <tr>
                             <th scope="row">عنوان السكن </th>
-                            <td colspan="3">
-                                القطعه {{  $item->installment->client->client_address->last()->block  ?? ''}} 
+                            <td colspan="9">
+                                القطعه {{ $item->installment->client->client_address->last()->block ?? '' }}
                                 -
-                                الشارع {{  $item->installment->client->client_address->last()->street ?? '' }}
+                                الشارع {{ $item->installment->client->client_address->last()->street ?? '' }}
                                 -
-                                جاده {{  $item->installment->client->client_address->last()->jada ?? '' }}
+                                جاده {{ $item->installment->client->client_address->last()->jada ?? '' }}
                                 -
-                                المبنى {{  $item->installment->client->client_address->last()->building ?? '' }}
+                                المبنى {{ $item->installment->client->client_address->last()->building ?? '' }}
                                 -
-                                الدور {{  $item->installment->client->client_address->last()->floor ?? '' }}
+                                الدور {{ $item->installment->client->client_address->last()->floor ?? '' }}
                                 -
-                                الشقة {{  $item->installment->client->client_address->last()->flat ?? '' }}
+                                الشقة {{ $item->installment->client->client_address->last()->flat ?? '' }}
                             </td>
                         </tr>
 
@@ -135,7 +160,7 @@
                 </table>
             </div>
 
-            
+
 
 
 
