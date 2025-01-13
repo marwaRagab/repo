@@ -184,7 +184,11 @@ class ProblemRepository implements ProblemRepositoryInterface
             $data->link = $request->link;
             $data->descr = $request->descr;
             if ($request->hasFile('file')) {
-                $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+                
+                $filename = time() . '-' . $request->file('file')->getClientOriginalName();
+                $path = $request->file('file')->move(public_path('uploads/new_photos'), $filename);
+                $data->file = 'uploads/new_photos' . '/' . $filename;
+                
             }
             $data->department_id = $request->department;
             $data->sub_department_id = $request->sub_department;
@@ -203,7 +207,8 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification->user_id = $one->id;
             $notification->problem_id = $data->id;
             if ($request->hasFile('file')) {
-                $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+                // $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+                $notification->attachment = $data->file;
             }
             $notification->created_at = now();
             $notification->save();
@@ -242,7 +247,11 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data->problem_id = $request->problem_id;
         $data->descr = $request->descr;
         if ($request->hasFile('file')) {
-            $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+            // $data->file = $request->file('file')->store('uploads/new_photos', 'public');
+                $filename = time() . '-' . $request->file('file')->getClientOriginalName();
+                $path = $request->file('file')->move(public_path('uploads/new_photos'), $filename);
+                $data->file = 'uploads/new_photos' . '/' . $filename;
+            
         }
         $data->user_id = Auth::user()->id;
         $data->save();
@@ -272,7 +281,7 @@ class ProblemRepository implements ProblemRepositoryInterface
                 $notification->user_id = $one->id;
                 $notification->problem_id = $data->id;
                 if ($request->hasFile('file')) {
-                    $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+                    $notification->attachment = $data->file;
                 }
                 $notification->created_at = now();
                 $notification->save();
