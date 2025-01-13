@@ -78,7 +78,7 @@ class InstallmentApproveController extends Controller
         $ministry = Ministry::where('id', $data->ministry_id)->first();
         $nationality = Nationality::all();
         $region = Regions::all();
-        $bank = Bank::all();
+        $bank = Bank::where('type',2)->where('active','=','1')->get();
         $total_cient = Installment_Client_Cinet::where('installment_clients_id', $data->id)->sum('file_debit_amount_1');
         $branches = Branch::all();
 

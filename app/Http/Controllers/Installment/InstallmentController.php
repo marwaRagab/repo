@@ -46,7 +46,8 @@ class InstallmentController extends Controller
         $breadcrumb[1]['title'] = $title;
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
-        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->OrderBy('installment.id', 'desc')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
+                                            ->where('finished',0)->OrderBy('installment.id', 'desc')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
         if ($data) {
@@ -130,7 +131,8 @@ class InstallmentController extends Controller
 
       //  $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
 
-        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])->where('finished', '1')->get();
+        $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
+                              ->where('finished', '1')->get();
         // $data['preclient'] = Prev_cols_clients::with('client_old')->where('id', $data['Installment']->client_id)->first();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
@@ -234,7 +236,18 @@ class InstallmentController extends Controller
                 ->sum('amount');
         }
         $data['Installment_Client'] = Installment_Client::with(['user', 'ministry_working', 'bank'])->where('id', $data['Installment']->installment_clients)->first();
-        $data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
+        $data['first_amount'] =  Installment_month::where('installment_id', $id)
+            ->where('status', 'done')
+            ->where('installment_type', ['first_amount'])
+            ->first();
+        if( $data['first_amount']){
+            $data['first_invoice'] = Invoices_installment::where(['installment_id' =>$id,'install_month_id'=>$data['first_amount']['id']])->first();
+
+        }
+
+        //$data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
+
+        $data['total_madionia1'] =$installment->eqrardain_amount ;
         $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type', 'income');
         $data['not_done_count'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
         $current_date = now(); // Use Carbon to get the current date and time
@@ -277,12 +290,13 @@ class InstallmentController extends Controller
 
         $mil_item = Military_affair::with('installment')->get();
 
-       
+
         // $military_affair = null; // Default initialization
         $military_affair = Military_affair::where('installment_id', $id)->first();
-        
-       if ($installment->laws == 1  && ($data['not_done_amount'] != 0)) {
-           
+
+
+       if ($installment->laws == 1  ) {
+
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
@@ -293,15 +307,28 @@ class InstallmentController extends Controller
 
             $data['sum'] = $data['not_done_amount'];
         }
-        
+
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();
         $data['install_amount'] = $first_month->amount ?? 0;
 
         // $data['invoices'] = Invoices_installment::with('install_month', 'installment')
         //     ->where('installment_id', $id)->get();
-        $data['invoices'] = Invoices_installment::with('install_month', 'installment')
-            ->where('installment_id', $id)->where('payment_type','!=','check')->get();
-        // dd($data['invoices']);
+      /*  $data['invoices'] = Invoices_installment::with('install_month', 'installment')
+            ->where('installment_id', $id)->where('payment_type','!=','check')->get();*/
+
+        $data['invoices'] = Installment_month::
+            where('installment_id', $id)->where('status','=','done')->groupBy('payment_date')->get();
+
+        foreach ($data['invoices'] as $value){
+
+            $value->sum_amount = Installment_month::where('installment_id', $id)
+                ->where('status', '=', 'done')
+
+                ->where('payment_date', $value->payment_date) // This ensures the sum is calculated for that specific payment_date
+                ->sum('amount'); // This will return the sum directly
+        }
+
+
         $data['install_discount'] = Invoices_installment::with('installment')->where('type', 'expenses_pending')->get();
         if ($military_affair) {
             $data['get_all_delegations'] = get_all_delegations($military_affair->id);
@@ -554,9 +581,6 @@ class InstallmentController extends Controller
                 'payment_type' => "part",
             ]);
 
-            $installment_item->update([
-                'finished' => 1,
-            ]);
 
 
             if ($installment_item->laws == 1 ) {
@@ -587,6 +611,13 @@ class InstallmentController extends Controller
                     'created_by' => Auth::user()->id ?? null,
                 ]);
                 // }
+            }
+
+            if(empty($month))
+            {
+                $installment_item->update([
+                    'finished' => 1,
+                ]);
             }
 
             return redirect()->back()->with('message', 'تم الدفع بنجاح');
@@ -853,7 +884,7 @@ class InstallmentController extends Controller
             $installment = Installment::findOrFail($installment_id);
             $client = Client::where('id', $installment->client_id);
             $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->whereNotIn('installment_type', ['law_percent', 'first_amount', 'discount'])->count();
-            
+
            if ($installment->months == 36) {
                 $data['not_done_amount'] = Installment_month::where('installment_id', $installment_id)
                     ->where('status', 'not_done')
@@ -865,7 +896,7 @@ class InstallmentController extends Controller
                     ->whereNotIn('installment_type', ['first_amount', 'discount'])
                     ->sum('amount');
             }
-            
+
             $military_affair = Military_affair::where('installment_id', $installment_id)->first();
 
             // dd($data['not_done_amount']);
@@ -874,12 +905,12 @@ class InstallmentController extends Controller
             if ($installment->laws == 1 ) {
 
                 $data['sum'] = $data['not_done_amount'] - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
-                
+
                 $military_affair->update([
                         'reminder_amount' => $military_affair->reminder_amount - $request->cash ?? $military_affair->reminder_amount - $request->knet,
                         'payment_done' => $military_affair->reminder_amount + $request->cash ?? $military_affair->reminder_amount + $request->knet
                     ]);
-                
+
             } else {
 
                 $data['sum'] = $data['not_done_amount'];
@@ -1046,7 +1077,7 @@ class InstallmentController extends Controller
     public function pay_total_with_discount($installment_id, Request $request)
     {
 
-        
+
         $messages = [
 
             'discount.required' => 'القيمة مطلوبة',
@@ -1091,7 +1122,7 @@ class InstallmentController extends Controller
 
                 $data['sum'] = $data['not_done_amount'];
             }
-           
+
             $data['id'] = $installment_id;
             $installments = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->get();
             $counter = count($installments);
@@ -1144,9 +1175,11 @@ class InstallmentController extends Controller
                     $military_affair->update([
                         'checking' => 1,
                         'reminder_amount' => $military_affair->reminder_amount - $request->discount_cash ?? $military_affair->reminder_amount - $request->discount_knet,
-                        'payment_done' => $military_affair->reminder_amount + $request->discount_cash ?? $military_affair->reminder_amount + $request->discount_knet   
+                        'payment_done' => $military_affair->reminder_amount + $request->discount_cash ?? $military_affair->reminder_amount + $request->discount_knet
                     ]);
                 }
+
+
 
                 // $lawsaffair = $this->db_get->get_where_r('lawsaffairs', 'installment_id', $installment_id);
                 // if (!empty($lawsaffair)) {
@@ -1206,7 +1239,7 @@ class InstallmentController extends Controller
                 $path = $request->file('discount_img_dir')->move(public_path('uploads/new_photos'), $filename);
 
                 for ($j = 1; $j < count($installments); $j++) {
-                    
+
                     $months::where('id', $installments[$j]->id)->update([
                         'created_by' => Auth::user()->id ?? null,
                         'img_dir' => 'uploads/new_photos' . '/' . $filename,
@@ -1237,7 +1270,7 @@ class InstallmentController extends Controller
     public function pay_some_of_amount($installment_id, Request $request)
     {
 
-       
+
         $messages = [
             'some_amount.required' => 'القيمة مطلوبة',
             'pay_way.required' => 'القيمة مطلوبة',
@@ -1268,34 +1301,34 @@ class InstallmentController extends Controller
             // }
 
             $this->do_pay_to_bank($first->id, $request->some_amount, $request->pay_way);
-          
+
             $months_id = array();
             $months = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->first();
 
             $invoice = Invoices_installment::where('install_month_id', $first->id)->where('installment_id', $installment_id)->first();
 
             if ($request->hasFile('img_dir')) {
-               
+
                 $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
                 $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
-               
+
                     $invoice->update([
                         'img' => 'uploads/new_photos' . '/' . $filename,
                         'created_by' => Auth::user()->id ?? null,
                     ]);
             }
-            
+
             $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->first();
-           
+
             if ($installment->laws == 1 ) {
-           
+
                 $military_affairs_item_1->update([
                     'reminder_amount' => $military_affairs_item_1->reminder_amount - $request->some_amount ,
-                    'payment_done' => $military_affairs_item_1->reminder_amount + $request->some_amount    
+                    'payment_done' => $military_affairs_item_1->reminder_amount + $request->some_amount
                 ]);
-                
+
             }
-            
+
             for ($i = 0; $i < count($installments); $i++)
             {
                 if ($request->some_amount >= $installments[$i]['amount']) {
@@ -1311,9 +1344,9 @@ class InstallmentController extends Controller
                         'hesab_file' => 1,
                         'img_dir' => 'uploads/new_photos/' . $filename,
                     ]);
-                    
+
                 } else {
-                   
+
                     if ($request->some_amount > 0) {
                         if ($installments[$i]['installment_type'] == 'law_percent') {
                             $old_law_percent = $installments[$i]['amount'];
@@ -1334,7 +1367,7 @@ class InstallmentController extends Controller
                                 'hesab_file' => 1,
                                 'img_dir' => 'uploads/new_photos/' . $filename,
                             ]);
-                           
+
                             if ($installments[$i]['installment_type'] == 'law_percent') {
                                 $months->amount = $old_law_percent - $request->some_amount;
                                 $months->status = "not_done";
@@ -1351,13 +1384,13 @@ class InstallmentController extends Controller
 
                         // $months = new Installment_month();
                         if (!empty($installments[$i + 1])) {
-                           
+
                             $months::where('id',$installments[$i+1]['id'])->update([
                                 'amount' => $installments[$i + 1]['amount'] + $reminder,
                                 'notes' => $reminder . "تم إضافة جزء من القسط السابق وقدره :  ",
                                 'created_by' => Auth::user()->id ?? null,
                             ]);
-                        }                       
+                        }
                     }
                     $request->some_amount = $request->some_amount - $installments[$i]['amount'];
                     $j = count($installments);
@@ -1382,7 +1415,7 @@ class InstallmentController extends Controller
             }
 
             // $months = new Installment_month;
-            
+
         }
 
         $title = 'نظام الأقساط';
@@ -1397,7 +1430,6 @@ class InstallmentController extends Controller
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
     }
-
 
     public function do_pay_to_bank($installment_month_id, $amount, $payment_type)
     {
@@ -1440,7 +1472,7 @@ class InstallmentController extends Controller
     }
     public function get_sum_installments($installment_id, Request $request)
     {
-        
+
         $messages = [
             'cash.required' => 'القيمة مطلوبة',
             'knet.required' => 'القيمة مطلوبة',
@@ -1460,9 +1492,9 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        } 
+        }
 
-       
+
         else {
             dd($request->all());
             $insall_ids = $request->payment_order_id;
@@ -1528,7 +1560,7 @@ class InstallmentController extends Controller
             }
 
             if (empty($installments)) {
-                
+
 
                 $installments_item_eqrar_dain = Installment::where([
                     'cancel_eqrar_dain' => 0,

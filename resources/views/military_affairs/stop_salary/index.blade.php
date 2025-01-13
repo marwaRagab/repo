@@ -1,13 +1,15 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2" href="{{route('stop_salary')}}">
-            الكل ({{ $total_count}})
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ !request()->get('court')  ? 'active' : '' }} "
+            href="{{route('stop_salary')}}">
+            الكل ({{ $total_count}})({{ count_court('' ,'stop_salary',null,null) }})
         </a>
 
         @foreach($courts as $court)
 
         <a href="{{route('stop_salary',array('court' => $court->id ))}}"
-            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2"> {{$court->name_ar}} ({{ $court->counter}})
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('court') == $court->id ? 'active' : '' }} ">
+            {{$court->name_ar}} ({{ $court->counter}})
         </a>
 
         @endforeach
@@ -20,7 +22,7 @@
         @foreach($ministries as $one)
 
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => $one->id ))}}"
-            class="btn-filter bg-primary-subtle text-primary px-2  mx-1 mb-2"> {{$one->name_ar}}
+            class="btn-filter bg-primary-subtle text-primary px-2  mx-1 mb-2 {{ request()->get('minsitry_id') == $one->id ? 'active' : '' }}"> {{$one->name_ar}}
             ({{ $one->counter}})
         </a>
 
@@ -34,7 +36,7 @@
 
         @foreach($item_type_time as $item_type)
         <a href="{{route('stop_salary',array('court'=> request()->get('court') , 'minsitry_id' => request()->get('minsitry_id') ,'type' => $item_type->slug ))}}"
-            class="btn-filter bg-success-subtle text-success  px-2  mx-1 mb-2">
+            class="btn-filter bg-success-subtle text-success  px-2  mx-1 mb-2 {{ request()->get('type') == $item_type->slug ? 'active' : '' }}">
             {{$item_type->name_ar}} ({{ $item_type->counter}})
         </a>
         @endforeach
@@ -47,7 +49,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="all-student" class="table table-bordered border text-nowrap align-middle">
+            <table id="all-student" class="table table-bordered border text-center text-nowrap align-middle">
                 <thead>
                     <!-- start row -->
                     @php
@@ -79,7 +81,10 @@
 
                     <!-- start row -->
                     @foreach ($items as $item)
-
+                    @php
+                     $new_date = $item->notes->where('type','stop_salary')->first();
+                     $type_date = $item->notes->where('type','stop_salary')->where('cat2', request()->get('type'))->first();
+                    @endphp
                     <tr>
                         <td>
                             {{ $loop->iteration }}
@@ -87,6 +92,16 @@
                         <td>
                             <a href="{{url('installment/show-installment/'.$item->installment->id)}}">
                                 {{$item->installment->id}}</a>
+                            <br />
+                            {!! getDiffTodayDates($item->open_file_date, null) !!}
+                            <br /> <br />
+                           
+                            @if(request()->has('minsitry_id') && (request()->has('type') == false) && optional($new_date)->date )
+                            {!! getDiffTodayDates(\Carbon\Carbon::parse(optional($new_date)->date)->format('Y-m-d'), null)   !!}
+                            @endif
+                            @if(request()->has('type') && optional($type_date)->date)
+                            {!! getDiffTodayDates(optional($type_date)->date, null)  !!}
+                            @endif
                         </td>
                         <td>{{$item->installment->client->name_ar}}
                         </td>
@@ -250,7 +265,7 @@
                                                 $get_all_delegations = get_all_delegations($item->id);
                                                 @endphp
 
-                                               <div class="tab-pane active p-3" id="notes-{{ $item->id }}"
+                                                <div class="tab-pane active p-3" id="notes-{{ $item->id }}"
                                                     role="tabpanel">
                                                     <table id="notes1"
                                                         class="table table-bordered border text-wrap align-middle">
@@ -270,47 +285,47 @@
 
 
                                                             @if (count($all_notes) > 0)
-                                                                <!-- start row -->
-                                                                @foreach ($all_notes as $all_note)
-                                                                    <tr data-bs-toggle="collapse"
-                                                                        data-bs-target="#collapseExample"
-                                                                        aria-expanded="false" aria-controls="collapseExample">
-                                                                        <td>
-                                                                            {{ $all_note->created_by }}
-                                                                        </td>
-                                                                        <td>
-                                                                            @php
-                                                                                if ($all_note->notes_type == 'answered') {
-                                                                                    $type = 'رد';
-                                                                                } elseif ($all_note->notes_type == 'refused') {
-                                                                                    $type = 'لم يرد';
-                                                                                } else {
-                                                                                    $type = 'ملاحظة';
-                                                                                }
+                                                            <!-- start row -->
+                                                            @foreach ($all_notes as $all_note)
+                                                            <tr data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                <td>
+                                                                    {{ $all_note->created_by }}
+                                                                </td>
+                                                                <td>
+                                                                    @php
+                                                                    if ($all_note->notes_type == 'answered') {
+                                                                    $type = 'رد';
+                                                                    } elseif ($all_note->notes_type == 'refused') {
+                                                                    $type = 'لم يرد';
+                                                                    } else {
+                                                                    $type = 'ملاحظة';
+                                                                    }
 
-                                                                            @endphp
-                                                                            {{ $type }}
-                                                                        </td>
-                                                                        <td>
-                                                                            <p>
-                                                                                {{ $all_note->note }}
-                                                                            </p>
-                                                                        </td>
-                                                                        @php
-                                                                            $time = explode(' ', $all_note->date)[1];
-                                                                            $day = explode(' ', $all_note->date)[0];
+                                                                    @endphp
+                                                                    {{ $type }}
+                                                                </td>
+                                                                <td>
+                                                                    <p>
+                                                                        {{ $all_note->note }}
+                                                                    </p>
+                                                                </td>
+                                                                @php
+                                                                $time = explode(' ', $all_note->date)[1];
+                                                                $day = explode(' ', $all_note->date)[0];
 
-                                                                        @endphp
-                                                                        <td>{{ $time }}<span class="d-block"></span>
-                                                                        </td>
-                                                                        <td>{{ $day }}</td>
+                                                                @endphp
+                                                                <td>{{ $time }}<span class="d-block"></span>
+                                                                </td>
+                                                                <td>{{ $day }}</td>
 
-                                                                    </tr>
-                                                                @endforeach
+                                                            </tr>
+                                                            @endforeach
                                                             @else
-                                                                <tr>
-                                                                    <td colspan="5"> لا يوجد بيانات</td>
-                                                                </tr>
+                                                            <tr>
+                                                                <td colspan="5"> لا يوجد بيانات</td>
+                                                            </tr>
 
                                                             @endif
 
@@ -320,13 +335,17 @@
                                                         <h4 class="mb-3">اضف ملاحظة</h4>
                                                         <input type="hidden" name="military_affairs_id"
                                                             value="{{ $item->installment_id }}">
-                                                            <input type="hidden" name="id_time_type_old" value="{{ $item_type_time->first()->id ?? '' }}">
+                                                        <input type="hidden" name="id_time_type_old"
+                                                            value="{{ $item_type_time->first()->id ?? '' }}">
 
-                                                            <input type="hidden" name="id_time_type_new" value="{{ $item_type_time_new->id ?? '' }}">
+                                                        <input type="hidden" name="id_time_type_new"
+                                                            value="{{ $item_type_time_new->id ?? '' }}">
 
-                                                            <input type="hidden" name="type" value="{{ $item_type_time->first()->type ?? '' }}">
+                                                        <input type="hidden" name="type"
+                                                            value="{{ $item_type_time->first()->type ?? '' }}">
 
-                                                            <input type="hidden" name="type_id" value="{{ $item_type_time->first()->slug ?? '' }}">
+                                                        <input type="hidden" name="type_id"
+                                                            value="{{ $item_type_time->first()->slug ?? '' }}">
 
                                                         <div class="form-row">
                                                             <div class="form-group">
@@ -347,9 +366,10 @@
                                                             <div class="form-group">
                                                                 <div class="my-3">
                                                                     <label class="form-label">الملاحظات</label>
-                                                                    <textarea name="note" class="form-control" rows="5"></textarea>
+                                                                    <textarea name="note" class="form-control"
+                                                                        rows="5"></textarea>
                                                                     @error('note')
-                                                                        <div style='color:red'>{{ $message }}</div>
+                                                                    <div style='color:red'>{{ $message }}</div>
                                                                     @enderror
                                                                 </div>
                                                             </div>
@@ -370,67 +390,67 @@
                                                             <!-- end row -->
                                                         </thead>
                                                         <tbody>
-                                                        @if (count($all_actions) > 0 )
-                                                                    @foreach ($all_actions as $value)
-                                                                    <tr>
-                                                                    @php
-                                                                                $created_by = DB::table('users')
-                                                                                    ->where('id', $value->created_by)
-                                                                                    ->first();
+                                                            @if (count($all_actions) > 0 )
+                                                            @foreach ($all_actions as $value)
+                                                            <tr>
+                                                                @php
+                                                                $created_by = DB::table('users')
+                                                                ->where('id', $value->created_by)
+                                                                ->first();
 
-                                                                            @endphp
-                                                                        <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
-                                                                        <td> @if ($value->timesType)
-                                                                                                        {{ $value->timesType->name_ar }}
-                                                                                                    @elseif ($value->bankType)
-                                                                                                        {{ $value->bankType->name_ar }}
-                                                                                                    @elseif ($value->carType)
-                                                                                                        {{ $value->carType->name_ar }}
-                                                                                                    @elseif ($value->salaryType)
-                                                                                                        {{ $value->salaryType->name_ar }}
-                                                                                                        @elseif ($value->travelType)
-                                                                                                        {{ $value->travelType->name_ar }}
-                                                                                                    @else
-                                                                                                        لا يوجد
-                                                                                                    @endif
-                                                                                                </td>
-                                                                                                <td>
-                                                                             @php
-
-                                                                                $day_start = explode(' ', $value->date_start)[0];
-                                                                                if (
-                                                                                    $value->date_end &&
-                                                                                    $value->date_end != '0000-00-00 00:00:00'
-                                                                                ) {
-                                                                                    $day_end = explode(' ', $value->date_end)[0];
-                                                                                    $different_day = get_different_date(
-                                                                                        $day_start,
-                                                                                        $day_end,
-                                                                                    );
-                                                                                } else {
-                                                                                    $day_end = 'لم تنتهى';
-                                                                                    $different_day = get_different_date(
-                                                                                        $day_start,
-                                                                                        now(),
-                                                                                    );
-                                                                                }
-
-                                                                                @endphp
-                                                                                {{ $day_start }}
-                                                                            </br>
-                                                                            {{ $day_end }}
-                                                                        </td>
-                                                                        <td>{{ $different_day }}</td>
-
-
-                                                                    </tr>
-                                                                    @endforeach
+                                                                @endphp
+                                                                <td>{{ $created_by->name_ar ?? 'لا يوجد' }}</td>
+                                                                <td> @if ($value->timesType)
+                                                                    {{ $value->timesType->name_ar }}
+                                                                    @elseif ($value->bankType)
+                                                                    {{ $value->bankType->name_ar }}
+                                                                    @elseif ($value->carType)
+                                                                    {{ $value->carType->name_ar }}
+                                                                    @elseif ($value->salaryType)
+                                                                    {{ $value->salaryType->name_ar }}
+                                                                    @elseif ($value->travelType)
+                                                                    {{ $value->travelType->name_ar }}
                                                                     @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
-                                                                        </tr>
-
+                                                                    لا يوجد
                                                                     @endif
+                                                                </td>
+                                                                <td>
+                                                                    @php
+
+                                                                    $day_start = explode(' ', $value->date_start)[0];
+                                                                    if (
+                                                                    $value->date_end &&
+                                                                    $value->date_end != '0000-00-00 00:00:00'
+                                                                    ) {
+                                                                    $day_end = explode(' ', $value->date_end)[0];
+                                                                    $different_day = get_different_date(
+                                                                    $day_start,
+                                                                    $day_end,
+                                                                    );
+                                                                    } else {
+                                                                    $day_end = 'لم تنتهى';
+                                                                    $different_day = get_different_date(
+                                                                    $day_start,
+                                                                    now(),
+                                                                    );
+                                                                    }
+
+                                                                    @endphp
+                                                                    {{ $day_start }}
+                                                                    </br>
+                                                                    {{ $day_end }}
+                                                                </td>
+                                                                <td>{{ $different_day }}</td>
+
+
+                                                            </tr>
+                                                            @endforeach
+                                                            @else
+                                                            <tr>
+                                                                <td colspan="5"> لا يوجد بيانات</td>
+                                                            </tr>
+
+                                                            @endif
 
                                                         </tbody>
                                                     </table>
@@ -452,18 +472,18 @@
                                                         <tbody>
                                                             <!-- start row -->
                                                             @if (count($get_all_delegations) > 0 )
-                                                                    @foreach ($get_all_delegations as $value)
-                                                                    <tr data-bs-toggle="collapse"
-                                                                        data-bs-target="#collapseExample" aria-expanded="false"
-                                                                        aria-controls="collapseExample">
-                                                                        @php
-                                                                            $created_by = DB::table('users')
-                                                                                ->where('id', $value->emp_id)
-                                                                                ->first();
+                                                            @foreach ($get_all_delegations as $value)
+                                                            <tr data-bs-toggle="collapse"
+                                                                data-bs-target="#collapseExample" aria-expanded="false"
+                                                                aria-controls="collapseExample">
+                                                                @php
+                                                                $created_by = DB::table('users')
+                                                                ->where('id', $value->emp_id)
+                                                                ->first();
 
-                                                                        @endphp
-                                                                       <td>
-                                                                            {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
+                                                                @endphp
+                                                                <td>
+                                                                    {{ $value['execute_date'] ? 'اعلان التنفيذ' : (
                                                                                 $value['image_date'] ? 'الايمج' : (
                                                                                 $value['case_proof_date'] ? 'إثبات الحالة' : (
                                                                                 $value['travel_date'] ? 'منع السفر' : (
@@ -473,48 +493,50 @@
                                                                                 $value['certificate_date'] ? 'إصدار شهادة العسكريين' : 'فتح ملف'
                                                                                 )))))))
                                                                             }}
-                                                                        </td>
-                                                                        <td>
-                                                                            {{ $created_by->name_ar ?? 'لا يوجد' }}
-                                                                        </td>
-                                                                        <td>
-                                                                            @php
+                                                                </td>
+                                                                <td>
+                                                                    {{ $created_by->name_ar ?? 'لا يوجد' }}
+                                                                </td>
+                                                                <td>
+                                                                    @php
 
-                                                                            $day_start = explode(' ', $value->assign_date)[0];
-                                                                                if (is_numeric($day_start)) {
-                                                                                    $day_start = date('Y-m-d', $day_start);
-                                                                                }
+                                                                    $day_start = explode(' ', $value->assign_date)[0];
+                                                                    if (is_numeric($day_start)) {
+                                                                    $day_start = date('Y-m-d', $day_start);
+                                                                    }
 
-                                                                                // Check the end date
-                                                                                if ($value->end_date && $value->end_date != '') {
-                                                                                    $day_end = explode(' ', $value->end_date)[0];
-                                                                                    if (is_numeric($day_end)) {
-                                                                                        $day_end = date('Y-m-d', $day_end);
-                                                                                    }
-                                                                                    $different_day = get_different_date($day_start, $day_end);
-                                                                                } else {
-                                                                                    // Use current timestamp if end_date is missing
-                                                                                    $day_end = 'لم تنتهى';
-                                                                                    $different_day = get_different_date($day_start, now()->timestamp);
-                                                                                }
-                                                                            @endphp
-                                                                            {{ $day_start }}
+                                                                    // Check the end date
+                                                                    if ($value->end_date && $value->end_date != '') {
+                                                                    $day_end = explode(' ', $value->end_date)[0];
+                                                                    if (is_numeric($day_end)) {
+                                                                    $day_end = date('Y-m-d', $day_end);
+                                                                    }
+                                                                    $different_day = get_different_date($day_start,
+                                                                    $day_end);
+                                                                    } else {
+                                                                    // Use current timestamp if end_date is missing
+                                                                    $day_end = 'لم تنتهى';
+                                                                    $different_day = get_different_date($day_start,
+                                                                    now()->timestamp);
+                                                                    }
+                                                                    @endphp
+                                                                    {{ $day_start }}
 
-                                                                        </td>
-                                                                        <td>{{ $day_end }}</td>
+                                                                </td>
+                                                                <td>{{ $day_end }}</td>
 
-                                                                        <td>
-                                                                            {{ $different_day }}
-                                                                        </td>
+                                                                <td>
+                                                                    {{ $different_day }}
+                                                                </td>
 
-                                                                    </tr>
-                                                                    @endforeach
-                                                                    @else
-                                                                        <tr>
-                                                                            <td colspan="5"> لا يوجد بيانات</td>
-                                                                        </tr>
+                                                            </tr>
+                                                            @endforeach
+                                                            @else
+                                                            <tr>
+                                                                <td colspan="5"> لا يوجد بيانات</td>
+                                                            </tr>
 
-                                                                    @endif
+                                                            @endif
 
                                                         </tbody>
                                                     </table>

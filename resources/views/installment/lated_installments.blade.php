@@ -86,7 +86,7 @@
 
                         <td>{{ $item->installment_months->where('status', 'not_done')->where('date', '<', \Carbon\Carbon::now())->sum('amount') }}</td>
                         <td>
-                            {{ $item->installment_months->where('status', 'done')->where('date', '<', \Carbon\Carbon::now())->count() }}
+                            {{ $item->installment_months->where('status', 'done')->where('installment_type','!=', 'first_amount')->where('date', '<', \Carbon\Carbon::now())->count() }}
                         </td>
                         <td>{{ $item->installment_months->where('status', 'done')->where('date', '<', \Carbon\Carbon::now())->sum('amount') }}</td>
                         <td>

@@ -61,8 +61,9 @@
         @endif
             @if (Str::contains(request()->url(), 'stop_travel') || Str::contains(request()->url(), 'stop_travel'))
                 <li>
-                    <a class="dropdown-item {{  $case_img !=null ??   $case_img->img_dir == null || $case_img->img_dir == '' || $case_img->img_dir == 0   ? 'disabled' : '' }}"
-                       {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+
+
+                    <a class="dropdown-item {{  !isset($case_img) ?? $case_img !=null ??   $case_img->img_dir == null || $case_img->img_dir == '' || $case_img->img_dir == 0   ? 'disabled' : '' }}"
                        onclick="checkFileAndRedirect(
                     '{{ $case_img && $case_img->img_dir  && $case_img->img_dir !== '0' ? 'https://electron-kw.net/' . $case_img->img_dir: '#' }}',
                     '{{ $case_img && $pdf_img->img_dir && $case_img->img_dir!== '0' ? 'https://electron-kw.com/' . $case_img->img_dir: '#' }}'

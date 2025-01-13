@@ -965,7 +965,7 @@ class old_dbController extends Controller
          if('installment.months'==24){
              $law_percent = '(SELECT SUM(installment_months.amount)
                  FROM installment_months
-                 WHERE installment_months.installment_type in("law_percent","2_._5_percent")
+                 WHERE installment_months.installment_type "law_percent"
                  AND installment_months.installment_id  =  installment.id
                  AND installment_months.status="done")';
          }else{
@@ -975,8 +975,7 @@ class old_dbController extends Controller
 
        $check_pay = '(SELECT SUM(military_affairs_check.amount)
                FROM military_affairs_check
-               WHERE military_affairs_check.deposit = 1
-               AND military_affairs_check.military_affairs_id  =  military_affairs.id)';
+              WHERE   military_affairs_check.military_affairs_id  =  military_affairs.id)';
 
        $amount_pay = '(SELECT SUM(military_affairs_amounts.amount)
                 FROM military_affairs_amounts

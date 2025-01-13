@@ -3,13 +3,19 @@
         <h4 class="card-title mb-0"> محتوي المشكلة
         </h4>
     </div>
+    {{-- {{ dd($data) }} --}}
     <div class="card-body">
         <div class="table-responsive pb-4">
             <table class="table table-bordered border text-nowrap align-middle">
                 <tbody>
+
                     <tr>
                         <td><strong>العنوان</strong></td>
                         <td>{{ $data->title }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رقم المعاملة</strong></td>
+                        <td>{{ $data->installement_id }}</td>
                     </tr>
                     <tr>
                         <td><strong>الوصف</strong></td>
@@ -22,6 +28,37 @@
                     <tr>
                         <td><strong>اسم المستخدم</strong></td>
                         <td>{{ $data->user->name_ar }}</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong>المبرمج</strong></td>
+                        <td>{{ $data->developer->name_ar ?? 'لا يوجد' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>الاولوية</strong></td>
+                        <td>{{ $data->priority }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>القسم</strong></td>
+                        <td>{{ $data->department->name_ar  ?? 'لا يوجد'}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong> القسم الفرعى</strong></td>
+                        <td>{{ $data->subdepartment->name_ar ?? 'لا يوجد' }}</td>
+                    </tr>
+
+                    <tr>
+                        <td><strong> وقت استلام التاسك</strong></td>          
+                        <td>{{ $data->assign_date ?? 'لا يوجد' }}</td> 
+                       
+                    </tr>
+                    <tr>
+                        <td><strong> وقت الانتهاء التاسك</strong></td>
+                        <td>{{ $data->end_task ?? 'لا يوجد' }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong> الرابط</strong></td>
+                        <td>{{ $data->link ?? 'لا يوجد' }}</td>
                     </tr>
                     <tr>
                         <td><strong>مرفق</strong></td>
@@ -87,6 +124,10 @@
                                         <li>
                                             <button type="submit" class="btn btn-warning rounded-0 btn-sm w-100 mt-2"
                                                 name="status" value="5">قيد المراجعة</button>
+                                        </li>
+                                        <li>
+                                            <button type="submit" class="btn btn-warning rounded-0 btn-sm w-100 mt-2"
+                                                name="status" value="8"> تم الانتهاء منها</button>
                                         </li>
                                         <li>
                                             <button type="submit" class="btn btn-success rounded-0 btn-sm w-100 mt-2"

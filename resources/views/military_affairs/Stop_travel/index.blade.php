@@ -23,7 +23,7 @@
 
         @foreach($courts as $court)
 
-            <a href="{{route('stop_travel',array('governorate_id' => $court->id,'stop_travel_type'=>$travel_type))}}"
+            <a href="{{route('stop_travel',array('governorate_id' => $court->id))}}"
                class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}  "> {{$court->name_ar}}
                 ({{ count_court($court->id ,'stop_travel',null,null) }})
             </a>
@@ -49,8 +49,8 @@
 
         @foreach($stop_travel_types as $stop_travel_type)
 
-            <a href="{{route('stop_travel',array('stop_travel_type' => $stop_travel_type->slug,'governorate_id'=> $gov ))}}"
-               class="btn-filter {{$stop_travel_type->style}}   px-4  mx-1 mb-2   {{ request()->get('stop_travel_type') == $stop_travel_type->slug ? 'active' : '' }}">  {{$stop_travel_type->name_ar}}
+            <a href="{{route('stop_travel',array('stop_travel_type' => $stop_travel_type->slug,'governorate_id'=>$gov))}}"
+               class="btn-filter {{$stop_travel_type->style}}   px-4  mx-1 mb-2   {{ request()->get('stop_travel_type') == $stop_travel_type->slug ? 'active' : '' }}">  {{$stop_travel_type->name_ar}} ({{count_status_stop_travel($gov,$stop_travel_type->slug)}})
             </a>
 
         @endforeach
@@ -117,14 +117,13 @@
 
                         @if($item->installment)
 
-                                @php
+                               {{-- @php
 
 
                                      if( Request::has('stop_travel_type') &&  Request::get('stop_travel_type')!= '' ){
+                                         $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
 
 
-
-                                            $array= count($item->status_all->where('type_id',Request::get('stop_travel_type'))->where('flag',0)) ;
 
                                         }else{
                                          $array= count($items);
@@ -132,10 +131,14 @@
 
 
                                 @endphp
+--}}
+
+
 
 
 
                                     @include('military_affairs.Stop_travel.table_details')
+
 
 
                         @endif

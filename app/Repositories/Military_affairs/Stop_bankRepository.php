@@ -105,9 +105,12 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             ->with('status_all', function ($query) {
                 return $query->where('type', '=', 'stop_bank');
             })
-            ->with('installment', function ($query) {
-                return $query->where('finished', '=', 0);
+            ->with('installment')
+            ->whereHas('installment', function ($q) use ($request) {
+                // dd('fff');
+                return $q->where('finished',0);
             })
+
             ->when(request()->has('date'), function ($query) use ($request) {
                 $query->whereHas('installment.client.get_ministry', function ($q) use ($request) {
 
@@ -174,7 +177,6 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         //dd($this->data['items']);
         foreach ($this->data['items'] as $value) {
-
             if ($value->installment && $value->status_all) {
                 $value->i = $x + 1;
                 $value->all_notes = get_all_notes('stop_bank', $value->id);
@@ -247,6 +249,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $this->data['dates'] = $array_date;
         $this->data['banks'] = $array_bank;
+
         $this->data['get_responsible'] = get_responsible();
 
 

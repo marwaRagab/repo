@@ -67,17 +67,28 @@
                         <tr>
                             <th scope="row">عنوان السكن </th>
                             <td colspan="9">
-                                القطعه {{ $item->installment->client->client_address->last()->block ?? '' }}
-                                -
-                                الشارع {{ $item->installment->client->client_address->last()->street ?? '' }}
-                                -
-                                جاده {{ $item->installment->client->client_address->last()->jada ?? '' }}
-                                -
-                                المبنى {{ $item->installment->client->client_address->last()->building ?? '' }}
-                                -
-                                الدور {{ $item->installment->client->client_address->last()->floor ?? '' }}
-                                -
-                                الشقة {{ $item->installment->client->client_address->last()->flat ?? '' }}
+                                @php
+
+                                    $area_name = $item->installment->client->client_address->last()->area_id
+                                        ? \App\Models\Region::Findorfail(
+                                            $item->installment->client->client_address->last()->area_id,
+                                        )->name_ar
+                                        : '';
+                                @endphp
+                                المنطقة: {{ $area_name ?? '' }},
+                                القطعه: {{ $item->installment->client->client_address->last()->block ?? ' ' }},
+
+                                الشارع: {{ $item->installment->client->client_address->last()->street ?? ' ' }},
+
+                                جاده: {{ $item->installment->client->client_address->last()->jada ?? ' ' }},
+
+                                المبنى :{{ $item->installment->client->client_address->last()->building ?? '' }},
+
+                                الدور: {{ $item->installment->client->client_address->last()->floor ?? ' ' }},
+
+                                الشقة: {{ $item->installment->client->client_address->last()->flat ?? '  ' }},
+
+                                الرقم الالى :{{ $item->installment->client->house_id ?? '' }}
                             </td>
                         </tr>
 
@@ -139,17 +150,28 @@
                         <tr>
                             <th scope="row">عنوان السكن </th>
                             <td colspan="9">
-                                القطعه {{ $item->installment->client->client_address->last()->block ?? '' }}
-                                -
-                                الشارع {{ $item->installment->client->client_address->last()->street ?? '' }}
-                                -
-                                جاده {{ $item->installment->client->client_address->last()->jada ?? '' }}
-                                -
-                                المبنى {{ $item->installment->client->client_address->last()->building ?? '' }}
-                                -
-                                الدور {{ $item->installment->client->client_address->last()->floor ?? '' }}
-                                -
-                                الشقة {{ $item->installment->client->client_address->last()->flat ?? '' }}
+                                @php
+
+                                    $area_name = $item->installment->client->client_address->last()->area_id
+                                        ? \App\Models\Region::Findorfail(
+                                            $item->installment->client->client_address->last()->area_id,
+                                        )->name_ar
+                                        : '';
+                                @endphp
+                                المنطقة: {{ $area_name ?? '' }},
+                                القطعه: {{ $item->installment->client->client_address->last()->block ?? ' ' }},
+
+                                الشارع: {{ $item->installment->client->client_address->last()->street ?? ' ' }},
+
+                                جاده: {{ $item->installment->client->client_address->last()->jada ?? ' ' }},
+
+                                المبنى :{{ $item->installment->client->client_address->last()->building ?? '' }},
+
+                                الدور: {{ $item->installment->client->client_address->last()->floor ?? ' ' }},
+
+                                الشقة: {{ $item->installment->client->client_address->last()->flat ?? '  ' }},
+
+                                الرقم الالى :{{ $item->installment->client->house_id ?? '' }}
                             </td>
                         </tr>
 
