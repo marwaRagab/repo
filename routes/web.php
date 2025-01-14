@@ -28,6 +28,7 @@ use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\OttuPaymentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PoliceStationController;
+use App\Http\Controllers\SubDepartmentController;
 use App\Http\Controllers\WorkingIncomeController;
 use App\Http\Controllers\InstallmentCarController;
 use App\Http\Controllers\InstallmentIssueController;
@@ -44,41 +45,41 @@ use App\Http\Controllers\InstallmentClientNoteController;
 use App\Http\Controllers\InstallmentPercentageController;
 use App\Http\Controllers\InstallmentSubmissionController;
 use App\Http\Controllers\Military_affairs\ImageController;
-use App\Http\Controllers\ImportingCompanies\MarkController;
 
 // use App\Http\Controllers\Showroom\ShowroomController;
+use App\Http\Controllers\ImportingCompanies\MarkController;
 use App\Http\Controllers\Installment\InstallmentController;
-use App\Http\Controllers\Military_affairs\PapersController;
 // use App\Http\Controllers\Military_affairs\CheckingController;
 
+use App\Http\Controllers\Military_affairs\PapersController;
 use App\Http\Controllers\Military_affairs\SearchController;
-use App\Http\Controllers\ImportingCompanies\ClassController;
 
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
+use App\Http\Controllers\ImportingCompanies\ClassController;
 use App\Http\Controllers\TechnicalSupport\ProblemController;
-use App\Http\Controllers\TechnicalSupport\RequestController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
 // use App\Http\Controllers\Transfer\TransferController;
 
+use App\Http\Controllers\TechnicalSupport\RequestController;
 use App\Http\Controllers\Installment\PapersInstallController;
-use App\Http\Controllers\Military_affairs\CheckingController;
 // use App\Http\Controllers\Military_affairs\Stop_bankController;
+use App\Http\Controllers\Military_affairs\CheckingController;
 use App\Http\Controllers\Military_affairs\Stop_carController;
-use App\Http\Controllers\ImportingCompanies\CompanyController;
 
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
+use App\Http\Controllers\ImportingCompanies\CompanyController;
 use App\Http\Controllers\ImportingCompanies\ProductController;
 use App\Http\Controllers\ImportingCompanies\TawreedController;
-use App\Http\Controllers\Military_affairs\DelegatesController;
 // use App\Http\Controllers\Military_affairs\Stop_travelController;
 
-use App\Http\Controllers\Military_affairs\EqrardainController;
+use App\Http\Controllers\Military_affairs\DelegatesController;
 
 // use App\Http\Controllers\Military_affairs\Excute_actionsController;
 
+use App\Http\Controllers\Military_affairs\EqrardainController;
 use App\Http\Controllers\Military_affairs\Open_fileController;
 use App\Http\Controllers\Military_affairs\Stop_bankController;
 use App\Http\Controllers\Military_affairs\SettlementController;
@@ -92,7 +93,6 @@ use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\HumanResources\TransactionsCompletedController;
-use App\Http\Controllers\SubDepartmentController;
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -365,6 +365,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/print_all/{ids}/{seriall}', [PaymentsController::class, 'print_all'])->name('print_all');
     Route::get('/print_all_invoice', [PaymentsController::class, 'print_all_in'])->name('print_all_in');
     Route::any('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve_all');
+    // Route::post('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve.all');
+
     Route::get('/invoices_installment', [PaymentsController::class, 'invoices_installment_index'])->name('invoices_installment');
     Route::post('/get_invoices_papers', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/installment/invoices_installment/print_invoice/{id1}/{id2}', [PaymentsController::class, 'get_invoices_papers']);

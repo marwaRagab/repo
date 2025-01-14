@@ -4,7 +4,7 @@ namespace App\Repositories\Payments;
 
 use DateTime;
 use Carbon\Carbon;
-use App\Models\Log;
+// use App\Models\Log;
 use App\Models\Bank;
 use Inertia\Inertia;
 use App\Models\Court;
@@ -19,6 +19,7 @@ use App\Models\Installment_month;
 use App\Models\Installment_Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\InstallmentClientNote;
@@ -259,7 +260,6 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     }
 
     ///////////////////////////////case_proof function
-
 
     public function print_invoice($invoice_id, $installment_id, $id, $serial_no) // id is month_id
     {
@@ -506,32 +506,41 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
     public function print_all($ids, $serial_nos)
 {
-
-    // dd("ss"); 
+    // Convert ids and serial_nos to arrays
+    $ids = explode(',', $ids);
     $serial_nos = explode(',', $serial_nos);
-    $ids = is_string($ids) ? explode(',', $ids) : $ids;
 
     $data['user_name'] = Auth::user()->name_ar;
     $data['title'] = 'نظام الأقساط';
     $data['add_title'] = 'الأقساط';
 
     $data_update['print_status'] = 'done';
-    $invoices = Invoices_installment::whereIn('id', $ids)->get()->keyBy('id');
+    // Get invoices where print_status is NULL
+    $invoices = Invoices_installment::whereIn('installment_id', $ids)
+        ->whereNull('print_status')
+        ->get()
+        ->keyBy('id');
+
+    // Get installments
     $installments = Installment::whereIn('id', $ids)->get()->keyBy('id');
 
-    foreach ($ids as $index => $id) {
-        $invoice = $invoices[$id] ?? abort(404);
-        $invoice->update($data_update);
+    // Loop through the invoices
+    foreach ($invoices as $invoice) {
+        $id = $invoice->installment_id;
 
+        // Mark invoice as 'done'
+        $invoice->print_status = "done";    
+        $invoice->save();
         $installment_item = $installments[$id] ?? abort(404);
         $data["item"] = $installment_item;
 
+        // Handle installment month and amounts
         $data["installment_month"] = Installment_month::findorfail($id);
         $explode = explode('.', $data["installment_month"]['amount']);
         $data['first_sum'] = numberToArabicWords($explode[0]);
         $data['secound_sum'] = $explode[1] ?? '';
 
-        $data["client"] = $client = $installment_item->client;
+        $data["client"] = $installment_item->client;
 
         $data['done_amount'] = $installment_item->get_total_amount('done');
         $data['not_done_amount'] = $installment_item->get_total_amount('not_done');
@@ -541,9 +550,10 @@ class PaymentsRepository implements PaymentsRepositoryInterface
         $data['items'] = Installment_month::where('installment_id', $id)->orderBy('date', 'asc')->get();
         $data['items_done'] = Installment_month::where('installment_id', $id)->where('status', 'done')->orderBy('date', 'asc')->get();
 
-        $data['serial'] = $serial_nos[$index];
-        // $data['title1'] = 'نسخة ملف العميل (1)';
+        // Add serial number to data
+        $data['serial'] = $serial_nos[array_search($id, $ids)];
 
+        // Generate and echo the views
         $data['title1'] = 'نسخة ملف العميل (1)';
         echo view("Payments/print_invoice", $data);
 
@@ -555,27 +565,47 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
         $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
         echo view("Payments/print_invoice", $data);
-
-        // $url = route('print_all_in') . '?' . http_build_query($data);
-        // return true;
     }
 
     return;
 }
 
-    public function archieve_all($ids)
-    {
-        $add_data['arch'] = 1;
-        $invoices = explode(',', $ids);
-
-        foreach ($invoices as $id) {
-            $items = Invoices_installment::findorfail($id);
-            $items->update(['arch' => 1]);
+public function archieve_all($ids)
+{
+   
+    try {
+        $invoices = array_filter(array_map('trim', explode(',', $ids)), 'is_numeric');
+      
+        if (empty($invoices)) {
+            return response()->json(['success' => false, 'message' => 'No IDs provided.'], 400);
         }
-        $response['redirect'] = url('/payments');
-        echo json_encode($response);
-    }
 
+        $updatedCount = Invoices_installment::whereIn('installment_id', $invoices)
+        ->where('arch', '!=', 1)
+        ->where('print_status', '=', "done")
+        ->get();
+        foreach($updatedCount as $item)
+        {
+            $item->arch = "1";    
+            $item->save();
+        }  
+
+        if ($updatedCount === 0) {
+            return response()->json(['success' => false, 'message' => 'No invoices were updated.'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "تم أرشفة فواتير بنجاح.",
+            'redirect' => url('/payments'),
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error: ' . $e->getMessage(),
+        ], 500);
+    }
+}
 
     public function get_invoices_papers(Request $request)
     {
