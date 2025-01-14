@@ -44,6 +44,7 @@
             <h6>رقم المعاملة : <span>{{$installment->id}}</span></h6>
         </div>
     </div>
+    {{-- {{ dd($client->client_address->last()) }} --}}
     <div class="row">
         <div class="col-12  ">
             <p class="text-dark">انه فى تاريخ أعلاه تم الاتفاق بين كل من : </p>
@@ -55,9 +56,25 @@
             <div class=" d-flex justify-content-between">
                 <div class="col-md-6 col-sm-12">
                     <p class="text-dark">ثانيا :العميل : {{$client->name_ar}}</p>
-                    <p class="text-dark"> العنوان : المنطقة : {{$client->client_address->last()->area}}- قطعة : - شارع
-                        : {{$client->client_address->last()->street}}- مبني
-                        : {{$client->client_address->last()->building}}-</p>
+                    <p class="text-dark"> العنوان 
+                        : المنطقة : 
+                        {{$client->client_address->last()->area}} -
+                         قطعة : 
+                         {{$client->client_address->last()->block}} -
+                         - شارع
+                        : {{$client->client_address->last()->street}} - 
+                        مبني
+                        : {{$client->client_address->last()->building}} -
+                        جادة :
+                        {{$client->client_address->last()->jada != "0" ? $client->client_address->last()->jada : ""}} -
+                        الدور :
+                        {{$client->client_address->last()->floor != "0" ? $client->client_address->last()->floor : ""}} -
+                        الشقة :
+                        {{$client->client_address->last()->flat != "0" ? $client->client_address->last()->flat : ""}} -
+                        الرقم الالى  :
+                        {{$client->client_address->last()->house_id}}
+                    </p>
+                    
                     <p class="text-dark"> جهة العمل
                      @if($client->client_ministrey)
                         جهة العمل : {{\App\Models\Ministry::find($client->client_ministrey->first()->ministry_id)->name_ar}}
