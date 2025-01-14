@@ -9,7 +9,7 @@
     </div>
 
     <div class="card-body">
-        @include('installment.papers.links', $papers_type)
+        @include('installment.papers.links', ['papers_type' => $papers_type, 'slug' => $status])
 
 
                             <div class="table-responsive pb-4">
