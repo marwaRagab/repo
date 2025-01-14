@@ -3,106 +3,32 @@
 namespace App\Http\Controllers\Installment;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Installment;
+use App\Models\Client;
 use App\Models\Eqrars_details;
-use App\Models\Paperstype;
+use App\Models\Installment;
+use App\Models\User; // Add this line
+use App\Repositories\Installment\PapersInstallRepository;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PapersInstallController extends Controller
 {
-    public function __construct()
+    protected $repository;
+
+    public function __construct(PapersInstallRepository $repository)
     {
-
-
+        $this->repository = $repository;
     }
-    public function index (Request $request, $status)
+
+    public function index(Request $request, $status)
     {
-
-
-        $title = 'المحفوظات';
-        $all_counters = [
-            'not_finished' => Eqrars_details::where('paper_received_checked', 0)->count(), // Count of not finished papers
-
-            'received' => Eqrars_details::where('paper_received_checked', 1)->count(), // Count of received papers
-
-            'tadqeeq' => Installment::with(['client', 'paper','eqrarsDetail'])
-            ->whereHas('paper', function ($query) {
-                $query->where('slug', 'my_index');
-            }) ->whereHas('eqrarsDetail', function ($query) {
-                $query->where('paper_received_checked', 1);
-            })
-            ->where('type', 'installment')
-            ->where('tadqeeq', 1)
-            ->where('manage_review', 0)
-            ->where('status', 'finished')->count(), // Count of papers in tadqeeq
-
-            'manage_review' => Installment::with(['client', 'paper', 'eqrarsDetail'])
-            ->whereHas('paper', function ($query) {
-                $query->where('slug', 'tadqeeq');
-            })
-            ->whereHas('eqrarsDetail', function ($query) {
-                $query->where('paper_received_checked', 1);
-            })
-            ->where('type', 'installment')
-            ->where('tadqeeq', 1)
-            ->where('manage_review', 1)
-            ->where('status', 'finished')
-            ->where('tadqeeq_archive', 0)->count(), // Count of papers in manage review
-
-            'archive' => Installment::with(['client', 'paper', 'eqrarsDetail'])
-            ->whereHas('paper', function ($query) {
-                $query->where('slug', 'manage_review');
-            })
-            ->whereHas('eqrarsDetail', function ($query) {
-                $query->where('paper_received_checked', 1)->where('paper_received', 1);
-            })
-            ->where('type', 'installment')
-            ->where('status', 'finished')
-            ->where('tadqeeq', 1)
-            ->where('manage_review', 1)
-            ->where('tadqeeq_archive', 1)
-            ->where('archive_finished', 0)->count(), // Count of papers in archive
-
-            'archive_finished' => Installment::with(['client', 'paper', 'eqrarsDetail'])
-            ->whereHas('paper', function ($query) {
-                $query->where('slug', 'manage_review');
-            })
-            ->whereHas('eqrarsDetail', function ($query) {
-                $query->where('paper_received_checked', 1)->where('paper_received', 1);
-            })
-            ->where('type', 'installment')
-            ->where('status', 'finished')
-            ->where('tadqeeq', 1)
-            ->where('manage_review', 1)
-            ->where('tadqeeq_archive', 1)
-            ->where('archive_finished', 1)
-            ->where('archive_received', 0)->count(), // Count of finished papers in archive
-            'eqrar_dain' => 0,
-            'eqrar_dain_recieved' => 0,
-            'archive_received'=> 0
-        ];
-        $papers = []; // Fetch data from the database
-        $papers_type = PapersType::all();
-        $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger',
-        'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning',
-        'bg-warning-subtle text-warning', 'px-4 bg-primary-subtle text-primary', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger'];
-
-        foreach ($papers_type as $key => $paper_type) {
-         $papers_type[$key]->style = $color_array[array_rand($color_array)];
-         $papers_type[$key]->count = $all_counters[$papers_type[$key]->slug];
-        }
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route("dashboard");
-        $breadcrumb[1]['title'] = $title;
-        $breadcrumb[1]['url'] = 'javascript:void(0);';
-        $data['view'] = 'installment.papers.index';
-
-        return view('layout', $data, compact('breadcrumb','papers','title','all_counters','papers_type'));
+        $data = $this->repository->getIndexData($status);
+        return view('layout', $data['data'], $data);
     }
     public function getAllData(Request $request, $slug = null)
     {
-        // استعلام أساسي باستخدام العلاقة بين Eqrars_details و Installment
+        $slug = $request->get('slug', $slug) ?? 'index';
+
         $query = Eqrars_details::with(['installment.client'])
             ->when($slug === 'not_finished', function ($q) {
                 $q->where('paper_received_checked', 0);
@@ -129,99 +55,106 @@ class PapersInstallController extends Controller
                 $q->whereHas('installment', function ($subQuery) {
                     $subQuery->where('slug', 'archive_finished');
                 });
-            });
+            })
+            ->orderBy('eqrars_details.id', 'desc'); // Correct the column name
 
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('transaction_number', function ($detail) {
-                return $detail->installment->id ?? '-';
+                return '<a href="' . url('installment/show-installment/' . $detail->installment->id) . '">' . $detail->installment->id . '</a>';
             })
             ->addColumn('client_name', function ($detail) {
-                return $detail->installment->client->name ?? '-';
+                $client = $detail->installment->client;
+                return $client ? $client->name_ar . '<br/>' . $client->civil_number : '-';
             })
             ->addColumn('received_date', function ($detail) {
                 return $detail->installment->date ?? '-';
             })
-            ->addColumn('paper_img_dir', function ($detail) {
-                return $detail->img_dir;
+            ->addColumn('created_by', function ($detail) {
+                return $detail->installment->user->name_ar ?? '-';
             })
-            ->addColumn('actions', function ($detail) {
-                return '<a href="' . route('installment.papers.edit', $detail->id) . '" class="btn btn-primary">تعديل</a>';
+            ->addColumn('actions', function ($detail) use ($slug) {
+                if ($slug === 'index') {
+                    return '<a href="' . route('installment.papers.addToInstallmentPapers', ['slug' => 'not_finished', 'id' => $detail->id]) . '" class="btn btn-primary">تسليم المعاملة</a>';
+                } elseif ($slug === 'archive') {
+                    return '<a href="#" class="btn btn-warning">أرشفة</a>';
+                } else {
+                    return '<a href="#" class="btn btn-primary">تعديل</a>';
+                }
             })
-            ->rawColumns(['actions'])
+            ->rawColumns(['transaction_number', 'client_name', 'actions'])
+            ->filter(function ($query) use ($request) {
+                if ($request->has('search') && $request->search['value']) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->whereHas('installment', function ($subQuery) use ($search) {
+                            $subQuery->where('id', 'like', "%{$search}%")
+                                ->orWhereHas('client', function ($clientQuery) use ($search) {
+                                    $clientQuery->where('name_ar', 'like', "%{$search}%")
+                                        ->orWhere('civil_number', 'like', "%{$search}%");
+                                });
+                        });
+                    });
+                }
+            })
             ->toJson();
     }
 
-     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addToInstallmentPapers(Request $request, $slug, $id)
     {
-        return view('installment.papers.create');
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+            if ($request->hasFile('cinet_img')) {
+                $data['cinet_img'] = $request->file('cinet_img');
+            }
+            $result = $this->repository->addToInstallmentPapers($slug, $id, $data);
+            return redirect()->back()->with('success', 'تمت العملية بنجاح.');
+        }
+
+        $installment = Installment::with('client')->findOrFail($id);
+        $admins = User::where('active', 1)->get();
+
+        $title = 'إضافة صورة الاعتماد';
+
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " المحفوظات";
+        $breadcrumb[1]['url'] = route("installment.papers.status", 'index');
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+        $view = 'installment.papers.add_to_installment_papers';
+
+        return view(
+            'layout', compact('breadcrumb', 'title', 'installment', 'admins', 'slug','view')
+        );
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function recieveInstallPaper($id)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+        $installment = Installment::with('client')->findOrFail($id);// dd($installment);
+        $client = $installment->client;
+        $bank = $client->client_banks->last();
+        $ministry = $client->get_ministry;
+        $bankName = $bank->name_ar ?? 'لا يوجد';
+        $ministryName = $ministry->name_ar ?? 'لا يوجد';
 
-        // Logic to store paper in the database
-        // Example: Paper::create($validated);
+        $title = 'نموذج الاستلام' ;
+        $addTitle = 'نموذج الاستلام' ;
 
-        return redirect()->route('installment.papers.index')->with('success', 'Paper created successfully!');
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = $title;
+        $breadcrumb[1]['url'] = 'javascript:void(0);';
+        $view = 'installment.papers.recieve_install_paper';
+
+        return view('installment.papers.recieve_install_paper', compact('breadcrumb', 'title', 'addTitle', 'installment', 'client', 'bankName', 'ministryName', 'view'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        // Example: Fetch specific paper data
-        // $paper = Paper::findOrFail($id);
-        return view('installment.papers.show');
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        // Example: Fetch specific paper data
-        // $paper = Paper::findOrFail($id);
-        return view('installment.papers.edit');
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
 
-        // Example: Update paper data
-        // $paper = Paper::findOrFail($id);
-        // $paper->update($validated);
 
-        return redirect()->route('installment.papers.index')->with('success', 'Paper updated successfully!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        // Example: Delete paper data
-        // $paper = Paper::findOrFail($id);
-        // $paper->delete();
-
-        return redirect()->route('installment.papers.index')->with('success', 'Paper deleted successfully!');
-    }
 }

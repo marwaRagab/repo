@@ -134,7 +134,7 @@ class OttuPaymentController extends Controller
         $customerPhone = $clientData->phone;
         $customerEmail = $clientData->email;
         $amount = $installmentData->installment;
-        $civilId = $clientData->civil_id;
+        $civilId = $clientData->civil_number;
         $orderNum = "#electron" . rand(1, 100000);
 
         // Payload for the API request

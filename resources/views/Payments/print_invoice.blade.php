@@ -236,10 +236,12 @@
 
                 </h1>
                 <tr class="table-data">
-                    {{ dd(optional(request()->query('installment_month'))['id']) }}
+                    {{-- {{ dd(optional(request()->query('installment_month'))['id']) }} --}}
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?= $installment_month['id'] ?? request()->query('installment_month')->id ?>                                    </p>
+                            <?= $installment_month['id'] ?? (is_array(request()->query('installment_month')) 
+                            ? request()->query('installment_month')['id'] ?? null 
+                            : request()->query('installment_month')->id ?? null) ?>                                 </p>
                     </td>
                     <td class="item" colspan=3>
                         <h2> رقم السند </h2>
@@ -790,6 +792,7 @@ $the_balance = $total_madionia - ($laws_item_amount ?? 0) + $first_amount;
 
     </main>
 </div>
+
 <!-- Bootstrap-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
         integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="

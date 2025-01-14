@@ -8,9 +8,14 @@
         <div class="table-responsive pb-4">
             <table class="table table-bordered border text-nowrap align-middle">
                 <tbody>
+
                     <tr>
                         <td><strong>العنوان</strong></td>
                         <td>{{ $data->title }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>رقم المعاملة</strong></td>
+                        <td>{{ $data->installement_id }}</td>
                     </tr>
                     <tr>
                         <td><strong>الوصف</strong></td>

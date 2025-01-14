@@ -1540,3 +1540,28 @@ if (!function_exists('count_status_stop_travel')) {
     }
 }
 
+if (!function_exists('count_court_stop_travel')) {
+
+    function count_court_stop_travel($id)
+    {
+        if($id){
+            $governorate_id =Court::findorfail($id)->governorate_id  ;
+
+        }else{
+            $governorate_id ='';
+        }
+
+        return Military_affair::where(['military_affairs.status' => 'execute','military_affairs.stop_bank'=>'1','archived'=> 0,'bank_archive'=> 0])
+            ->with('installment')->with('installment.client')
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
+            })->when($id, function ($query) use ($governorate_id) {
+
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            })
+            ->count();
+    }
+}
+

@@ -12,15 +12,15 @@
                 5 => 'secondary',
                 6 => 'success',
                 7 => 'dark',
-                8 => 'primary',
+                // 8 => 'primary',
             ];
         @endphp
-        @foreach ($statusMapping as $key => $label)
-            <a href="{{ route('supportProblem.index', ['status' => $key ,'department_id'=> $request->department_id ,'sub_department_id'=> $request->sub_department_id]) }}"
-                class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
-                {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
-            </a>
-        @endforeach
+       @foreach ($statusMapping as $key => $label)
+    <a href="{{ route('supportProblem.index', ['status' => $key, 'department_id' => $request->department_id, 'sub_department_id' => $request->sub_department_id]) }}"
+    class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
+        {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
+    </a>
+@endforeach
     </div>
 </div>
 <div class="card">
@@ -52,10 +52,10 @@
                         <th>التاريخ</th>
                         <th>الحالة</th>
                         <th>اسم المستخدم</th>
-                        <th>الرابط</th>
+                        <!-- <th>الرابط</th> -->
                         @if (request('status') != "1")
                         <th>المبرمج</th>   
-                        <th>عدد الايام</th>  
+                        <!-- <th>عدد الايام</th>   -->
                         <th>الاولوية</th>  
                         @endif
                         @if (request('status') == "6" || request('status') == "7" || request('status') == "8")
@@ -76,8 +76,10 @@
                                 @if($problem->department != NuLL)
                                     {{ $problem->department->name_ar  }}
                                 @else
-                                   لا يوجد
+                                &nbsp;&nbsp;&nbsp;&nbsp;   لا يوجد
                                 @endif
+                            </br>
+                                <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a>
                             </td>
                             <td>
                                 @if($problem->department && $problem->department->subdepartment)
@@ -86,20 +88,20 @@
                                     لا يوجد
                                 @endif
                             </td>
-                            <td>{{ $problem->title }}</td>
+                            <td>{{ $problem->title }}   </td>
                             <td>
                                 <p class="m-0">{{ \Carbon\Carbon::parse($problem->created_at)->format('Y/m/d') }}
                                 </p>
                                 <p class="m-0">{{ \Carbon\Carbon::parse($problem->created_at)->format('h:i:s A') }}
                                 </p>
                                 <span class="badge bg-success">
-                                    {{ \Carbon\Carbon::parse($problem->created_at)->diffForHumans(null, true, true, 2) }}
+                                {{ \Carbon\Carbon::parse($problem->created_at)->diffForHumans(null, true, false, 2) }}
                                 </span>
                             </td>
                             <td> <span class="badge bg-primary">{{ $statusMapping[$problem->status] }}</span>
                             </td>
                             <td>{{ $problem->user->name_ar }}</td>
-                            <td> <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
+                            <!-- <td> <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a></td> -->
 
                            
                             @if (request('status') != "1")
@@ -121,9 +123,20 @@
                                             @endif
                                         </select>
                                     </form>
+                                    @if ($problem->assign_date)
+                                        <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('Y/m/d') }}
+                                        </p>
+                                        <!-- <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('h:i:s A') }}
+                                        </p> -->
+                                        <span class="badge bg-success">
+                                            {{ \Carbon\Carbon::parse($problem->assign_date)->diffForHumans(null, true, true, 2) }}
+                                        </span>
+                                    @else
+                                        لم يتم تحديد مبرمج
+                                    @endif
                                 </td>
 
-                                <td>
+                                <!-- <td>
                                     @if ($problem->assign_date)
                                         <p class="m-0">{{ \Carbon\Carbon::parse($problem->assign_date)->format('Y/m/d') }}
                                         </p>
@@ -135,7 +148,7 @@
                                     @else
                                         لم يتم تحديد مبرمج
                                     @endif
-                                </td>
+                                </td> -->
                                 <td>
                                     {{ $problem->priority == "high" 
                                     ? "مرتفعة" 
@@ -149,7 +162,7 @@
 
 
                             @if (request('status') == "6" || request('status') == "7" || request('status') == "8")
-                                 <td> {{ $problem->end_task ?? 'لا يوجد' }}</td>   
+                                 <td> {{ \Carbon\Carbon::parse($problem->end_task)->format('Y/m/d') ?? 'لا يوجد' }}</td>   
                             @endif
                             <td>
                                 <a class="btn btn-success btn-sm rounded me-6"
@@ -218,7 +231,7 @@
                             <select id="priority"  class="form-control mb-2" name="priority">
 
                                 <option selected disabled>اختر</option>
-                                <option value="high">عالية</option>
+                                <option value="high">مرتفعة</option>
                                 <option value="medium">متوسطة</option>
                                 <option value="low">منخفضة</option>
                             </select>
