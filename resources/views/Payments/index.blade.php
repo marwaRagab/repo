@@ -35,12 +35,11 @@
                 </thead>
                 
             </table>
+            <button id="print-selected" value="1"  class="btn btn-primary"> طباعة</button>
+            <!-- <button   class="btn btn-success test" value="1"    style="margin-right: 900px;     margin-bottom: -50px;"    onclick="valthisform(this);"  >طباعة</button> -->
+                    <!-- <button   class="btn btn-danger test"  value="2"  style="margin-right: 1000px"  onclick="valthisform(this);"   >ارشفة</button> -->
+                    <button class="btn btn-danger" value="2" id="archive-selected">ارشفة</button>
 
-            <button   class="btn btn-success test" value="1"    style="margin-right: 900px;     margin-bottom: -50px;"    onclick="valthisform(this);"  >طباعة</button>
-                    <button   class="btn btn-danger test"  value="2"  style="margin-right: 1000px"  onclick="valthisform(this);"   >ارشفة</button>
-
-
-                    <button id="print-selected" class="btn btn-primary">Print Selected</button>
         </div>
     </div>
 </div>
@@ -290,7 +289,7 @@ function valthisform(button) {
                     //},
 
                     render: function (data, type, row) {
-                        return `<input type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}">`;
+                        return `<input type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}" data-serial="${row.serial_no}">`;
                     }
             }
                     
@@ -349,10 +348,9 @@ const seriall = serialNumbers.join(',');
 
     // Send selected rows to the server or handle them on the client
     $.ajax({
-        url: `/print_all/${ids}/${seriall}`, // Define the print route in your backend
+        url: '/print_all/' + ids + '/' + seriall, // Define the print route in your backend
         type: 'GET',
         success: function (response) {
-            console.log(response);
 
             // Open a new window for printing
             const printWindow = window.open('', '_blank');
@@ -370,5 +368,48 @@ const seriall = serialNumbers.join(',');
         }
     });
 });
+// ///////
+document.getElementById('archive-selected').addEventListener('click', function () {
+    // Get selected checkbox values
+    const selectedIds = Array.from(document.querySelectorAll('.row-select:checked'))
+        .map(checkbox => checkbox.value);
+
+    if (selectedIds.length === 0) {
+        alert('يجب اختيار عميل واحد على الأقل!');
+        return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const ids = selectedIds.join(','); // Join IDs into a comma-separated string
+
+    $.ajax({
+        type: 'GET',
+        // url: `/archieve_all/${ids}`, // Pass IDs in the URL
+        url: '/archieve_all/' + ids,
+        headers: { 'X-CSRF-TOKEN': csrfToken }, // Include CSRF token
+        success: function (response) {
+            console.log('Archived IDs:', selectedIds);
+            alert( 'تم أرشفة العناصر بنجاح');
+
+            // Reload the DataTable without resetting pagination
+            $('#users-table').DataTable().ajax.reload(null, false);
+        },
+        error: function (xhr) {
+            console.error('Archive Error:', xhr.responseText);
+            alert('حدث خطأ أثناء الأرشفة');
+        }
+    });
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set the default value to the current month (YYYY-MM format)
+        const currentMonth = new Date().toISOString().slice(0, 7); // Get current month in 'YYYY-MM' format
+        const dateSelect = document.getElementById('dateSelect');
+        
+        // Set the default value for the dropdown
+        dateSelect.value = currentMonth;
+
+    });
 
 </script>
