@@ -517,9 +517,12 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     $data_update['print_status'] = 'done';
     // Get invoices where print_status is NULL
     $invoices = Invoices_installment::whereIn('installment_id', $ids)
-        ->whereNull('print_status')
-        ->get()
-        ->keyBy('id');
+    ->where(function($query) {
+        $query->whereNull('print_status')
+              ->orWhere('print_status', 0);
+    })
+    ->get()
+    ->keyBy('id');
 
     // Get installments
     $installments = Installment::whereIn('id', $ids)->get()->keyBy('id');

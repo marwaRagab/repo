@@ -892,7 +892,7 @@
                 type="text"
                 name="salary"
                 id="Salary"
-                value="{{ old('salary') }}" required />
+                value="{{ old('salary',$data->salary) }}" readonly />
                 @error('salary')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
