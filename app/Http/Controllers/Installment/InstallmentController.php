@@ -211,7 +211,7 @@ class InstallmentController extends Controller
             $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         }
 
-        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image'])
+        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image','get_ministry'])
 
             ->where('id', $data['Installment']->client_id)
             ->first();
@@ -262,6 +262,7 @@ class InstallmentController extends Controller
 
         $data['id'] = $id;
         $data['client_ministries'] = DB::table('client_ministries')->where('client_id', $data['Client']->id)->get();
+        // dd($data['Client'] );
         // Extract ministry IDs from the collection
         $ministryIds = $data['client_ministries']->pluck('ministry_id')->toArray();
 

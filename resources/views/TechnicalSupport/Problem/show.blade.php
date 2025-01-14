@@ -31,8 +31,10 @@
                     </tr>
 
                     <tr>
+                        @if (Auth::user()->roles->name_ar == "superadmin")
                         <td><strong>المبرمج</strong></td>
                         <td>{{ $data->developer->name_ar ?? 'لا يوجد' }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <td><strong>الاولوية</strong></td>

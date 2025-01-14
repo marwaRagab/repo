@@ -152,15 +152,21 @@
                                     </tr>
                                     <tr>
                                         <th>كويت فايندر</th>
-                                        <td>{{$Installment->client->location}}</td>
+                                        <td>{{$Installment->client->kwfinder}}</td>
                                     </tr>
 
                                     <tr>
                                         <th>جهة العمل (1)</th>
                                         <td>
-                                            @foreach ($data['ministries'] as $ministry)
-                                                {{ $ministry->name_ar }}<br>
-                                            @endforeach
+
+
+                                            @if(empty($data['ministries']))
+                                                @foreach ($data['ministries'] as $ministry)
+                                                    {{ $ministry->name_ar }}<br>
+                                                @endforeach
+                                            @else
+                                            {{ $Installment->installment_client?->ministry_working?->name_ar ?? '' }}
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>
