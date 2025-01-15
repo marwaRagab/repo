@@ -11,40 +11,50 @@
     <div class="card-body">
         @include('installment.papers.links', $papers_type)
 
-<table class="table table-bordered" id="papersTable">
-                        <thead>
+
+                            <div class="table-responsive pb-4">
+                                <table id="papersTable" class="table table-bordered border text-nowrap align-middle">
+                                    <thead>
                             <tr>
                                 <th>#</th>
                                 <th>رقم المعاملة</th>
                                 <th>اسم العميل</th>
-                                <th>تاريخ الإستلام</th>
-                                <th>صورة الإستلام</th>
-                                <th>خيارات</th>
+                                <th>التاريخ </th>
+                                <th>معتمد المعاملة</th>
+
+                                @if($status == 'index' || $status == 'not_finished')
+                                    <th>تسليم معاملة</th>
+                                @else
+                                    <th>خيارات</th>
+                                @endif
                             </tr>
                         </thead>
                     </table>
 
-
+                            </div>
 </div>
 </div>
+<script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        $('#papersTable').DataTable({
+        let slug = '';
+
+        const table = $('#papersTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('installment.papers.getAllData', $slug ?? '') }}",
+            ajax: {
+                url: "{{ route('installment.papers.getAllData') }}",
+                data: function(d) {
+                    d.slug = slug;
+                }
+            },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                 { data: 'transaction_number', name: 'transaction_number' },
                 { data: 'client_name', name: 'client_name' },
                 { data: 'received_date', name: 'received_date' },
-                {
-                    data: 'paper_img_dir',
-                    name: 'paper_img_dir',
-                    render: function(data) {
-                        return data ? `<a href="${data}" target="_blank" class="btn btn-info">عرض</a>` : 'N/A';
-                    }
-                },
+
+                { data: 'created_by', name: 'created_by' },
                 {
                     data: 'actions',
                     name: 'actions',
@@ -54,7 +64,14 @@
                         return data;
                     }
                 }
-            ]
+            ],
+            language: {
+                url: "{{ asset('assets/js/datatables/i18n/ar.json') }}", // Arabic translations
+            }
+        });
+        $('#slugButtons a').on('click', function() {
+            slug = $(this).data('slug');
+            table.ajax.reload();
         });
     });
 </script>

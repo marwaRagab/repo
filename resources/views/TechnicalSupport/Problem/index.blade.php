@@ -12,7 +12,7 @@
                 5 => 'secondary',
                 6 => 'success',
                 7 => 'dark',
-                8 => 'primary',
+                // 8 => 'primary',
             ];
         @endphp
        @foreach ($statusMapping as $key => $label)
@@ -53,8 +53,11 @@
                         <th>الحالة</th>
                         <th>اسم المستخدم</th>
                         <!-- <th>الرابط</th> -->
-                        @if (request('status') != "1")
+                        @if (request('status') != "1" )
+                        @if (Auth::user()->roles->name_ar == "superadmin")
                         <th>المبرمج</th>   
+                        @endif
+                          
                         <!-- <th>عدد الايام</th>   -->
                         <th>الاولوية</th>  
                         @endif
@@ -105,6 +108,7 @@
 
                            
                             @if (request('status') != "1")
+                                @if (Auth::user()->roles->name_ar == "superadmin")
                                 <td>
                                     <form action="{{ route('updatedeveloper', ['id' => $problem->id]) }}" method="POST" id="developerForm">
                                         @csrf
@@ -135,6 +139,7 @@
                                         لم يتم تحديد مبرمج
                                     @endif
                                 </td>
+                                @endif
 
                                 <!-- <td>
                                     @if ($problem->assign_date)

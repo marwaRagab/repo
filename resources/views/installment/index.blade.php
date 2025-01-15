@@ -85,7 +85,7 @@
 
                             </td>
                             <td>
-                                {{ $item->amount }}
+                                {{ $item->total_madionia  + $item->extra_first_amount + $item->first_amount}}
                             </td>
 
                             <td>

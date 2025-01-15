@@ -41,7 +41,7 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table id="all-student1" class="table table-bordered border text-nowrap align-middle">
+            <table id="all-student" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -75,10 +75,6 @@
                         </td>
                     </tr>
                     @endforeach
-                    @else
-                    <tr>
-                        <td colspan="7" class="text-center">لا توجد نتائج</td>
-                    </tr>
                     @endif
                 </tbody>
             </table>

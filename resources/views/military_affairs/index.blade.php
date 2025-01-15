@@ -1,6 +1,6 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2" href="{{ route('military_affairs') }}">
             العدد الكلي ({{ $count['all_military_affairs_count'] }})
         </a>
         <a class="btn-filter  bg-success-subtle text-success px-2  mx-1 mb-2" href="{{ route('open_file') }}">
@@ -42,11 +42,11 @@
             href="{{ route('papers.eqrar_dain_received') }}">
             اقرارات الدين مستلمة ({{ $count['eqrar_dain_received_count'] }})
         </a>
-        <a class="btn-filter bg-info-subtle text-info px-2  mx-1 mb-2" href="{{ route('settle.index') }}">
+        <a class="btn-filter bg-info-subtle text-info px-2  mx-1 mb-2" href="{{ route('excute_actions') }}">
             رصيد التنفيذ ({{ $count['excute_actions_count'] }})
         </a>
         <a class="btn-filter me-1 mb-1  bg-warning-subtle text-warning  px-2  mx-1 mb-2 "
-            href="{{ route('excute_actions') }}">
+            href="{{ route('settle.index') }}">
             التسوية ({{ $count['settlement_count'] }})
         </a>
     </div>
@@ -67,27 +67,62 @@
                         <th>الرقم المدني</th>
                         <th> الهاتف </th>
                         <th> المحكمة</th>
-                        <th> التاريخ</th>
+                        <!-- <th> التاريخ</th> -->
+                        <th> المرحلة</th>
+
                     </tr>
                     <!-- end row -->
                 </thead>
                 <tbody>
                     @php $i=1; @endphp
                     @foreach ($transactions as $one_1)
-                        <!-- start row -->
+                    <!-- start row -->
+                     
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td><a
+                                href="{{ route('installment.show-installment', ['id' => $one_1->installment_id]) }}">{{ $one_1->installment_id }}</a>
+                        </td>
+                        <td>{{ $one_1->name_ar }}</td>
+                        <td>{{ $one_1->civil_number }}</td>
+                        <td>{{ $one_1->phone_ids }}</td>
+                        <td>{{ $one_1->governorate_id }}</td>
+                        <!-- <td>{{ $one_1->date }}</td> -->
+                        <td>
+                            
+                            @if ($one_1->status == 'military')
+                            {{' فتح ملف' }}
+                            @elseif ($one_1->status == 'execute_alert' && $one_1->jalasat_alert_status == 'accepted')
+                            {{ 'الايمج' }}
+                            @elseif ($one_1->status == 'execute_alert' && $one_1->jalasat_alert_status != 'accepted')
+                            {{ 'إعلان التنفيذ '}}
+                            @elseif ($one_1->status == 'case_proof' && $one_1->jalasat_alert_status == 'accepted')
+                            {{ 'أثبات الحالة'}}
+                            @elseif (($one_1->cancel_certificate == 1) && ($one_1->stop_salary == 0) && ($one_1->job_type == 'military') )
+                            {{ 'أصدار الشهادة العسكرية'}}
+                            @elseif ($one_1->status == 'execute' && $one_1->stop_bank == 1 && $one_1->bank_archive ==0)
+                            {{ 'حجز بنوك '}}
+                            @elseif ($one_1->status == 'execute' &&  $one_1->stop_car == 1)
+                            {{ 'حجز سيارات '}}
+                            @elseif ($one_1->status == 'execute' &&  $one_1->stop_salary == 1 && $one_1->job_type == 'military')
+                            {{ 'حجز راتب '}}
+                            @elseif ($one_1->status == 'execute' && $one_1->stop_travel == 1)
+                            {{ 'منع سفر '}}
+                            @elseif ($one_1->paper_eqrar_dain_received == 0 && $one_1->status =='null')
+                            {{ 'اقرارات الدين غير مستلمة '}}
+                            @elseif ($one_1->paper_eqrar_dain_received == 1 && $one_1->status =='null')
+                            {{ 'اقرارات الدين  مستلمة '}}
+                            @elseif ($one_1->status =='execute')
+                            {{ 'رصيد التنفيذ '}}
+                            @elseif ($one_1->type =='settlement')
+                            {{ 'التسوية' }}
+                          
+                            @endif
+                        </td>
+                    </tr>
+                    <!-- end row -->
 
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td><a href="#">{{ $one_1->id }}</a></td>
-                            <td>{{ $one_1->name_ar }}</td>
-                            <td>{{ $one_1->civil_number }}</td>
-                            <td>{{ $one_1->phone_ids }}</td>
-                            <td>{{ $one_1->governorate_id }}</td>
-                            <td>{{ $one_1->date }}</td>
-                        </tr>
-                        <!-- end row -->
-
-                        @php $i++; @endphp
+                    @php $i++; @endphp
                     @endforeach
 
                     <!-- end row -->

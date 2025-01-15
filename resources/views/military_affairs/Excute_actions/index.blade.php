@@ -67,7 +67,8 @@
                         <td>{{$item->eqrar_dain_amount}}</td>
                         <td>{{$item->military_check->sum('amount')}} </td>
                         <td>{{$item->military_amount->where('military_affairs_check_id',0)->sum('amount')}} </td>
-                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=',0)->count()}}</td>
+
+                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=','0')->count()}}</td>
                         <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
