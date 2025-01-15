@@ -590,50 +590,16 @@
             <ul id="sidebarnav" class="mb-0">
    <!-- start profile Dropdown -->
                         <!-- ------------------------------- -->
-                        <li class="nav-item dropdown border py-2">
-                            <a class="nav-link position-relative ms-6" href="javascript:void(0)" id="drop1"
-                                aria-expanded="false">
-                                <div class="d-flex align-items-center flex-shrink-0">
-                                    <div class="user-profile me-sm-3 me-2">
-                                        <img src="{{ asset('user_profile/' . Auth::user()->img) }}" width="40"
-                                            class="rounded-circle" alt="spike-img">
-
-
-
-                                    </div>
-                                    <span class="d-sm-none d-block"><iconify-icon
-                                            icon="solar:alt-arrow-down-line-duotone"></iconify-icon></span>
-
-                                    <div class="d-none d-sm-block">
-                                        <h6 class=" mb-1 profile-name">
-                                            {{ Auth::user()->name_ar }}
-                                        </h6>
-                                        <p class="y lh-base mb-0 profile-subtext">
-                                            {{ Auth::user()->roles ? Auth::user()->roles->name_ar : '' }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up"
-                                aria-labelledby="drop1">
-                                <div class="profile-dropdown position-relative" data-simplebar>
-
-                                    <div class="py-6 px-7 mb-1">
-                                        <!-- <a href="../horizontal/authentication-login.html" class="btn btn-primary w-100">Log
-                      Out</a> -->
-                                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-primary w-100">تسجيل الخروج</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        
                         <!-- ------------------------------- -->
                        
                 <!-- ============================= -->
                 <!-- Home -->
                 <!-- ============================= -->
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-primary w-100">تسجيل الخروج</button>
+                </form>
                 <li class="nav-small-cap">
                     <iconify-icon icon="solar:menu-dots-bold-duotone" class="nav-small-cap-icon fs-5"></iconify-icon>
                     <span class="hide-menu">Home</span>

@@ -108,64 +108,70 @@
                                             </td>
                                             @endif
 
-                                        </tr>
-                                        <tr>
-                                            <th>مبلغ اقرار الدين</th>
-                                            <td>{{$Installment->eqrardain_amount}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط</th>
-                                            <td>{{$Installment->count_months}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المتأخرة</th>
-                                            <td>{{ $not_done_count_lated }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المدفوعة</th>
-                                            <td>{{$Installment['months'] - $not_done_count}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>قيمة الخصم</th>
-                                            <!-- <td> {{ count($install_discount) > 0  ? $install_discount->amount : 0}}</td> -->
-                                            <td>{{$nstallment_discount}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>عدد الاقساط المستحقة</th>
-                                            <td>{{$not_done_count}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>القسط الشهري</th>
-                                            <td>{{$Installment->monthly_amount }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>القسط الداخلي</th>
-                                            <td>{{$Installment->intrenal_installment}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>قسط الساينت</th>
-                                            <td>{{$Installment->installment_client->cinet_installment ?? ''}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>بنك العميل</th>
-                                            <td>{{ $data['Installment_Client']->bank->name_ar ?? 'N/A' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>كويت فايندر</th>
-                                            <td>{{$Installment->client->location}}</td>
-                                        </tr>
+                                    </tr>
+                                    <tr>
+                                        <th>مبلغ اقرار الدين</th>
+                                        <td>{{$Installment->eqrardain_amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط</th>
+                                        <td>{{$Installment->count_months}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المتأخرة</th>
+                                        <td>{{ $not_done_count_lated }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المدفوعة</th>
+                                        <td>{{$Installment['months'] - $not_done_count}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>قيمة الخصم</th>
+                                        <!-- <td> {{ count($install_discount) > 0  ? $install_discount->amount : 0}}</td> -->
+                                        <td>{{$nstallment_discount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>عدد الاقساط المستحقة</th>
+                                        <td>{{$not_done_count}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>القسط الشهري</th>
+                                        <td>{{$Installment->monthly_amount }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>القسط الداخلي</th>
+                                        <td>{{$Installment->intrenal_installment}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>قسط الساينت</th>
+                                        <td>{{$Installment->installment_client->cinet_installment ?? ''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>بنك العميل</th>
+                                        <td>{{ $data['Installment_Client']->bank->name_ar ?? 'N/A' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>كويت فايندر</th>
+                                        <td>{{$Installment->client->kwfinder}}</td>
+                                    </tr>
 
-                                        <tr>
-                                            <th>جهة العمل (1)</th>
-                                            <td>
+                                    <tr>
+                                        <th>جهة العمل (1)</th>
+                                        <td>
+
+
+                                            @if(empty($data['ministries']))
                                                 @foreach ($data['ministries'] as $ministry)
-                                                {{ $ministry->name_ar }}<br>
+                                                    {{ $ministry->name_ar }}<br>
                                                 @endforeach
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>رقم الحساب (1)</th>
-                                            @if($Installment->client && $Installment->client->ipan)
+                                            @else
+                                            {{ $Installment->installment_client?->ministry_working?->name_ar ?? '' }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>رقم الحساب (1)</th>
+                                        @if($Installment->client && $Installment->client->ipan)
                                             <td>{{$Installment->client->ipan}}</td>
                                             @elseif($data['client_banks'])
                                             <td>{{$data['client_banks']->bank_account_number}}</td>
