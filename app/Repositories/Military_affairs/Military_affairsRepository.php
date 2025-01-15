@@ -119,11 +119,11 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
 
             case ('eqrar_dain'):
 
-                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 0, 'type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null];
+                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 0, 'installment.type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null];
                 break;
             case ('eqrar_dain_received'):
 
-                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 1, 'type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => ''];
+                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 1, 'installment.type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => ''];
                 break;
 
             case ('excute_actions'):
@@ -133,22 +133,22 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
 
             default:
                 $extra = array();
-
         }
 
-        $arr = ['installment.finished' => 0, 'military_affairs.archived' => 0];
+        $arr = ['installment.finished' => 0, 'military_affairs.archived' => 0 , 'installment.laws' => 1];
         if (!empty($extra)) {$mr = array_merge($arr, $extra);} else { $mr = $arr;}
 
-        $count = DB::table('military_affairs')->select('military_affairs.stop_car_archive', 'military_affairs.jalasat_alert_status', 'installment.id', 'clients.name_ar', 'clients.civil_number', 'installment.date',
-            'installment.qard_paper', 'military_affairs.eqrar_dain_amount', 'installment.eqrardain_date', 'installment.amana_paper', 'military_affairs.id', 'military_affairs.date', 'military_affairs.emp_id', 'clients.governorate_id', 'clients.job_type', 'stop_salary', 'clients.house_id', 'clients.phone_ids')
-            ->where($mr)
+        $count = DB::table('military_affairs')
+            ->select('military_affairs.stop_car_archive', 'military_affairs.jalasat_alert_status', 'installment.id', 'clients.name_ar', 'clients.civil_number', 'installment.date',
+            'installment.qard_paper', 'military_affairs.eqrar_dain_amount', 'installment.eqrardain_date', 'installment.amana_paper', 'military_affairs.id', 'military_affairs.date', 
+            'military_affairs.emp_id', 'clients.governorate_id', 'clients.job_type', 'stop_salary', 'clients.house_id', 'clients.phone_ids','military_affairs.status',
+            'eqrars_details.paper_eqrar_dain_received','installment_id','installment.laws','cancel_certificate','stop_bank','stop_car','stop_travel','bank_archive','military_affairs_settlement.type')
+            ->where( $mr )
             ->leftJoin('installment', 'military_affairs.installment_id', '=', 'installment.id')
             ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
-
-            ->leftJoin('eqrars_details', 'installment.eqrars_id', 'eqrars_details.id')
-
-            ->orderBy('installment.id', 'desc')->get();
-
+            ->leftJoin('eqrars_details', 'installment.eqrars_id', '=','eqrars_details.id')
+            ->leftJoin('military_affairs_settlement', 'military_affairs.id', '=', 'military_affairs_settlement.military_affairs_id')
+            ->orderBy('installment.id', 'asc')->get();
         return $count;
 
     }
