@@ -38,7 +38,16 @@
                     </tr>
                     <tr>
                         <td><strong>الاولوية</strong></td>
-                        <td>{{ $data->priority }}</td>
+                        <td >
+                            <p class="p-2 text-white {{ $data->priority == 'high' ? 'bg-danger' : ($data->priority == 'medium' ? 'bg-primary' : 'bg-success') }}">
+                                 {{ $data->priority == "high" 
+                                     ? "مرتفعة" 
+                                     : ($data->priority == "medium" 
+                                         ? "متوسطة" 
+                                         : "منخفضة") 
+                                 }}
+                             </p>
+                         </td>
                     </tr>
                     <tr>
                         <td><strong>القسم</strong></td>
@@ -129,16 +138,16 @@
                                         </li>
                                         <li>
                                             <button type="submit" class="btn btn-warning rounded-0 btn-sm w-100 mt-2"
-                                                name="status" value="8"> تم الانتهاء منها</button>
+                                                name="status" value="6"> تم الانتهاء منها</button>
                                         </li>
                                         <li>
                                             <button type="submit" class="btn btn-success rounded-0 btn-sm w-100 mt-2"
-                                                name="status" value="6">منجزة</button>
+                                                name="status" value="7">منجزة</button>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <button type="submit" class="btn btn-dark rounded-0 btn-sm w-100 mt-2"
                                                 name="status" value="7">مغلقة</button>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </form>
                             {{-- @endif --}}

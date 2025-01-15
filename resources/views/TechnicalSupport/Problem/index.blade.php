@@ -82,14 +82,14 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;   لا يوجد
                                 @endif
                             </br>
-                                <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a>
+                            @if ( filter_var($problem->link, FILTER_VALIDATE_URL))
+                            <a href="{{ $problem->link }}" class="btn btn-link" target="_blank">الرابط</a>
+                            @endif
+                              
                             </td>
                             <td>
-                                @if($problem->department && $problem->department->subdepartment)
-                                    {{ $problem->department->subdepartment->first()->name_ar }}
-                                @else
-                                    لا يوجد
-                                @endif
+ 
+                                {{ $problem->subdepartment->name_ar ?? 'لا يوجد'  }}
                             </td>
                             <td>{{ $problem->title }}   </td>
                             <td>
@@ -154,13 +154,16 @@
                                         لم يتم تحديد مبرمج
                                     @endif
                                 </td> -->
-                                <td>
-                                    {{ $problem->priority == "high" 
-                                    ? "مرتفعة" 
-                                    : ($problem->priority == "medium" 
-                                        ? "متوسطة" 
-                                        : "منخفضة") 
-                                }}
+                                <td >
+                                  
+                                   <p class="p-2 text-white {{ $problem->priority == 'high' ? 'bg-danger' : ($problem->priority == 'medium' ? 'bg-primary' : 'bg-success') }}">
+                                        {{ $problem->priority == "high" 
+                                            ? "مرتفعة" 
+                                            : ($problem->priority == "medium" 
+                                                ? "متوسطة" 
+                                                : "منخفضة") 
+                                        }}
+                                    </p>
                                 </td>
 
                             @endif
