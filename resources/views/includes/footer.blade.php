@@ -39,6 +39,14 @@
 
     });
     $('.owl-carousel').find('.owl-nav').removeClass('disabled');
+
+    function showError(input, message) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error-message text-danger";
+        errorDiv.textContent = message;
+        input.closest(".form-group").appendChild(errorDiv);
+    }
+
 </script>
 
 

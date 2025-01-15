@@ -71,12 +71,12 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             })
             ->orderBy('excute_actions_amount', 'desc')
             ->get();
-            
-            
+
+
 
             $this->data['items'] = $data->filter(function ($item) use ($request) {
-                return $item->installment && 
-                       (!$request->has('governorate_id') || 
+                return $item->installment &&
+                       (!$request->has('governorate_id') ||
                         $request->get('governorate_id') == $item->installment->client->governorate_id);
             });
 
@@ -189,7 +189,9 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             'check_type' => $request->check_type ?? '',
             'amount' => $request->amount ?? '',
             'military_affairs_id' => $request->military_affairs_id,
-            'img_dir' => $data_img_dir ?? ' '
+            'img_dir' => $data_img_dir ?? ' ',
+            'created_at'=>date('Y-m-d'),
+            'created_by'=>Auth::user()->id
 
         ];
 
@@ -200,7 +202,8 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         $update_data['excute_actions_last_date_check'] = date('Y-m-d H:i:s');
         $item_military->update($update_data);
-        return redirect()->route('excute_actions')->with('success', 'تم الاستعلام بنجاح  ');
+        return redirect()->back()->with('governorate_id', request()->get('governorate_id'))->with('success', 'تم الاستعلام بنجاح  ');
+      //  return redirect()->route('excute_actions')->with('success', 'تم الاستعلام بنجاح  ');
 
     }
 
@@ -227,30 +230,50 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
             'check_number' => $request->check_number,
             'amount' => $request->check_amount,
             'military_affairs_id' => $request->military_affairs_id,
-            'img_dir' => $data_img_dir
+            'img_dir' => $data_img_dir,
+            'created_at'=>date('Y-m-d'),
+            'created_by'=>Auth::user()->id
 
         ];
 
         Military_affairs_check::create($array_add);
         $last_check_add = Military_affairs_check::get()->last();
-
-
         $item_military_affairs = Military_affair::findOrFail($request->military_affairs_id);
-
         $items_amount = Military_affairs_amount::where(['military_affairs_id' => $item_military_affairs->id, 'military_affairs_check_id' => 0])->get();
+        $items_amount_sum = Military_affairs_amount::where(['military_affairs_id' => $item_military_affairs->id, 'military_affairs_check_id' => 0])->sum('amount');
+        if($items_amount_sum==$request->check_amount){
+            foreach ($items_amount as $value) {
+                //  dd('ffff');
+                $value->military_affairs_check_id = $last_check_add->id;
+                $value->save();
+            }
+        }else{
+            foreach ($items_amount as $value) {
+                $value->military_affairs_check_id = -1;
+                $value->save();
+            }
+            $array_amount=[
+                'date' =>date('Y-m-d') ,
+                'check_type'=>'update',
+                'amount' => $request->check_amount,
+                'military_affairs_id' => $request->military_affairs_id,
+                'military_affairs_check_id'=>$last_check_add->id,
+                'created_at'=>date('Y-m-d'),
+                'img_dir' => $data_img_dir ?? ' ',
+                'created_by'=>Auth::user()->id
+            ];
 
-        foreach ($items_amount as $value) {
-            //  dd('ffff');
-            $value->military_affairs_check_id = $last_check_add->id;
-            $value->save();
+            Military_affairs_amount::create($array_amount);
         }
+
+
         $data['excute_actions_counter'] = 0;
         $data['excute_actions_amount'] = 0;
         $data['excute_actions_check_amount'] = $last_check_add->amount;
         $item_military_affairs->update($data);
 
 
-        return redirect()->route('excute_actions');
+        return redirect()->back()->with('governorate_id', request()->get('governorate_id'))->with('success', 'تم الاستعلام بنجاح  ');
 
 
     }
@@ -329,7 +352,6 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         //  echo '<pre>';  print_r($add_data1); exit;
 
         Invoices_installment::create($add_data1);
-
 
         add_money_to_bank('5', $request->installment_id, $check_item->amount, 'military_affairs', $description, 'income', 'checkat');
 
