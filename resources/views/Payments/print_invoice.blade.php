@@ -303,7 +303,7 @@
                                     echo 'كاش / كي نت';
                                     break;
                                 case "part":
-                                    echo 'استقطاع  ';
+                                    echo 'دفع رابط ';
                                     break;
                                 default:
                                     break;
@@ -494,7 +494,7 @@ $the_balance = $total_madionia - ($laws_item_amount ?? 0) + $first_amount;
                                         switch ($item['payment_type']) {
                                             case 'cash':
                                                 echo '<span class="label label-success font-weight-100 ">'
-                                                    . 'دفع يدوي'
+                                                    . 'دفع كاش'
                                                     . '</span>';
                                                 break;
                                             case 'part':
