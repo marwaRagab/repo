@@ -338,7 +338,7 @@ if (!function_exists('Add_note_general')) {
         $notesData = [
             'note' => $array->note,
             'type' => $array->type,
-            'notes_type' => $array->notes_type,
+            'note_type' => $array->notes_type,
             'date' => date('Y-m-d H:i:s'),
             'military_affairs_id' => $array->military_affairs_id,
             'created_at' => date('Y-m-d H:i:s'),
@@ -1559,6 +1559,59 @@ if (!function_exists('count_court_stop_travel')) {
 
                 $query->whereHas('installment.client', function ($q) use ($governorate_id) {
                     $q->where('governorate_id', $governorate_id);
+                });
+            })
+            ->count();
+    }
+}
+
+if (!function_exists('count_bank_date')) {
+
+    function count_bank_date($date,$id)
+    {
+
+        if ($id) {
+            $governorate_id = Court::findorfail($id)->governorate_id;
+
+        } else {
+            $governorate_id = '';
+        };
+
+
+        Military_affair::where('archived', 0)
+            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1, 'bank_archive' => 0])
+            ->with('installment.client.get_ministry')
+            ->whereHas('installment.client.get_ministry', function ($q) use ($id) {
+                // dd('fff');
+                $q->whereIn('date', $this->data['ministries']->pluck('date')->toArray());
+            })
+            ->with('status_all', function ($query) {
+                return $query->where('type', '=', 'stop_bank');
+            })
+            ->with('installment.client')
+            ->whereHas('installment', function ($q) use ($id) {
+                // dd('fff');
+                return $q->where('finished', 0);
+            })
+            ->when(request()->has('stop_bank_type'), function ($query) use ($id) {
+                $query->whereHas('status_all', function ($q) use ($id) {
+                    $q->where('type_id', $request->stop_bank_type)->where('flag', 0);
+                });
+            })
+            ->when($governorate_id, function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            });
+
+
+        return Military_affair::where(['military_affairs.status' => 'execute','military_affairs.stop_bank'=>'1','archived'=> 0,'bank_archive'=> 0])
+            ->with('installment')->with('installment.client')
+            ->whereHas('installment', function ($q) {
+                $q->where('finished', 0);
+            })->when($date, function ($query) use ($date) {
+                $query->whereHas('installment.client.get_ministry', function ($q) use ($date) {
+                    $q->where('date', $date);
                 });
             })
             ->count();
