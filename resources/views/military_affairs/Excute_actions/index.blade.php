@@ -6,7 +6,7 @@
         @foreach($courts as $court)
 
         <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}} 
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
             ({{ count_court($court->id ,'excute_actions',null,null) }})
         </a>
 
@@ -67,7 +67,7 @@
                         <td>{{$item->eqrar_dain_amount}}</td>
                         <td>{{$item->military_check->sum('amount')}} </td>
                         <td>{{$item->military_amount->where('military_affairs_check_id',0)->sum('amount')}} </td>
-                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->count()}}</td>
+                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=',0)->count()}}</td>
                         <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
@@ -142,10 +142,8 @@
                                                         <div id="additionalInputs-{{$item->id}}" class="hidden">
                                                             <div class="form-group mb-3">
                                                                 <label class="form-label"> المبلغ </label>
-                                                                <input type="text" name="amount" class="form-control">
-                                                                @error('check_amount')
-                                                                <div style='color:red'>{{$message}}</div>
-                                                                @enderror
+                                                                <input type="text" name="amount"   class="form-control">
+
                                                             </div>
                                                             <div class="form-row mb-3 ">
                                                                 <div class="form-group">
@@ -172,9 +170,7 @@
                                                                             تقسيط محكمة
                                                                         </option>
                                                                     </select>
-                                                                    @error('check_amount')
-                                                                    <div style='color:red'>{{$message}}</div>
-                                                                    @enderror
+
                                                                 </div>
 
                                                             </div>
@@ -182,17 +178,13 @@
                                                             <div class="form-group mb-3">
                                                                 <label class="form-label">التاريخ</label>
                                                                 <input type="date" name="date" class="form-control">
-                                                                @error('date')
-                                                                <div style='color:red'>{{$message}}</div>
-                                                                @enderror
+
                                                             </div>
                                                             <div class="form-group my-3">
                                                                 <label for="formFile" class="form-label">الصورة </label>
                                                                 <input class="form-control" name="img_dir" type="file"
                                                                     id="formFile">
-                                                                @error('date')
-                                                                <div style='color:red'>{{$message}}</div>
-                                                                @enderror
+
                                                             </div>
 
                                                         </div>
@@ -218,7 +210,7 @@
                             <div id="add-check-{{$item->id}}" class="modal fade" tabindex="-1"
                                 aria-labelledby="bs-example-modal-md" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                    <form class="mega-vertical" action="{{url('add_check')}}" method="post"
+                                    <form class="mega-vertical_open" action="{{url('add_check')}}" method="post"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-content">
@@ -234,28 +226,45 @@
                                                 $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
                                                 @endphp
                                                 <input type="hidden" name="military_affairs_id" value="{{$item->id}}" />
-
+                                                   <input type="hidden" name="check_value"  id="check_value" value="{{$check_amount}}">
                                                 <div class="form-row">
                                                     <div class="form-group mb-3">
                                                         <label class="form-label">مبلغ الشيك </label>
-                                                        <input type="text" name="check_amount" readonly
-                                                            onchange="check(this)" value="{{$check_amount}}"
-                                                            class="form-control">
+                                                        @if(Auth::user()->username =='ahmedkh222')
+                                                            <input type="text" name="check_amount"   value="{{$check_amount}}"  class="form-control">
+                                                        @else
+                                                            <input type="text" name="check_amount" readonly
+                                                                   value="{{$check_amount}}"
+                                                                   class="form-control">
+                                                        @endif
+
+                                                        @error('check_amount')
+                                                        <div style='color:red'>{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label class="form-label">رقم الشيك </label>
                                                         <input type="text" name="check_number" value=""
                                                             class="form-control">
+                                                        @error('check_number')
+                                                        <div style='color:red'>{{ $message }}</div>
+                                                        @enderror
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <label class="form-label">تاريخ </label>
                                                         <input type="date" name="date" class="form-control">
+                                                        @error('date')
+                                                        <div style='color:red'>{{ $message }}</div>
+                                                        @enderror
                                                     </div>
 
                                                     <div class="form-group my-3">
                                                         <label for="formFile" class="form-label">الصورة </label>
                                                         <input class="form-control" name="img_dir" accept="image/*"
                                                             type="file" id="formFile">
+                                                        @error('img_dir')
+                                                        <div style='color:red'>{{ $message }}</div>
+                                                        @enderror
                                                     </div>
 
                                                 </div>
@@ -649,16 +658,58 @@ function hideInput(id) {
     document.getElementById('additionalInputs-'+id).classList.add('hidden');
 }
 
-function check(id) {
-    var amount = id.value;
 
-    var val = "<?php   echo $check_amount ;  ?>";
+document.addEventListener("DOMContentLoaded", function () {
+    const forms = document.querySelectorAll('.mega-vertical_open');
 
-    if (amount > val) {
-        alert(val + 'مبلغ الشيك لابد ان يكون اقل من ');
+    forms.forEach(form => {
+        form.addEventListener("submit", function (event) {
+            let isValid = true;
 
-    }
-    return false;
+            // Clear previous error messages
+            form.querySelectorAll(".error-message").forEach(e => e.remove());
 
-}
+            // Validate date
+            const dateInput = form.querySelector("input[name='date']");
+            if (!dateInput.value) {
+                showError(dateInput, "التاريخ   مطلوب");
+                isValid = false;
+            } const checknumber = form.querySelector("input[name='check_number']");
+            if (!checknumber.value) {
+                showError(checknumber, "رقم الشيك   مطلوب");
+                isValid = false;
+            }
+
+            // Validate issue_id
+            const checkInput = form.querySelector("input[name='check_amount']");
+            const  checkvalue= form.querySelector("input[name='check_value']");
+            const  check_img= form.querySelector("input[name='img_dir']");
+            if ( checkInput.value == 0 ) {
+                showError(checkInput, "مبلغ الشيك مطلوب");
+                isValid = false;
+            }else if (checkInput.value > checkvalue.value) {
+                showError(checkInput,   "مبلغ الشيك لابد ان يكون اقل من" + checkvalue.value);
+                isValid = false;
+            }else if (!check_img.value) {
+                showError(check_img,   "صورة الشيك مطلوبة " );
+                isValid = false;
+            }
+
+            // Validate place
+
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+    });
+
+
+});
+
+
+
+
+
+
 </script>

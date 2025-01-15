@@ -246,8 +246,6 @@ class InstallmentController extends Controller
         }
 
         //$data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
-
-        $data['total_madionia1'] =$installment->eqrardain_amount ;
         $data['nstallment_discount_amount'] = DB::table('invoices_installment')->where('installment_id', $id)->where('type', 'income');
         $data['not_done_count'] = Installment_month::where('installment_id', $id)->where('status', 'not_done')->where('installment_type', 'installment')->count();
         $current_date = now(); // Use Carbon to get the current date and time
@@ -296,8 +294,8 @@ class InstallmentController extends Controller
 
 
        if ($installment->laws == 1  ) {
-
-            $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','update')->get();
+           $data['total_madionia1'] =$military_affair->eqrar_dain_amount ;
+            $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
 
@@ -306,6 +304,7 @@ class InstallmentController extends Controller
         } else {
 
             $data['sum'] = $data['not_done_amount'];
+           $data['total_madionia1'] =$installment->eqrardain_amount ;
         }
 
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();

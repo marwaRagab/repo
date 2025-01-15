@@ -2,11 +2,11 @@
 
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
-        <a   class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
+        <a href="{{route('eqrardain')}}"    class="btn-filter bg-warning-subtle text-warning px-4  mx-1 mb-2">
             فعال </a>
-        <a   href="{{route('checking',array('eqrardain_type' =>'requre_cancel'))}}"   class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2">
+        <a   href="{{route('eqrardain',array('eqrardain_type' =>'requre_cancel'))}}"   class="btn-filter  bg-success-subtle text-success px-4  mx-1 mb-2">
             مطلوب إلغاؤه </a>
-        <a   href="{{route('checking',array('eqrardain_type' =>'canceled'))}}"  class="btn-filter  bg-primary-subtle text-primary px-4  mx-1 mb-2">
+        <a   href="{{route('eqrardain',array('eqrardain_type' =>'canceled'))}}"  class="btn-filter  bg-primary-subtle text-primary px-4  mx-1 mb-2">
             ملغي </a>
     </div>
 </div>
@@ -43,9 +43,10 @@
                 </thead>
                 <tbody>
                 <!-- start row -->
-                @php @endphp
-                @if(isset($items_main))
+
+
                 @foreach($items as $item)
+
                     <tr data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
                         aria-controls="collapseExample">
                         <td>
@@ -53,11 +54,11 @@
 
                         </td>
                         <td>
-                        {{$item->installment->client->name_ar}}
+                        {{$item->client->name_ar}}
                         </td>
 
                         <td>
-                            {{$item->installment->client->civil_number}}
+                            {{$item->client->civil_number}}
                         </td>
                         <td>الأقساط</td>
                         <td> {{$item->eqrardain_amount}}</td>
@@ -68,7 +69,7 @@
                             <a class="btn btn-primary" href="{{isset($item->qard_paper)?url($item->qard_paper):'#'}}">صورة</a>
                         </td>
                         <td>
-                            <a class="btn btn-success me-6" href="{{url('please_cancel_eqrar'/$item->id)}}">
+                            <a class="btn btn-success me-6" href="{{url('please_cancel_eqrar/'.$item->id)}}">
                                 مطلوب إلغاؤه</a>
                         </td>
                     </tr>
@@ -77,7 +78,7 @@
 
 
                 @endforeach
-                @endif
+
 
                 </tbody>
             </table>

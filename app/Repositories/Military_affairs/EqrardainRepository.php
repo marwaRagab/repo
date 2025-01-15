@@ -6,6 +6,7 @@ use App\Interfaces\Military_affairs\EqrardainRepositoryInterface;
 use App\Models\Client;
 use App\Models\Installment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EqrardainRepository implements EqrardainRepositoryInterface
@@ -23,18 +24,20 @@ class EqrardainRepository implements EqrardainRepositoryInterface
 
         $eqrardain_type = $request->eqrardain_type;
         $message = "تم دخول صفحة فتح اقرارات الدين ";
-        $user_id = 1;
-        //$user_id =  Auth::user()->id,
-        // $this->log($user_id ,$message);
-        // $user_id =  Auth::user()->id;
+
+        $user_id =  Auth::user()->id;
+        log_move($user_id ,$message);
+
         $this->data['title'] = 'اقرارات الدين  ';
         if ($eqrardain_type == 'requre_cancel') {
+
             $this->data['items'] = Installment::where(['status' => 'finished', 'finished' => 1])
                 ->with('client')->with('installment_eqrardain', function ($query) {
                 $query->where('cancel_eqrar_dain', '=', 0);
                 $query->where('please_cancel_eqrar_dain', '=', 1);
                 return $query;
             })->get();
+
         } elseif ($eqrardain_type == 'canceled') {
             $this->data['items'] = Installment::where('installment.qard_paper', 'like', '%uploads/new_photos%')
                 ->with('client')->with('installment_eqrardain', function ($query) {

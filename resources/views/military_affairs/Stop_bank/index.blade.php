@@ -31,7 +31,7 @@
         @foreach($courts as $court)
 
             <a href="{{route('stop_bank',array('governorate_id' => $court->id))}}"
-               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}({{ count_court_stop_travel($court->id) }})
+               class="btn-filter {{$court->style}}   px-2  mx-1 mb-2  {{ request()->get('governorate_id') == $court->id ? 'active' : '' }} "> {{$court->name_ar}}({{ count_court($court->id,'stop_bank',null,null) }})
             </a>
 
         @endforeach
@@ -44,7 +44,7 @@
         @foreach($stop_bank_types as $stop_bank_type)
 
             <a href="{{route('stop_bank',array('stop_bank_type'=> $stop_bank_type->slug))}}"
-               class="btn-filter {{$stop_bank_type->style}}   px-2  mx-1 mb-2  {{ request()->get('stop_bank_type') == $stop_bank_type->id ? 'active' : '' }} "> {{$stop_bank_type->name_ar}}
+               class="btn-filter {{$stop_bank_type->style}}   px-2  mx-1 mb-2  {{ request()->get('stop_bank_type') == $stop_bank_type->slug ? 'active' : '' }} "> {{$stop_bank_type->name_ar}}
                 ({{count_status_stop_travel($gov,$stop_bank_type->slug)}})
             </a>
 
@@ -55,15 +55,16 @@
 </div>
 @if(request()->has('stop_bank_type'))
 
+
     <div class="card mt-4 py-3">
         <div class="d-flex flex-wrap ">
 
 
         @foreach($dates as $one)
 
-                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank'=>$bank))}}"
+                <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank' => $bank ))}}"
                    class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
-                    {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
+                    {{now()->format('Y').'/'.now()->format('m').'/'.$one}}   ({{count_bank_date($one)}})
                 </a>
             @endforeach
         </div>
@@ -73,9 +74,9 @@
         <div class="card mt-4 py-3">
             <div class="d-flex flex-wrap ">
                 @foreach($banks as $bank)
-                    <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'bank' => $bank['slug'],'date'=> $date))}}"
+                    <a href="{{route('stop_bank',array('bank' => $bank['slug'],'stop_bank_type'=> request()->get('stop_bank_type'),'governorate_id' => $gov,'date' => $date))}}"
                        class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2 {{ request()->get('bank') == $bank['slug'] ? 'active' : '' }}   ">
-                        {{$bank['name']}}
+                        {{$bank['name']}}  ({{count_status_stop_travel($gov,'stop_bank',$stop_bank_type->slug,$one, $bank['slug'])}})
                     </a>
                 @endforeach
             </div>

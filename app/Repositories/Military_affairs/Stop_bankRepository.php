@@ -52,7 +52,7 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning', 'bg-warning-subtle text-warning'];
 
-        $this->data['banks'] = Bank::all();
+        $this->data['banks'] = Bank::where('type', 2)->where('active', '0')->get();
         for ($i = 0; $i < count($this->data['ministries']); $i++) {
             $this->data['ministries'][$i]['ministries_dates'] = date('Y-m-' . $this->data['ministries'][$i]['date']);
 
@@ -73,76 +73,28 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
     public function index(Request $request)
     {
         //dd($this->data['ministries']->pluck('id'));
-        if($request->governorate_id){
-            $governorate_id =Court::findorfail($request->governorate_id)->governorate_id  ;
+        if ($request->governorate_id) {
+            $governorate_id = Court::findorfail($request->governorate_id)->governorate_id;
 
-        }else{
-            $governorate_id='';
+        } else {
+            $governorate_id = '';
         };
 
         $message = "تم دخول صفحة  حجز بنوك  ";
 
-        $user_id =  Auth::user()->id;
-        log_move($user_id ,$message);
+        $user_id = Auth::user()->id;
+        log_move($user_id, $message);
+        $array_date = [];
+        $array_bank = [];
 
         $this->data['title'] = '    حجز بنوك';
-//         $this->data['items'] = Military_affair::where('archived','=',0)
-//             ->where(['military_affairs.status' =>'execute', 'military_affairs.stop_bank' =>1  ])
-//             ->with('installment')->with('status_all')
-//             ->whereHas('installment', function ($q){
-//                 return $q->where('finished',0);
-//             })
-// // ;
-//             ->get();
-//   dd( count($this->data['items']));
-        $this->data['items'] = Military_affair::where('archived', 0)
-            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1, 'bank_archive' => 0])
-            ->with('installment.client.get_ministry')
-            ->whereHas('installment.client.get_ministry', function ($q) use ($request) {
-                // dd('fff');
-                $q->whereIn('date', $this->data['ministries']->pluck('date'));
-            })
-            ->with('status_all', function ($query) {
-                return $query->where('type', '=', 'stop_bank');
-            })
-            ->with('installment')
-            ->whereHas('installment', function ($q) use ($request) {
-                // dd('fff');
-                return $q->where('finished',0);
-            })
-
-            ->when(request()->has('date'), function ($query) use ($request) {
-                $query->whereHas('installment.client.get_ministry', function ($q) use ($request) {
-
-                    $q->where('date', $request->date);
-                });
-            })->when(request()->has('bank'), function ($query) use ($request) {
-                $query->whereHas('installment.client.client_banks', function ($q) use ($request) {
-
-                    $q->where('date', $request->bank);
-                });
-            })->when(request()->has('stop_bank_type'), function ($query) use ($request) {
-                $query->whereHas('status_all', function ($q) use ($request) {
-
-                    $q->where('type_id', $request->stop_bank_type)->where('flag', 0);
-                });
-            })
-            ->when(request()->has('governorate_id'), function ($query) use ($governorate_id) {
-                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
-                    $q->where('governorate_id',$governorate_id);
-                });
-            })
-            ->get();
-        // dd($this->data['items']);
-
-        $title = ' حجز بنوك';
 
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
         $breadcrumb[1]['title'] = "الشئون القانونية";
         $breadcrumb[1]['url'] = route("military_affairs");
-        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['title'] = $this->data['title'];
         $breadcrumb[2]['url'] = 'javascript:void(0);';
         $stop_type = $request->stop_bank_type;
         $date = $request->date;
@@ -163,56 +115,58 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             $new_type = 'stop_bank_command';
 
         }
-
-        if ($date) {
-            $date_sel = '';
-        }
-
         $this->data['item_type_time_old'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $stop_type])->first();
         $this->data['item_type_time_new'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $new_type])->first();
-        $mins = collect();
-        $array_date = [];
-        $array_bank = [];
-        $x = 0;
 
-        //dd($this->data['items']);
-        foreach ($this->data['items'] as $value) {
-            if ($value->installment && $value->status_all) {
-                $value->i = $x + 1;
-                $value->all_notes = get_all_notes('stop_bank', $value->id);
-                $value->all_actions = get_all_actions($value->id);
-                $value->get_all_delegations = get_all_delegations($value->id);
+       $test = Military_affair::where('archived', 0)
+            ->where(['military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1, 'bank_archive' => 0])
+            ->with('installment.client.get_ministry')
+            ->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+                // dd('fff');
+                $q->whereIn('date', $this->data['ministries']->pluck('date')->toArray());
+            })
+            ->with('status_all', function ($query) {
+                return $query->where('type', '=', 'stop_bank');
+            })
+            ->with('installment.client')
+            ->whereHas('installment', function ($q) use ($request) {
+                // dd('fff');
+                return $q->where('finished', 0);
+            })
+            ->when(request()->has('stop_bank_type'), function ($query) use ($request) {
+                $query->whereHas('status_all', function ($q) use ($request) {
+                    $q->where('type_id', $request->stop_bank_type)->where('flag', 0);
+                });
+            })
+            ->when($governorate_id, function ($query) use ($governorate_id) {
+                $query->whereHas('installment.client', function ($q) use ($governorate_id) {
+                    $q->where('governorate_id', $governorate_id);
+                });
+            });
 
 
-                $ministry = $value->installment->client->ministry->last()->ministry_id;
-                $value->ministry_name = Ministry::findorfail($ministry);
-                $date = date('Y-m-' . $value->ministry_name->date);
+        foreach ($test->get() as $item){
+            if ($item->installment && $item->status_all) {
+                $ministry = $item->installment->client->ministry->last()->ministry_id;
+                $item->ministry_name = Ministry::findorfail($ministry);
+                $date = date('Y-m-' . $item->ministry_name->date);
                 $day_name = Carbon::parse($date)->format('l');
                 if ($day_name == 'Saturday') {
-                    $value->last_date = date('Y-m-' . $value->ministry_name->date - 2);
+                    $item->last_date = Carbon::parse($date)->subDays(2)->format('Y-m-d');
                 } elseif ($day_name == 'Friday') {
-                    $value->last_date = date('Y-m-' . $value->ministry_name->date - 1);
-
+                    $item->last_date = Carbon::parse($date)->subDay()->format('Y-m-d');
                 } else {
-                    $value->last_date = date('Y-m-' . $value->ministry_name->date);
+                    $item->last_date = $date;
                 }
-                $x = $x + 1;
-
-                $bank = $value->installment->client->client_banks ? $value->installment->client->client_banks->last()  : '' ;
-                $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last()->phone : '');
 
 
-                /* $bank_name=Bank::where('slug','=',$bank->bank_name)->first();
-
-                 if(isset($bank_name)){
-                  $bank_name=$bank_name->name_ar;
-                 }else{
-                     $bank_name= Bank::findorfail($bank->bank_name)->name_ar;
-                 }*/
+                $bank = $item->installment->client->client_banks ? $item->installment->client->client_banks->last() : '';
+                $item->phone = ($item->installment->client->client_phone ? $item->installment->client->client_phone->last()->phone : '');
 
 
-                if (!in_array($value->ministry_name->date, $array_date)) {
-                    array_push($array_date, $value->ministry_name->date);
+
+                if (!in_array($item->ministry_name->date, $array_date)) {
+                    array_push($array_date, $item->ministry_name->date);
                 }
                 if ($bank && $bank->bank_name != 0) {
                     if (!in_array($bank->bank_name, $array_bank)) {
@@ -224,10 +178,54 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
             }
 
 
-            // $value->min_id = Ministry::findORFail($value->installment->client->ministry_last)->date;
+        }
+          $all_data = $test
+              ->when(request()->has('date'), function ($query) use ($request) {
+                $query->whereHas('installment.client.get_ministry', function ($q) use ($request) {
+                    $q->where('date', $request->date);
+                });
+            })->when(request()->has('bank'), function ($query) use ($request) {
+                  $query->whereHas('installment.client.client_banks', function ($q) use ($request) {
+
+                      $q->where('bank_name', $request->bank);
+                  });
+              })
+            ->get() ;
+
+
+
+
+        $x = 0;
+        foreach ($all_data as $value) {
+            if ($value->installment && $value->status_all) {
+                $value->i = $x + 1;
+                $value->all_notes = get_all_notes('stop_bank', $value->id);
+                $value->all_actions = get_all_actions($value->id);
+                $value->get_all_delegations = get_all_delegations($value->id);
+                $ministry = $value->installment->client->ministry->last()->ministry_id;
+                $value->ministry_name = Ministry::findorfail($ministry);
+                $date = date('Y-m-' . $value->ministry_name->date);
+                $day_name = Carbon::parse($date)->format('l');
+                if ($day_name == 'Saturday') {
+                    $value->last_date = Carbon::parse($date)->subDays(2)->format('Y-m-d');
+                } elseif ($day_name == 'Friday') {
+                    $value->last_date = Carbon::parse($date)->subDay()->format('Y-m-d');
+                } else {
+                    $value->last_date = $date;
+                }
+                $x = $x + 1;
+                $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last()->phone : '');
+            }
+
+
             $value->different_date = get_different_dates($value->date, date('Y-m-d'));
 
         }
+
+
+
+
+
 
         foreach ($array_bank as $key => $value) {
 
@@ -247,10 +245,16 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
         }
 
 
+
+
+
+        $this->data['items'] = $all_data;
         $this->data['dates'] = $array_date;
         $this->data['banks'] = $array_bank;
-
         $this->data['get_responsible'] = get_responsible();
+
+        //dd($array_bank);
+
 
 
         $this->data['view'] = 'military_affairs/Stop_bank/index';
@@ -313,13 +317,13 @@ class Stop_bankRepository implements Stop_bankRepositoryInterface
 
         $this->data['item_type_time_old'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $stop_type])->first();
         $this->data['item_type_time_new'] = Military_affairs_stop_bank_type::where(['type' => 'stop_bank', 'slug' => $new_type])->first();
-        $x=1;
+        $x = 1;
         foreach ($this->data['items'] as $value) {
-            if($value->installment){
+            if ($value->installment) {
                 $value->different_date = get_different_dates($value->date, date('Y-m-d'));
                 $value->adress = ($value->installment->client->client_address ? $value->installment->client->client_address->last() : '');
                 $value->phone = ($value->installment->client->client_phone ? $value->installment->client->client_phone->last() : '');
-                $value->i=$x;
+                $value->i = $x;
                 $x++;
             }
 
