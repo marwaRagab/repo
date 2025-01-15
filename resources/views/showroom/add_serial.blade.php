@@ -1,4 +1,3 @@
-
 <!--<div class="card mt-4 py-3">
      <div class="d-flex flex-wrap ">
         <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
@@ -9,7 +8,7 @@
 </div>-->
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
-        <h4 class="card-title mb-0"> استلام  </h4>
+        <h4 class="card-title mb-0"> استلام </h4>
     </div>
     <div class="card-body">
         <form action="{{ route('showroom.addSerial',$id) }}" method="POST" enctype="multipart/form-data">
@@ -32,6 +31,7 @@
                     <tbody>
                         <!-- start row -->
                         @foreach ($new_items as $item)
+                        {{ $item->id}}
                         <tr>
                             <td> {{ $loop->index + 1 }} </td>
                             <td> {{ $item->product->mark->name_ar }}</td>
@@ -49,18 +49,16 @@
                                 @enderror
                             </td>
                             <td><input type="file" name="serial_number_img_{{ $item->id}}" class="form-control" /></td>
-                            
+
                         </tr>
                         @endforeach
-                        
+
                     </tbody>
-                    
+
                 </table>
-                
+
             </div>
             <button type="submit" class="btn btn-primary">حفظ </button>
         </form>
     </div>
 </div>
-
-
