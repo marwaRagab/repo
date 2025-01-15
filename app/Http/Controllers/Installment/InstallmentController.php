@@ -1275,6 +1275,7 @@ class InstallmentController extends Controller
             'some_amount.required' => 'القيمة مطلوبة',
             'pay_way.required' => 'القيمة مطلوبة',
             // 'some_code.required' => 'القيمة  مطلوبة',
+            'some_code.required_if' => 'القيمة مطلوبة عندما تكون طريقة الدفع KNET.',
             'img_dir.required' => 'الصورة  مطلوبة',
         ];
 
@@ -1282,6 +1283,7 @@ class InstallmentController extends Controller
             'some_amount' => 'required',
             'pay_way' => 'required',
             // 'some_code' => 'required',
+            'some_code' => 'required_if:pay_way,knet',
             'img_dir' => 'required',
         ], $messages);
         if ($validatedData->fails()) {
