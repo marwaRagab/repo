@@ -3,12 +3,14 @@
 namespace App\Repositories\Installment;
 
 use App\Models\Installment;
+use App\Models\InstallmentPaper;
 use App\Models\Eqrars_details;
 use App\Models\Paperstype;
 use App\Models\Client;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+use App\Models\InstallmentNote;
 
 class PapersInstallRepository
 {
@@ -107,20 +109,62 @@ class PapersInstallRepository
 
     public function addToInstallmentPapers($slug, $id, $data)
     {
-        $adminId = Session::get('admin')['id'];
-        $installment = Installment::findOrFail($id);
-        $client = Client::findOrFail($installment->client_id);
-        $admins = Admin::where('active', 1)->get();
+        /*
+        table->eqrars_details
+
+        $addData = [
+            'paper_eqrar_dain_received' => $data['paper_eqrar_dain_received'] ?? null,
+            'paper_received_img' => $data['paper_received_img'] ?? null,
+            'please_cancel_eqrar_dain' => $data['please_cancel_eqrar_dain'] ?? null,
+            'paper_received_checked' => $data['paper_received_checked'] ?? null,
+            'paper_received_note' => $data['paper_received_note'] ?? null,
+            'paper_eqrar_dain_received_img' => $data['paper_eqrar_dain_received_img'] ?? null,
+            'paper_received' => $data['paper_received'] ?? null,
+            'cancel_eqrar_dain' => $data['cancel_eqrar_dain'] ?? null,
+            'eqrar_dain_cancel_img' => $data['eqrar_dain_cancel_img'] ?? null,
+            'paper_received_checked_date' => $data['paper_received_checked_date'] ?? null,
+            'paper_eqrar_dain_received_date' => $data['paper_eqrar_dain_received_date'] ?? null,
+            'paper_received_date' => $data['paper_received_date'] ?? null,
+            'cancel_eqrar_dain_date' => $data['cancel_eqrar_dain_date'] ?? null,
+            'paper_eqrar_dain_sender_id' => $data['paper_eqrar_dain_sender_id'] ?? null,
+            'paper_eqrar_dain_received_user_id' => $data['paper_eqrar_dain_received_user_id'] ?? null,
+            'paper_received_admin_id' => $data['paper_received_admin_id'] ?? null,
+        ];
+ALTER TABLE installment_papers
+ADD COLUMN created_by BIGINT UNSIGNED NULL,
+ADD COLUMN updated_by BIGINT UNSIGNED NULL,
+ADD COLUMN created_at TIMESTAMP NULL,
+ADD COLUMN updated_at TIMESTAMP NULL,
+ADD COLUMN deleted_at TIMESTAMP NULL;
+
+        ALTER TABLE installment_papers
+ADD CONSTRAINT fk_created_by
+FOREIGN KEY (created_by) REFERENCES users(id)
+ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE installment_papers
+ADD CONSTRAINT fk_updated_by
+FOREIGN KEY (updated_by) REFERENCES users(id)
+ON DELETE SET NULL ON UPDATE CASCADE;
+         */
+
+        $adminId = auth()->id() ?? null;
+        $installment = Installment::with('client')->findOrFail($id);
+        $eqrar = Eqrars_details::findOrFail($installment->eqrars_id);
+
+        $client = $installment->client;
+        $admins = User::where(['active' => '1', 'deleted_at' => null, 'type' => 'emp'])->get();
 
         $addData = [];
+        $eqrarData = [];
 
         switch ($slug) {
             case 'not_finished':
-                $addData['paper_received'] = 1;
+                $eqrarData['paper_received'] = 1;
                 $noteTypeName = 'المعاملات الغير مستلمة';
                 break;
             case 'my_index':
-                $addData['paper_received_checked'] = 1;
+                $eqrarData['paper_received_checked'] = 1;
                 $noteTypeName = 'المعاملات مستلمة';
                 $addData['tadqeeq'] = 1;
                 break;
@@ -151,6 +195,7 @@ class PapersInstallRepository
         }
 
         $installment->update($addData);
+        $eqrar->update($eqrarData);
 
         $paperData = [
             'installment_id' => $id,
@@ -162,21 +207,47 @@ class PapersInstallRepository
         ];
 
         if (isset($data['cinet_img'])) {
-            $file = $data['cinet_img'];
-            $path = $file->store('uploads/new_photos', 'public');
-            $paperData['img_dir'] = $path;
+
+            $paperData['img_dir'] = $data['cinet_img'];
         }
 
-        Eqrars_details::create($paperData);
+        InstallmentPaper::create($paperData);
 
         // Update the notes (assuming you have a method for this)
         $this->updateTheNotes($id, $data['received_user_id'], $noteTypeName, $data['paper_received_note']);
+        return true;
 
-        return compact('installment', 'client', 'admins', 'slug');
     }
-
-    protected function updateTheNotes($id, $receivedId, $noteTypeName, $note)
+    public function updateTheNotes($id, $receivedUserId, $noteTypeName, $note)
     {
-        // Implement the logic to update the notes
+        $adminData = auth()->user();
+        $userFullName = $adminData->name_ar ;
+
+        if ($noteTypeName == 'تسليم إقرار الدين') {
+            $txt = 'إقرار الدين';
+        } else {
+            $txt = 'أوراق المعاملة';
+        }
+
+        $theNote = 'قسم الحفظ والتدقيق (' . $noteTypeName . '): <br> تسليم ' . $txt . ' إلى ' . $userFullName;
+
+        if (!empty($note)) {
+            $theNote .= ' <br> ملاحظة: <br> ' . $note;
+        }
+
+        $userId = auth()->id();
+        $this->addInstallmentNote($id, $userId, $theNote, 'tadqeeq');
+        return true;
     }
+
+    protected function addInstallmentNote($id, $userId, $note, $type)
+    {
+        return InstallmentNote::create([
+            'installment_clients_id' => $id,
+            'created_by' => $userId,
+            'note' => $note,
+            'type' => $type,
+        ]);
+    }
+
 }

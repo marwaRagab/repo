@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Eqrars_details;
 use App\Models\Installment;
-use App\Models\User; // Add this line
+use App\Models\User;
+use App\Models\Paperstype;
 use App\Repositories\Installment\PapersInstallRepository;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -104,15 +105,32 @@ class PapersInstallController extends Controller
     {
         if ($request->isMethod('post')) {
             $data = $request->all();
+
+
             if ($request->hasFile('cinet_img')) {
-                $data['cinet_img'] = $request->file('cinet_img');
+                $fileName = time() . '_' . $request->file('cinet_img')->getClientOriginalName();
+                $filePath = 'papers/' . $fileName;
+                $request->file('cinet_img')->move(public_path('papers'), $fileName);
+                $data['cinet_img']  = $filePath;
             }
+
             $result = $this->repository->addToInstallmentPapers($slug, $id, $data);
-            return redirect()->back()->with('success', 'تمت العملية بنجاح.');
+            $papers_type_id = PapersType::where('slug', $slug)->first()->id;
+            $nextPapersType = PapersType::where('id', '>', $papers_type_id)->orderBy('id')->first();
+            $next_papers_type_slug = $nextPapersType ? $nextPapersType->slug : null;
+
+            if ($result) {
+                return redirect()->route("installment.papers.status", $next_papers_type_slug)->with('success', 'تمت العملية بنجاح.');
+
+            }
+
+            return redirect()->back()->with('error', 'حدث خطأ ما، يرجى المحاولة مرة أخرى.');
         }
 
         $installment = Installment::with('client')->findOrFail($id);
-        $admins = User::where('active', 1)->get();
+        $admins = User::where(['active' => '1', 'deleted_at' => null, 'type' => 'emp'])->get();
+
+
 
         $title = 'إضافة صورة الاعتماد';
 
