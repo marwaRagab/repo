@@ -362,11 +362,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/print_invoice/{id}/{id1}/{id2}/{id3}', [PaymentsController::class, 'print_invoice'])->name('print_invoice');
     Route::get('/set_archief/{id}', [PaymentsController::class, 'set_archief'])->name('set_archief.data');
-    Route::get('/print_all/{ids}/{seriall}', [PaymentsController::class, 'print_all'])->name('print_all');
+    Route::get('/print_all/{ids}/{seriall}/{invoiceids}', [PaymentsController::class, 'print_all'])->name('print_all');
     Route::get('/print_all_invoice', [PaymentsController::class, 'print_all_in'])->name('print_all_in');
     Route::any('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve_all');
     // Route::post('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve.all');
-
+    Route::get('/archive_all_in', [PaymentsController::class, 'archive_all_in'])->name('archive_all_in');
     Route::get('/invoices_installment', [PaymentsController::class, 'invoices_installment_index'])->name('invoices_installment');
     Route::post('/get_invoices_papers', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/installment/invoices_installment/print_invoice/{id1}/{id2}', [PaymentsController::class, 'get_invoices_papers']);

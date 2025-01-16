@@ -236,7 +236,6 @@
 
                 </h1>
                 <tr class="table-data">
-                    {{-- {{ dd(optional(request()->query('installment_month'))['id']) }} --}}
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
                             <?= $installment_month['id'] ?? (is_array(request()->query('installment_month')) 
@@ -248,7 +247,7 @@
                     </td>
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?php echo  $installment_month['payment_date'] ?> </p>
+                            <?php echo  $invoice['date'] ?> </p>
                     </td>
                     <td class="item" colspan=4>
                         <h2>التاريخ</h2>
@@ -259,14 +258,20 @@
 
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?php echo $installment_month['amout'] ?>
-                            (<?php echo $first_sum ?>
-                            دينار
-                            <?php if (strlen($secound_sum) > 3) { ?>
-                                و
-                                <?php echo $secound_sum ?>
-                                فلس
-                            <?php } ?>)
+                            <?php echo $invoice['amount'] ?>
+                            (<?php
+// Ensure secound_sum is set or initialize it with an empty string
+$secound_sum = isset($secound_sum) ? $secound_sum : '';
+
+// Display first_sum with secound_sum condition
+echo (is_array($first_sum)) ? implode(', ', $first_sum) : $first_sum;
+?>
+دينار
+<?php if (!empty($secound_sum) && strlen($secound_sum) > 3) { ?>
+    و
+    <?php echo $secound_sum; ?>
+    فلس
+<?php } ?>)
                         </p>
                     </td>
                     <td class="item" colspan=3>
@@ -285,14 +290,14 @@
 
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?php echo $installment_month['installment_id'] ?>                                    </p>
+                            <?php echo $invoice['installment_id'] ?>                                    </p>
                     </td>
                     <td class="item" colspan=3>
                         <h2> معاملة رقم </h2>
                     </td>
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?php switch ($installment_month['payment_type']) {
+                            <?php switch ($invoice['payment_type']) {
                                 case "cash":
                                     echo 'كاش';
                                     break;
@@ -324,12 +329,12 @@
                     <td class="item" colspan=3>
                         <h2> عدد الشهور المتأخرة </h2>
                     </td>
-                    <td class="tableitem" colspan=4>
+                    <td class="tableitem" colspan="4">
                         <p class="itemtext">
-                            <?php if ($installment_month['installment_type'] == "first_amount") { ?>
+                            <?php if (isset($installment_month['installment_type']) && $installment_month['installment_type'] == "first_amount") { ?>
                                 المقدم
                             <?php } else { ?>
-                                <?php echo  $installment_month['date'] ?>
+                                <?php echo isset($invoice['date']) ? $invoice['date'] : 'لا يوجد تاريخ'; ?>
                             <?php } ?>
                         </p>
                     </td>

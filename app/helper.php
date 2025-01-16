@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Court;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
+use App\Models\Court;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
 use App\Models\FixedPrintData;
@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\military_affairs_deligation;
 use App\Models\military_affairs_deligations;
+use Illuminate\Support\Facades\Log as LaravelLog;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_times;
-use Illuminate\Support\Facades\Log as LaravelLog;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -510,6 +510,17 @@ if (!function_exists('count_client')) {
         $governorates = Governorate::with('clients')->get();
     }
 }
+if (!function_exists('get_admin_user_name')) {
+    function get_admin_user_name($user_id)
+    {
+        $item =   User::findOrFail($user_id);
+        if (empty($item)) {
+            echo 'لا يوجد ';
+        } else {
+            echo $item['name_ar'] ;
+        }
+    }
+}
 if (!function_exists('get_different_dates')) {
 
     function get_different_dates($first_end_date, $second_end_date)
@@ -838,24 +849,51 @@ if (!function_exists('numberToArabicWords')) {
             100 => 'مئة',
             200 => 'مئتان',
             1000 => 'ألف',
-            // Add more numbers if necessary
         ];
 
+        // Handle exact matches
         if (array_key_exists($number, $arabic_numbers)) {
             return $arabic_numbers[$number];
         }
 
-        // For numbers between 21 and 99 (like 65)
-        $tens = floor($number / 10) * 10;
-        $ones = $number % 10;
+        // Handle numbers between 21 and 99
+        if ($number < 100) {
+            $tens = floor($number / 10) * 10;
+            $ones = $number % 10;
 
-        if ($tens && $ones) {
             return $arabic_numbers[$tens] . ' و ' . $arabic_numbers[$ones];
         }
 
-        return $arabic_numbers[$number] ?? $number;
+        // Handle numbers >= 100
+        if ($number < 1000) {
+            $hundreds = floor($number / 100) * 100;
+            $remainder = $number % 100;
+
+            if ($remainder) {
+                return $arabic_numbers[$hundreds] . ' و ' . numberToArabicWords($remainder);
+            }
+
+            return $arabic_numbers[$hundreds];
+        }
+
+        // Handle numbers >= 1000
+        if ($number >= 1000) {
+            $thousands = floor($number / 1000);
+            $remainder = $number % 1000;
+
+            $result = numberToArabicWords($thousands) . ' ' . $arabic_numbers[1000];
+
+            if ($remainder) {
+                $result .= ' و ' . numberToArabicWords($remainder);
+            }
+
+            return $result;
+        }
+
+        return (string)$number; // Default to returning the number as a string
     }
 }
+
 if (!function_exists('getOrderDetails')) {
     function getOrderDetails($id)
     {
