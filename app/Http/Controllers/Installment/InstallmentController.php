@@ -47,7 +47,7 @@ class InstallmentController extends Controller
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
         $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
-                                            ->where('finished',0)->OrderBy('installment.id', 'desc')->get();
+                                            ->where('finished',0)->where('status','finished')->OrderBy('installment.id', 'desc')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
         if ($data) {
@@ -299,8 +299,9 @@ class InstallmentController extends Controller
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
-
-            $data['sum'] = $data['not_done_amount'] - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
+            $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
+            $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
+            $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
 
         } else {
 
@@ -903,8 +904,10 @@ class InstallmentController extends Controller
 
 
             if ($installment->laws == 1 ) {
+                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
+                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
 
-                $data['sum'] = $data['not_done_amount'] - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
+                $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
 
                 $military_affair->update([
                         'reminder_amount' => $military_affair->reminder_amount - $request->cash ?? $military_affair->reminder_amount - $request->knet,
@@ -1115,8 +1118,10 @@ class InstallmentController extends Controller
             $military_affair = Military_affair::where('installment_id', $installment_id)->first();
 
             if ($installment->laws == 1 && ($data['not_done_amount'] != 0) && $military_affair) {
+                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
+                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
 
-                $data['sum'] = $data['not_done_amount'] - $military_affair->excute_actions_amount - $military_affair->excute_actions_check_amount;
+                $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
 
             } else {
 
