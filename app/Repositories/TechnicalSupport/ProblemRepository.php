@@ -185,9 +185,10 @@ class ProblemRepository implements ProblemRepositoryInterface
             $data->descr = $request->descr;
             if ($request->hasFile('file')) {
                 
-                $filename = time() . '-' . $request->file('file')->getClientOriginalName();
-                $path = $request->file('file')->move(public_path('uploads/new_photos'), $filename);
-                $data->file = 'uploads/new_photos' . '/' . $filename;
+                $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
+                $filePath = 'techical_support/' . $fileName;
+                $request->file('file')->move(public_path('techical_support'), $fileName);
+                $data->file = $filePath; // Save the relative path to the database
                 
             }
             $data->department_id = $request->department;
@@ -248,9 +249,10 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data->descr = $request->descr;
         if ($request->hasFile('file')) {
             // $data->file = $request->file('file')->store('uploads/new_photos', 'public');
-                $filename = time() . '-' . $request->file('file')->getClientOriginalName();
-                $path = $request->file('file')->move(public_path('uploads/new_photos'), $filename);
-                $data->file = 'uploads/new_photos' . '/' . $filename;
+            $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
+            $filePath = 'techical_support/' . $fileName;
+            $request->file('file')->move(public_path('techical_support'), $fileName);
+            $data->file = $filePath; // Save the relative path to the database
             
         }
         $data->user_id = Auth::user()->id;

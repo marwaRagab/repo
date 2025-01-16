@@ -159,19 +159,19 @@
         if (!nameArInput.value.trim()) {
             nameArError.textContent = 'الرجاء إدخال الاسم بالعربية';
             isValid = false;
-        } else if (!arabicRegex.test(nameArInput.value)) {
+        } /*else if (!arabicRegex.test(nameArInput.value)) {
             nameArError.textContent = 'الاسم بالعربية يجب أن يحتوي على أحرف عربية فقط';
             isValid = false;
-        }
+        }*/
 
         // Validate English name
         if (!nameEnInput.value.trim()) {
             nameEnError.textContent = 'الرجاء إدخال الاسم بالإنجليزية';
             isValid = false;
-        } else if (!englishRegex.test(nameEnInput.value)) {
+        }/* else if (!englishRegex.test(nameEnInput.value)) {
             nameEnError.textContent = 'الاسم بالإنجليزية يجب أن يحتوي على أحرف إنجليزية فقط';
             isValid = false;
-        }
+        }*/
 
         // Submit form if all fields are valid
         if (isValid) {
