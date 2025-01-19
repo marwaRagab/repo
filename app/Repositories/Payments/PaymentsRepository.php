@@ -154,7 +154,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                     ->count();
                     
                     // Generate the serial number by incrementing count
-                    $serialNo = $year . $month . str_pad($payment->id, 4, '0', STR_PAD_LEFT);
+                    $serialNo = $current_month_year . str_pad(substr($payment->id, -4), 4, '0', STR_PAD_LEFT);
             
                     // Attach the serial number to the payment object
                     $payment->serial_no = $serialNo;
@@ -208,7 +208,21 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
 }
 
+public function archive_all_in(Request $request)
+    {
 
+        $title = ' أرشيف عمليات الدفع';
+       
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = " عمليات الدفع";
+        $breadcrumb[1]['url'] = route("payments");
+
+        $this->data['view'] = 'Payments/archive';
+        return view('layout', $this->data, compact('breadcrumb'));
+
+    }
     public function invoices_installment_index(Request $request)
     {
         $title = '  عمليات الدفع ';
@@ -573,6 +587,10 @@ private function initializeInvoiceData($invoice_id, $installment_id, $id, $seria
         'installment_id' => $installment_id,
         'installment_month' => $id == 0 ? null : Installment_month::findOrFail($id),
         'item' => Installment::findOrFail($installment_id),
+        'invoice' => Invoices_installment::findOrFail($invoice_id),
+        'installment_discount' => Invoices_installment::where('installment_id', $installment_id)
+                                               ->where('install_month_id', $id)
+                                               ->get(),
     ];
 }
 
@@ -597,7 +615,6 @@ private function processInstallmentItem(&$data, $installment_id)
     $data['client'] = $installmentItem->client;
     $data['item_images'] = $installmentItem->images ?? [];
 }
-
 private function processMilitaryAffairs(&$data, $installment_id, $id)
 {
     if ($data['item']['laws'] != 1) {
@@ -658,31 +675,33 @@ private function convertToArabicWords($amount)
 }
 // ////////////////////////////
 
-    public function print_all($ids, $serial_nos)
+    public function print_all($ids, $serial_nos,$invoiceids)
 {
     // Convert ids and serial_nos to arrays
     $ids = explode(',', $ids);
     $serial_nos = explode(',', $serial_nos);
-
+    $invoiceids = explode(',', $invoiceids);
+    
     $data['user_name'] = Auth::user()->name_ar;
     $data['title'] = 'نظام الأقساط';
     $data['add_title'] = 'الأقساط';
 
     $data_update['print_status'] = 'done';
     // Get invoices where print_status is NULL
-    $invoices = Invoices_installment::whereIn('installment_id', $ids)
-    ->where(function($query) {
+    $invoices = Invoices_installment::whereIn('installment_id', $ids)->whereIn('id', $invoiceids)
+    ->where('arch', 0)->where('branch_id', Auth::user()->branch_id)->where(function($query) {
         $query->whereNull('print_status')
               ->orWhere('print_status', 0);
     })
     ->get()
     ->keyBy('id');
-
     // Get installments
     $installments = Installment::whereIn('id', $ids)->get()->keyBy('id');
 
     // Loop through the invoices
     foreach ($invoices as $invoice) {
+
+        $data['invoice'] = $invoice;
         $id = $invoice->installment_id;
 
         // Mark invoice as 'done'

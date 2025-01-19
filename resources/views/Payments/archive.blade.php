@@ -1,5 +1,6 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
+<a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('region.index') }}">
+            الارشيف </a>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
@@ -290,7 +291,7 @@ function valthisform(button) {
                     //},
 
                     render: function (data, type, row) {
-                        return `<input name="checkAll[]" type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}" data-serial="${row.serial_no}" data-invoice_id="${row.id}">`;
+                        return `<input type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}" data-serial="${row.serial_no}">`;
                     }
             }
                     
@@ -331,12 +332,11 @@ function valthisform(button) {
     // });
 
     const selectedIds = []; // Collect selected IDs from checkboxes
-const serialNumbers = []; // Collect serial numbers if needed invoice_id
-const invoice_ids = [];
+const serialNumbers = []; // Collect serial numbers if needed
+
 $('.row-select:checked').each(function () {
     selectedIds.push($(this).val());
     serialNumbers.push($(this).data('serial'));
-    invoice_ids.push($(this).data('invoice_id'));
 });
 
 // Make sure there are selected IDs
@@ -347,11 +347,10 @@ if (selectedIds.length === 0) {
 
 const ids = selectedIds.join(',');
 const seriall = serialNumbers.join(',');
-const invoiceids = invoice_ids.join(',');
+
     // Send selected rows to the server or handle them on the client
     $.ajax({
-        
-        url: '/print_all/' + ids + '/' + seriall + '/' + invoiceids, // Define the print route in your backend
+        url: '/print_all/' + ids + '/' + seriall, // Define the print route in your backend
         type: 'GET',
         success: function (response) {
 
@@ -367,7 +366,6 @@ const invoiceids = invoice_ids.join(',');
         },
         error: function (xhr) {
             console.error(xhr.responseText);
-            console.log(invoiceids);
             alert('An error occurred while processing the request.');
         }
     });

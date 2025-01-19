@@ -158,14 +158,12 @@
                                         <tr>
                                             <th>جهة العمل (1)</th>
                                             <td>
-
-
-                                                @if(empty($data['ministries']))
-                                                @foreach ($data['ministries'] as $ministry)
-                                                {{ $ministry->name_ar }}<br>
-                                                @endforeach
+                                                 @if(empty($data['ministries']))
+                                                    @foreach ($data['ministries'] as $ministry)
+                                                        {{ $ministry->name_ar }}<br>
+                                                    @endforeach
                                                 @else
-                                                {{ $Installment->installment_client?->ministry_working?->name_ar ?? '' }}
+                                                   {{ $Installment->installment_client?->ministry_working?->name_ar ?? '' }}
                                                 @endif
                                             </td>
                                         </tr>
@@ -2118,31 +2116,32 @@
 
                                     @endforeach
                                     @if ($Installment->qard_paper != "")
-                                    <div class="item">
-                                        <div class="meet-our-team position-relative rounded-4 overflow-hidden">
-                                            <img src="{{ asset('assets/images/PDF_file_icon.png') }}"
-                                                alt="PDF Thumbnail">
-                                            <div
-                                                class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                            <div class="item">
+                                                <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                    <img src="{{ asset('assets/images/PDF_file_icon.png') }}"
+                                                         alt="PDF Thumbnail">
+                                                    <div
+                                                        class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+                                                        
+                                                        <p for="">اقرار الدين </p>
+                                                        <a target="_blank"
+                                                           onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->qard_paper   }}', 'https://electron-kw.com/{{$Installment->qard_paper  }}'); return false;"
+                                                           class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
+                                                           title="Download the file from the primary or fallback server.">
+                                                            تحميل
+                                                        </a>
 
-                                                <p for="">اقرار الدين </p>
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $Installment->qard_paper   }}', 'https://electron-kw.com/{{$Installment->qard_paper  }}'); return false;"
-                                                    class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
-                                                    title="Download the file from the primary or fallback server.">
-                                                    تحميل
-                                                </a>
-
-                                                <a target="_blank"
-                                                    onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->qard_paper   }}', 'https://electron-kw.com/{{ $Installment->qard_paper  }}'); return false;"
-                                                    class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
-                                                    title="Print the file from the primary or fallback server.">
-                                                    طباعة
-                                                </a>
+                                                        <a target="_blank"
+                                                           onclick="checkFileAndPRINT('https://electron-kw.net/{{ $Installment->qard_paper   }}', 'https://electron-kw.com/{{ $Installment->qard_paper  }}'); return false;"
+                                                           class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
+                                                           title="Print the file from the primary or fallback server.">
+                                                            طباعة
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    @endif
+                                        @endif
+
 
                                 </div>
 
@@ -2191,28 +2190,33 @@
                                         <!-- end row -->
                                     </thead>
                                     <tbody>
-                                        <!-- start row -->
-                                        @php
-                                        $total_madionia1= $total_madionia1+ $Installment->extra_first_amount+
-                                        $Installment->first_amount;
-                                        $i=1; $the_balance = $total_madionia1 ;
+                                    <!-- start row -->
+                                    @php
+                                     if ($Installment->extra_first_amount > 0 && $first_amount )
+                                       $extra = $Installment->extra_first_amount ;
+                                       else
+                                       $extra = 0; 
+                                       
+                                        $total_madionia1= $total_madionia1  +  $Installment->first_amount + $extra ;
+                                             $i=1; $the_balance = $total_madionia1 ;
 
-                                        ; @endphp
+                                             ; @endphp
 
-                                        <tr>
-                                            <td>{{ $i }}</td>
-                                            <td>{{ number_format($total_madionia1  ,3)}}
-                                            </td>
-                                            <td>{{ number_format ($total_madionia1 ,3)}}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ $Installment->created_at ? $Installment->created_at->format('Y-m-d') : 'N/A' }}
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $i }}</td>
+                                        <td>{{ number_format($total_madionia1  ,3)}}
+                                        </td>
+                                        <td>{{ number_format ($total_madionia1 ,3)}}
+                                        </td>
+                                        <td>-</td>
+                                        <td>{{ $Installment->created_at ? $Installment->created_at->format('Y-m-d') : 'N/A' }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
 
-                                        @if($Installment->months == 24 && $Installment->laws==1 )
+                                    @if($Installment->months == 24 && $Installment->laws==1 )
+                                    
                                         <tr>
                                             <td> {{$i}} </td>
                                             <td>{{ number_format($total_madionia1,3)}}
@@ -2224,195 +2228,195 @@
                                             <td></td>
                                             <td><span class="btn btn-danger"> أتعاب المحامى </span></td>
                                         </tr>
-                                        @endif
-                                        @php $i++ @endphp
-                                        @php
+                                    @endif
+                                    @php $i++ @endphp
+                                    @php
                                         $total_madionia = $total_madionia1 ;
 
-                                        @endphp
-                                        @foreach($invoices as $one)
+                                    @endphp
+                                    @foreach($invoices as $one)
 
                                         @if($one->amount !=0 )
-                                        <tr>
-                                            <td>{{$i }}</td>
-                                            <td>
-                                                @php $total_madionia = $total_madionia - $one->sum_amount; @endphp
-                                                {{ number_format(($total_madionia), 3, '.', ',') }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{$one->sum_amount}}</td>
-                                            <td>{{($one->payment_date != 0) ? \Carbon\Carbon::parse($one->payment_date)->format('Y-m-d')  :  date('Y-m-d',$one->created_at) }}
-                                            </td>
-                                            @if($one->payment_type=='cash')
-                                            <td> <span class="btn btn-success"> كاش</span></td>
-                                            @endif
-                                            @if ($one->payment_type=='knet')
-                                            <td> <span class="btn btn-success">كى نت</span></td>
-                                            @endif
-                                            @if ($one->payment_type == 'check')
-                                            <td> <span class="btn btn-success">شيك </span></td>
-                                            @endif
-                                            @if($one->payment_type == 'part')
-                                            <td>
+                                            <tr>
+                                                <td>{{$i }}</td>
+                                                <td>
+                                                    @php $total_madionia = $total_madionia - $one->sum_amount; @endphp
+                                                    {{ number_format(($total_madionia), 3, '.', ',') }}
+                                                </td>
+                                                <td>-</td>
+                                                <td>{{$one->sum_amount}}</td>
+                                                <td>{{($one->payment_date != 0) ? \Carbon\Carbon::parse($one->payment_date)->format('Y-m-d')  :  date('Y-m-d',$one->created_at) }}
+                                                </td>
+                                                @if($one->payment_type=='cash')
+                                                    <td> <span class="btn btn-success"> كاش</span></td>
+                                                @endif
+                                                @if ($one->payment_type=='knet')
+                                                    <td> <span class="btn btn-success">كى نت</span></td>
+                                                @endif
+                                                @if ($one->payment_type == 'check')
+                                                    <td> <span class="btn btn-success">شيك </span></td>
+                                                @endif
+                                                @if($one->payment_type == 'part')
+                                                    <td>
                                                 <span class="btn btn-success">
                                                     رابط </span>
-                                            </td>
-                                            @endif
-                                            <td>
+                                                    </td>
+                                                @endif
+                                                <td>
 
 
 
-                                                <!--                                                    <a href="{{ asset($one->img ?? '/') }}" target=" _blank">
+                                                    <!--                                                    <a href="{{ asset($one->img ?? '/') }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
                                                     </a>-->
 
-                                                @if(!empty($one->img))
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
+                                                    @if(!empty($one->img))
+                                                        <a target="_blank"
+                                                           onclick="checkFileAndRedirect('https://electron-kw.net/{{$one->img}}', 'https://electron-kw.com/{{$one->img}}'); return false;"
+                                                           title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
-                                                </a>
-                                                @else
-                                                <a href="{{ route('noimage') }}" target=" _blank">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
-                                                @endif
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                        </a>
+                                                    @endif
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
                                         @endif
                                         @php $i++ @endphp
-                                        @endforeach
+                                    @endforeach
 
-                                        @php $total_amounts = 0;
+                                    @php $total_amounts = 0;
                                         $total_checkat=0;
-                                        @endphp
+                                    @endphp
 
 
-                                        @if (!empty($mil_check) && count($mil_check) > 0 )
+                                    @if (!empty($mil_check) && count($mil_check) > 0 )
 
                                         @foreach($mil_check as $military_affairs_check)
-                                        @php
-                                        $total_amounts = $total_amounts + $military_affairs_check->amount;
-                                        $total_diff = $total_amounts - $total_checkat;
+                                            @php
+                                                $total_amounts = $total_amounts + $military_affairs_check->amount;
+                                                $total_diff = $total_amounts - $total_checkat;
 
 
-                                        @endphp
-                                        @if($military_affairs_check->military_affairs_check_id !=-1)
+                                            @endphp
+                                            @if($military_affairs_check->military_affairs_check_id !=-1)
 
-                                        @if($total_diff>0)
-                                        @php
-                                        $total_madionia = $total_madionia - $military_affairs_check->amount;
-                                        @endphp
-                                        <tr>
-                                            <td> {{ $i }} </td>
-                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ $military_affairs_check->amount }}
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($military_affairs_check->date)->format('Y-m-d') }}
-                                            </td>
-                                            <td>
-                                                <span class="btn btn-success font-weight-100 "> شيك</span>
-                                            </td>
-                                            <td>
+                                                @if($total_diff>0)
+                                                    @php
+                                                        $total_madionia = $total_madionia - $military_affairs_check->amount;
+                                                    @endphp
+                                                    <tr>
+                                                        <td> {{ $i }} </td>
+                                                        <td> {{ number_format(($total_madionia), 3, '.', ',') }}
+                                                        </td>
+                                                        <td>-</td>
+                                                        <td>{{ $military_affairs_check->amount }}
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($military_affairs_check->date)->format('Y-m-d') }}
+                                                        </td>
+                                                        <td>
+                                                            <span class="btn btn-success font-weight-100 "> شيك</span>
+                                                        </td>
+                                                        <td>
 
-                                                @if(!empty($military_affairs_check->img_dir))
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
-                                                @else
-                                                <a href="{{ route('noimage') }}" target=" _blank">
-                                                    <span class="btn btn-info"> صورة
-                                                        الايصال </span>
-                                                </a>
+                                                            @if(!empty($military_affairs_check->img_dir))
+                                                                <a target="_blank"
+                                                                   onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_check->img_dir}}', 'https://electron-kw.com/{{$military_affairs_check->img_dir}}'); return false;"
+                                                                   title="Download the file from the primary or fallback server.">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('noimage') }}" target=" _blank">
+                                                        <span class="btn btn-info"> صورة
+                                                            الايصال </span>
+                                                                </a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
                                                 @endif
-                                            </td>
-                                        </tr>
-                                        @endif
-                                        @endif
-                                        @php $i++ @endphp
+                                            @endif
+                                            @php $i++ @endphp
                                         @endforeach
-                                        @endif
-                                        @if (!empty($mil_amount))
+                                    @endif
+                                    @if (!empty($mil_amount))
 
                                         @foreach($mil_amount as $military_affairs_amount)
-                                        @php
-                                        $total_amounts = $total_amounts + $military_affairs_amount->amount;
-                                        $total_diff = $total_amounts - $total_checkat;
+                                            @php
+                                                $total_amounts = $total_amounts + $military_affairs_amount->amount;
+                                                $total_diff = $total_amounts - $total_checkat;
 
 
-                                        @endphp
-                                        @if($military_affairs_amount->military_affairs_check_id !=-1)
+                                            @endphp
+                                            @if($military_affairs_amount->military_affairs_check_id !=-1)
 
-                                        @if($total_diff>0)
-                                        @php
-                                        $total_madionia = $total_madionia - $military_affairs_amount->amount;
-                                        @endphp
-                                        <tr>
-                                            <td> {{$i}} </td>
-                                            <td> {{ number_format(($total_madionia), 3, '.', ',') }}
-                                            </td>
-                                            <td>-</td>
-                                            <td>{{ $military_affairs_amount->amount }}
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($military_affairs_amount->date)->format('Y-m-d')}}
-                                            </td>
-                                            <td>
+                                                @if($total_diff>0)
+                                                    @php
+                                                        $total_madionia = $total_madionia - $military_affairs_amount->amount;
+                                                    @endphp
+                                                    <tr>
+                                                        <td> {{$i}} </td>
+                                                        <td> {{ number_format(($total_madionia), 3, '.', ',') }}
+                                                        </td>
+                                                        <td>-</td>
+                                                        <td>{{ $military_affairs_amount->amount }}
+                                                        </td>
+                                                        <td>{{ \Carbon\Carbon::parse($military_affairs_amount->date)->format('Y-m-d')}}
+                                                        </td>
+                                                        <td>
                                                 <span class="btn btn-danger font-weight-100 ">
 
                                                     @if($military_affairs_amount->check_type=='salary' )
 
-                                                    حجز راتب
+                                                        حجز راتب
 
                                                     @elseif($military_affairs_amount->check_type=='banks' )
-                                                    حجز بنوك
+                                                        حجز بنوك
 
                                                     @elseif($military_affairs_amount->check_type=='cars' )
-                                                    حجز سيارة
+                                                        حجز سيارة
 
                                                     @elseif($military_affairs_amount->check_type=='mahkama_installment'
                                                     )
-                                                    تقسيط محكمة
+                                                        تقسيط محكمة
 
                                                     @elseif($military_affairs_amount->check_type=='mahkama_madionia_sadad'
                                                     )
-                                                    سداد مديونية محكمة
+                                                        سداد مديونية محكمة
                                                     @else
-                                                    رصيد تنفيذ
+                                                        رصيد تنفيذ
                                                     @endif
 
                                                 </span>
-                                            </td>
-                                            <td>
+                                                        </td>
+                                                        <td>
 
-                                                @if(!empty($military_affairs_amount->img_dir))
-                                                <a target="_blank"
-                                                    onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
-                                                    title="Download the file from the primary or fallback server.">
+                                                            @if(!empty($military_affairs_amount->img_dir))
+                                                                <a target="_blank"
+                                                                   onclick="checkFileAndRedirect('https://electron-kw.net/{{ $military_affairs_amount->img_dir  }}', 'https://electron-kw.com/{{$military_affairs_amount->img_dir}}'); return false;"
+                                                                   title="Download the file from the primary or fallback server.">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
-                                                </a>
-                                                @else
-                                                <a href="{{ route('noimage') }}" target=" _blank">
+                                                                </a>
+                                                            @else
+                                                                <a href="{{ route('noimage') }}" target=" _blank">
                                                     <span class="btn btn-info"> صورة
                                                         الايصال </span>
-                                                </a>
+                                                                </a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
                                                 @endif
-                                            </td>
-                                        </tr>
-                                        @endif
-                                        @endif
+                                            @endif
 
                                         @endforeach
-                                        @endif
+                                    @endif
 
 
                                     </tbody>
@@ -2444,9 +2448,8 @@
 
                         <div class="accordion-body">
                             <div class="d-flex flex-wrap ">
-                                <a class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
-                                    @if($sum !=0) data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}"
-                                    @endif>
+                                <a  class=" btn-filter me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 mx-1 mb-2 "
+                                    @if($sum != 0) data-bs-toggle="modal" data-bs-target="#pay-total-discount_{{$id}}" @endif>
                                     دفع المديونية مع الخصم </a>
                                 <div id="pay-total-discount_{{$id}}" class="modal fade" tabindex="-1"
                                     aria-labelledby="pay-total-discountLabel{{$id}}" aria-hidden="true">
@@ -2502,7 +2505,7 @@
                                                             النقدي
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="discount_cash"
-                                                            name="discount_cash" value="{{ $sum }}"
+                                                            name="discount_cash"  value="{{ $sum }}"
                                                             onchange="calculate_2(this.value,'discount_cash');">
                                                         @error('discount_cash')
                                                         <div style='color:red'>{{$message}}</div>
@@ -2556,9 +2559,9 @@
                                     <!-- /.modal-dialog -->
                                 </div>
 
-                                <a @if($sum !=0) data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}" @endif
+                                <a @if($sum != 0) data-bs-toggle="modal" data-bs-target="#pay-total_{{$id}}" @endif
                                     class=" btn-filter bg-info-subtle text-info px-4 fs-4 mx-1 mb-2  @if($sum == 0)  disabled  @endif"
-                                    onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');">
+                                     onclick="return confirm('برجاء التأكد من قيمة المديونية\n قيمة المديونية هى {{ $sum }} دينار \n هل تريد دفع كامل المديونية');"  >
                                     دفع كامل المديونية
                                 </a>
                                 <div id="pay-total_{{$id}}" class="modal fade" tabindex="-1"
@@ -2682,13 +2685,12 @@
                                                         <div style='color:red'>{{$message}}</div>
                                                         @enderror
                                                     </div>
-                                                    <div class="form-group mb-3" style="display:none;"
-                                                        id="some_code_div">
+                                                    <div class="form-group mb-3" style="display:none;" id="some_code_div">
                                                         <label class="form-label" for="some_code">
                                                             رقم وصل الكي نت
                                                         </label>
                                                         <input type="text" class="form-control mb-2" id="some_code"
-                                                            name="some_code">
+                                                            name="some_code" >
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <input type="file" name="img_dir" class="form-control" />
@@ -2728,10 +2730,10 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-header">
-                                                <label class="form-label" for="input1"> المبلغ
-                                                    المطلوب : {{ request()->has('payment_order_id')}} دينار
-                                                </label>
-                                            </div>
+                                                    <label class="form-label" for="input1"> المبلغ
+                                                        المطلوب : {{   request()->has('payment_order_id')}} دينار
+                                                    </label>
+                                                </div>
                                             <div class="modal-body">
                                                 <form action="{{ route('installment.pay_all',$id) }}" method="POST"
                                                     enctype="multipart/form-data">
@@ -2805,7 +2807,7 @@
                                             <th> م</th>
                                             <th>تاريخ الاستحقاق</th>
                                             <th> المبلغ (دينار)</th>
-                                            <th> دفع كاش</th>
+                                            <th> دفع يدوي</th>
                                             <th> دفع رابط</th>
                                             <th> تاريخ الدفع</th>
                                             @if ($Installment['laws'] == 0)
@@ -2826,7 +2828,7 @@
                                             <td>{{ $month->date }} </td>
                                             <td>{{ $month->amount }}
                                                 @if ($month->installment_type == "first_amount")
-                                                <label class="btn btn-warning ">المقدم</label>
+                                                <label class="btn btn-success ">المقدم</label>
                                                 @endif
                                                 @if ($month->installment_type == "law_percent")
                                                 <label class="btn btn-success ">اتعاب
@@ -3018,7 +3020,7 @@
 
                                                 <h6>{{ $month->payment_date }}</h6>
                                                 <h6>
-                                                    @if(!empty($month->img_dir))
+                                                     @if(!empty($month->img_dir))
                                                     <a href="{{ asset($month->img_dir) }}" target=" _blank">
                                                         <span class="btn btn-info"> صورة
                                                             الايصال </span>
@@ -3029,7 +3031,7 @@
                                                             الايصال </span>
                                                     </a>
                                                     @endif
-                                                </h6>
+                                                    </h6>
 
                                                 <a target="_blank"
                                                     href="{{ route('installment.print_recive_ins_money', ['id' => $Installment->id, 'id2' => $month['id']]) }}">
@@ -3044,8 +3046,9 @@
                                             <td>
                                                 @if ($month->status == "not_done" && $Installment->law == 0)
                                                 <input type="checkbox" disc="{{ $month->amout}}"
-                                                    class="form-check-input" id="payment_order_id_{{$month->id}}"
-                                                    name="payment_order_id[]" value="{{ $month->id }}">
+                                                    class="form-check-input"
+                                                    id="payment_order_id_{{$month->id}}" name="payment_order_id[]"
+                                                    value="{{ $month->id }}">
                                                 <input type="hidden" name="sum_check" id="sum_check">
                                                 @endif
                                             </td>
@@ -3088,7 +3091,7 @@ function valthisform() {
     var okay = false;
     for (var i = 0, l = checkboxs.length; i < l; i++) {
         if (checkboxs[i].checked) {
-
+           
             arr.push(checkboxs[i].value);
             okay = true;
             // break;
@@ -3184,7 +3187,7 @@ function calculate(value, type) {
         var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
         $('#knet_total').val(knet_n);
     }
-
+    
 
 
     return false;
@@ -3202,35 +3205,35 @@ function convert(val) {
 function calculate_2(value, type) {
     var real_price = parseFloat($('#amount').val()).toFixed(3);
     var discount = parseFloat($('#discount').val()).toFixed(3);
-
+   
     if (discount == 'NaN') {
         alert('برجاء ادخال قيمة الخصم');
         return false;
         // $('#knet').val('0.000');
     } else {
-        if (type == "discount_cash") {
-            var cash = parseFloat($('#discount_cash').val()).toFixed(3);
-            var cash = convert(cash);
-            var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
-            $('#discount_knet').val(knet_n);
+    if (type == "discount_cash") {
+        var cash = parseFloat($('#discount_cash').val()).toFixed(3);
+        var cash = convert(cash);
+        var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
+        $('#discount_knet').val(knet_n);
 
-        }
-        if (type == "discount_knet") {
-            var knet = parseFloat($('#discount_knet').val()).toFixed(3);
-            var knet = convert(knet);
-            var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
-            $('#discount_cash').val(cash_n);
+    }
+    if (type == "discount_knet") {
+        var knet = parseFloat($('#discount_knet').val()).toFixed(3);
+        var knet = convert(knet);
+        var cash_n = parseFloat(((real_price * 1000) - knet) / 1000).toFixed(3);
+        $('#discount_cash').val(cash_n);
 
-        }
+    }
     }
     return false;
 }
 
 function show_knet_code(val) {
     if (val == 'knet') {
-        $("#some_code_div").show();
+      $("#some_code_div").show();
     } else {
-        $("#some_code_div").hide();
-    }
+      $("#some_code_div").hide();
+    }   
 }
 </script>
