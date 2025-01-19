@@ -223,6 +223,103 @@ public function archive_all_in(Request $request)
         return view('layout', $this->data, compact('breadcrumb'));
 
     }
+
+    public function getArchivePaymentsData(Request $request)
+    {
+        // Retrieve the selected month from the request
+        $pay_date = $request->month;
+    
+        // Query the database with necessary filters and relationships
+        $payments = Invoices_installment::where('arch', 1)
+        // ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
+            ->when($pay_date, function ($query) use ($pay_date) {
+                $date = new DateTime($pay_date);
+                $year = $date->format('Y');
+                $month = $date->format('m');
+                return $query->whereYear('invoices_installment.date', $year)->whereMonth('invoices_installment.date', $month);
+            })
+            ->where('branch_id', Auth::user()->branch_id)
+            ->with([
+                'installment',
+                'install_month',
+            ])
+            ->select([
+                'id', 'payment_type', 'date', 'branch_id', 
+                'installment_id', 'install_month_id', 
+                'description', 'amount', 'print_status'
+            ]);
+    
+        // Process data for DataTables
+        return DataTables::of($payments)
+            ->addColumn('pay_method', function ($payment) {
+                return match ($payment->payment_type) {
+                    'cash' => 'كاش',
+                    'part' => 'روابط',
+                    'check' => 'شيك',
+                    default => 'كى نت',
+                };
+            })
+            ->addColumn('installment_name', function ($payment) {
+                return $payment->installment && $payment->installment->client
+                    ? $payment->installment->client->name_ar
+                    : 'لايوجد';
+            })
+            ->addColumn('serial_no', function ($payment)use($request) {
+                $current_month_year = now()->format('Ym');
+                $currentMonth =  $request->month;
+                $date = new DateTime($currentMonth);
+                $year = $date->format('Y');
+                $month = $date->format('m');
+                $currentYear = Carbon::now()->year;
+                // Count records grouped by date and filter by current month
+                $total_items = Invoices_installment::where('arch', 0)->where('branch_id', Auth::user()->branch_id)->whereYear('date', $year)
+                    ->whereMonth('date', $month)
+                    ->count();
+                    
+                    // Generate the serial number by incrementing count
+                    $serialNo = $current_month_year . str_pad(substr($payment->id, -4), 4, '0', STR_PAD_LEFT);
+            
+                    // Attach the serial number to the payment object
+                    $payment->serial_no = $serialNo;
+            
+                    return $serialNo; 
+            })
+            
+            ->addColumn('final_date_formatted', function ($payment) {
+                $finalDate = $payment->date ?? null;
+            
+                if ($finalDate) {
+                    try {
+                        return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
+                    } catch (\Exception $e) {
+                        return $finalDate; // Handle invalid date gracefully
+                    }
+                }
+            
+                return 'N/A'; // Return default if date is null or invalid
+            })
+            ->addColumn('actions', function ($payment) {
+                $printUrl = route('print_invoice', [
+                    'id' => $payment->id,
+                    'id1' => $payment->installment_id,
+                    'id2' => $payment->install_month_id,
+                    'id3' => $payment->serial_no,
+                ]);
+                $archiveUrl = route('set_archive.data', ['id' => $payment->id]);
+    
+                $archiveButton =
+                     "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'> إلغاء الارشفة</a>" ;
+    
+                return $archiveButton;
+            })
+            
+            ->rawColumns(['print_status_label', 'actions', 'select_checkbox']) // Allow HTML for specific columns
+            ->addIndexColumn() // Add an auto-incrementing index column
+            ->make(true); // Generate JSON response for DataTables
+    // dd(DataTables::of($payments)->toArray());
+
+}
+
     public function invoices_installment_index(Request $request)
     {
         $title = '  عمليات الدفع ';
@@ -287,7 +384,17 @@ public function archive_all_in(Request $request)
 
 
     }
+    public function set_archive($id)
 
+    {
+        $data['arch'] = 0;
+
+        $invoice = Invoices_installment::findorfail($id);
+        $invoice->update($data);
+
+        return redirect()->route('payments');
+
+    }
     ///////////////////////////////case_proof function
 
     // public function print_invoice($invoice_id, $installment_id, $id, $serial_no) // id is month_id
