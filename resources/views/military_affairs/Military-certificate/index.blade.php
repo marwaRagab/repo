@@ -173,15 +173,239 @@
                                 <td>{{$item->open_file_date}} </td>
                                 <td>{{$item->issue_id}}</td>
                                 @if(Request::get('certificate_type')=='info_request')
-                                    <td> طلب الاستعلام</td>
+                                    <td>
+
+                                        <div class="btn-group me-6 my-2 d-block dropdown">
+                                            <button class="btn bg-success-subtle text-success dropdown-toggle"
+                                                    type="button"
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                الإجراءات
+                                            </button>
+                                            <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
+
+
+                                                <li>
+                                                    <a class="dropdown-item btn-static bg-secondary-subtle text-secondary rounded-0 w-100 mt-2"
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                                                        طباعة شهادة الراتب</a>
+                                                </li>
+
+                                                <li>
+                                                    <a class="dropdown-item btn-static bg-danger-subtle text-danger rounded-0 w-100 mt-2"
+                                                       href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                                                        طباعة الرقم العسكرى </a>
+                                                </li>
+
+
+                                            </ul>
+
+
+                                        </div>
+                                        طلب الاستعلام
+                                    </td>
                                 @endif
 
                                 @if(Request::get('certificate_type')=='info_book')
-                                    <td> كتاب الاستعلام</td>
+                                    <td>
+
+                                        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                                                data-bs-target="#add-note-{{$item->id}}" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
+                                            كتاب الاستعلام
+                                        </button>
+
+                                        <div id="add-note-{{$item->id}}" class="modal fade" tabindex="-1"
+                                             aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                <div class="modal-content">
+                                                    <form class="mega-vertical"
+                                                          action="{{url('convert_to_export')}}" method="post"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" name="military_affairs_id"
+                                                               value="{{$item->id}}">
+
+                                                        <input type="hidden" name="type"
+                                                               value="certificate">
+                                                        <input type="hidden" name="type_id"
+                                                               value="{{ \App\Models\Military_affairs\Military_affairs_certificate_type::where('slug','=','export')->first()->id }}">
+
+
+                                                        <div class="modal-header d-flex align-items-center">
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                                كتاب الاستعلام</h4>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <div class="form-row">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="input1 ">
+                                                                        تاريخ </label>
+                                                                    <input type="date" name="date"
+                                                                           class="form-control mb-2" id="input1">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="formFile" class="form-label">اختر
+                                                                        صورة </label>
+                                                                    <input class="form-control" name="img_dir"
+                                                                           accept="image/*" type="file" id="formFile"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer d-flex ">
+                                                            <button type="submit" class="btn btn-primary">حفظ</button>
+                                                            <button type="button"
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
+                                                                الغاء
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+
+
+                                    </td>
                                 @endif
                                 @if(Request::get('certificate_type')=='export')
-                                    <td> الصادر والوارد</td>
+                                    <td>
+
+                                        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                                                data-bs-target="#export_update-{{$item->id}}">
+                                            الصادر والوارد
+                                        </button>
+
+                                        <div id="export_update-{{$item->id}}" class="modal fade" tabindex="-1"
+                                             aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                <div class="modal-content">
+                                                    <form class="mega-vertical"
+                                                          action="{{url('convert_to_money')}}" method="post"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" name="military_affairs_id"
+                                                               value="{{$item->id}}">
+
+                                                        <div class="modal-header d-flex align-items-center">
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                                الصادر والوارد</h4>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <div class="form-row">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="input1 "> رقم
+                                                                        الصادر </label>
+                                                                    <input type="text" name="certificate_no"
+                                                                           class="form-control mb-2" id="input1">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="input1 ">
+                                                                        الصورة</label>
+                                                                    <input class="form-control" name="img_dir"
+                                                                           accept="image/*" type="file" id="formFile"/>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="input1 ">
+                                                                        تاريخ </label>
+                                                                    <input type="date" name="date"
+                                                                           class="form-control mb-2" id="input1">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="formFile" class="form-label">
+                                                                        الملاحظة </label>
+                                                                    <textarea class="form-control mb-2"
+                                                                              name="note"></textarea>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer d-flex ">
+                                                            <button type="submit" class="btn btn-primary">حفظ</button>
+                                                            <button type="button"
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
+                                                                الغاء
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+
+
+                                    </td>
                                 @endif
+                                @if(Request::get('certificate_type')=='money')
+                                    <td>
+
+                                        <button class="btn btn-success me-6 my-2" data-bs-toggle="modal"
+                                                data-bs-target="#stop_salary-{{$item->id}}">
+                                            حجز راتب
+                                        </button>
+
+                                        <div id="stop_salary-{{$item->id}}" class="modal fade" tabindex="-1"
+                                             aria-labelledby="bs-example-modal-md" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                                <div class="modal-content">
+                                                    <form class="mega-vertical"
+                                                          action="{{url('convert_to_stop_salary')}}" method="post"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" name="military_affairs_id"
+                                                               value="{{$item->id}}">
+
+                                                        <div class="modal-header d-flex align-items-center">
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                                حجز الراتب</h4>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <div class="form-row">
+
+                                                                <div class="form-group">
+                                                                    <label for="formFile" class="form-label">اختر
+                                                                        صورة </label>
+                                                                    <input class="form-control" name="img_dir"
+                                                                           accept="image/*" type="file" id="formFile"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer d-flex ">
+                                                            <button type="submit" class="btn btn-primary">حفظ</button>
+                                                            <button type="button"
+                                                                    class="btn bg-danger-subtle text-danger  waves-effect"
+                                                                    data-bs-dismiss="modal">
+                                                                الغاء
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+
+
+                                    </td>
+                                @endif
+
                                 <td>
                                     @include('military_affairs.Open_file.partial.column_responsible')
                                 </td>
@@ -575,4 +799,3 @@
 
 
 </script>
-
