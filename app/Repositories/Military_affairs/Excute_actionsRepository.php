@@ -40,6 +40,8 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         for ($i = 0; $i < count($this->data['courts']); $i++) {
             $this->data['courts'][$i]['style'] = $color_array[$i];
+
+
         }
     }
 
@@ -197,6 +199,8 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
         Military_affairs_amount::create($array_add);
         $update_data['excute_actions_amount'] = $item_military['excute_actions_amount'] + $request->amount;
+        $update_data['reminder_amount'] = $item_military['reminder_amount'] - $request->amount;
+        $update_data['payment_done'] = $item_military['payment_done'] + $request->amount;
 
         $update_data['excute_actions_counter'] = 1 + $item_military['excute_actions_counter'];
 
@@ -270,6 +274,8 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $data['excute_actions_counter'] = 0;
         $data['excute_actions_amount'] = 0;
         $data['excute_actions_check_amount'] = $last_check_add->amount;
+        $data['reminder_amount'] = $item_military_affairs['reminder_amount'] - $request->check_amount;
+        $data['payment_done'] = $item_military_affairs['payment_done'] + $request->check_amount;
         $item_military_affairs->update($data);
 
 
