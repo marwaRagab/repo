@@ -69,30 +69,28 @@
                         <th> المحكمة</th>
                         <!-- <th> التاريخ</th> -->
                         <th> المرحلة</th>
-
+                        <th> التفاصيل</th>
                     </tr>
                     <!-- end row -->
                 </thead>
                 <tbody>
-                    @php $i=1; @endphp
+                   
                     @foreach ($transactions as $one_1)
                     <!-- start row -->
-                     
                     <tr>
-                        <td>{{ $i }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td><a
                                 href="{{ route('installment.show-installment', ['id' => $one_1->installment_id]) }}">{{ $one_1->installment_id }}</a>
                         </td>
-                        <td>{{ $one_1->name_ar }}</td>
-                        <td>{{ $one_1->civil_number }}</td>
-                        <td>{{ $one_1->phone_ids }}</td>
-                        <td>{{ $one_1->governorate_id }}</td>
-                        <!-- <td>{{ $one_1->date }}</td> -->
+                        <td>{{ $one_1->installment->client->name_ar }}</td>
+                        <td>{{ $one_1->installment->client->civil_number }}</td>
+                        <td>{{ $one_1->installment->client->client_phone->first()->phone }}</td>
+                        <td>{{ $one_1->installment->client->courtNew->name_ar ?? ''}} </td>
+                        <!-- <td>{{ $one_1->status_all->where('flag',0)->first()->date ?? $one_1->status_all->where('flag',0)->first()?->created_at }}</td> -->
                         <td>
-                            
                             @if ($one_1->status == 'military')
                             {{' فتح ملف' }}
-                            @elseif ($one_1->status == 'execute_alert' && $one_1->jalasat_alert_status == 'accepted')
+                            @elseif ($one_1->status == 'images' && $one_1->jalasat_alert_status == 'accepted')
                             {{ 'الايمج' }}
                             @elseif ($one_1->status == 'execute_alert' && $one_1->jalasat_alert_status != 'accepted')
                             {{ 'إعلان التنفيذ '}}
@@ -100,12 +98,6 @@
                             {{ 'أثبات الحالة'}}
                             @elseif (($one_1->cancel_certificate == 1) && ($one_1->stop_salary == 0) && ($one_1->job_type == 'military') )
                             {{ 'أصدار الشهادة العسكرية'}}
-                            @elseif ($one_1->status == 'execute' && $one_1->stop_bank == 1 && $one_1->bank_archive ==0)
-                            {{ 'حجز بنوك '}}
-                            @elseif ($one_1->status == 'execute' &&  $one_1->stop_car == 1)
-                            {{ 'حجز سيارات '}}
-                            @elseif ($one_1->status == 'execute' &&  $one_1->stop_salary == 1 && $one_1->job_type == 'military')
-                            {{ 'حجز راتب '}}
                             @elseif ($one_1->status == 'execute' && $one_1->stop_travel == 1)
                             {{ 'منع سفر '}}
                             @elseif ($one_1->paper_eqrar_dain_received == 0 && $one_1->status =='null')
@@ -114,15 +106,22 @@
                             {{ 'اقرارات الدين  مستلمة '}}
                             @elseif ($one_1->status =='execute')
                             {{ 'رصيد التنفيذ '}}
-                            @elseif ($one_1->type =='settlement')
-                            {{ 'التسوية' }}
-                          
                             @endif
+                            @if ($one_1->status == 'execute' && $one_1->stop_bank == 1 && $one_1->bank_archive ==0)
+                             <br> {{ 'حجز بنوك '}}
+                            @endif
+                            @if ($one_1->status == 'execute' &&  $one_1->stop_car == 1)
+                            <br> {{ 'حجز سيارات '}}
+                            @endif
+                            @if ($one_1->status == 'execute' &&  $one_1->stop_salary == 1 && $one_1->job_type == 'military')
+                            <br> {{ 'حجز راتب '}}
+                            @endif
+                        </td>
+                        <td><a class="btn btn-primary rounded-0 w-100 mt-2"
+                                href="{{ route('installment.show-installment', ['id' => $one_1->installment_id]) }}"> التفاصيل</a>
                         </td>
                     </tr>
                     <!-- end row -->
-
-                    @php $i++; @endphp
                     @endforeach
 
                     <!-- end row -->
