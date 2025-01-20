@@ -1036,7 +1036,7 @@
                                     <tbody>
 
                                         <!-- start row -->
-                                        @foreach( $purchase_orders_array as $item)
+                                        {{-- @foreach( $purchase_orders_array as $item)
 
                                         <tr>
                                             <td>
@@ -1057,6 +1057,30 @@
                                             @endif
 
                                         </tr>
+                                        @endforeach --}}
+
+                                        @foreach ($data['OrderItem'] as $item)
+
+                                        <tr>
+                                            <td>
+                                               {{ $item->product_order->first()?->mark->name_ar}}
+                                            </td>
+                                            <td>{{$item->product_order->first()?->class->name_ar}} </td>
+                                            <td>{{$item->product_order->first()?->model}}</td>
+                                            <td>{{$item->price}}</td>
+                                            <td>{{$item->org_price}}
+                                            </td>
+                                            <td>{{$item->final_price}}</td>
+                                            <td>{{ $item->counter }}</td>
+                                            @if (($item->counter != "") || ($item->counter!= null) )
+                                            <td>{{floatval($item->final_price)* floatval($item->counter)}}
+                                            </td>
+                                            @else
+                                            <td>{{floatval($item->final_price)}}</td>
+                                            @endif
+
+                                        </tr>
+                                            
                                         @endforeach
 
                                     </tbody>
