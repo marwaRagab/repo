@@ -93,6 +93,8 @@ use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\HumanResources\TransactionsCompletedController;
+use App\Http\Controllers\ClientAuth\ClientAuthController;
+
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -106,7 +108,20 @@ use App\Http\Controllers\HumanResources\TransactionsCompletedController;
 | contains the "web" middleware group. Now create something great!
 |
  */
+// Route::middleware('auth:client')->get('/clientDash/login', function () {
+//     return view('middleware.login');
+// });
 
+Route::prefix('clientDash')->group(function () {
+    // CLient login routes
+    Route::get('login', [ClientAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('login', [ClientAuthController::class, 'login'])->name('client.login');
+    Route::post('logout', [ClientAuthController::class, 'logout'])->name('admin.logout');
+
+    // Route::middleware('auth:client')->get('dashboard', function () {
+    //     return view('admin.dashboard');
+    // })->name('admin.dashboard');
+})->middleware('auth:client');
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),

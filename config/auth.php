@@ -44,6 +44,10 @@ return [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+          ],
     ],
 
     /*
@@ -68,7 +72,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AuthClient::class,
+            // 'table' => 'client_new',
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
