@@ -24,10 +24,10 @@ class ClientAuthController extends Controller
         //     // Handle invalid login attempt
         //     return redirect()->back()->withErrors(['email' => 'User not found.']);
         // }  
-        $credentials = $request->only('email');
-        dd(Auth::guard('client')->check(), Auth::check());
+        $credentials = $request->only('email', 'password');
+        // dd(Auth::guard('client')->check(), Auth::check());
     //    dd(   Auth::guard('client')->check());
-        if (Auth::guard('client')->attempt(['email' => $request->email])) {
+        if (Auth::guard('client')->attempt(['email' => $request->email, 'password' => $request->password])) {
              dd($request->all());
             return redirect()->route('admin.dashboard');
         }
