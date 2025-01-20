@@ -526,11 +526,11 @@ Route::middleware('auth')->group(function () {
     })->name('export.clients');
 
 
-
+Route::get('installment/papers/update_date', [PapersInstallController::class, 'updateInstallmentPapersDates'])->name('installment.papers.updateInstallmentPapersDates');
 Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
 Route::get('installment/papers/{status}', [PapersInstallController::class, 'index'])->name('installment.papers.status');
 Route::get('installment/papers/recieve_install/{id}', [PapersInstallController::class, 'recieve_install'])->name('installment.papers.recieve_install');
-Route::match(['get', 'post'], 'installment/papers/add/{slug}/{id}', [PapersInstallController::class, 'addToInstallmentPapers'])->name('installment.papers.addToInstallmentPapers');
+Route::match(['get', 'post'], 'installment/papers/{slug}/{id}', [PapersInstallController::class, 'addToInstallmentPapers'])->name('installment.papers.addToInstallmentPapers');
 Route::get('installment/papers/recieve_install_paper/{id}', [PapersInstallController::class, 'recieveInstallPaper'])->name('installment.papers.recieveInstallPaper');
 
     Route::get('installment/show-installment/{id}', [InstallmentController::class, 'show_installment'])->name('installment.show-installment');
