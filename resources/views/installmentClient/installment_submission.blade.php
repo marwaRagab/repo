@@ -727,7 +727,7 @@
                             <label class="form-label">
                                 مجموع الاقساط
                             </label>
-                            <input class="form-input form-control" type="text" name="cinet_installments_total" id="cinet_installments_total"
+                            <input class="form-input form-control" type="text" name="installment_total" id="cinet_installments_total"
                                 required />
                         </div>
                         <div class="form-group mb-3 col-6">

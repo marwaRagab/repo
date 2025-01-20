@@ -89,7 +89,7 @@ class InstallmentSubmissionController extends Controller
         $data->legal_indicator = $request->legal_indicator;
         $data->dead_loan = $request->dead_loan;
         $data->cinet_total_income = $request->cinet_total_income;
-        $data->cinet_installments_total = $request->cinet_installments_total;
+        $data->installment_total = $request->installment_total;
         $data->total_lated_installments = $request->total_lated_installments;
         $data->cinet_amount_limit = $request->cinet_amount_limit;
         $data->cinet_amount_limit_safi = $request->cinet_amount_limit_safi;
