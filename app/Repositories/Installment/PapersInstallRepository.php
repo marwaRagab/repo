@@ -16,9 +16,38 @@ class PapersInstallRepository
 {
     public function getAllCounters()
     {
+       /* $res= Installment::with(['client', 'paper', 'eqrarsDetail'])
+        ->where('type', 'installment')
+        ->where('status', 'finished')
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'not_finished');
+            })
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 0);
+                $query->where('paper_received', 1);
+            })
+->get();
+       dd($res);
+       */
         return [
-            'not_finished' => Eqrars_details::where('paper_received_checked', 0)->count(),
-            'received' => Eqrars_details::where('paper_received_checked', 1)->count(),
+            'not_finished' =>  Installment::with(['client', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received', 0);
+                })->count(),
+            'received' => Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'not_finished');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 0);
+                    $query->where('paper_received', 1);
+                })
+              ->count(),
             'tadqeeq' => Installment::with(['client', 'paper','eqrarsDetail'])
                 ->whereHas('paper', function ($query) {
                     $query->where('slug', 'my_index');
@@ -69,9 +98,36 @@ class PapersInstallRepository
                 ->where('tadqeeq_archive', 1)
                 ->where('archive_finished', 1)
                 ->where('archive_received', 0)->count(),
-            'eqrar_dain' => 0,
-            'eqrar_dain_recieved' => 0,
-            'archive_received'=> 0
+            'eqrar_dain' =>   Installment::with(['client', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+            ->where('laws', 1)
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_eqrar_dain_received', 0);
+            })->count(),
+            'eqrar_dain_recieved' =>   Installment::with(['client', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+            ->where('laws', 1)
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_eqrar_dain_received', 1);
+            })->count(),
+            'archive_received'=>  Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->whereHas('paper', function ($query) {
+                $query->where('slug', 'manage_review');
+            })
+            ->whereHas('eqrarsDetail', function ($query) {
+                $query->where('paper_received_checked', 1);
+                $query->where('paper_received', 1);
+                $query->where('paper_eqrar_dain_received', 0);
+            })
+            ->where('type', 'installment')
+            ->where('tadqeeq', 1)
+            ->where('manage_review', 1)
+            ->where('tadqeeq_archive', 1)
+            ->where('archive_finished', 1)
+            ->where('archive_received', 1)
+            ->where('archive_final', 0)->count(),
         ];
     }
 
@@ -157,7 +213,6 @@ ON DELETE SET NULL ON UPDATE CASCADE;
 
         $addData = [];
         $eqrarData = [];
-
         switch ($slug) {
             case 'not_finished':
                 $eqrarData['paper_received'] = 1;

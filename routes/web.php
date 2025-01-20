@@ -523,7 +523,7 @@ Route::middleware('auth')->group(function () {
     })->name('export.clients');
 
 
-
+Route::get('installment/papers/update_date', [PapersInstallController::class, 'updateInstallmentPapersDates'])->name('installment.papers.updateInstallmentPapersDates');
 Route::get('/installment/papers/data/{slug?}', [PapersInstallController::class, 'getAllData'])->name('installment.papers.getAllData');
 Route::get('installment/papers/{status}', [PapersInstallController::class, 'index'])->name('installment.papers.status');
 Route::get('installment/papers/recieve_install/{id}', [PapersInstallController::class, 'recieve_install'])->name('installment.papers.recieve_install');
