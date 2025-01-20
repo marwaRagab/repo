@@ -38,11 +38,37 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
         $this->data['courts'] = Court::with('government')->get();
         $color_array = ['bg-warning-subtle text-warning', 'bg-success-subtle text-success', 'bg-danger-subtle text-danger', 'px-4 bg-primary-subtle text-primary', 'bg-danger-subtle text-danger', 'me-1 mb-1  bg-warning-subtle text-warning'];
 
-        for ($i = 0; $i < count($this->data['courts']); $i++) {
-            $this->data['courts'][$i]['style'] = $color_array[$i];
+        $data  = Military_affair::where(['military_affairs.archived' => 0, 'military_affairs.status' => 'execute'])
+            ->with('installment', function ($query) {
+                return $query->where('finished', '=', 0);
+            })->with('military_amount')
 
+            ->orderBy('excute_actions_amount', 'desc')
+            ->get();
+        foreach ($data as $value){
+
+            $value->amount_finall = $value->military_amount->where('military_affairs_check_id',0)->sum('amount');
 
         }
+
+        $amountsByGovernorate = $data->groupBy('installment.client.governorate_id')->map(function ($items) {
+            return $items->sum('amount_finall');
+        });
+        $total=0;
+
+// Now loop through the courts
+        for ($i = 0; $i < count($this->data['courts']); $i++) {
+            $court = $this->data['courts'][$i];
+            $court['gov'] = Court::findOrFail($court['id'])->governorate_id;
+            $court['style'] = $color_array[$i];
+            $court['court_amount'] = $amountsByGovernorate->get($court['gov'], 0);
+            $total= $total + $court['court_amount'] ;
+        }
+
+
+        $this->data['courts_all_amount']=$total;
+
+
     }
 
     public function index(Request $request)
@@ -172,9 +198,6 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
                 'check_type' => 'required',
                 'amount' => 'required',
             ]);
-
-
-
             if ($request->hasFile('img_dir')) {
                 $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
                 $path = $request->file('img_dir')->move(public_path('military_affairs'), $filename);
@@ -365,6 +388,8 @@ class Excute_actionsRepository implements Excute_actionsRepositoryInterface
 
 
     }
+
+
 
 
 }

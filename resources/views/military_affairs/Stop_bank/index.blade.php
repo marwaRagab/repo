@@ -64,7 +64,7 @@
 
                 <a href="{{route('stop_bank',array('governorate_id' => $gov,'stop_bank_type'=> $bank_type , 'date' => $one,'bank' => $bank ))}}"
                    class="btn-filter bg-success-subtle text-success px-2  mx-1 mb-2   {{ request()->get('date') == $one ? 'active' : '' }}  ">
-                    {{now()->format('Y').'/'.now()->format('m').'/'.$one}}   ({{count_bank_date($one)}})
+                    {{now()->format('Y').'/'.now()->format('m').'/'.$one}}
                 </a>
             @endforeach
         </div>

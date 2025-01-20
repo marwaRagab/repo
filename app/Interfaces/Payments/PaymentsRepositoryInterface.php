@@ -10,6 +10,7 @@ interface PaymentsRepositoryInterface
     public function archive_all_in (Request $request);
     public function print_invoice($invoice_id,$installment_id,$id,$serial);
     public function set_archief($id);
+    public function set_archive($id);
     public function print_all($ids,$allserials ,$invoiceids);
     public function archieve_all($ids);
     public function invoices_installment_index(Request $request);
@@ -17,7 +18,7 @@ interface PaymentsRepositoryInterface
     public function export_all();
     public function print_invoice_export($id1,$id2);
     public function getPaymentsData(Request $request);
-
+    public function getArchivePaymentsData(Request $request);
     public function collect_affairs (Request $request);
     public function getcollect_affairsData (Request $request);
 

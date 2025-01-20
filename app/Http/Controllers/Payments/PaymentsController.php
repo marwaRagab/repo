@@ -47,6 +47,11 @@ class PaymentsController extends Controller
         return $this->paymentRepository->getPaymentsData($request);
 
     }
+    public function getArchivePaymentsData(Request $request)
+    {
+        return $this->paymentRepository->getArchivePaymentsData($request);
+
+    }
     public function invoices_installment_index(Request $request)
     {
         //
@@ -68,6 +73,13 @@ class PaymentsController extends Controller
     {
 
         return $this->paymentRepository->set_archief($id);
+
+
+    }
+    public function set_archive($id)
+    {
+
+        return $this->paymentRepository->set_archive($id);
 
 
     }
