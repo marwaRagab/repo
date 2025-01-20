@@ -367,10 +367,7 @@ if (!function_exists('log_move')) {
 if (!function_exists('change_status')) {
 
     function change_status($array_status, $id)
-    {
-
-
-        //dd($array_status);
+    {   
         if ($array_status->hasFile('img_dir')) {
             $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
             $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
@@ -380,18 +377,90 @@ if (!function_exists('change_status')) {
             $data_img_dir = '';
         }
 
-        $array_status = [
-            'type' => $array_status->type,
-            'type_id' => $array_status->type_id,
-            'date' => $array_status->date,
-            'note' => $array_status->note ?? $array_status->note,
-            'military_affairs_id' => $id,
-            'img_dir' => $data_img_dir,
-            'created_at' => date('Y-m-d H:i:s'),
-            'created_by' => Auth::user() ? Auth::user()->id : null,
-        ];
+        if($array_status->type == 'case_proof'){
+            $array_cars = [
+                'type' => 'stop_car',
+                'type_id' => 'stop_car_request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
 
-        \App\Models\Military_affairs\Military_affairs_status::create($array_status);
+            \App\Models\Military_affairs\Military_affairs_status::create($array_cars);
+
+            $array_bank = [
+                'type' => 'stop_bank',
+                'type_id' => 'stop_bank_request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+            \App\Models\Military_affairs\Military_affairs_status::create($array_bank);
+
+            $array_travel = [
+                'type' => 'stop_travel',
+                'type_id' => 'request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+            \App\Models\Military_affairs\Military_affairs_status::create($array_travel);
+
+            if($array_status->client_job == 'militray')
+            {
+                $array_travel = [
+                    'type' => 'Military_certificate',
+                    'type_id' => 'info_request',
+                    'date' => $array_status->date,
+                    'note' => $array_status->note ?? $array_status->note,
+                    'military_affairs_id' => $id,
+                    'img_dir' => $data_img_dir,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => Auth::user() ? Auth::user()->id : null,
+                ];
+                \App\Models\Military_affairs\Military_affairs_status::create($array_travel);
+            }
+            else
+            {
+                $array_salary = [
+                    'type' => 'stop_salary',
+                    'type_id' => 'stop_salary_request',
+                    'date' => $array_status->date,
+                    'note' => $array_status->note ?? $array_status->note,
+                    'military_affairs_id' => $id,
+                    'img_dir' => $data_img_dir,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => Auth::user() ? Auth::user()->id : null,
+                ];
+                \App\Models\Military_affairs\Military_affairs_status::create($array_salary);
+            }
+
+
+        }
+        else
+        {
+            $array_status = [
+                'type' => $array_status->type,
+                'type_id' => $array_status->type_id,
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+    
+            \App\Models\Military_affairs\Military_affairs_status::create($array_status);
+        }
     }
 }
 if (!function_exists('get_all_notes')) {
