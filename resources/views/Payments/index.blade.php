@@ -3,6 +3,8 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
+        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('archive_all_in') }}">
+            الارشيف </a>
         <div class="form-group">
     <select class="form-select" id="dateSelect" name="month">
         <option selected disabled>اختر التاريخ</option>

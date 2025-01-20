@@ -175,7 +175,8 @@
                                 @if(Request::get('certificate_type')=='info_request')
                                     <td>
 
-                                        <div class="btn-group dropup me-6 my-2 d-block ">
+                                        <div class="btn-group me-6 my-2 d-block dropdown">
+
                                             <button class="btn bg-success-subtle text-success dropdown-toggle"
                                                     type="button"
                                                     id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -186,13 +187,15 @@
 
 
                                                 <li>
-                                                    <a class="btn-static bg-secondary-subtle text-secondary rounded-0 w-100 mt-2"
+                                                    <a class="dropdown-item btn-static bg-secondary-subtle text-secondary rounded-0 w-100 mt-2"
+
                                                        href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة شهادة الراتب</a>
                                                 </li>
 
                                                 <li>
-                                                    <a class="btn-static bg-danger-subtle text-danger rounded-0 w-100 mt-2"
+                                                    <a class="dropdown-item btn-static bg-danger-subtle text-danger rounded-0 w-100 mt-2"
+
                                                        href="" {{ $item->emp_id == 0 || $item->emp_id == null ? 'disabled' : '' }}>
                                                         طباعة الرقم العسكرى </a>
                                                 </li>
@@ -799,4 +802,3 @@
 
 
 </script>
-
