@@ -80,75 +80,67 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
 
     public function all_military_affairs_count($type = '')
     {
-        $extra = '';
-
-        switch ($type) {
-            case ('open_file'):
-                $extra = ['military_affairs.status' => 'military'];
-                break;
-            case ('images'):
-                $extra = ['military_affairs.status' => 'execute_alert', 'military_affairs.jalasat_alert_status' => 'accepted'];
-                break;
-            case ('execute_alert'):
-                $extra = ['military_affairs.status' => 'execute_alert', 'military_affairs.jalasat_alert_status' => '!=accepted'];
-                break;
-            case ('case_proof'):
-                $extra = ['military_affairs.status' => 'case_proof', 'military_affairs.jalasat_alert_status' => 'accepted'];
-                break;
-            case ('Military_certificate'):
-                $extra = ['clients.job_type' => 'military', 'stop_salary' => 0, 'cancel_certificate' => 1];
-                break;
-            case ('stop_bank'):
-
-                $extra = ['bank_archive' => 0, 'military_affairs.status' => 'execute', 'military_affairs.stop_bank' => 1];
-                break;
-            case ('stop_car'):
-
-                $extra = ['military_affairs.status' => 'execute', 'military_affairs.stop_car_archive' => 0, 'military_affairs.stop_car' => 1];
-                break;
-
-            case ('stop_salary'):
-
-                $extra = ['clients.job_type' => 'military', 'military_affairs.stop_salary' => 1, 'military_affairs.status' => 'execute'];
-                break;
-
-            case ('stop_travel'):
-
-                $extra = ['military_affairs.status' => 'execute', 'military_affairs.stop_travel' => 1];
-                break;
-
-            case ('eqrar_dain'):
-
-                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 0, 'installment.type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => null];
-                break;
-            case ('eqrar_dain_received'):
-
-                $extra = ['installment.laws' => 1, 'eqrars_details.paper_eqrar_dain_received' => 1, 'installment.type' => 'installment', 'installment.status' => 'finished', 'military_affairs.status' => ''];
-                break;
-
-            case ('excute_actions'):
-
-                $extra = ['military_affairs.status' => 'execute'];
-                break;
-
-            default:
-                $extra = array();
-        }
-
-        $arr = ['installment.finished' => 0, 'military_affairs.archived' => 0 , 'installment.laws' => 1];
-        if (!empty($extra)) {$mr = array_merge($arr, $extra);} else { $mr = $arr;}
-
-        $count = DB::table('military_affairs')
-            ->select('military_affairs.stop_car_archive', 'military_affairs.jalasat_alert_status', 'installment.id', 'clients.name_ar', 'clients.civil_number', 'installment.date',
-            'installment.qard_paper', 'military_affairs.eqrar_dain_amount', 'installment.eqrardain_date', 'installment.amana_paper', 'military_affairs.id', 'military_affairs.date', 
-            'military_affairs.emp_id', 'clients.governorate_id', 'clients.job_type', 'stop_salary', 'clients.house_id', 'clients.phone_ids','military_affairs.status',
-            'eqrars_details.paper_eqrar_dain_received','installment_id','installment.laws','cancel_certificate','stop_bank','stop_car','stop_travel','bank_archive','military_affairs_settlement.type')
-            ->where( $mr )
-            ->leftJoin('installment', 'military_affairs.installment_id', '=', 'installment.id')
-            ->leftJoin('clients', 'installment.client_id', '=', 'clients.id')
-            ->leftJoin('eqrars_details', 'installment.eqrars_id', '=','eqrars_details.id')
-            ->leftJoin('military_affairs_settlement', 'military_affairs.id', '=', 'military_affairs_settlement.military_affairs_id')
-            ->orderBy('installment.id', 'asc')->get();
+        $count = Military_Affair::with('installment')
+                                ->with('status_all')
+                                ->whereHas('installment', function ($query) {
+                                    $query->where('finished',0)->where('laws',1)->orderBy('id', 'asc');
+                                })
+                                ->with('installment.client')
+                                ->with('installment.installment_eqrardain')
+                                ->when($type === 'open_file', function ($q) use ($type) {
+                                    $q->where('status', 'military');
+                                })
+                                ->when($type === 'images', function ($q) use ($type) {
+                                    $q->where('status', 'images')->where('jalasat_alert_status','accepted');
+                                })
+                                ->when($type === 'execute_alert', function ($q) use ($type) {
+                                    $q->where('status', 'execute_alert')->where('jalasat_alert_status','!=','accepted');
+                                })
+                                ->when($type === 'case_proof', function ($q) use ($type) {
+                                    $q->where('status', 'case_proof')->where('jalasat_alert_status','accepted');
+                                })
+                                ->when($type === 'Military_certificate', function ($q) use ($type) {
+                                    $q
+                                    ->whereHas('installment.client', function ($query) {
+                                        $query->where('job_type','military');
+                                    })
+                                    ->where('stop_salary', 0)->where('cancel_certificate',1);
+                                })
+                                ->when($type === 'stop_bank', function ($q) use ($type) {
+                                    $q->where('status', 'execute')->where('stop_bank',1)->where('bank_archive',0);
+                                })
+                                ->when($type === 'stop_car', function ($q) use ($type) {
+                                    $q->where('status', 'execute')->where('stop_car',1)->where('stop_car_archive',0);
+                                })
+                                ->when($type === 'stop_travel', function ($q) use ($type) {
+                                    $q->where('status', 'execute')->where('stop_travel',1);
+                                })
+                                ->when($type === 'eqrar_dain', function ($q) use ($type) {
+                                    $q
+                                    ->whereHas('installment', function ($query) {
+                                        $query->where('status','finished')->where('type','installment');
+                                    })
+                                    ->whereHas('installment.installment_eqrardain', function ($query) {
+                                        $query->where('paper_eqrar_dain_received',0);
+                                    })
+                                    ->where('status', null);
+                                })
+                                ->when($type === 'eqrar_dain_received', function ($q) use ($type) {
+                                    $q
+                                    ->whereHas('installment', function ($query) {
+                                        $query->where('status','finished')->where('type','installment');
+                                    })
+                                    ->whereHas('installment.installment_eqrardain', function ($query) {
+                                        $query->where('paper_eqrar_dain_received',1);
+                                    })
+                                    ->where('status', null);
+                                })
+                                ->when($type === 'excute_actions', function ($q) use ($type) {
+                                    $q->where('status', 'execute');
+                                })
+                                ->where('archived',0)
+                                ->get();
+                    //  dd($count);           
         return $count;
 
     }

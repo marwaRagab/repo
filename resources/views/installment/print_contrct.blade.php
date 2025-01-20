@@ -104,36 +104,29 @@
                     له
                 </p>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered border">
 
                     <tbody>
                     @php
                         $all_madion_amount=round(($installment->installment*$installment->months ),0);
                         $last_amoun_required=((($installment->amount-$installment->first_amount)*25)/100);
                     @endphp
-                    <tr>
-                        <th scope="row">المبلغ المستحق</th>
-                        <td>{{number_format(($all_madion_amount ), 3, '.', ',')}} دك</td>
-                        <td>تاريخ تسديد القسط الأول</td>
-
-                        <td>{{$installment->start_date}}</td>
+                    <tr style="border: 1px solid black !important;">
+                        <th style="border: 1px solid black !important;" scope="row">المبلغ المستحق</th>
+                        <td style="border: 1px solid black !important;">{{number_format(($all_madion_amount ), 3, '.', ',')}} دك</td>
+                        <td style="border: 1px solid black !important;">تاريخ تسديد القسط الأول</td>
+                        <td style="border: 1px solid black !important;">{{$installment->start_date}}</td>
                     </tr>
-                    <tr>
-
-
-
-
-
-
-                        <th scope="row">القسط</th>
-                        <td>{{$installment->installment}} دك</td>
-                        <td>تاريخ تسديد القسط الأخير</td>
-                        <td>{{\Carbon\Carbon::parse($installment->start_date)->addMonth($installment->months)->subMonth(1)->format('Y-m-d')}}</td>
+                    <tr style="border: 1px solid black !important;">
+                        <th style="border: 1px solid black !important;" scope="row">القسط</th>
+                        <td style="border: 1px solid black !important;">{{$installment->installment}} دك</td>
+                        <td style="border: 1px solid black !important;">تاريخ تسديد القسط الأخير</td>
+                        <td style="border: 1px solid black !important;">{{\Carbon\Carbon::parse($installment->start_date)->addMonth($installment->months)->subMonth(1)->format('Y-m-d')}}</td>
                     </tr>
-                    <tr>
+                    <tr style="border: 1px solid black !important;">
 
-                        <td> مدة الاتفاق</td>
-                        <td>{{$installment->months}} شهر</td>
+                        <td style="border: 1px solid black !important;"> مدة الاتفاق</td>
+                        <td style="border: 1px solid black !important;">{{$installment->months}} شهر</td>
                     </tr>
 
 

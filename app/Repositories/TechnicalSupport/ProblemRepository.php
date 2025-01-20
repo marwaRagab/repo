@@ -240,7 +240,7 @@ class ProblemRepository implements ProblemRepositoryInterface
     {
         $request->validate([
             'problem_id' => 'required',
-            'descr' => 'required|string|max:255',
+            'descr' => 'required|string',
             'file' => 'file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
         ]);
 

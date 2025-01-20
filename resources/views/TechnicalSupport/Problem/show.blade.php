@@ -189,7 +189,10 @@
                                     </video>
                                 @elseif (in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif','PNG','JPG']))
                                     <!-- Image -->
-                                    <img src="{{ asset( $reply->file) }}" alt="Attachment" width="200">
+                                    <a href="{{ asset( $reply->file) }}" target="_blank"
+                                        class="btn btn-primary btn-sm"> عرض الصورة
+                                    </a>
+                                    <!-- <img src="{{ asset( $reply->file) }}" alt="Attachment" width="200" > -->
                                 @elseif ($fileExtension === 'pdf')
                                     <!-- PDF -->
                                     <a href="{{ asset( $reply->file) }}" target="_blank"

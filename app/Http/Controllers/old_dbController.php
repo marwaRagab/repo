@@ -1029,14 +1029,13 @@ class old_dbController extends Controller
 
        // Assuming you know the model related to the item (e.g. Reminder)
        foreach ($items as $item) {
-           if ($item->is_reminder_amount == 0) {
+
 
                $model = Military_affair::findorfail($item->my_id); // Find the Eloquent model
-
                $model->reminder_amount = $item->ALL_reminder;
                $model->payment_done = $item->pay_done;
                $model->save(); // Save it to the database
-           }
+
        }
 
 
@@ -1050,6 +1049,21 @@ class old_dbController extends Controller
 
 
    }
+
+    public  function finished_installment(){
+        $items=Military_affair::where(['archived'=>0,'reminder_amount'=>0])->with('installment', function ($query) {
+            return $query->where('finished', '=', 0);
+        })->get();
+
+        foreach ($items as $item){
+            if($item->installment){
+                $item->installment->finished=1;
+                $item->installment->save();
+            }
+
+        }
+
+    }
 
 }
 

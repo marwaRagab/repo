@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Court;
 use Carbon\Carbon;
 use App\Models\Log;
 use App\Models\User;
+use App\Models\Court;
 use App\Models\Governorate;
 use Illuminate\Http\Request;
 use App\Models\FixedPrintData;
@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\military_affairs_deligation;
 use App\Models\military_affairs_deligations;
+use Illuminate\Support\Facades\Log as LaravelLog;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_times;
-use Illuminate\Support\Facades\Log as LaravelLog;
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)
@@ -367,10 +367,7 @@ if (!function_exists('log_move')) {
 if (!function_exists('change_status')) {
 
     function change_status($array_status, $id)
-    {
-
-
-        //dd($array_status);
+    {   
         if ($array_status->hasFile('img_dir')) {
             $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
             $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
@@ -380,18 +377,90 @@ if (!function_exists('change_status')) {
             $data_img_dir = '';
         }
 
-        $array_status = [
-            'type' => $array_status->type,
-            'type_id' => $array_status->type_id,
-            'date' => $array_status->date,
-            'note' => $array_status->note ?? $array_status->note,
-            'military_affairs_id' => $id,
-            'img_dir' => $data_img_dir,
-            'created_at' => date('Y-m-d H:i:s'),
-            'created_by' => Auth::user() ? Auth::user()->id : null,
-        ];
+        if($array_status->type == 'case_proof'){
+            $array_cars = [
+                'type' => 'stop_car',
+                'type_id' => 'stop_car_request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
 
-        \App\Models\Military_affairs\Military_affairs_status::create($array_status);
+            \App\Models\Military_affairs\Military_affairs_status::create($array_cars);
+
+            $array_bank = [
+                'type' => 'stop_bank',
+                'type_id' => 'stop_bank_request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+            \App\Models\Military_affairs\Military_affairs_status::create($array_bank);
+
+            $array_travel = [
+                'type' => 'stop_travel',
+                'type_id' => 'request',
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+            \App\Models\Military_affairs\Military_affairs_status::create($array_travel);
+
+            if($array_status->client_job == 'militray')
+            {
+                $array_travel = [
+                    'type' => 'Military_certificate',
+                    'type_id' => 'info_request',
+                    'date' => $array_status->date,
+                    'note' => $array_status->note ?? $array_status->note,
+                    'military_affairs_id' => $id,
+                    'img_dir' => $data_img_dir,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => Auth::user() ? Auth::user()->id : null,
+                ];
+                \App\Models\Military_affairs\Military_affairs_status::create($array_travel);
+            }
+            else
+            {
+                $array_salary = [
+                    'type' => 'stop_salary',
+                    'type_id' => 'stop_salary_request',
+                    'date' => $array_status->date,
+                    'note' => $array_status->note ?? $array_status->note,
+                    'military_affairs_id' => $id,
+                    'img_dir' => $data_img_dir,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'created_by' => Auth::user() ? Auth::user()->id : null,
+                ];
+                \App\Models\Military_affairs\Military_affairs_status::create($array_salary);
+            }
+
+
+        }
+        else
+        {
+            $array_status = [
+                'type' => $array_status->type,
+                'type_id' => $array_status->type_id,
+                'date' => $array_status->date,
+                'note' => $array_status->note ?? $array_status->note,
+                'military_affairs_id' => $id,
+                'img_dir' => $data_img_dir,
+                'created_at' => date('Y-m-d H:i:s'),
+                'created_by' => Auth::user() ? Auth::user()->id : null,
+            ];
+    
+            \App\Models\Military_affairs\Military_affairs_status::create($array_status);
+        }
     }
 }
 if (!function_exists('get_all_notes')) {
@@ -508,6 +577,17 @@ if (!function_exists('count_client')) {
     function count_client($array_data)
     {
         $governorates = Governorate::with('clients')->get();
+    }
+}
+if (!function_exists('get_admin_user_name')) {
+    function get_admin_user_name($user_id)
+    {
+        $item =   User::findOrFail($user_id);
+        if (empty($item)) {
+            echo 'لا يوجد ';
+        } else {
+            echo $item['name_ar'] ;
+        }
     }
 }
 if (!function_exists('get_different_dates')) {
@@ -838,24 +918,51 @@ if (!function_exists('numberToArabicWords')) {
             100 => 'مئة',
             200 => 'مئتان',
             1000 => 'ألف',
-            // Add more numbers if necessary
         ];
 
+        // Handle exact matches
         if (array_key_exists($number, $arabic_numbers)) {
             return $arabic_numbers[$number];
         }
 
-        // For numbers between 21 and 99 (like 65)
-        $tens = floor($number / 10) * 10;
-        $ones = $number % 10;
+        // Handle numbers between 21 and 99
+        if ($number < 100) {
+            $tens = floor($number / 10) * 10;
+            $ones = $number % 10;
 
-        if ($tens && $ones) {
             return $arabic_numbers[$tens] . ' و ' . $arabic_numbers[$ones];
         }
 
-        return $arabic_numbers[$number] ?? $number;
+        // Handle numbers >= 100
+        if ($number < 1000) {
+            $hundreds = floor($number / 100) * 100;
+            $remainder = $number % 100;
+
+            if ($remainder) {
+                return $arabic_numbers[$hundreds] . ' و ' . numberToArabicWords($remainder);
+            }
+
+            return $arabic_numbers[$hundreds];
+        }
+
+        // Handle numbers >= 1000
+        if ($number >= 1000) {
+            $thousands = floor($number / 1000);
+            $remainder = $number % 1000;
+
+            $result = numberToArabicWords($thousands) . ' ' . $arabic_numbers[1000];
+
+            if ($remainder) {
+                $result .= ' و ' . numberToArabicWords($remainder);
+            }
+
+            return $result;
+        }
+
+        return (string)$number; // Default to returning the number as a string
     }
 }
+
 if (!function_exists('getOrderDetails')) {
     function getOrderDetails($id)
     {

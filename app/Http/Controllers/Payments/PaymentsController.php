@@ -30,6 +30,13 @@ class PaymentsController extends Controller
         return $this->paymentRepository->index($request);
 
     }
+    public function archive_all_in(Request $request)
+    {
+        //
+        return $this->paymentRepository->archive_all_in($request);
+
+    }
+    
     public function print_all_in(Request $request)
     {
         $data = $request->all(); // Retrieve all query parameters
@@ -38,6 +45,11 @@ class PaymentsController extends Controller
     public function getPaymentsData(Request $request)
     {
         return $this->paymentRepository->getPaymentsData($request);
+
+    }
+    public function getArchivePaymentsData(Request $request)
+    {
+        return $this->paymentRepository->getArchivePaymentsData($request);
 
     }
     public function invoices_installment_index(Request $request)
@@ -64,6 +76,13 @@ class PaymentsController extends Controller
 
 
     }
+    public function set_archive($id)
+    {
+
+        return $this->paymentRepository->set_archive($id);
+
+
+    }
     public function archieve_all($ids)
     {
 
@@ -72,10 +91,10 @@ class PaymentsController extends Controller
 
     }
 
-    public function print_all($ids,$allserials)
+    public function print_all($ids,$allserials ,$invoiceids)
     {
 
-        return $this->paymentRepository->print_all($ids,$allserials);
+        return $this->paymentRepository->print_all($ids,$allserials ,$invoiceids);
 
 
     }
