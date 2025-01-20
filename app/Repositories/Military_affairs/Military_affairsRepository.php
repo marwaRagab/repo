@@ -91,7 +91,7 @@ class Military_affairsRepository implements Military_affairsRepositoryInterface
                                     $q->where('status', 'military');
                                 })
                                 ->when($type === 'images', function ($q) use ($type) {
-                                    $q->where('status', 'execute_alert')->where('jalasat_alert_status','accepted');
+                                    $q->where('status', 'images')->where('jalasat_alert_status','accepted');
                                 })
                                 ->when($type === 'execute_alert', function ($q) use ($type) {
                                     $q->where('status', 'execute_alert')->where('jalasat_alert_status','!=','accepted');
