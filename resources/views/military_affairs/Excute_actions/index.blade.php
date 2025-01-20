@@ -1,21 +1,34 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
+
         <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
             الكل ({{ count_court('' ,'excute_actions',null,null) }})
+
+            <p>({{$courts_all_amount}} )
+                د.ك
+            </p>
         </a>
+
+
         @foreach($courts as $court)
+
+
 
         <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
             class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
-            ({{ count_court($court->id ,'excute_actions',null,null) }})
+            ({{ count_court($court->id ,'excute_actions',null,null) }})  ({{$court->court_amount}})
+            <p>({{$court->court_amount}} )
+                د.ك
+            </p>
         </a>
 
         @endforeach
+
     </div>
 </div>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
-        <h4 class="card-title mb-0"> الشيكات المستلمة</h4>
+        <h4 class="card-title mb-0">  رصيد التنفيذ</h4>
         <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-2  " href="{{route('all_checks')}}">
             الشيكات المستلمة</a>
     </div>
@@ -80,7 +93,15 @@
                                 </button>
                                 <ul class="dropdown-menu rounded-0" aria-labelledby="dropdownMenuButton">
                                     <li>
-                                        <a class="btn btn-success rounded-0 w-100 mt-2" href=""> صورة الاجراءات المالية
+
+                                        <a class="btn btn-success rounded-0 w-100 mt-2 {{ $item->excute_actions_last_img_dir  == null || $item->excute_actions_last_img_dir  == '' || $item->excute_actions_last_img_dir == 0   ? 'disabled' : '' }}"
+                                           {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+                                           onclick="checkFileAndRedirect(
+                    '{{  $item->excute_actions_last_img_dir && $item->excute_actions_last_img_dir  !== '0' ? 'https://electron-kw.net/' . $item->excute_actions_last_img_dir : '#' }}',
+                    '{{  $item->qard_paper_img && $item->excute_actions_last_img_dir  !== '0' ? 'https://electron-kw.com/' . $item->excute_actions_last_img_dir  : '#' }}'
+                ); return false;"
+                                           target="_blank">
+                                            صورة الاجراءات المالية
                                         </a>
                                     </li>
                                     <li>
@@ -648,6 +669,7 @@
     </div>
 </div>
 
+@include('military_affairs.Execute_alert.print.script')
 
 <!-- modals -->
 <script>
