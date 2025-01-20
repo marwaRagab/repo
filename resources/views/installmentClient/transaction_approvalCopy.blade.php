@@ -105,7 +105,7 @@
                 <input onchange="calculate();"
                     class="form-input form-control"
                     placeholder="مبلغ الموافقة" type="text" value="{{ $data->cost_install }}" id="price_cost"
-                    name="price_cost"  value="{{ old('price_cost') }}"/>
+                    name="price_cost"  value="{{ old('price_cost') }}" readonly/>
 
                     @error('price_cost')
                         <div class="text-danger">{{ $message }}</div>
@@ -1113,16 +1113,11 @@
                         </th>
                         <td> {{ $data->ministry_working->name_ar ?? 'لايوجد' }}</td>
 
-
-
                     </tr>
                     <tr>
                         <th>
                             مجموع الأقساط </th>
                         <td> {{ $data->installment_total ?? 'لايوجد' }}</td>
-
-
-
 
                     </tr>
                     <tr>
@@ -1130,18 +1125,11 @@
                             مجموع مديونية الساينت </th>
                         <td> {{ $total_cient ?? 'لايوجد' }}</td>
 
-
-
-
                     </tr>
                     <tr>
                         <th>
                             الوسيط </th>
                         <td> {{ $data->Boker->name_ar ?? 'لايوجد' }}</td>
-
-
-
-
 
                     </tr>
                     <tr>
