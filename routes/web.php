@@ -137,6 +137,7 @@ Route::get('/noimage', function () {
     return view('noimage');
 })->name('noimage');
 Route::get('/db/{type}', [old_dbController::class, 'index']);
+Route::get('/finished_installment', [old_dbController::class, 'finished_installment']);
 Route::get('/get_reminder_all', [old_dbController::class, 'get_reminder']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
