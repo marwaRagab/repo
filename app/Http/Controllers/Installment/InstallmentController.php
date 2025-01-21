@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Installment;
 
 ini_set('memory_limit', '600M');
 
-use App\Models\Military_affairs\Military_affairs_check;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Client;
@@ -12,10 +11,12 @@ use App\Models\ClientImg;
 use App\Models\Installment;
 use App\Models\Nationality;
 use Illuminate\Http\Request;
+use App\Models\ClientWorking;
 use App\Models\InstallmentCar;
 use App\Models\InstallmentNote;
 use App\Models\InstallmentIssue;
 use App\Models\Installment_month;
+use App\Models\Prev_cols_clients;
 use App\Models\PurchaseOrderItem;
 use App\Models\Installment_Client;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,7 @@ use App\Models\InstallmentClientNote;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Military_affairs\Military_affair;
+use App\Models\Military_affairs\Military_affairs_check;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\InvoicesInstallment\Invoices_installment;
 use App\Models\Military_affairs\Military_affairs_amount;
@@ -381,7 +383,9 @@ class InstallmentController extends Controller
         }
 
         $data['militaryAffair'] = Military_affair::where('installment_id',$id)->first();
-
+        $data['ClientWorking'] = ClientWorking::where('installment_clients_id', $data['Installment']->installment_clients)
+        ->get();
+        $data['Installment_Clients'] = Installment_Client::with(['user', 'ministry_working', 'bank'])->where('id', $data['Installment']->installment_clients)->get();
         // order items
 
         $data['view'] = 'installment/show_details';
