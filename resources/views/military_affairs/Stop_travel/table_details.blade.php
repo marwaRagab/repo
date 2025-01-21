@@ -287,7 +287,7 @@
         <td>{{$final_date[0]}}</td>
 
     @else
-     
+
         <td>
             <button class="btn btn-success me-6 my-2 @if ($item->emp_id == 0 || $item->emp_id == null  ) disabled @endif" data-bs-toggle="modal"
                     data-bs-target="#convert_resuest-{{$item->id}}"   {{ ($item->status_all->where('type_id','stop_travel_finished')->first() ) ? 'disabled' : '' }}>
@@ -396,6 +396,10 @@
                         <span class="badge ms-auto text-bg-secondary">{{count($item->all_notes)}}</span>
                         الملاحظات </a>
                 </li>
+                <a class="btn btn-warning rounded-0 w-100 mt-2   {{ $item->emp_id == null || $item->emp_id == '' ||  $item->emp_id == 0   ? 'disabled' : '' }}"
+                   href="{{url('show_settlement/'.$item->id)}}">
+                    تحويل للتسوية
+                </a>
 
             </ul>
 

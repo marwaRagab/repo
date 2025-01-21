@@ -236,7 +236,7 @@
 
                 @endphp
 
-                    @if( Request::has('stop_bank_type') &&  Request::get('stop_bank_type') == 'stop_bank_doing' )
+
 
                         <li>
                             <a class="btn btn-success rounded-0 w-100 mt-2   {{ $item->emp_id == null || $item->emp_id == '' ||  $item->emp_id == 0   ? 'disabled' : '' }}"
@@ -246,7 +246,7 @@
                         </li>
 
 
-                @endif
+
 
                 @if(Request::has('stop_bank_type') &&  Request::get('stop_bank_type') !='stop_bank_doing' )
                     @if(Request::get('stop_bank_type') !='stop_bank_cancel')
