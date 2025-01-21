@@ -115,7 +115,9 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 $month = $date->format('m');
                 return $query->whereYear('invoices_installment.date', $year)->whereMonth('invoices_installment.date', $month);
             })
-            ->where('branch_id', Auth::user()->branch_id)
+            ->when(Auth::user()->role_id != 1, function ($query) {
+                return $query->where('branch_id', Auth::user()->branch_id);
+            })
             ->with([
                 'installment',
                 'install_month',
@@ -807,7 +809,7 @@ private function convertToArabicWords($amount)
 
     // Loop through the invoices
     foreach ($invoices as $invoice) {
-
+        if ($invoice->print_status != 'done') {
         $data['invoice'] = $invoice;
         $id = $invoice->installment_id;
 
@@ -848,6 +850,7 @@ private function convertToArabicWords($amount)
 
         $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
         echo view("Payments/print_invoice", $data);
+}
     }
 
     return;
