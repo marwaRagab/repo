@@ -12,10 +12,12 @@ use App\Models\OrderItem;
 use App\Models\Installment;
 use App\Models\Nationality;
 use Illuminate\Http\Request;
+use App\Models\ClientWorking;
 use App\Models\InstallmentCar;
 use App\Models\InstallmentNote;
 use App\Models\InstallmentIssue;
 use App\Models\Installment_month;
+use App\Models\Prev_cols_clients;
 use App\Models\PurchaseOrderItem;
 use App\Models\Installment_Client;
 use Illuminate\Support\Facades\DB;
@@ -417,7 +419,10 @@ class InstallmentController extends Controller
 
         }
 
-        $data['militaryAffair'] = Military_affair::where('installment_id', $id)->first();
+        $data['militaryAffair'] = Military_affair::where('installment_id',$id)->first();
+        $data['ClientWorking'] = ClientWorking::where('installment_clients_id', $data['Installment']->installment_clients)
+        ->get();
+        $data['Installment_Clients'] = Installment_Client::with(['user', 'ministry_working', 'bank'])->where('id', $data['Installment']->installment_clients)->get();
 
         // order items
 
