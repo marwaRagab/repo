@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Client;
 use App\Models\ClientImg;
+use App\Models\OrderItem;
 use App\Models\Installment;
 use App\Models\Nationality;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class InstallmentController extends Controller
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
         $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
-                                            ->where('finished',0)->where('status','finished')->OrderBy('installment.id', 'desc')->get();
+            ->where('finished', 0)->where('status', 'finished')->OrderBy('installment.id', 'desc')->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
         if ($data) {
@@ -131,17 +132,19 @@ class InstallmentController extends Controller
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-      //  $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
+        //  $data['Installment']= Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs','installment_client'])->get();
 
         $data['Installment'] = Installment::with(['user', 'client', 'eqrar_not_recieve', 'installment_months', 'militay_affairs', 'installment_client'])
-                              ->where('finished', '1')->get();
+            ->where('finished', '1')->get();
         // $data['preclient'] = Prev_cols_clients::with('client_old')->where('id', $data['Installment']->client_id)->first();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
-        if ($data) {$user_id = 1;
+        if ($data) {
+            $user_id = 1;
             //   $user_id =  Auth::user()->id,
             $message = "تم دخول صفحة الارشيف فى عملاء الاقساط";
-            $this->log($user_id, $message);}
+            $this->log($user_id, $message);
+        }
 
         $data['view'] = 'installment/archive';
         return view('layout', $data, compact('breadcrumb'));
@@ -169,14 +172,15 @@ class InstallmentController extends Controller
         $data['Client'] = Client::with(['user', 'client_address', 'client_phone'])->get();
         //  $data = Installment::with(['user','client','eqrar_not_recieve','installment_months','militay_affairs'])->get();
 
-        if ($data) {$user_id = 1;
+        if ($data) {
+            $user_id = 1;
             //   $user_id =  Auth::user()->id,
             $message = "تم دخول صفحة احصائيات العملاء";
-            $this->log($user_id, $message);}
+            $this->log($user_id, $message);
+        }
 
         $data['view'] = 'installment/excel';
         return view('layout', $data, compact('breadcrumb'));
-
     }
 
     public function show_installment($id)
@@ -213,13 +217,49 @@ class InstallmentController extends Controller
             $data['Installment']->test = Installment_Client::findOrFail($data['Installment']->installment_clients)->cinet_installment;
         }
 
-        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image','get_ministry'])
-
+        $data['Client'] = Client::with(['user', 'client_address', 'client_phone', 'client_image', 'get_ministry'])
             ->where('id', $data['Installment']->client_id)
             ->first();
-        $data['OrderItem'] = DB::table('orders_items')->where('order_id', $data['Installment']->order_id)->get();
+
+        // $data['OrderItem'] = OrderItem::with(['product_order' ,'product_order.mark','product_order.class'])->where('order_id', $data['Installment']->order_id)->get();
+
+        // dd($data['OrderItem']);
+
+        $orderItems = OrderItem::with(['product_order.mark', 'product_order.class'])
+            ->where('installment_id', $data['Installment']->id)
+            ->get();
+
+
+
+        // Group the OrderItems by mark, product_id, and class
+        $groupedOrderItems = $orderItems->groupBy(function ($item) {
+            return  $item->product_id;
+        });
+        // dd($groupedOrderItems);
+
+        // Merge items and update a counter
+        $data['OrderItem'] = $groupedOrderItems->map(function ($items, $key) {
+            $baseItem = $items->first();
+
+            // dd($baseItem);
+            $counter = 0;
+
+            foreach ($items as $item) {
+                $counter += $item->counter; // Adjust to the appropriate field
+            }
+            // dd($counter);
+
+            $baseItem->counter = $counter; // Update the quantity
+            return $baseItem;
+        });
+
+
+
+
+
         $data['purchase_orders_items'] = PurchaseOrderItem::with('product')->where('order_id', $data['Installment']->order_id)->get();
 
+        // dd($data['purchase_orders_items']);
         $data['installment_months'] = Installment_month::where('installment_id', $id)->orderBy('date')->get();
 
         $data['count_installment_months'] = Installment_month::where('installment_id', $id)->where('status', 'done')->where('installment_type', '!=', 'first_amount')->where('installment_type', '!=', 'law_percent')->count();
@@ -242,9 +282,8 @@ class InstallmentController extends Controller
             ->where('status', 'done')
             ->where('installment_type', ['first_amount'])
             ->first();
-        if( $data['first_amount']){
-            $data['first_invoice'] = Invoices_installment::where(['installment_id' =>$id,'install_month_id'=>$data['first_amount']['id']])->first();
-
+        if ($data['first_amount']) {
+            $data['first_invoice'] = Invoices_installment::where(['installment_id' => $id, 'install_month_id' => $data['first_amount']['id']])->first();
         }
 
         //$data['total_madionia1'] = $data['done_amount'] + $data['not_done_amount'];
@@ -296,19 +335,18 @@ class InstallmentController extends Controller
         $military_affair = Military_affair::where('installment_id', $id)->first();
 
 
-       if ($installment->laws == 1  ) {
-           $data['total_madionia1'] =$military_affair->eqrar_dain_amount ;
-            $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->get();
-            $data['mil_check'] = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->get();
+        if ($installment->laws == 1) {
+            $data['total_madionia1'] = $military_affair->eqrar_dain_amount;
+            $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->get();
+            $data['mil_check'] = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
-            $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
-            $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
+            $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->sum('amount');
+            $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->sum('amount');
             $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
-
         } else {
 
             $data['sum'] = $data['not_done_amount'];
-           $data['total_madionia1'] =$installment->eqrardain_amount ;
+            $data['total_madionia1'] = $installment->eqrardain_amount;
         }
 
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();
@@ -316,13 +354,12 @@ class InstallmentController extends Controller
 
         // $data['invoices'] = Invoices_installment::with('install_month', 'installment')
         //     ->where('installment_id', $id)->get();
-      /*  $data['invoices'] = Invoices_installment::with('install_month', 'installment')
+        /*  $data['invoices'] = Invoices_installment::with('install_month', 'installment')
             ->where('installment_id', $id)->where('payment_type','!=','check')->get();*/
 
-        $data['invoices'] = Installment_month::
-            where('installment_id', $id)->where('status','=','done')->groupBy('payment_date')->get();
+        $data['invoices'] = Installment_month::where('installment_id', $id)->where('status', '=', 'done')->groupBy('payment_date')->get();
 
-        foreach ($data['invoices'] as $value){
+        foreach ($data['invoices'] as $value) {
 
             $value->sum_amount = Installment_month::where('installment_id', $id)
                 ->where('status', '=', 'done')
@@ -386,6 +423,7 @@ class InstallmentController extends Controller
         $data['ClientWorking'] = ClientWorking::where('installment_clients_id', $data['Installment']->installment_clients)
         ->get();
         $data['Installment_Clients'] = Installment_Client::with(['user', 'ministry_working', 'bank'])->where('id', $data['Installment']->installment_clients)->get();
+
         // order items
 
         $data['view'] = 'installment/show_details';
@@ -397,18 +435,20 @@ class InstallmentController extends Controller
 
     public function pay_from($installment_id, Request $request)
     {
-        $request->validate([
-            'cash' => 'required',
-            'knet' => 'required',
-            'knet_code' => 'required',
-            'img_dir' => 'required',
-        ],
+        $request->validate(
+            [
+                'cash' => 'required',
+                'knet' => 'required',
+                'knet_code' => 'required',
+                'img_dir' => 'required',
+            ],
             [
                 'cash.required' => 'القيمة مطلوبة',
                 'knet.required' => 'القيمة مطلوبة',
                 'knet_code.required' => 'وصل الكى نت  مطلوب',
                 'img_dir.required' => 'الصورة مطلوبة',
-            ]);
+            ]
+        );
 
         $title = 'نظام الأقساط';
 
@@ -453,7 +493,7 @@ class InstallmentController extends Controller
         // }
 
         if ($month->installment_type == "first_amount") {
-            Orders::where('id',$installment_item->order_id)->update([
+            Orders::where('id', $installment_item->order_id)->update([
                 'status' => "finished"
             ]);
         }
@@ -504,7 +544,6 @@ class InstallmentController extends Controller
         }
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
-
     }
 
     public function add_install_money_part($id, $amount, $knet_code)
@@ -518,15 +557,14 @@ class InstallmentController extends Controller
         if (!empty($installment->part_latif)) {
 
             $invoice->description = "عملية  دفع قسط (رابط  ) عن معاملة العميل "
-            //. $client['name']
-            . " رقم " . " " . $installment_month->installment_id;
+                //. $client['name']
+                . " رقم " . " " . $installment_month->installment_id;
         }
 
         if (!empty($installment->part_paper)) {
             $invoice->description = "عملية  دفع قسط (رابط) عن معاملة العميل "
-            // . $client['name']
-            . " رقم " . " " . $installment_month->installment_id;
-
+                // . $client['name']
+                . " رقم " . " " . $installment_month->installment_id;
         }
 
         $invoice->amount = $amount;
@@ -545,7 +583,6 @@ class InstallmentController extends Controller
         $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank + $amount;
 
         $invoice->save();
-
     }
 
     public function pay_part($installment_id, Request $request)
@@ -588,7 +625,7 @@ class InstallmentController extends Controller
 
 
 
-            if ($installment_item->laws == 1 ) {
+            if ($installment_item->laws == 1) {
 
                 $military_affairs_item = Military_affair::where('installment_id', $installment_id)->first();
                 $military_affairs_item->update([
@@ -608,7 +645,7 @@ class InstallmentController extends Controller
 
                 $month->update([
                     'created_by' => Auth::user()->id ?? null,
-                    'img_dir' =>'uploads/new_photos' . '/' . $filename,
+                    'img_dir' => 'uploads/new_photos' . '/' . $filename,
                 ]);
                 // for($i =0 ; $i < 2 ; $i++){
                 $invoice::where('install_month_id', $month->id)->update([
@@ -618,8 +655,7 @@ class InstallmentController extends Controller
                 // }
             }
 
-            if(empty($month))
-            {
+            if (empty($month)) {
                 $installment_item->update([
                     'finished' => 1,
                 ]);
@@ -627,7 +663,6 @@ class InstallmentController extends Controller
 
             return redirect()->back()->with('message', 'تم الدفع بنجاح');
         }
-
     }
 
     public function add_install_money($id, $amount, $type, $knet_code)
@@ -695,7 +730,6 @@ class InstallmentController extends Controller
         $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
 
         $invoice->save();
-
     }
 
     public function add_install_money_settle($id, $amount, $type, $knet_code)
@@ -763,23 +797,24 @@ class InstallmentController extends Controller
         $invoice->balance_bank = empty($last_invoice->balance_bank) ? 0 : $last_invoice->balance_bank;
 
         $invoice->save();
-
     }
 
     public function pay_settle($installment_id, Request $request)
     {
-        $request->validate([
-            'cash_settle' => 'required',
-            'knet_settle' => 'required',
-            'knet_code_settle' => 'required',
-            'img_dir' => 'required',
-        ],
-        [
+        $request->validate(
+            [
+                'cash_settle' => 'required',
+                'knet_settle' => 'required',
+                'knet_code_settle' => 'required',
+                'img_dir' => 'required',
+            ],
+            [
                 'cash_settle.required' => 'القيمة مطلوبة',
                 'knet_settle.required' => 'القيمة مطلوبة',
                 'knet_code_settle.required' => 'وصل الكى نت  مطلوب',
                 'img_dir.required' => 'الصورة مطلوبة',
-        ]);
+            ]
+        );
 
         $title = 'نظام الأقساط';
 
@@ -860,7 +895,6 @@ class InstallmentController extends Controller
         }
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
-
     }
 
     public function pay_total_installs($installment_id, Request $request)
@@ -890,7 +924,7 @@ class InstallmentController extends Controller
             $client = Client::where('id', $installment->client_id);
             $data['not_done_count'] = Installment_month::where('installment_id', $installment_id)->where('status', 'not_done')->whereNotIn('installment_type', ['law_percent', 'first_amount', 'discount'])->count();
 
-           if ($installment->months == 36) {
+            if ($installment->months == 36) {
                 $data['not_done_amount'] = Installment_month::where('installment_id', $installment_id)
                     ->where('status', 'not_done')
                     ->whereNotIn('installment_type', ['law_percent', 'first_amount', 'discount'])
@@ -907,17 +941,16 @@ class InstallmentController extends Controller
             // dd($data['not_done_amount']);
 
 
-            if ($installment->laws == 1 ) {
-                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
-                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
+            if ($installment->laws == 1) {
+                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->sum('amount');
+                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->sum('amount');
 
                 $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
 
                 $military_affair->update([
-                        'reminder_amount' => $military_affair->reminder_amount - $request->cash ?? $military_affair->reminder_amount - $request->knet,
-                        'payment_done' => $military_affair->reminder_amount + $request->cash ?? $military_affair->reminder_amount + $request->knet
-                    ]);
-
+                    'reminder_amount' => $military_affair->reminder_amount - $request->cash ?? $military_affair->reminder_amount - $request->knet,
+                    'payment_done' => $military_affair->reminder_amount + $request->cash ?? $military_affair->reminder_amount + $request->knet
+                ]);
             } else {
 
                 $data['sum'] = $data['not_done_amount'];
@@ -970,7 +1003,6 @@ class InstallmentController extends Controller
                 }
 
                 $installment->update();
-
             }
 
             $ids = '';
@@ -994,14 +1026,12 @@ class InstallmentController extends Controller
                     ]);
                 }
 
-                foreach($invoice as $one)
-                {
+                foreach ($invoice as $one) {
                     $one->update([
                         'img' => 'uploads/new_photos' . '/' . $filename,
                         'created_by' => Auth::user()->id ?? null,
                     ]);
                 }
-
             }
         }
 
@@ -1017,7 +1047,6 @@ class InstallmentController extends Controller
         $data['id'] = $installment_id;
 
         return redirect()->back()->with('message', 'تم الدفع بنجاح');
-
     }
 
     public function add_install_money_all($installment_id, $counter, $amount, $type, $knet_code, $description)
@@ -1100,8 +1129,7 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-        else {
+        } else {
 
             $installment = Installment::findOrFail($installment_id);
             $client = Client::where('id', $installment->client_id);
@@ -1122,11 +1150,10 @@ class InstallmentController extends Controller
             $military_affair = Military_affair::where('installment_id', $installment_id)->first();
 
             if ($installment->laws == 1 && ($data['not_done_amount'] != 0) && $military_affair) {
-                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id','=',$military_affair->id)->where('check_type','!=','0')->where('check_type','!=','update')->sum('amount');
-                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id','=',$military_affair->id)->sum('amount');
+                $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->sum('amount');
+                $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->sum('amount');
 
                 $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
-
             } else {
 
                 $data['sum'] = $data['not_done_amount'];
@@ -1141,20 +1168,19 @@ class InstallmentController extends Controller
 
                 $months_id[] = $installments[$j]->id;
 
-                $months::where('id',$installments[$j]->id)->update([
+                $months::where('id', $installments[$j]->id)->update([
                     'status' => "done",
                     'payment_date' => now(),
                     'payment_type' => 'cash/knet/finish',
                     'created_by' => Auth::user()->id ?? null,
                 ]);
-
             }
             if ($request->discount_cash > 0) {
 
                 $description = "عملية  دفع($counter) قسط إجمالي"
-                . "مع خصم"
-                . " بقيمة"
-                . $request->discount
+                    . "مع خصم"
+                    . " بقيمة"
+                    . $request->discount
                     . " د.ك"
                     . " "
                     . "  عن المعاملة  رقم " . " " . $installment_id;
@@ -1261,7 +1287,6 @@ class InstallmentController extends Controller
                     ]);
                 }
             }
-
         }
         $title = 'نظام الأقساط';
         $breadcrumb = array();
@@ -1323,31 +1348,29 @@ class InstallmentController extends Controller
                 $filename = time() . '-' . $request->file('img_dir')->getClientOriginalName();
                 $path = $request->file('img_dir')->move(public_path('uploads/new_photos'), $filename);
 
-                    $invoice->update([
-                        'img' => 'uploads/new_photos' . '/' . $filename,
-                        'created_by' => Auth::user()->id ?? null,
-                    ]);
+                $invoice->update([
+                    'img' => 'uploads/new_photos' . '/' . $filename,
+                    'created_by' => Auth::user()->id ?? null,
+                ]);
             }
 
             $military_affairs_item_1 = Military_affair::where('installment_id', $installment_id)->first();
 
-            if ($installment->laws == 1 ) {
+            if ($installment->laws == 1) {
 
                 $military_affairs_item_1->update([
-                    'reminder_amount' => $military_affairs_item_1->reminder_amount - $request->some_amount ,
+                    'reminder_amount' => $military_affairs_item_1->reminder_amount - $request->some_amount,
                     'payment_done' => $military_affairs_item_1->reminder_amount + $request->some_amount
                 ]);
-
             }
 
-            for ($i = 0; $i < count($installments); $i++)
-            {
+            for ($i = 0; $i < count($installments); $i++) {
                 if ($request->some_amount >= $installments[$i]['amount']) {
 
                     $months_id[] = $installments[$i]['id'];
                     $request->some_amount = $request->some_amount - $installments[$i]['amount'];
 
-                    $months::where('id',$installments[$i]['id'])->update([
+                    $months::where('id', $installments[$i]['id'])->update([
                         'status' => "done",
                         'payment_date' => now()->format('Y-m-d'),
                         'created_by' => Auth::user()->id ?? null,
@@ -1355,7 +1378,6 @@ class InstallmentController extends Controller
                         'hesab_file' => 1,
                         'img_dir' => 'uploads/new_photos/' . $filename,
                     ]);
-
                 } else {
 
                     if ($request->some_amount > 0) {
@@ -1368,7 +1390,7 @@ class InstallmentController extends Controller
                         // dd($request->some_amount);
                         if ($request->some_amount > 0) {
                             // dd($installments[$i]['id'] - $reminder);
-                            $months::where('id',$installments[$i]['id'])->update([
+                            $months::where('id', $installments[$i]['id'])->update([
                                 'amount' => $installments[$i]['amount'] - $reminder,
                                 'notes' => $reminder . "تم ترحيل جزء من القسط للشهر التالي وقدره :  ",
                                 'status' => "done",
@@ -1388,7 +1410,7 @@ class InstallmentController extends Controller
                                 $months->notes = $reminder . "تم ترحيل جزء من  اتعاب المحامى  وقدره :  ";
                                 $months->created_by = Auth::user()->id ?? null;
 
-                                $months::where('id',$installments[$i]['id'])->save();
+                                $months::where('id', $installments[$i]['id'])->save();
                             }
                         }
                         // $last_month = Installment_month::latest()->first();
@@ -1396,7 +1418,7 @@ class InstallmentController extends Controller
                         // $months = new Installment_month();
                         if (!empty($installments[$i + 1])) {
 
-                            $months::where('id',$installments[$i+1]['id'])->update([
+                            $months::where('id', $installments[$i + 1]['id'])->update([
                                 'amount' => $installments[$i + 1]['amount'] + $reminder,
                                 'notes' => $reminder . "تم إضافة جزء من القسط السابق وقدره :  ",
                                 'created_by' => Auth::user()->id ?? null,
@@ -1421,7 +1443,7 @@ class InstallmentController extends Controller
 
                     $military_affairs_item_1::where('id', $military_affairs_item_1->id)->update([
                         'checking' => 1,
-                          ]);
+                    ]);
                 }
             }
 
@@ -1479,7 +1501,6 @@ class InstallmentController extends Controller
         $invoice->branch_id = Auth::user()->branch_id ?? null;
         $invoice->created_by = Auth::user()->id ?? null;
         $invoice->save();
-
     }
     public function get_sum_installments($installment_id, Request $request)
     {
@@ -1503,10 +1524,7 @@ class InstallmentController extends Controller
             return redirect()->back()
                 ->withErrors($validatedData)
                 ->withInput();
-        }
-
-
-        else {
+        } else {
             dd($request->all());
             $insall_ids = $request->payment_order_id;
             $installments = Installment_month::where('status', 'not_done')->where('installment_id', $installment_id)->get();
@@ -1531,7 +1549,6 @@ class InstallmentController extends Controller
                     'img' => 'uploads/new_photos' . '/' . $filename,
                     'created_by' => Auth::user()->id ?? null,
                 ]);
-
             }
 
             for ($j = 0; $j < count($insall_ids); $j++) {
@@ -1561,7 +1578,7 @@ class InstallmentController extends Controller
 
             $inst = Installment::findORFail($installment_id);
 
-            if ($inst->laws == 1 ) {
+            if ($inst->laws == 1) {
 
                 $military_affairs_item = Military_affair::where('installment_id', $installment_id)->first();
                 $military_affairs_item->update([
@@ -1711,7 +1728,6 @@ class InstallmentController extends Controller
         $installment->update($add_data);
 
         return view('installment.warning_print_paper', compact('installment', 'client', 'not_done_count', 'not_done_count_lated'));
-
     }
 
     public function print_contrct($id)
@@ -1750,7 +1766,6 @@ class InstallmentController extends Controller
         $items = Installment_month::where('installment_id', '=', $installment->id)->get();
 
         return view('installment.print_contrct', compact('installment', 'client', 'not_done_count', 'items', 'nationality'));
-
     }
 
     public function print_finished_installments($id)
@@ -1791,7 +1806,6 @@ class InstallmentController extends Controller
         $rec_name = Auth::user()->name_ar;
 
         return view('installment.print_install_paper_info', compact('item', 'client', 'rec_name'));
-
     }
 
     public function recive_install_paper($id)
@@ -1824,7 +1838,6 @@ class InstallmentController extends Controller
         }*/
 
         return view('installment.print_invoice', compact('order', 'client', 'user_name'));
-
     }
 
     public function show_upload_papers($id)
@@ -1841,7 +1854,6 @@ class InstallmentController extends Controller
         $data['view'] = 'installment/upload_papers';
         $item = Installment::findorfail($id);
         return view('layout', $data, compact('breadcrumb', 'item'));
-
     }
 
     public function upload_papers(Request $request)
@@ -1928,7 +1940,6 @@ class InstallmentController extends Controller
         $data['view'] = 'installment/edit_images';
 
         return view('layout', $data, compact('breadcrumb', 'id'));
-
     }
 
     public function upload_edit_images(Request $request)
@@ -2027,7 +2038,7 @@ class InstallmentController extends Controller
             $filename = time() . '-' . $request->file('contract_cinet_2')->getClientOriginalName();
             $path = $request->file('contract_cinet_2')->move(public_path('installment'), $filename);
             // $installment_data_image['contract_cinet_2'] = $request->file('contract_cinet_2')->store('installment', 'public'); // Store in the 'products' directory
-             $installment_data_image['contract_cinet_2'] = 'installment' . '/' . $filename;
+            $installment_data_image['contract_cinet_2'] = 'installment' . '/' . $filename;
         }
         if ($request->hasFile('contract_cinet_1')) {
             $filename = time() . '-' . $request->file('contract_cinet_1')->getClientOriginalName();
@@ -2108,7 +2119,6 @@ class InstallmentController extends Controller
 
             return redirect()->route('installment.show-installment', $id)->with('success', 'تم العملية بنجاح');
         }
-
     }
 
     public function print_cient($id)
@@ -2146,8 +2156,6 @@ class InstallmentController extends Controller
         //  $data["items"] = $this->db_get->get_where_conditions('installment_months', $conditions);
         // $items = Installment_month::where('installment_id', '=', $installment->id)->get();
 
-        return view('installment.print_cinet',compact('installment','client','nationality'));
-
+        return view('installment.print_cinet', compact('installment', 'client', 'nationality'));
     }
-
 }

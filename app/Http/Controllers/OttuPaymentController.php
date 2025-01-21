@@ -19,7 +19,11 @@ class OttuPaymentController extends Controller
     public function process($id)
     {
         // Fetch client data from the database
-        $clientData = DB::table('installment_clients')->find($id);
+     //   dd($id);
+        $installment = DB::table('installment')->find($id);
+
+        $clientData = DB::table('installment_clients')->find($installment->installment_clients);
+
         // dd($clientData);
         if (!$clientData) {
             return redirect()->back()->with('error', 'Client not found');
@@ -59,7 +63,7 @@ class OttuPaymentController extends Controller
         $response = Http::withHeaders([
             "Content-Type" => "application/json",
             "Authorization" => "Api-Key H7o77wEV.dkZTq2TBPWSgepDIuAD6KNgALqSIFVYY",
-        ])->post('https://pay.electronkw.com/b/checkout/v1/pymt-txn/', $payload);
+        ])->post('https://pay.electron-kw.com/test_vr/b/checkout/v1/pymt-txn/', $payload);
 
         if ($response->failed()) {
             //    return redirect()->back()->with('error', 'Payment failed.');
