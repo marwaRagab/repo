@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.png') }}" />
 
     <!-- Core Css -->
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}" />
 
     <title>Spike Bootstrap Admin</title>
 </head>
@@ -35,7 +35,7 @@
                         <div class="row align-items-center justify-content-around pt-6 pb-5">
                             <div class="col-lg-6 col-xl-5 d-none d-lg-block">
                                 <div class="text-center text-lg-start">
-                                    <img src="../assets/images/logos/logo.jpg" alt="spike-img" class="img-fluid">
+                                    <img src="{{ asset('assets/images/logos/logo.jpg') }}" alt="spike-img" class="img-fluid">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-5">
@@ -287,12 +287,12 @@
         <div class="dark-transparent sidebartoggler"></div>
     </div>
     <!-- Import Js Files -->
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
-    <script src="../assets/js/theme/app.init.js"></script>
-    <script src="../assets/js/theme/theme.js"></script>
-    <script src="../assets/js/theme/app.min.js"></script>
-    <script src="../assets/js/theme/feather.min.js"></script>
+    <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/app.init.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/theme.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/app.min.js') }}"></script>
+    <script src=" {{ asset('assets/js/theme/feather.min.js') }}"></script>
 
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
