@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+// use App\Http\Controllers\ClientAuth\AuthenticatedSessionController;
+use App\Http\Controllers\ClientAuth\AuthenticatedSessionClientController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -11,16 +12,19 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
+Route::group(['middleware' => ['guest:client'] , 'prefix' => 'clientDash', 'as' => 'clientDash'] , function(){
+// Route::middleware('guest:client')->group(function () {
+    // dd(Route::get('login', [AuthenticatedSessionClientController::class, 'create'])
+    // ->name('client.login'));
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
-
+              
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
-
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('login', [AuthenticatedSessionClientController::class, 'create'])
+                ->name('client.login');
+               
+    Route::post('login', [AuthenticatedSessionClientController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
@@ -35,7 +39,10 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::group(['middleware' => ['auth:client'] , 'prefix' => 'clientDash'] , function(){
+// Route::middleware('auth:client')->group(function () {
+    // Route::get('login', [AuthenticatedSessionClientController::class, 'create'])
+    // ->name('client.login');
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -54,30 +61,6 @@ Route::middleware('auth')->group(function () {
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+    // Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    //             ->name('logout');
 });
-// Route::middleware('client')->group(function () {
-//     // dd('fffffffffffff');
-//     // Route::get('register', [RegisteredUserController::class, 'create'])
-//     //             ->name('register');
-
-//     // Route::post('register', [RegisteredUserController::class, 'store']);
-
-//     Route::get('clientDash/login', [AuthenticatedSessionClientController::class, 'create'])
-//                 ->name('client.login');
-
-//     Route::post('clientDash/login', [AuthenticatedSessionClientController::class, 'store']);
-
-//     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-//                 ->name('password.request');
-
-//     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-//                 ->name('password.email');
-
-//     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-//                 ->name('password.reset');
-
-//     Route::post('reset-password', [NewPasswordController::class, 'store'])
-//                 ->name('password.store');
-// });

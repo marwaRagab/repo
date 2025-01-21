@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\ClientAuth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\ClientAuth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,18 +12,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AuthenticatedSessionController extends Controller
+class AuthenticatedSessionClientController extends Controller
 {
     /**
      * Display the login view.
      */
     public function create(): Response
     {
-       // dd('ff');
-        return Inertia::render('Auth/Login', [
+    //    dd('ff');
+        // 
+        return Inertia::render('ClientAuth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
         ]);
+        // return view('ClientDashboard.login');
     }
 
     /**
@@ -35,7 +37,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->intended(RouteServiceProvider::Client_HOME);
     }
 
     /**
@@ -43,7 +45,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::guard('client')->logout();
 
         $request->session()->invalidate();
 

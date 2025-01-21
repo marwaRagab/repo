@@ -11,7 +11,7 @@ class ClientAuthController extends Controller
 {
     public function showLoginForm()
     {
-       
+       dd('zzzzzzzz');
         return view('ClientDashboard.login');
     }
 
@@ -26,7 +26,7 @@ class ClientAuthController extends Controller
         // }  
         $credentials = $request->only('email', 'password');
         // dd(Auth::guard('client')->check(), Auth::check());
-    //    dd(   Auth::guard('client')->check());
+       dd(   Auth::guard('client')->check());
         if (Auth::guard('client')->attempt(['email' => $request->email, 'password' => $request->password])) {
              dd($request->all());
             return redirect()->route('admin.dashboard');
@@ -37,7 +37,7 @@ class ClientAuthController extends Controller
 
     public function logout()
     {
-        Auth::guard('admin')->logout();
+        Auth::guard('client')->logout();
         return redirect('/');
     }
 }

@@ -112,16 +112,8 @@ use App\Http\Controllers\ClientAuth\ClientAuthController;
 //     return view('middleware.login');
 // });
 
-Route::prefix('clientDash')->group(function () {
-    // CLient login routes
-    Route::get('login', [ClientAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('login', [ClientAuthController::class, 'login'])->name('client.login');
-    Route::post('logout', [ClientAuthController::class, 'logout'])->name('admin.logout');
 
-    // Route::middleware('auth:client')->get('dashboard', function () {
-    //     return view('admin.dashboard');
-    // })->name('admin.dashboard');
-})->middleware('auth:client');
+
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),
@@ -749,3 +741,14 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });
+
+
+Route::middleware('client')->group(function () {
+    // dd("client");
+    Route::get('clientDash/login', [ClientAuthController::class, 'showLoginForm'])->name('client.login.show');
+    Route::post('clientDash/login', [ClientAuthController::class, 'login'])->name('client.login');
+    Route::post('clientDash/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
+});
+
+
+// require __DIR__ . '/Clientauth.php';

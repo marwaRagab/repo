@@ -75,6 +75,7 @@ return [
         'clients' => [
             'driver' => 'eloquent',
             'model' => App\Models\AuthClient::class,
+            // 'driver' => 'database',
             // 'table' => 'client_new',
         ],
         // 'users' => [

@@ -43,15 +43,7 @@
                                     الــــكـــــــتـــــرون </h2>
                                 <p class="fs-4 mb-7 text-center text-warning">قم بتسجيل الدخول الان </p>
 
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
+                               
 
                                 {{-- @if ($errors->has('error'))
                                 <div class="alert alert-danger">

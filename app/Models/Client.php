@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Client extends Model
 {
     use HasFactory;
+    protected $guarded = 'client';
     protected $table = 'client_new';
     protected $fillable = ['location_google_map', 'kwfinder', 'location', 'Latitude', 'Longitude', 'house_id'];
 

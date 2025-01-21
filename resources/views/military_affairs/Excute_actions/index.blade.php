@@ -1,7 +1,8 @@
 <div class="card mt-4 py-3">
     <div class="d-flex flex-wrap ">
 
-        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}" href="{{route('excute_actions')}}">
+        <a class="btn-filter bg-warning-subtle text-warning px-2  mx-1 mb-2 {{ request()->get('governorate_id') == '' ? 'active' : '' }}"
+            href="{{route('excute_actions')}}">
             الكل ({{ count_court('' ,'excute_actions',null,null) }})
 
             <p>({{$courts_all_amount}} )
@@ -15,8 +16,9 @@
 
 
         <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
-            ({{ count_court($court->id ,'excute_actions',null,null) }})  ({{$court->court_amount}})
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}">
+            {{$court->name_ar}}
+            ({{ count_court($court->id ,'excute_actions',null,null) }}) ({{$court->court_amount}})
             <p>({{$court->court_amount}} )
                 د.ك
             </p>
@@ -28,7 +30,7 @@
 </div>
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-2 py-3 border-bottom">
-        <h4 class="card-title mb-0">  رصيد التنفيذ</h4>
+        <h4 class="card-title mb-0"> رصيد التنفيذ</h4>
         <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-2  " href="{{route('all_checks')}}">
             الشيكات المستلمة</a>
     </div>
@@ -62,11 +64,13 @@
                     <!-- start row -->
                     @foreach( $items as $item)
                     @if($item->installment)
-
-
+                    @php
+                    $amount_count =
+                    $item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=','0')->count();
+                    @endphp
                     <tr>
                         <td>
-                             {{ $loop->iteration }}
+                            {{ $loop->iteration }}
 
                         </td>
                         <td>
@@ -81,7 +85,8 @@
                         <td>{{$item->military_check->sum('amount')}} </td>
                         <td>{{$item->military_amount->where('military_affairs_check_id',0)->sum('amount')}} </td>
 
-                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=','0')->count()}}</td>
+                        <td> {{$item->military_amount->where('military_affairs_check_id',0)->where('check_type','!=','0')->count()}}
+                        </td>
                         <td> {{$item->military_amount ? count($item->military_amount) : 0 }} </td>
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
@@ -95,12 +100,11 @@
                                     <li>
 
                                         <a class="btn btn-success rounded-0 w-100 mt-2 {{ $item->excute_actions_last_img_dir  == null || $item->excute_actions_last_img_dir  == '' || $item->excute_actions_last_img_dir == 0   ? 'disabled' : '' }}"
-                                           {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
-                                           onclick="checkFileAndRedirect(
+                                            {{-- href="{{ $qrareldin ? asset($qrareldin->qard_paper_img) : '#' }}" --}}
+                                            onclick="checkFileAndRedirect(
                     '{{  $item->excute_actions_last_img_dir && $item->excute_actions_last_img_dir  !== '0' ? 'https://electron-kw.net/' . $item->excute_actions_last_img_dir : '#' }}',
                     '{{  $item->qard_paper_img && $item->excute_actions_last_img_dir  !== '0' ? 'https://electron-kw.com/' . $item->excute_actions_last_img_dir  : '#' }}'
-                ); return false;"
-                                           target="_blank">
+                ); return false;" target="_blank">
                                             صورة الاجراءات المالية
                                         </a>
                                     </li>
@@ -120,14 +124,12 @@
                                         </a>
                                     </li>
 
-                                    @if($item->excute_actions_amount)
                                     <li>
-                                        <a class="btn btn-primary rounded-0 w-100 mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#add-check-{{$item->id}}"> استلام الشيكات
+                                        <a class="btn btn-primary rounded-0 w-100 mt-2  @if($amount_count) disabled @endif"
+                                            data-bs-toggle="modal" data-bs-target="#add-check-{{$item->id}}"> استلام
+                                            الشيكات
                                         </a>
                                     </li>
-                                    @endif
-
 
                                 </ul>
 
@@ -164,7 +166,7 @@
                                                         <div id="additionalInputs-{{$item->id}}" class="hidden">
                                                             <div class="form-group mb-3">
                                                                 <label class="form-label"> المبلغ </label>
-                                                                <input type="text" name="amount"   class="form-control">
+                                                                <input type="text" name="amount" class="form-control">
 
                                                             </div>
                                                             <div class="form-row mb-3 ">
@@ -173,7 +175,7 @@
                                                                         مصدر الحجز</label>
                                                                     <select class="form-select" name="check_type">
                                                                         <option value="0">
-                                                                           اختر
+                                                                            اختر
                                                                         </option>
                                                                         <option value="salary">
                                                                             حجز راتب
@@ -248,16 +250,17 @@
                                                 $item->military_amount->where('military_affairs_check_id',0)->sum('amount');
                                                 @endphp
                                                 <input type="hidden" name="military_affairs_id" value="{{$item->id}}" />
-                                                   <input type="hidden" name="check_value"  id="check_value" value="{{$check_amount}}">
+                                                <input type="hidden" name="check_value" id="check_value"
+                                                    value="{{$check_amount}}">
                                                 <div class="form-row">
                                                     <div class="form-group mb-3">
                                                         <label class="form-label">مبلغ الشيك </label>
                                                         @if(Auth::user()->username =='ahmedkh222')
-                                                            <input type="text" name="check_amount"   value="{{$check_amount}}"  class="form-control">
+                                                        <input type="text" name="check_amount" value="{{$check_amount}}"
+                                                            class="form-control">
                                                         @else
-                                                            <input type="text" name="check_amount" readonly
-                                                                   value="{{$check_amount}}"
-                                                                   class="form-control">
+                                                        <input type="text" name="check_amount" readonly
+                                                            value="{{$check_amount}}" class="form-control">
                                                         @endif
 
                                                         @error('check_amount')
@@ -674,19 +677,19 @@
 <!-- modals -->
 <script>
 function showInputs(id) {
-    document.getElementById('additionalInputs-'+id).classList.remove('hidden');
+    document.getElementById('additionalInputs-' + id).classList.remove('hidden');
 }
 
 function hideInput(id) {
-    document.getElementById('additionalInputs-'+id).classList.add('hidden');
+    document.getElementById('additionalInputs-' + id).classList.add('hidden');
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     const forms = document.querySelectorAll('.mega-vertical_open');
 
     forms.forEach(form => {
-        form.addEventListener("submit", function (event) {
+        form.addEventListener("submit", function(event) {
             let isValid = true;
 
             // Clear previous error messages
@@ -697,7 +700,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!dateInput.value) {
                 showError(dateInput, "التاريخ   مطلوب");
                 isValid = false;
-            } const checknumber = form.querySelector("input[name='check_number']");
+            }
+            const checknumber = form.querySelector("input[name='check_number']");
             if (!checknumber.value) {
                 showError(checknumber, "رقم الشيك   مطلوب");
                 isValid = false;
@@ -705,16 +709,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Validate issue_id
             const checkInput = form.querySelector("input[name='check_amount']");
-            const  checkvalue= form.querySelector("input[name='check_value']");
-            const  check_img= form.querySelector("input[name='img_dir']");
-            if ( checkInput.value == 0 ) {
+            const checkvalue = form.querySelector("input[name='check_value']");
+            const check_img = form.querySelector("input[name='img_dir']");
+            if (checkInput.value == 0) {
                 showError(checkInput, "مبلغ الشيك مطلوب");
                 isValid = false;
-            }else if (checkInput.value > checkvalue.value) {
-                showError(checkInput,   "مبلغ الشيك لابد ان يكون اقل من" + checkvalue.value);
+            } else if (checkInput.value > checkvalue.value) {
+                showError(checkInput, "مبلغ الشيك لابد ان يكون اقل من" + checkvalue.value);
                 isValid = false;
-            }else if (!check_img.value) {
-                showError(check_img,   "صورة الشيك مطلوبة " );
+            } else if (!check_img.value) {
+                showError(check_img, "صورة الشيك مطلوبة ");
                 isValid = false;
             }
 
@@ -729,10 +733,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 });
-
-
-
-
-
-
 </script>
