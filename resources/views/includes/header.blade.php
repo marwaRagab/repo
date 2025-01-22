@@ -61,11 +61,12 @@
                             </a>
                         </li>
                         @php
-                            $count = App\Models\Notification::orderBy('created_at', 'desc')
-                                ->where('user_id', Auth::user()->id)
-                                ->where('show', 0)
-                                ->whereDate('created_at', \Carbon\Carbon::today())
-                                ->count();
+                            $count = App\Models\Notification::where('user_id', Auth::id())
+    ->where('show', 0)
+    ->whereDate('created_at', today())
+    ->count();
+
+echo $count;
                         @endphp
                         <li class="nav-item dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"

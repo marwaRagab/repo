@@ -20,7 +20,7 @@
 
     <div class="card-body">
     <div class="table-responsive pb-4">
-    <table id="users-table" class="table table-bordered border text-nowrap align-middle">
+    <table id="users-table" class="table table-bordered border text-wrap align-middle">
                 <thead class="thead-dark">
                     <tr>
                     <th>م</th>
@@ -29,6 +29,8 @@
                     <th>طريقة الدفع</th>
                     <th>رقم العملية</th>
                     <th>حالة الطباعة</th>
+                    <th>الجهة</th>
+                    <th>الإيصال</th>
                     <th>التفاصيل</th>
                     <th>التاريخ</th>
                     <th>طباعة</th>
@@ -256,6 +258,16 @@ function valthisform(button) {
                     {
                         data: 'print_status_label',
                         name: 'print_status_label',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'print_status_label',
+                        name: 'print_status_label',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'direct',
+                        name: 'direct',
                         className: 'text-center'
                     },
                     {
