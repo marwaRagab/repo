@@ -16,6 +16,7 @@ use App\Http\Controllers\ClientAuth\LoginController;
 //     return view('middleware.login');
 // });
 
+// Route::middleware('IsClient')->group(function () {
     Route::get('clientDash/login', [LoginController::class, 'showLoginForm']);
     Route::post('clientDash/login', [LoginController::class, 'login'])->name('client.login');
     // Route::get('clientDash/index', [LoginController::class, 'index'])->name('client.index');
@@ -23,6 +24,10 @@ use App\Http\Controllers\ClientAuth\LoginController;
         return view('clientDashboard.index');
     })->name('client.index');
     Route::post('clientDash/logout', [LoginController::class, 'logout'])->name('client.logout');
+
+// });
+
+   
 // Route::prefix('clientDash')->name('client.')->group(function () {
 //     // dd("client");
    
