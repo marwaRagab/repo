@@ -170,7 +170,7 @@
                                         @php
                                         if($data['Installment_Client']>0){
                                            $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $data['Installment_Client']->id)->first();
-                                            $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
+                                            $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;    
                                         }else{
                                             $clientBank = App\Models\ClientBank::where('client_id', $Installment->client->id)->first();
 
@@ -188,9 +188,9 @@
 } else {
     // Handle case when clientBank is not found
     $bank_name = 'لايوجد'; // or some default value
-}
+}  
                                         }
-
+                                           
 
 
 
