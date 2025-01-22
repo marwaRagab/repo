@@ -168,28 +168,28 @@
 
 
                                         @php
-                                        if($data['Installment_Client']>0){
-                                           $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $data['Installment_Client']->id)->first();
-                                            $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
-                                        }else{
-                                            $clientBank = App\Models\ClientBank::where('client_id', $Installment->client->id)->first();
+                                            if($data['Installment_Client']>0){
+                                               $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $data['Installment_Client']->id)->first();
+                                                $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
+                                            }else{
+                                                $clientBank = App\Models\ClientBank::where('client_id', $Installment->client->id)->first();
 
-                                          if ($clientBank) {
-    $bank_id = $clientBank->bank_name;
+                                              if ($clientBank) {
+        $bank_id = $clientBank->bank_name;
 
-    $bank = App\Models\Bank::where('id', $bank_id)->orWhere('slug', $bank_id)->first();
+        $bank = App\Models\Bank::where('id', $bank_id)->orWhere('slug', $bank_id)->first();
 
-    if ($bank) {
-        $bank_name = $bank->name_ar;
+        if ($bank) {
+            $bank_name = $bank->name_ar;
+        } else {
+            // Handle case when bank is not found
+            $bank_name = 'لايوجد'; // or some default value
+        }
     } else {
-        // Handle case when bank is not found
+        // Handle case when clientBank is not found
         $bank_name = 'لايوجد'; // or some default value
     }
-} else {
-    // Handle case when clientBank is not found
-    $bank_name = 'لايوجد'; // or some default value
-}
-                                        }
+                                            }
 
 
 
