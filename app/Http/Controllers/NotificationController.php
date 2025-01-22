@@ -51,15 +51,14 @@ class NotificationController extends Controller
 
     public function show($id)
     {
-        $notification = Notification::where('id', $id)->first();
+        $notification = Notification::find($id);
         $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $notification->problem_id)->first();
-        dd( $pr);
         if ($pr == null) {
             return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
 
         }
-        $data = Problem::with('user')->findOrFail($id);
-        $replies = ProblemReply::with('user')->where('problem_id', $id)->get();
+        $data = Problem::with('user')->findOrFail($notification->problem_id);
+        $replies = ProblemReply::with('user')->where('problem_id', $notification->problem_id)->get();
 
         $statusMapping = [
             1 => 'جديد',
@@ -71,6 +70,9 @@ class NotificationController extends Controller
             7 => 'منجزة',
             // 8 => 'تم الانتهاء منها',
         ];
+
+        $notification->update(['show' => 1]);
+        
         $title = "مشاهدة المشكلة";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";

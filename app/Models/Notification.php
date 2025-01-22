@@ -9,7 +9,7 @@ class Notification extends Model
 {
     use HasFactory;
     protected $table = 'notifications';
-
+    protected $fillable = ['show'];
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

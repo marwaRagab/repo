@@ -79,7 +79,7 @@
                             <p>{{ $notification->descr }}</p>
 
                             @if ($notification->problem_id)
-                                <a href="{{ route('supportProblem.show', $notification->problem_id) }}"
+                                <a href="{{ route('notification.show', $notification->id) }}"
                                     class="btn btn-link mt-2">
                                     عرض
                                 </a>
