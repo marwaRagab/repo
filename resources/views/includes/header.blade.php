@@ -61,12 +61,11 @@
                             </a>
                         </li>
                         @php
-                            $count = App\Models\Notification::where('user_id', Auth::id())
-    ->where('show', 0)
-    ->whereDate('created_at', today())
-    ->count();
+                        $count = App\Models\Notification::where('user_id', Auth::id())
+                        ->where('show', 0)
+                        ->whereDate('created_at', today())
+                        ->count();
 
-echo $count;
                         @endphp
                         <li class="nav-item dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
@@ -88,29 +87,29 @@ echo $count;
                                 </div>
                                 @php
 
-                                    $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
-                                        ->where('user_id', Auth::user()->id)
-                                        ->where('show', 0)
-                                        ->whereDate('created_at', \Carbon\Carbon::today())
-                                        ->take(2)
-                                        ->get();
+                                $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
+                                ->where('user_id', Auth::id())
+                                ->where('show', 0)
+                               
+                                ->get();
 
                                 @endphp
                                 <div class="message-body p-3" data-simplebar="">
                                     <ul class="list text-end mb-0 py-2">
-                                        <li class="p-1 mb-1 bg-hover-light-black rounded border-bottom p-3">
-                                            <a href="javascript:void(0)">
-                                                @foreach ($lastThreeRows as $one_br)
-                                                    <span class="fs-3 text-dark d-block ">{{ $one_br->title }}</span>
-                                                    <span class=" text-muted d-block border-bottom p-3">
-                                                        {{ \Carbon\Carbon::parse($one_br->created_at)->locale('ar')->translatedFormat('l j F Y h:i A') }}
 
-                                                    </span>
-                                                @endforeach
+                                        @foreach ($lastThreeRows as $one_br)
+                                            <li class="p-1 mb-1 bg-hover-light-black rounded border-bottom p-3">
+                                                <a href="{{ route('supportProblem.show', $one_br->problem_id) }}">
+                                                <span class="fs-3 text-dark d-block ">{{ $one_br->title }}</span>
+                                                <span class=" text-muted d-block border-bottom p-3">
+                                                    {{ \Carbon\Carbon::parse($one_br->created_at)->locale('ar')->translatedFormat('l j F Y h:i A') }}
 
-                                            </a>
+                                                </span>
+                                                </a>
 
-                                        </li>
+                                            </li>
+                                        @endforeach
+
                                         <li class="p-1 mb-1 bg-hover-light-black rounded">
 
                                             <a href="{{ route('notificatoin.index') }}">
@@ -130,7 +129,7 @@ echo $count;
                                 aria-expanded="false">
                                 <div class="d-flex align-items-center flex-shrink-0">
                                     <div class="user-profile me-sm-3 me-2">
-                                        <img src="{{ asset('user_profile/' . Auth::user()->img) }}" width="40"
+                                        <img src="{{ asset('user_profile/' . (Auth::user()->img ?? 'default.jpg')) }}" width="40"
                                             class="rounded-circle" alt="spike-img">
 
 
@@ -141,10 +140,10 @@ echo $count;
 
                                     <div class="d-none d-sm-block">
                                         <h6 class=" mb-1 profile-name">
-                                            {{ Auth::user()->name_ar }}
+                                            {{ Auth::user()->name_ar ?? 'Default Name' }}
                                         </h6>
                                         <p class=" lh-base mb-0 profile-subtext">
-                                            {{ Auth::user()->roles ? Auth::user()->roles->name_ar : '' }}
+                                            {{ Auth::user()?->roles?->name_ar ?? '' }}
                                         </p>
                                     </div>
                                 </div>

@@ -2,16 +2,16 @@
 
 namespace App\Repositories\TechnicalSupport;
 
-use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
+use App\Models\User;
 use App\Models\Department;
 use App\Models\Notification;
-use App\Models\SubDepartment;
-use App\Models\TechnicalSupport\Problem;
-use App\Models\TechnicalSupport\ProblemReply;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\SubDepartment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TechnicalSupport\Problem;
 use Illuminate\Support\Facades\Validator;
+use App\Models\TechnicalSupport\ProblemReply;
+use App\Interfaces\TechnicalSupport\ProblemRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 
 class ProblemRepository implements ProblemRepositoryInterface
@@ -98,7 +98,8 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     public function show($id)
     {
-        $pr = Problem::with(['user', 'developer', 'department', 'subdepartment'])->where('id', $id)->first();
+        $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $id)->first();
+       
         if ($pr == null) {
             return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
         }
@@ -199,6 +200,22 @@ class ProblemRepository implements ProblemRepositoryInterface
         }
         $data->save();
 
+        $support_users = User::where('support', 1)->get();
+
+        foreach ($support_users as $one) {
+
+            $notification = new Notification();
+            $notification->title = 'تم تحديث حالة المشكلة  ' . $data->id;
+            $notification->descr = '';
+            $notification->user_id = $one->id;
+            $notification->problem_id = $data->id;
+            if ($request->hasFile('file')) {
+                // $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
+                $notification->attachment = $data->file;
+            }
+            $notification->created_at = now();
+            $notification->save();
+        }
         DB::table('issue_status_history')->insert([
             'issue_id' => $id,
             'from_status' => $currentStatus,
@@ -243,8 +260,8 @@ class ProblemRepository implements ProblemRepositoryInterface
 
             foreach ($support_users as $one) {
                 $notification = new Notification();
-                $notification->title = 'تم اضافة مشكلة جديدة بالدعم الفني';
-                $notification->descr = '';
+                $notification->title = 'تعليق جديد على مشكلة في الدعم الفني';
+                $notification->descr = $request->descr ;
                 $notification->user_id = $one->id;
                 $notification->problem_id = $data->id;
                 if ($request->hasFile('file')) {
