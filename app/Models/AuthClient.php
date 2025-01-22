@@ -16,7 +16,7 @@ class AuthClient extends Authenticatable
 {
     use HasFactory , Notifiable ;
     protected $table = 'client_new';
-    protected $fillable = ['email','password'];
+    protected $fillable = ['civil_number','password'];
     protected $guard = 'client';
     protected $hidden = [
         'password',
