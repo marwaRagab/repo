@@ -86,28 +86,37 @@
 
                                 </div>
                                 @php
-
+                                if(Auth::user()->support == 1){
                                 $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
-                                ->where('user_id', Auth::id())
+                                ->where('user_id', '!=', Auth::id())
                                 ->where('show', 0)
-                               
+                                ->take(2)
                                 ->get();
 
+                                }
+                                else{
+                                $problems = App\Models\TechnicalSupport\Problem::where('user_id', Auth::id())->pluck('id');
+                                $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
+                                ->whereIn('problem_id', $problems)
+                                ->where('show', 0)
+                                ->take(2)
+                                ->get();
+                                }
                                 @endphp
                                 <div class="message-body p-3" data-simplebar="">
                                     <ul class="list text-end mb-0 py-2">
 
                                         @foreach ($lastThreeRows as $one_br)
-                                            <li class="p-1 mb-1 bg-hover-light-black rounded border-bottom p-3">
-                                                <a href="{{ route('supportProblem.show', $one_br->problem_id) }}">
+                                        <li class="p-1 mb-1 bg-hover-light-black rounded border-bottom p-3">
+                                            <a href="{{ route('notification.show', $one_br->id) }}">
                                                 <span class="fs-3 text-dark d-block ">{{ $one_br->title }}</span>
                                                 <span class=" text-muted d-block border-bottom p-3">
                                                     {{ \Carbon\Carbon::parse($one_br->created_at)->locale('ar')->translatedFormat('l j F Y h:i A') }}
 
                                                 </span>
-                                                </a>
+                                            </a>
 
-                                            </li>
+                                        </li>
                                         @endforeach
 
                                         <li class="p-1 mb-1 bg-hover-light-black rounded">
