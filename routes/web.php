@@ -652,6 +652,7 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::put('/human-resources/clients/{id}', [ClientController::class, 'update'])->name('clients.update'); //->middleware('permission:update_clients');
     Route::delete('/human-resources/clients/delete/{id}', [ClientController::class, 'destroy'])->name('clients.delete'); //->middleware('permission:delete_clients');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notificatoin.index');
+    Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notification.show');
 
     Route::get('/update-tab', [NotificationController::class, 'updateTab']);
 

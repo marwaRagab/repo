@@ -78,7 +78,6 @@
                             <h5>{{ $notification->title }}</h5>
                             <p>{{ $notification->descr }}</p>
 
-
                             @if ($notification->problem_id)
                                 <a href="{{ route('supportProblem.show', $notification->problem_id) }}"
                                     class="btn btn-link mt-2">

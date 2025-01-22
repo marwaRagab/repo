@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\NotificationRepositoryInterface;
-use App\Models\Notification;
 use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Interfaces\NotificationRepositoryInterface;
 
 class NotificationRepository implements NotificationRepositoryInterface
 {
@@ -22,7 +22,7 @@ class NotificationRepository implements NotificationRepositoryInterface
         $notifications = Notification::with('user')
             ->where('user_id', Auth::user()->id)
             ->where('show', 0)
-            ->whereDate('created_at', \Carbon\Carbon::today())
+            // ->whereDate('created_at', \Carbon\Carbon::today())
             ->orderBy('created_at', 'desc')->get();
         //   }
 
