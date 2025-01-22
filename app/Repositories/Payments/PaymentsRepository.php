@@ -115,7 +115,9 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 $month = $date->format('m');
                 return $query->whereYear('invoices_installment.date', $year)->whereMonth('invoices_installment.date', $month);
             })
-            ->where('branch_id', Auth::user()->branch_id)
+            ->when(Auth::user()->role_id != 1, function ($query) {
+                return $query->where('branch_id', Auth::user()->branch_id);
+            })
             ->with([
                 'installment',
                 'install_month',
@@ -198,10 +200,22 @@ class PaymentsRepository implements PaymentsRepositoryInterface
 
                 return $printButton . ' ' . $archiveButton;
             })
+            ->addColumn('direct', function ($payment) {
+                $printUrl = route('print_invoice', [
+                    'id' => $payment->id,
+                    'id1' => $payment->installment_id,
+                    'id2' => $payment->install_month_id,
+                    'id3' => $payment->serial_no,
+                ]);
+
+                $printButton = "<a class='btn bg-primary-subtle text-primary btn-sm rounded-pill' href='$printUrl'>عرض الصورة</a>";
+
+                return $printButton ;
+            })
             ->addColumn('select_checkbox', function ($payment) {
                 return '<input type="checkbox" name="checkAll[]" value="' . $payment->id . '" class="form-check-input">'; // Checkbox for bulk actions
             })
-            ->rawColumns(['print_status_label', 'actions', 'select_checkbox']) // Allow HTML for specific columns
+            ->rawColumns(['print_status_label', 'actions', 'select_checkbox', 'direct']) // Allow HTML for specific columns
             ->addIndexColumn() // Add an auto-incrementing index column
             ->make(true); // Generate JSON response for DataTables
     // dd(DataTables::of($payments)->toArray());
@@ -799,7 +813,7 @@ private function convertToArabicWords($amount)
 
     // Loop through the invoices
     foreach ($invoices as $invoice) {
-
+        if ($invoice->print_status != 'done') {
         $data['invoice'] = $invoice;
         $id = $invoice->installment_id;
 
@@ -832,10 +846,9 @@ private function convertToArabicWords($amount)
 
         echo view("Payments/print_invoice_up", $data);
 
-  
     }
-
-    return;
+    }
+   
 }
 
 public function archieve_all($ids)
