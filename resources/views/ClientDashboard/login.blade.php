@@ -55,7 +55,7 @@
                                     @csrf
                                     <div class="mb-7">
                                         <label for="exampleInputEmail1" class="form-label fw-bold">الايميل</label>
-                                        <input type="text" name="email" class="form-control py-6"
+                                        <input type="text" name="civil_number" class="form-control py-6"
                                             id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-9">
