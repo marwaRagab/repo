@@ -11,10 +11,7 @@
                         <td><strong>العنوان</strong></td>
                         <td>{{ $data->title }}</td>
                     </tr>
-                    <tr>
-                        <td><strong>الوصف</strong></td>
-                        <td>{{ $data->descr }}</td>
-                    </tr>
+
                     <tr>
                         <td><strong>التاريخ</strong></td>
                         <td>{{ \Carbon\Carbon::parse($data->created_at)->format('Y/m/d h:i:s A') }}</td>
@@ -104,6 +101,11 @@
                                 </form>
                             @endif
                         </td>
+
+                    </tr>
+                    <tr>
+                        <td><strong>الوصف</strong></td>
+                        <td> {!! nl2br(e($data->descr)) !!}</td>
                     </tr>
                 </tbody>
             </table>
@@ -127,7 +129,7 @@
                     <tr>
                         <td>{{ $reply->created_at }}</td>
                         <td>{{ $reply->user->name_ar }}</td>
-                        <td>{{ $reply->descr }}</td>
+                        <td> {!! nl2br(e($reply->descr)) !!}</td>
                         <td>
                             @if ($reply->file)
                                 @php

@@ -582,11 +582,25 @@ if (!function_exists('count_client')) {
 if (!function_exists('get_admin_user_name')) {
     function get_admin_user_name($user_id)
     {
-        $item =   User::findOrFail($user_id);
+        $item = User::find($user_id);
         if (empty($item)) {
             echo 'لا يوجد ';
         } else {
-            echo $item['name_ar'] ;
+            echo $item['name_ar'];
+        }
+    }
+}
+if (!function_exists('getUserName')) {
+    function getUserName($fullname) {
+        $name = explode(" ", $fullname);
+        if (isset($name[1])) {
+            if ($name[0] == 'عبد' || $name[1] == 'عبد') {
+                return $name[0] . ' ' . $name[1] . ' ' . $name[2];
+            } else {
+                return $name[0] . ' ' . $name[1];
+            }
+        } else {
+            return $name[0];
         }
     }
 }
@@ -1724,4 +1738,3 @@ if (!function_exists('count_bank_date')) {
             ->count();
     }
 }
-
