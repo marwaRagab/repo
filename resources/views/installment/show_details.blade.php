@@ -148,7 +148,13 @@
                                         </tr>
                                         <tr>
                                             <th>بنك العميل</th>
-                                            <td>{{ $data['Installment_Client']->bank->name_ar ?? 'N/A' }}</td>
+                                            @php
+                                                    $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $data['Installment_Client']->id)->first();
+                                                    $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
+                                                    @endphp
+                             
+                                                <td> {{ $bank->name_ar ?? $data['Installment_Client']->bank->name_ar ?? 'لايوجد' }}</td>
+                                           
                                         </tr>
                                         <tr>
                                             <th>كويت فايندر</th>
@@ -1036,7 +1042,7 @@
                                     <tbody>
 
                                         <!-- start row -->
-                                        @foreach( $purchase_orders_array as $item)
+                                        {{-- @foreach( $purchase_orders_array as $item)
 
                                         <tr>
                                             <td>
@@ -1057,6 +1063,30 @@
                                             @endif
 
                                         </tr>
+                                        @endforeach --}}
+
+                                        @foreach ($data['OrderItem'] as $item)
+
+                                        <tr>
+                                            <td>
+                                               {{ $item->product_order->first()?->mark->name_ar}}
+                                            </td>
+                                            <td>{{$item->product_order->first()?->class->name_ar}} </td>
+                                            <td>{{$item->product_order->first()?->model}}</td>
+                                            <td>{{$item->price}}</td>
+                                            <td>{{$item->org_price}}
+                                            </td>
+                                            <td>{{$item->final_price}}</td>
+                                            <td>{{ $item->counter }}</td>
+                                            @if (($item->counter != "") || ($item->counter!= null) )
+                                            <td>{{floatval($item->final_price)* floatval($item->counter)}}
+                                            </td>
+                                            @else
+                                            <td>{{floatval($item->final_price)}}</td>
+                                            @endif
+
+                                        </tr>
+                                            
                                         @endforeach
 
                                     </tbody>
@@ -2114,6 +2144,94 @@
                                     </div>
                                     @endif
 
+                                    @endforeach
+
+                                    <!-- client working -->
+                                    @foreach ($data['ClientWorking'] as $index=>$img_Client)
+
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}"
+                                                    alt="PDF Thumbnail">
+                                                <div
+                                                    class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+
+                                                    <p for="">شهادة الراتب {{ $index + 1 }}</p>
+                                                    {{-- <br> --}}
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->image   }}', 'https://electron-kw.com/{{$img_Client->image   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
+                                                        title="Download the file from the primary or fallback server.">
+                                                        تحميل
+                                                    </a>
+
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->image   }}', 'https://electron-kw.com/{{ $img_Client->image   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
+                                                        title="Print the file from the primary or fallback server.">
+                                                        طباعة
+                                                    </a>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    @foreach ($data['Installment_Clients'] as $index=>$img_Client)
+
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}"
+                                                    alt="PDF Thumbnail">
+                                                <div
+                                                    class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+
+                                                    <p for="">ملف الساينت </p>
+                                                    {{-- <br> --}}
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->cinet_pdf   }}', 'https://electron-kw.com/{{$img_Client->cinet_pdf   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
+                                                        title="Download the file from the primary or fallback server.">
+                                                        تحميل
+                                                    </a>
+
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->cinet_pdf   }}', 'https://electron-kw.com/{{ $img_Client->cinet_pdf   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
+                                                        title="Print the file from the primary or fallback server.">
+                                                        طباعة
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="meet-our-team position-relative rounded-4 overflow-hidden">
+                                                <img src="{{ asset('assets/images/PDF_file_icon.png') }}"
+                                                    alt="PDF Thumbnail">
+                                                <div
+                                                    class="leadership-card z-1 bg-white rounded py-3 px-8 mx-6 my-6 w-90 text-center">
+
+                                                    <p for="">الصورة المدنية </p>
+                                                    {{-- <br> --}}
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndRedirect('https://electron-kw.net/{{ $img_Client->upload_img_2   }}', 'https://electron-kw.com/{{$img_Client->upload_img_2   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-primary-subtle text-primary btn-sm"
+                                                        title="Download the file from the primary or fallback server.">
+                                                        تحميل
+                                                    </a>
+
+                                                    <a target="_blank"
+                                                        onclick="checkFileAndPRINT('https://electron-kw.net/{{ $img_Client->upload_img_2   }}', 'https://electron-kw.com/{{ $img_Client->upload_img_2   }}'); return false;"
+                                                        class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
+                                                        title="Print the file from the primary or fallback server.">
+                                                        طباعة
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                     @if ($Installment->qard_paper != "")
                                             <div class="item">

@@ -5,7 +5,7 @@
             href="{{route('excute_actions')}}">
             الكل ({{ count_court('' ,'excute_actions',null,null) }})
 
-            <p>({{$courts_all_amount}} )
+            <p class="m-0">({{$courts_all_amount}} )
                 د.ك
             </p>
         </a>
@@ -16,10 +16,9 @@
 
 
         <a href="{{route('excute_actions',array('governorate_id' => $court->id))}}"
-            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}">
-            {{$court->name_ar}}
-            ({{ count_court($court->id ,'excute_actions',null,null) }}) ({{$court->court_amount}})
-            <p>({{$court->court_amount}} )
+            class="btn-filter {{$court->style}}   px-2  mx-1 mb-2 {{ request()->get('governorate_id') == $court->id ? 'active' : '' }}"> {{$court->name_ar}}
+            ({{ count_court($court->id ,'excute_actions',null,null) }}) 
+            <p class="m-0">({{$court->court_amount}} )
                 د.ك
             </p>
         </a>
@@ -91,7 +90,7 @@
                         <td> {{$item->reminder_amount}} </td>
                         <td>{{$item->excute_actions_last_date_check}} </td>
                         <td>
-                            <div class="btn-group dropup mb-6 me-6 d-block ">
+                            <div class="btn-group mb-6 me-6 d-block dropdown ">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     الإجراءات

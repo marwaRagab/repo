@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Installment;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Eqrars_details;
 use App\Models\Installment;
-use App\Models\User; // Add this line
+use App\Models\User;
+use App\Models\Paperstype;
 use App\Repositories\Installment\PapersInstallRepository;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -25,60 +26,43 @@ class PapersInstallController extends Controller
         $data = $this->repository->getIndexData($status);
         return view('layout', $data['data'], $data);
     }
-    public function getAllData(Request $request, $slug = null)
-    {
-        $slug = $request->get('slug', $slug) ?? 'index';
 
-        $query = Eqrars_details::with(['installment.client'])
-            ->when($slug === 'not_finished', function ($q) {
-                $q->where('paper_received_checked', 0);
-            })
-            ->when($slug === 'received', function ($q) {
-                $q->where('paper_received_checked', 1);
-            })
-            ->when($slug === 'tadqeeq', function ($q) {
-                $q->whereHas('installment', function ($subQuery) {
-                    $subQuery->where('slug', 'tadqeeq')->where('tadqeeq', 1);
-                });
-            })
-            ->when($slug === 'manage_review', function ($q) {
-                $q->whereHas('installment', function ($subQuery) {
-                    $subQuery->where('slug', 'manage_review')->where('manage_review', 1);
-                });
-            })
-            ->when($slug === 'archive', function ($q) {
-                $q->whereHas('installment', function ($subQuery) {
-                    $subQuery->where('slug', 'archive');
-                });
-            })
-            ->when($slug === 'archive_finished', function ($q) {
-                $q->whereHas('installment', function ($subQuery) {
-                    $subQuery->where('slug', 'archive_finished');
-                });
-            })
-            ->orderBy('eqrars_details.id', 'desc'); // Correct the column name
+    public function getAllData(Request $request)
+    {
+        $slug = $request->input('slug') ?? 'index';
+        $query = $this->buildQuery($slug);
 
         return DataTables::of($query)
             ->addIndexColumn()
-            ->addColumn('transaction_number', function ($detail) {
-                return '<a href="' . url('installment/show-installment/' . $detail->installment->id) . '">' . $detail->installment->id . '</a>';
+            ->addColumn('transaction_number', function ($detail) use ($slug) {
+
+                    return $detail->id ? '<a href="' . url('installment/show-installment/' . $detail->id) . '">' . $detail->id . '</a>' : '-';
+
+
             })
-            ->addColumn('client_name', function ($detail) {
-                $client = $detail->installment->client;
-                return $client ? $client->name_ar . '<br/>' . $client->civil_number : '-';
+            ->addColumn('client_name', function ($detail) use ($slug) {
+                    $client = $detail->client;
+                    return $client ? $client->name_ar . '<br/>' . $client->civil_number : '-';
+
             })
-            ->addColumn('received_date', function ($detail) {
-                return $detail->installment->date ?? '-';
+            ->addColumn('received_date', function ($detail) use ($slug) {
+                if ($slug === 'received') {
+                    return $detail->paper->date ?? '-';
+                }else {
+                    return $detail->date ?? '-';
+                }
+
+
             })
-            ->addColumn('created_by', function ($detail) {
-                return $detail->installment->user->name_ar ?? '-';
+            ->addColumn('created_by', function ($detail) use ($slug) {
+                    return $detail->user->name_ar ?? '-';
+
+
             })
             ->addColumn('actions', function ($detail) use ($slug) {
-                if ($slug === 'index') {
+                if ($slug === 'not_finished') {
                     return '<a href="' . route('installment.papers.addToInstallmentPapers', ['slug' => 'not_finished', 'id' => $detail->id]) . '" class="btn btn-primary">تسليم المعاملة</a>';
-                } elseif ($slug === 'archive') {
-                    return '<a href="#" class="btn btn-warning">أرشفة</a>';
-                } else {
+                    } else {
                     return '<a href="#" class="btn btn-primary">تعديل</a>';
                 }
             })
@@ -100,19 +84,166 @@ class PapersInstallController extends Controller
             ->toJson();
     }
 
+    private function buildQuery($slug)
+    {
+
+        if ($slug == 'archive') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'manage_review');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 1);
+                    $query->where('paper_received', 1);
+                })
+                ->where('type', 'installment')
+                ->where('tadqeeq', 1)
+                ->where('manage_review', 1)
+                ->where('tadqeeq_archive', 1)
+                ->where('archive_finished', 0)
+                ->where('status', 'finished')
+                ->orderBy('installment.id', 'desc');
+        } else if ($slug == 'eqrar_dain') {
+            return Installment::with(['client', 'eqrarsDetail'])
+                ->where('type', 'installment')
+                ->where('status', 'finished')
+                ->where('laws', 1)
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_eqrar_dain_received', 0);
+                })
+                ->orderBy('installment.id', 'desc');
+        } else if ($slug == 'eqrar_dain_recieved') {
+            return Installment::with(['client', 'eqrarsDetail','paper'])
+                ->where('type', 'installment')
+                ->where('status', 'finished')
+                ->where('laws', 1)
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_eqrar_dain_received', 1);
+                })
+                ->orderBy('installment.id', 'desc');
+        } else if ($slug == 'archive_finished') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'manage_review');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 1);
+                    $query->where('paper_received', 1);
+                })
+                ->where('type', 'installment')
+                ->where('tadqeeq', 1)
+                ->where('manage_review', 1)
+                ->where('tadqeeq_archive', 1)
+                ->where('archive_finished', 1)
+                ->where('archive_received', 0)
+                ->where('status', 'finished')
+                ->orderBy('installment.id', 'desc');
+        } else if ($slug == 'manage_review') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'tadqeeq');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 1);
+                })
+                ->where('type', 'installment')
+                ->where('tadqeeq', 1)
+                ->where('manage_review', 1)
+                ->where('tadqeeq_archive', 0)
+                ->where('status', 'finished')
+                ->orderBy('installment.id', 'desc');
+        } else if ($slug == 'archive_received') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'manage_review');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 1);
+                    $query->where('paper_received', 1);
+                    $query->where('paper_eqrar_dain_received', 0);
+                })
+                ->where('type', 'installment')
+                ->where('tadqeeq', 1)
+                ->where('manage_review', 1)
+                ->where('tadqeeq_archive', 1)
+                ->where('archive_finished', 1)
+                ->where('archive_received', 1)
+                ->where('archive_final', 0)
+                ->orderBy('installment.id', 'desc');
+        }
+        else if ($slug == 'received') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'not_finished');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 0);
+                    $query->where('paper_received', 1);
+                })
+
+                ->orderBy('installment.id', 'desc');
+        }
+
+        else if ($slug == 'tadqeeq') {
+            return Installment::with(['client', 'paper', 'eqrarsDetail'])
+                ->whereHas('paper', function ($query) {
+                    $query->where('slug', 'my_index');
+                })
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received_checked', 1);
+                })
+                ->where('type', 'installment')
+                ->where('tadqeeq', 1)
+                ->where('manage_review', 0)
+                ->where('status', 'finished')
+                ->orderBy('installment.id', 'desc');
+        }
+        else if ($slug == 'not_finished') {
+            return Installment::with(['client', 'eqrarsDetail'])
+            ->where('type', 'installment')
+            ->where('status', 'finished')
+
+                ->whereHas('eqrarsDetail', function ($query) {
+                    $query->where('paper_received', 0);
+                })
+
+                ->orderBy('installment.id', 'desc');
+        }
+     
+    }
+
     public function addToInstallmentPapers(Request $request, $slug, $id)
     {
         if ($request->isMethod('post')) {
             $data = $request->all();
+
+
             if ($request->hasFile('cinet_img')) {
-                $data['cinet_img'] = $request->file('cinet_img');
+                $fileName = time() . '_' . $request->file('cinet_img')->getClientOriginalName();
+                $filePath = 'papers/' . $fileName;
+                $request->file('cinet_img')->move(public_path('papers'), $fileName);
+                $data['cinet_img']  = $filePath;
             }
+
             $result = $this->repository->addToInstallmentPapers($slug, $id, $data);
-            return redirect()->back()->with('success', 'تمت العملية بنجاح.');
+            $papers_type_id = PapersType::where('slug', $slug)->first()->id;
+            $nextPapersType = PapersType::where('id', '>', $papers_type_id)->orderBy('id')->first();
+            $next_papers_type_slug = $nextPapersType ? $nextPapersType->slug : null;
+
+            if ($result) {
+                return redirect()->route("installment.papers.status", $next_papers_type_slug)->with('success', 'تمت العملية بنجاح.');
+
+            }
+
+            return redirect()->back()->with('error', 'حدث خطأ ما، يرجى المحاولة مرة أخرى.');
         }
 
         $installment = Installment::with('client')->findOrFail($id);
-        $admins = User::where('active', 1)->get();
+        $admins = User::where(['active' => '1', 'deleted_at' => null, 'type' => 'emp'])->get();
+
+
 
         $title = 'إضافة صورة الاعتماد';
 
@@ -153,7 +284,26 @@ class PapersInstallController extends Controller
         return view('installment.papers.recieve_install_paper', compact('breadcrumb', 'title', 'addTitle', 'installment', 'client', 'bankName', 'ministryName', 'view'));
     }
 
+ // Fetch records from installment_papers_old with matching installment_id
+    public function updateInstallmentPapersDates()
+    {
 
+        $records = DB::table('installment_papers_old')
+            ->join('installment_papers', 'installment_papers_old.installment_id', '=', 'installment_papers.installment_id')
+            ->select('installment_papers_old.date', 'installment_papers.installment_id')
+            ->get();
+
+        // Update each matching record
+        foreach ($records as $record) {
+            $formattedDate = date('Y-m-d', $record->date);
+
+            DB::table('installment_papers')
+                ->where('installment_id', $record->installment_id)
+                ->update(['date' => $formattedDate]);
+        }
+
+        echo "Installment papers dates updated successfully.";
+    }
 
 
 

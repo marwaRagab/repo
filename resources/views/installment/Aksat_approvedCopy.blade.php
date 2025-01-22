@@ -254,7 +254,13 @@
                                                 <th>
                                                     البنك
                                                 </th>
-                                                <td> {{ $Installment_Client->bank->name_ar ?? 'لايوجد' }}</td>
+                                             
+                                                @php
+                                                    $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $Installment_Client->id)->first();
+                                                    $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
+                                                    @endphp
+                             
+                                                <td> {{ $bank->name_ar ?? $Installment_Client->bank->name_ar ?? 'لايوجد' }}</td>
 
                                             </tr>
                                             <tr>
