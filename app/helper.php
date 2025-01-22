@@ -367,7 +367,7 @@ if (!function_exists('log_move')) {
 if (!function_exists('change_status')) {
 
     function change_status($array_status, $id)
-    {   
+    {
         if ($array_status->hasFile('img_dir')) {
             $filename = time() . '-' . $array_status->file('img_dir')->getClientOriginalName();
             $path = $array_status->file('img_dir')->move(public_path('military_affairs'), $filename);
@@ -458,7 +458,7 @@ if (!function_exists('change_status')) {
                 'created_at' => date('Y-m-d H:i:s'),
                 'created_by' => Auth::user() ? Auth::user()->id : null,
             ];
-    
+
             \App\Models\Military_affairs\Military_affairs_status::create($array_status);
         }
     }
