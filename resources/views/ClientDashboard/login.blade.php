@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
 
     <!-- Core Css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
 
     <title>Spike Bootstrap Admin</title>
 </head>
@@ -35,7 +35,7 @@
                         <div class="row align-items-center justify-content-around pt-6 pb-5">
                             <div class="col-lg-6 col-xl-5 d-none d-lg-block">
                                 <div class="text-center text-lg-start">
-                                    <img src="{{ asset('assets/images/logos/logo.jpg') }}" alt="spike-img" class="img-fluid">
+                                    <img src="../assets/images/logos/logo.jpg" alt="spike-img" class="img-fluid">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-xl-5">
@@ -43,27 +43,19 @@
                                     الــــكـــــــتـــــرون </h2>
                                 <p class="fs-4 mb-7 text-center text-warning">قم بتسجيل الدخول الان </p>
 
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
+                               
 
-                                {{-- @if ($errors->has('error'))
+                                 @if ($errors->has('error'))
                                 <div class="alert alert-danger">
                                     {{ $errors->first('error') }}
                                 </div>
-                            @endif --}}
-                                <form class="mega-vertical" action="{{ route('login') }}" method="post"
+                                @endif 
+                                <form class="mega-vertical" action="{{ route('client.login') }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-7">
-                                        <label for="exampleInputEmail1" class="form-label fw-bold">الاسم</label>
-                                        <input type="text" name="username" class="form-control py-6"
+                                        <label for="exampleInputEmail1" class="form-label fw-bold">الايميل</label>
+                                        <input type="text" name="email" class="form-control py-6"
                                             id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-9">
@@ -287,12 +279,12 @@
         <div class="dark-transparent sidebartoggler"></div>
     </div>
     <!-- Import Js Files -->
-    <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
-    <script src="{{ asset('assets/js/theme/app.init.js') }}"></script>
-    <script src="{{ asset('assets/js/theme/theme.js') }}"></script>
-    <script src="{{ asset('assets/js/theme/app.min.js') }}"></script>
-    <script src=" {{ asset('assets/js/theme/feather.min.js') }}"></script>
+    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
+    <script src="../assets/js/theme/app.init.js"></script>
+    <script src="../assets/js/theme/theme.js"></script>
+    <script src="../assets/js/theme/app.min.js"></script>
+    <script src="../assets/js/theme/feather.min.js"></script>
 
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
