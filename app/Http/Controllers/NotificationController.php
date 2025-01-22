@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\NotificationRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Notification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\TechnicalSupport\Problem;
+use App\Models\TechnicalSupport\ProblemReply;
+use App\Interfaces\NotificationRepositoryInterface;
 
 class NotificationController extends Controller
 {
@@ -44,5 +47,43 @@ class NotificationController extends Controller
 
         return response()->json(['message' => 'Tab updated successfully']);
 
+    }
+
+    public function show($id)
+    {
+        $notification = Notification::where('id', $id)->first();
+        $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $notification->problem_id)->first();
+        dd( $pr);
+        if ($pr == null) {
+            return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
+
+        }
+        $data = Problem::with('user')->findOrFail($id);
+        $replies = ProblemReply::with('user')->where('problem_id', $id)->get();
+
+        $statusMapping = [
+            1 => 'جديد',
+            2 => 'قيد التدقيق',
+            3 => 'قيد العمل',
+            4 => 'بانتظار الرد',
+            5 => 'قيد المراجعة',
+            6 => 'تم الانتهاء منها',
+            7 => 'منجزة',
+            // 8 => 'تم الانتهاء منها',
+        ];
+        $title = "مشاهدة المشكلة";
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "الدعم الفني";
+        $breadcrumb[1]['url'] = route("supportProblem.index");
+        $breadcrumb[2]['title'] = $title;
+        $breadcrumb[2]['url'] = 'javascript:void(0);';
+
+        $view = 'TechnicalSupport.Problem.show';
+        return view(
+            'layout',
+            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'replies')
+        );
     }
 }
