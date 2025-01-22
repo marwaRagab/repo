@@ -6,13 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Military_affairs\Military_affair;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 
-class Client extends Model
+
+class AuthClient extends Authenticatable
 {
-    use HasFactory;
-    protected $guarded = 'client';
+    use HasFactory , Notifiable ;
     protected $table = 'client_new';
-    protected $fillable = ['location_google_map', 'kwfinder', 'location', 'Latitude', 'Longitude', 'house_id'];
+    protected $fillable = ['civil_number','password'];
+    protected $guard = 'client';
+    protected $hidden = [
+        'password',
+        
+    ];
 
     public function court()
     {

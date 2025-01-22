@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/auth.php';
+require __DIR__ . '/client.php';
 
 use App\Exports\ClientsExport;
 use Illuminate\Support\Facades\Route;
@@ -93,6 +94,8 @@ use App\Http\Controllers\ImportingCompanies\PurchaseOrdersController;
 use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\TransferProductController;
 use App\Http\Controllers\HumanResources\TransactionsCompletedController;
+use App\Http\Controllers\ClientAuth\ClientAuthController;
+
 
 // use App\Http\Controllers\ImportingCompanies\Tawreed\TawreedController;
 //
@@ -106,6 +109,11 @@ use App\Http\Controllers\HumanResources\TransactionsCompletedController;
 | contains the "web" middleware group. Now create something great!
 |
  */
+// Route::middleware('auth:client')->get('/clientDash/login', function () {
+//     return view('middleware.login');
+// });
+
+
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -735,3 +743,9 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });
+
+
+
+
+
+

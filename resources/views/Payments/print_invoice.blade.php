@@ -14,19 +14,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"/>
     <link rel="icon" type="image/png" sizes="16x16"
-          href="{{ asset('template/layout/plugins/images/login_img.jpeg')}}">
+          href="{{ asset('template/layout/plugins/images/login_img.jpeg') }}">
     <!-- Bootstrap-->
 
 
     <link rel="stylesheet"
-          href="{{ asset('template/layout/invoice_assets/vendor/bootstrap/css/bootstrap.min.css')}}"
+          href="{{ asset('template/layout/invoice_assets/vendor/bootstrap/css/bootstrap.min.css') }}"
           type="text/css"/>
     <link rel="stylesheet"
-          href="{{ asset('template/layout/invoice_assets/vendor/bootstrap/css/bootstrap.min.css.map')}}"
+          href="{{ asset('template/layout/invoice_assets/vendor/bootstrap/css/bootstrap.min.css.map') }}"
           type="text/css"/>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ asset('template/layout/invoice_assets/styles/styles.css')}}"/>
+    <link rel="stylesheet" href="{{ asset('template/layout/invoice_assets/styles/styles.css') }}"/>
 
     <style type="text/css">
         /* @page {
@@ -205,7 +205,7 @@
 </style>
 <div class="page" >
     <main>
-    
+
 
         <!-- hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh -->
         <header>
@@ -238,8 +238,8 @@
                 <tr class="table-data">
                     <td class="tableitem" colspan=4>
                         <p class="itemtext">
-                            <?= $installment_month['id'] ?? (is_array(request()->query('installment_month')) 
-                            ? request()->query('installment_month')['id'] ?? null 
+                            <?= $installment_month['id'] ?? (is_array(request()->query('installment_month'))
+                            ? request()->query('installment_month')['id'] ?? null
                             : request()->query('installment_month')->id ?? null) ?>                                 </p>
                     </td>
                     <td class="item" colspan=3>
@@ -394,7 +394,7 @@ echo (is_array($first_sum)) ? implode(', ', $first_sum) : $first_sum;
                         if ($item['installment_clients'] > 0) {
                             $the_balance = $item['total_madionia'];
                         } else {
-                            $first_amount = isset($first_amount) ? $first_amount : 0; 
+                            $first_amount = isset($first_amount) ? $first_amount : 0;
 
 $the_balance = $total_madionia - ($laws_item_amount ?? 0) + $first_amount;
                             // $the_balance = $total_madionia - ($laws_item_amount ?? 0) + $first_amount;
@@ -802,7 +802,7 @@ $the_balance = $total_madionia - ($laws_item_amount ?? 0) + $first_amount;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
         integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src=" {{asset('template/layout/invoice_assets/vendor/bootstrap/js/bootstrap.js')}}">
+<script src=" {{ asset('template/layout/invoice_assets/vendor/bootstrap/js/bootstrap.js') }}">
 </script>
 <script>
     var win = nw.Window.get();
