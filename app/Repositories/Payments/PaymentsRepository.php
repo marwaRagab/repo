@@ -105,7 +105,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
     {
         // Retrieve the selected month from the request
         $pay_date = $request->month;
-    
+
         // Query the database with necessary filters and relationships
         $payments = Invoices_installment::where('arch', 0)
         // ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
@@ -121,11 +121,11 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 'install_month',
             ])
             ->select([
-                'id', 'payment_type', 'date', 'branch_id', 
-                'installment_id', 'install_month_id', 
+                'id', 'payment_type', 'date', 'branch_id',
+                'installment_id', 'install_month_id',
                 'description', 'amount', 'print_status'
             ]);
-    
+
         // Process data for DataTables
         return DataTables::of($payments)
             ->addColumn('pay_method', function ($payment) {
@@ -152,23 +152,23 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 $total_items = Invoices_installment::where('arch', 0)->where('branch_id', Auth::user()->branch_id)->whereYear('date', $year)
                     ->whereMonth('date', $month)
                     ->count();
-                    
+
                     // Generate the serial number by incrementing count
                     $serialNo = $current_month_year . str_pad(substr($payment->id, -4), 4, '0', STR_PAD_LEFT);
-            
+
                     // Attach the serial number to the payment object
                     $payment->serial_no = $serialNo;
-            
-                    return $serialNo; 
+
+                    return $serialNo;
             })
             ->addColumn('print_status_label', function ($payment) {
-                return $payment->print_status == 'done' 
-                    ? '<span class="text-success">تم الطباعة</span>' 
+                return $payment->print_status == 'done'
+                    ? '<span class="text-success">تم الطباعة</span>'
                     : '<span class="text-danger">لم يتم الطباعة</span>';
             })
             ->addColumn('final_date_formatted', function ($payment) {
                 $finalDate = $payment->date ?? null;
-            
+
                 if ($finalDate) {
                     try {
                         return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
@@ -176,7 +176,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                         return $finalDate; // Handle invalid date gracefully
                     }
                 }
-            
+
                 return 'N/A'; // Return default if date is null or invalid
             })
             ->addColumn('actions', function ($payment) {
@@ -187,15 +187,15 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                     'id3' => $payment->serial_no,
                 ]);
                 $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
-    
-                $printButton = $payment->print_status == 'done' 
-                    ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>' 
+
+                $printButton = $payment->print_status == 'done'
+                    ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>'
                     : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
-    
-                $archiveButton = $payment->print_status == 'done' 
-                    ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>" 
+
+                $archiveButton = $payment->print_status == 'done'
+                    ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>"
                     : '<button class="btn btn-secondary btn-sm rounded-pill" disabled>لم يتم الطباعة</button>';
-    
+
                 return $printButton . ' ' . $archiveButton;
             })
             ->addColumn('select_checkbox', function ($payment) {
@@ -212,7 +212,7 @@ public function archive_all_in(Request $request)
     {
 
         $title = ' أرشيف عمليات الدفع';
-       
+
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -228,7 +228,7 @@ public function archive_all_in(Request $request)
     {
         // Retrieve the selected month from the request
         $pay_date = $request->month;
-    
+
         // Query the database with necessary filters and relationships
         $payments = Invoices_installment::where('arch', 1)
         // ->join('military_affairs', 'military_affairs.installment_id', '=', 'invoices_installment.installment_id')
@@ -244,11 +244,11 @@ public function archive_all_in(Request $request)
                 'install_month',
             ])
             ->select([
-                'id', 'payment_type', 'date', 'branch_id', 
-                'installment_id', 'install_month_id', 
+                'id', 'payment_type', 'date', 'branch_id',
+                'installment_id', 'install_month_id',
                 'description', 'amount', 'print_status'
             ]);
-    
+
         // Process data for DataTables
         return DataTables::of($payments)
             ->addColumn('pay_method', function ($payment) {
@@ -275,19 +275,19 @@ public function archive_all_in(Request $request)
                 $total_items = Invoices_installment::where('arch', 0)->where('branch_id', Auth::user()->branch_id)->whereYear('date', $year)
                     ->whereMonth('date', $month)
                     ->count();
-                    
+
                     // Generate the serial number by incrementing count
                     $serialNo = $current_month_year . str_pad(substr($payment->id, -4), 4, '0', STR_PAD_LEFT);
-            
+
                     // Attach the serial number to the payment object
                     $payment->serial_no = $serialNo;
-            
-                    return $serialNo; 
+
+                    return $serialNo;
             })
-            
+
             ->addColumn('final_date_formatted', function ($payment) {
                 $finalDate = $payment->date ?? null;
-            
+
                 if ($finalDate) {
                     try {
                         return \Carbon\Carbon::parse($finalDate)->format('d-m-Y');
@@ -295,7 +295,7 @@ public function archive_all_in(Request $request)
                         return $finalDate; // Handle invalid date gracefully
                     }
                 }
-            
+
                 return 'N/A'; // Return default if date is null or invalid
             })
             ->addColumn('actions', function ($payment) {
@@ -306,13 +306,13 @@ public function archive_all_in(Request $request)
                     'id3' => $payment->serial_no,
                 ]);
                 $archiveUrl = route('set_archive.data', ['id' => $payment->id]);
-    
+
                 $archiveButton =
                      "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'> إلغاء الارشفة</a>" ;
-    
+
                 return $archiveButton;
             })
-            
+
             ->rawColumns(['print_status_label', 'actions', 'select_checkbox']) // Allow HTML for specific columns
             ->addIndexColumn() // Add an auto-incrementing index column
             ->make(true); // Generate JSON response for DataTables
@@ -410,9 +410,9 @@ public function archive_all_in(Request $request)
     //     $invoice = Invoices_installment::findorfail($invoice_id);
     //     $invoice->update($data_update);
 
-        
+
     //     $data["item"] = $installment_item = Installment::findorfail($installment_id);
-        
+
     //     // dd($installment_item->getCountAttribute('not_done'));
     //     $data["item"]['not_done_count'] = $installment_item->get_total_amount('not_done');
 
@@ -423,21 +423,21 @@ public function archive_all_in(Request $request)
     //     } else {
     //         $data["installment_month"] = Installment_month::findorfail($id);
     //     }
-        
+
     //     // Safely process 'installment'
     //     if (isset($data["item"]['installment'])) {
     //         $total = explode(".", $data["item"]['installment']);
     //     } else {
     //         $total = null; // Handle the missing value
     //     }
-        
+
     //     // Safely process 'amount'
     //     if ($data["installment_month"] && isset($data["installment_month"]['amount'])) {
     //         $explode = explode('.', $data["installment_month"]['amount']);
     //     } else {
     //         $explode = null; // Handle the absence of 'amount'
     //     }
-        
+
 
     //     $data['first_sum'] = numberToArabicWords($explode[0]);
 
@@ -520,7 +520,7 @@ public function archive_all_in(Request $request)
     //     }
     //     // dd($client);
     //     // $ministries_income = $this->db_get->get_by_id('ministries_income', $data["client"]['ministries_income_id']);
-        
+
     //     if ($client->get_ministry) {
     //         // dd($client->get_ministry);
     //         $ministries_income = $client->get_ministry;
@@ -588,7 +588,7 @@ public function archive_all_in(Request $request)
     //         if (isset($data['items_invoices_installment'][$i])) {
     //             $knet = Invoices_installment::where('installment_id', $installment_id)
     //                 ->where($data['items_done'][$i]['id'], '=', $data['items_invoices_installment'][$i]['install_month_id']);
-        
+
     //             $data['items_done'][$i]['knet'] = $data["items_invoices_installment"][$i]['knet_code'];
     //         } else {
     //             // Handle cases where items_invoices_installment[$i] does not exist
@@ -669,17 +669,9 @@ public function archive_all_in(Request $request)
     // Step 6: Handle additional calculations (totals, discounts)
     $this->calculateTotalsAndDiscounts($data, $installment_id);
 
-    $data['title1'] = 'نسخة ملف العميل (1)';
-        echo view("Payments/print_invoice", $data);
 
-        $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
-        echo view("Payments/print_invoice", $data);
+        echo view("Payments/print_invoice_up", $data);
 
-        $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
-        echo view("Payments/print_invoice", $data);
-
-        $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
-        echo view("Payments/print_invoice", $data); // Render the view with prepared data
 }
 
 // Helper Methods
@@ -788,7 +780,7 @@ private function convertToArabicWords($amount)
     $ids = explode(',', $ids);
     $serial_nos = explode(',', $serial_nos);
     $invoiceids = explode(',', $invoiceids);
-    
+
     $data['user_name'] = Auth::user()->name_ar;
     $data['title'] = 'نظام الأقساط';
     $data['add_title'] = 'الأقساط';
@@ -812,7 +804,7 @@ private function convertToArabicWords($amount)
         $id = $invoice->installment_id;
 
         // Mark invoice as 'done'
-        $invoice->print_status = "done";    
+        $invoice->print_status = "done";
         $invoice->save();
         $installment_item = $installments[$id] ?? abort(404);
         $data["item"] = $installment_item;
@@ -837,17 +829,10 @@ private function convertToArabicWords($amount)
         $data['serial'] = $serial_nos[array_search($id, $ids)];
 
         // Generate and echo the views
-        $data['title1'] = 'نسخة ملف العميل (1)';
-        echo view("Payments/print_invoice", $data);
 
-        $data['title1'] = 'نسخة ملف العميل الاحتياطى (2)';
-        echo view("Payments/print_invoice", $data);
+        echo view("Payments/print_invoice_up", $data);
 
-        $data['title1'] = 'نسخة احتياطية ارشيف الشركة (3)';
-        echo view("Payments/print_invoice", $data);
-
-        $data['title1'] = 'نسخة احتياطية أرشيف البيت (4)';
-        echo view("Payments/print_invoice", $data);
+  
     }
 
     return;
@@ -855,10 +840,10 @@ private function convertToArabicWords($amount)
 
 public function archieve_all($ids)
 {
-   
+
     try {
         $invoices = array_filter(array_map('trim', explode(',', $ids)), 'is_numeric');
-      
+
         if (empty($invoices)) {
             return response()->json(['success' => false, 'message' => 'No IDs provided.'], 400);
         }
@@ -869,9 +854,9 @@ public function archieve_all($ids)
         ->get();
         foreach($updatedCount as $item)
         {
-            $item->arch = "1";    
+            $item->arch = "1";
             $item->save();
-        }  
+        }
 
         if ($updatedCount === 0) {
             return response()->json(['success' => false, 'message' => 'No invoices were updated.'], 404);
@@ -1215,7 +1200,7 @@ public function archieve_all($ids)
 
     // collect_affairs
 
-    
+
     public function collect_affairs(Request $request)
     {
 
@@ -1258,7 +1243,7 @@ public function archieve_all($ids)
     {
         // Retrieve the selected month from the request
 
-    
+
         $pay_date = $request->month;
 
         // Query the database with necessary filcolumn: column: ters and relationships
@@ -1286,14 +1271,14 @@ public function archieve_all($ids)
             $id = route('installment.show-installment', ['id' => $payment->installment_id]);
 
             if ($payment->installment) {
-                return $payment->installment->client->name_ar . 
-                       ' (' . 
-                       '<a href="' . $id . '">' . $payment->installment_id . '</a>' . 
+                return $payment->installment->client->name_ar .
+                       ' (' .
+                       '<a href="' . $id . '">' . $payment->installment_id . '</a>' .
                        ')';
             } else {
                 return 'لايوجد';
             }
-        })    
+        })
         ->rawColumns(['installment_name']) // Allow HTML for certain columns
         ->addIndexColumn() // Add an auto-incrementing index column
         ->make(true); // Generate JSON response for DataTables

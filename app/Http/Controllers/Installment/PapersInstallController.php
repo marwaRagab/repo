@@ -211,7 +211,7 @@ class PapersInstallController extends Controller
 
                 ->orderBy('installment.id', 'desc');
         }
-     
+
     }
 
     public function addToInstallmentPapers(Request $request, $slug, $id)

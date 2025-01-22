@@ -12,10 +12,12 @@
                 8 => 'dark',
             ];
         @endphp
+
+
         @foreach ($statusMapping as $key => $label)
             <a href="{{ route('supportRequest.index', ['status' => $key]) }}"
-                class="btn btn-{{ $btnColors[$key] ?? 'primary' }} {{ $status == $key ? 'active' : '' }} {{ $status == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
-                {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
+            class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }}  {{ request('status') == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
+            {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
             </a>
         @endforeach
     </div>
@@ -36,20 +38,21 @@
                 <thead>
                     <tr>
                         <th>م</th>
-                        <th>رقم المعاملة</th>
+                        <th>رقم التذكرة</th>
                         <th>العنوان</th>
                         <th>التاريخ</th>
-                        <th>الحالة</th>
                         <th>اسم المستخدم</th>
-                        <th>الرابط</th>
-                        <th>الإعدادات</th>
+                        <th>اجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($data as $request)
+                    @foreach ($data as $request)
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
-                            <td>{{ $request->installement_id }}</td>
+                            <td>
+                                <a
+                                    href="{{ route('supportRequest.show', $request->id) }}">{{$request->id}}</a>
+                            </td>
                             <td>{{ $request->title }}</td>
                             <td>
                                 <p class="m-0">{{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}
@@ -60,13 +63,9 @@
                                     {{ \Carbon\Carbon::parse($request->created_at)->diffForHumans(null, true, true, 2) }}
                                 </span>
                             </td>
-                            <td> <span class="badge bg-primary">{{ $statusMapping[$request->status] }}</span>
-                            </td>
+
                             <td>{{ $request->user->name_ar }}</td>
-                            <td> <a href="{{ $request->link }}" class="btn btn-link" target="_blank">الرابط</a></td>
                             <td>
-                                <div class="btn-group dropup mb-6 me-sm-6  d-block">
-                                    @if (auth()->user()->support == 1)
                                         <form
                                             action="{{ route('supportRequest.updateStatus', ['id' => $request->id]) }}"
                                             method="POST">
@@ -120,18 +119,15 @@
                                                 </li>
                                             </ul>
                                         </form>
+<br/>
+
+
+                                    @if ( filter_var($request->link, FILTER_VALIDATE_URL))
+                                 <a href="{{ $request->link }}" class="btn btn-success btn-sm rounded" target="_blank">الرابط</a>
                                     @endif
-                                </div>
-                                <a class="btn btn-success btn-sm rounded me-sm-6 "
-                                    href="{{ route('supportRequest.show', $request->id) }}">مشاهدة
-                                    التفاصيل</a>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">لا يوجد طلبات</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>

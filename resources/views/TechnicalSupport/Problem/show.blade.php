@@ -13,17 +13,16 @@
                         <td><strong>العنوان</strong></td>
                         <td>{{ $data->title }}</td>
                     </tr>
-                    <tr>
-                        <td><strong>رقم المعاملة</strong></td>
-                        <td>{{ $data->installement_id }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>الوصف</strong></td>
-                        <td>{{ $data->descr }}</td>
-                    </tr>
+                    @if ($data->installement_id)
+                        <tr>
+                            <td><strong>رقم المعاملة</strong></td>
+                            <td>{{ $data->installement_id }}</td>
+                        </tr>
+                    @endif
+
                     <tr>
                         <td><strong>التاريخ</strong></td>
-                        <td>{{ \Carbon\Carbon::parse($data->created_at)->format('Y/m/d h:i:s A') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($data->created_at)->locale('ar')->isoFormat('YYYY/MM/DD') }}<br>{{ \Carbon\Carbon::parse($data->created_at)->locale('ar')->isoFormat('hh:mm:ss A') }}</td>
                     </tr>
                     <tr>
                         <td><strong>اسم المستخدم</strong></td>
@@ -39,12 +38,12 @@
                     <tr>
                         <td><strong>الاولوية</strong></td>
                         <td >
-                            <p class="p-2 text-white {{ $data->priority == 'high' ? 'bg-danger' : ($data->priority == 'medium' ? 'bg-primary' : 'bg-success') }}">
-                                 {{ $data->priority == "high" 
-                                     ? "مرتفعة" 
-                                     : ($data->priority == "medium" 
-                                         ? "متوسطة" 
-                                         : "منخفضة") 
+                            <p class="p-2 text-white d-inline-block {{ $data->priority == 'high' ? 'bg-danger' : ($data->priority == 'medium' ? 'bg-primary' : 'bg-success') }}">
+                                 {{ $data->priority == "high"
+                                     ? "مرتفعة"
+                                     : ($data->priority == "medium"
+                                         ? "متوسطة"
+                                         : "منخفضة")
                                  }}
                              </p>
                          </td>
@@ -59,17 +58,24 @@
                     </tr>
 
                     <tr>
-                        <td><strong> وقت استلام التاسك</strong></td>          
-                        <td>{{ $data->assign_date ?? 'لا يوجد' }}</td> 
-                       
+                        <td><strong> وقت استلام التاسك</strong></td>
+                        <td>{{ \Carbon\Carbon::parse($data->assign_date)->locale('ar')->isoFormat('YYYY/MM/DD') ?? 'لا يوجد' }}<br>{{ \Carbon\Carbon::parse($data->assign_date)->locale('ar')->isoFormat('hh:mm:ss A') ?? 'لا يوجد' }}</td>
+
                     </tr>
                     <tr>
                         <td><strong> وقت الانتهاء التاسك</strong></td>
-                        <td>{{ $data->end_task ?? 'لا يوجد' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($data->end_task)->locale('ar')->isoFormat('YYYY/MM/DD') ?? 'لا يوجد' }}<br>{{ \Carbon\Carbon::parse($data->end_task)->locale('ar')->isoFormat('hh:mm:ss A') ?? 'لا يوجد' }}</td>
+
                     </tr>
                     <tr>
                         <td><strong> الرابط</strong></td>
-                        <td>{{ $data->link ?? 'لا يوجد' }}</td>
+                        <td>
+                            @if ($data->link)
+                                <a href="{{ $data->link }}" target="_blank">اضغط للمشاهدة</a>
+                            @else
+                                لا يوجد
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td><strong>مرفق</strong></td>
@@ -153,6 +159,10 @@
                             {{-- @endif --}}
                         </td>
                     </tr>
+                    <tr>
+                        <td><strong>الوصف</strong></td>
+                        <td> {!! nl2br(e($data->descr)) !!}</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -175,7 +185,7 @@
                     <tr>
                         <td>{{ $reply->created_at }}</td>
                         <td>{{ $reply->user->name_ar }}</td>
-                        <td>{{ $reply->descr }}</td>
+                        <td> {!! nl2br(e($reply->descr)) !!}</td>
                         <td>
                             @if ($reply->file)
                                 @php

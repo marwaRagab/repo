@@ -3,9 +3,9 @@
 <div class="card">
     <div class="d-flex align-items-center justify-content-between px-4 py-3 border-bottom">
         <h4 class="card-title mb-0">عمليات الدفع</h4>
-        <a class="btn me-1 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('archive_all_in') }}">
-            الارشيف </a>
-        <div class="form-group">
+        <div class="d-flex">
+            <a class="btn ms-2 mb-1 bg-primary-subtle text-primary px-4 fs-4 " href="{{ route('archive_all_in') }}">
+                الارشيف </a>
     <select class="form-select" id="dateSelect" name="month">
         <option selected disabled>اختر التاريخ</option>
         @foreach($dates as $date)
@@ -20,7 +20,7 @@
 
     <div class="card-body">
     <div class="table-responsive pb-4">
-    <table id="users-table" class="table table-bordered border text-nowrap align-middle">
+    <table id="users-table" class="table table-bordered border text-wrap align-middle">
                 <thead class="thead-dark">
                     <tr>
                     <th>م</th>
@@ -29,6 +29,8 @@
                     <th>طريقة الدفع</th>
                     <th>رقم العملية</th>
                     <th>حالة الطباعة</th>
+                    <th>الجهة</th>
+                    <th>الإيصال</th>
                     <th>التفاصيل</th>
                     <th>التاريخ</th>
                     <th>طباعة</th>
@@ -36,12 +38,14 @@
                     <th><input type="checkbox" class="form-check-input" id="select-all"></th>
                     </tr>
                 </thead>
-                
+
             </table>
-            <button id="print-selected" value="1"  class="btn btn-primary"> طباعة</button>
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-primary" id="print-selected" value="1"  > طباعة</button>
             <!-- <button   class="btn btn-success test" value="1"    style="margin-right: 900px;     margin-bottom: -50px;"    onclick="valthisform(this);"  >طباعة</button> -->
                     <!-- <button   class="btn btn-danger test"  value="2"  style="margin-right: 1000px"  onclick="valthisform(this);"   >ارشفة</button> -->
-                    <button class="btn btn-danger" value="2" id="archive-selected">ارشفة</button>
+            <button class="btn btn-danger me-2" value="2" id="archive-selected">ارشفة</button>
+        </div>
 
         </div>
     </div>
@@ -67,7 +71,7 @@
 $('#users-table').on('draw.dt', function () {
     const selectAllCheckbox = document.getElementById('select-all');
     const checkboxes = document.querySelectorAll('#users-table input[name="checkAll[]"]');
-    
+
     // Sync "select-all" state with individual checkboxes
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
     selectAllCheckbox.checked = allChecked; // Check the "select-all" if all checkboxes are selected
@@ -80,7 +84,7 @@ $('#users-table').on('draw.dt', function () {
 $('#users-table').on('draw.dt', function () {
     const selectAllCheckbox = document.getElementById('select-all');
     const checkboxes = document.querySelectorAll('#users-table input[name="checkAll[]"]');
-    
+
     // Sync the select-all checkbox with individual checkboxes
     const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
     selectAllCheckbox.checked = allChecked;
@@ -213,7 +217,7 @@ function valthisform(button) {
                     // data: {
                     //     status: status // Pass the status parameter
                     // }
-                    
+
                 data: function (d) {
                     d.month = $('#dateSelect').val(); // Pass selected month
                 }
@@ -230,15 +234,15 @@ function valthisform(button) {
                     {
                         data: 'installment_name',
                         name: 'installment_name',
-                       
+
                         className: 'text-center'
-                        
+
                     },
                     {
                         data: 'amount',
                         name: 'amount',
                         className: 'text-center'
-                       
+
                     },
 
                     {
@@ -254,6 +258,16 @@ function valthisform(button) {
                     {
                         data: 'print_status_label',
                         name: 'print_status_label',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'print_status_label',
+                        name: 'print_status_label',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'direct',
+                        name: 'direct',
                         className: 'text-center'
                     },
                     {
@@ -277,25 +291,25 @@ function valthisform(button) {
                     //     name: 'archive_button',
                     //     className: 'text-center'
                     // },
-                    
+
                     {
                         // data: 'select_checkbox',
                         // name: 'select_checkbox',
                         // className: 'text-center'
                         data: null,
-            name: 'select_checkbox', 
+            name: 'select_checkbox',
             className: 'text-center',
             orderable: false,
             searchable: false,
                 //    render: function(data, type, row) {
-                    //    return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`;  
+                    //    return `<input type="checkbox" data-print="${row.print_status}" name="checkAll[]" id="${row.serial_no}" value="${row.installment_id}" class="form-check-input">`;
                     //},
 
                     render: function (data, type, row) {
                         return `<input name="checkAll[]" type="checkbox" class="row-select" value="${row.installment_id}" data-print="${row.print_status}" data-serial="${row.serial_no}" data-invoice_id="${row.id}">`;
                     }
             }
-                    
+
                 ],
                 // language: {
                 // url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json', // Arabic translations
@@ -322,7 +336,7 @@ function valthisform(button) {
             $('#users-table').DataTable().ajax.reload();
         });
         });
-           
+
 </script>
 
 <script>
@@ -352,7 +366,7 @@ const seriall = serialNumbers.join(',');
 const invoiceids = invoice_ids.join(',');
     // Send selected rows to the server or handle them on the client
     $.ajax({
-        
+
         url: '/print_all/' + ids + '/' + seriall + '/' + invoiceids, // Define the print route in your backend
         type: 'GET',
         success: function (response) {
@@ -412,7 +426,7 @@ document.getElementById('archive-selected').addEventListener('click', function (
         // Set the default value to the current month (YYYY-MM format)
         const currentMonth = new Date().toISOString().slice(0, 7); // Get current month in 'YYYY-MM' format
         const dateSelect = document.getElementById('dateSelect');
-        
+
         // Set the default value for the dropdown
         dateSelect.value = currentMonth;
 

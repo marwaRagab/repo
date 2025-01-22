@@ -12,119 +12,95 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ProblemRepository implements ProblemRepositoryInterface
 {
 
     public function index($request)
     {
-        // dd($request);
         $status = $request->input('status', '1');
-        // dd($status);
-        // $data = ($status === 'all')
+        $priority = $request->input('priority', null);
 
-        // ? Problem::with('user')->when($request->has('department_id') && $request->has('sub_department_id'),function($q) use ($request){
-        //   return  $q->where('department_id','=',$request->department_id)->where('sub_department_id','=',$request->sub_department_id);
-        // })->orderBy('created_at', 'desc')->get()
-        // : Problem::with('user')->where('status', $status)
-        //     ->orderBy('created_at', 'desc')->get();
+        $query = Problem::with(['user', 'department'])
+            ->when($status !== 'all', function ($q) use ($status) {
+                $q->where('status', $status);
+            })
+            ->when($request->filled('department_id'), function ($q) use ($request) {
+                $q->where('department_id', $request->department_id);
+            })
+            ->when($request->filled('sub_department_id'), function ($q) use ($request) {
+                $q->where('sub_department_id', $request->sub_department_id);
+            })
+            ->when($priority, function ($q) use ($priority) {
+                $q->where('priority', $priority);
+            });
 
-    $query = Problem::with(['user', 'department'])
-    ->when($status !== 'all', function ($q) use ($status) {
-        $q->where('status', $status);
-    })
-    ->when(
-        $request->filled('department_id') ,
-        function ($q) use ($request) {
-            $q->where('department_id', $request->department_id);
-        }
-    )->when(
-         $request->filled('sub_department_id'),
-        function ($q) use ($request) {
-            $q->where('sub_department_id', $request->sub_department_id);
-        }
-    );
+        $statusMapping = [
+            1 => 'جديد',
+            2 => 'قيد التدقيق',
+            3 => 'قيد العمل',
+            4 => 'بانتظار الرد',
+            5 => 'قيد المراجعة',
+            6 => 'تم الانتهاء منها',
+            7 => 'منجزة',
+        ];
 
-    $statusMapping = [
-        1 => 'جديد',
-        2 => 'قيد التدقيق',
-        3 => 'قيد العمل',
-        4 => 'بانتظار الرد',
-        5 => 'قيد المراجعة',
-        6 => 'تم الانتهاء منها',
-        7 => 'منجزة',
-        // 8 => 'تم الانتهاء منها',
-    ];
+        $statusCounts = [];
 
-         $statusCounts = [];
-    
-         if($request->filled('sub_department_id') || $request->filled('department_id'))
-         {
+        if ($request->filled('sub_department_id') || $request->filled('department_id')) {
             $d = Problem::with('user')
-            ->when(
-                $request->filled('department_id') ,
-                function ($q) use ($request) {
+                ->when($request->filled('department_id'), function ($q) use ($request) {
                     $q->where('department_id', $request->department_id);
-                }
-            )->when(
-                $request->filled('sub_department_id'),
-                function ($q) use ($request) {
+                })
+                ->when($request->filled('sub_department_id'), function ($q) use ($request) {
                     $q->where('sub_department_id', $request->sub_department_id);
-                }
-            );
+                });
             foreach ($statusMapping as $status => $label) {
                 $statusCounts[$status] = (clone $d)->where('status', $status)->count();
             }
-         }
-         else
-         {
+        } else {
             foreach ($statusMapping as $status => $label) {
                 $statusCounts[$status] = Problem::where('status', $status)->count();
             }
-         }
-       
+        }
 
-     $data = $query->orderBy('created_at', 'desc')->get();
+        $data = $query->orderBy('created_at', 'desc')->get();
 
-     $dpart = '';
-    $subdpart = '';
+        $dpart = '';
+        $subdpart = '';
 
-    if ($request->filled('department_id')) {
-        $dpart = ' - '. Department::find($request->department_id)?->name_ar ;
-    }
+        if ($request->filled('department_id')) {
+            $dpart = ' - ' . Department::find($request->department_id)?->name_ar;
+        }
 
-    if ($request->filled('sub_department_id')) {
-        $subdpart = ' - '.SubDepartment::find($request->sub_department_id)?->name_ar ;
-    }
+        if ($request->filled('sub_department_id')) {
+            $subdpart = ' - ' . SubDepartment::find($request->sub_department_id)?->name_ar;
+        }
 
+        $title = "الدعم الفني $dpart $subdpart";
 
-    $title = "الدعم الفني $dpart $subdpart";
-
-        
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
-        // $breadcrumb[1]['title'] = "الموارد البشرية";
-        // $breadcrumb[1]['url'] = route("dashboard");
         $breadcrumb[1]['title'] = $title;
         $breadcrumb[1]['url'] = 'javascript:void(0);';
 
         $department = Department::all();
-        $developer = User::where('developer','=','1')->get();
+        $developer = User::where('developer', '=', '1')->get();
 
         $view = 'TechnicalSupport.Problem.index';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status','department','developer' ,'request')
+            compact('title', 'view', 'breadcrumb', 'data', 'statusMapping', 'statusCounts', 'status', 'department', 'developer', 'request')
         );
     }
 
     public function show($id)
     {
-        $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $id)->first();
+        $pr = Problem::with(['user', 'developer', 'department', 'subdepartment'])->where('id', $id)->first();
         if ($pr == null) {
             return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
-
         }
         $data = Problem::with('user')->findOrFail($id);
         $replies = ProblemReply::with('user')->where('problem_id', $id)->get();
@@ -137,7 +113,6 @@ class ProblemRepository implements ProblemRepositoryInterface
             5 => 'قيد المراجعة',
             6 => 'تم الانتهاء منها',
             7 => 'منجزة',
-            // 8 => 'تم الانتهاء منها',
         ];
         $title = "مشاهدة المشكلة";
         $breadcrumb = array();
@@ -157,9 +132,6 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     public function store($request)
     {
-
-
-        // dd($request);
         $messages = [
             'title.required' => 'عنوان المشكلة اجباري.',
             'link.required' => 'رابط المشكلة اجباري',
@@ -167,8 +139,7 @@ class ProblemRepository implements ProblemRepositoryInterface
         ];
 
         $validator = Validator::make($request->all(), [
-            //   'installement_id' => 'exists:installment,id',
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|min:10',
             'link' => 'required|string|max:255',
             'descr' => 'required|string|max:255',
             'file' => 'file|mimes:jpeg,jpg,png,gif,mp4,mov,avi,pdf|max:10240',
@@ -184,16 +155,14 @@ class ProblemRepository implements ProblemRepositoryInterface
             $data->link = $request->link;
             $data->descr = $request->descr;
             if ($request->hasFile('file')) {
-                
                 $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
                 $filePath = 'techical_support/' . $fileName;
                 $request->file('file')->move(public_path('techical_support'), $fileName);
-                $data->file = $filePath; // Save the relative path to the database
-                
+                $data->file = $filePath;
             }
             $data->department_id = $request->department;
             $data->sub_department_id = $request->sub_department;
-            $data->priority =  $request->priority;
+            $data->priority = $request->priority;
             $data->user_id = Auth::user()->id;
             $data->save();
         }
@@ -201,19 +170,16 @@ class ProblemRepository implements ProblemRepositoryInterface
         $support_users = User::where('support', 1)->get();
 
         foreach ($support_users as $one) {
-
             $notification = new Notification();
             $notification->title = 'تم اضافة مشكلة جديدة بالدعم الفني';
             $notification->descr = '';
             $notification->user_id = $one->id;
             $notification->problem_id = $data->id;
             if ($request->hasFile('file')) {
-                // $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
                 $notification->attachment = $data->file;
             }
             $notification->created_at = now();
             $notification->save();
-
         }
         return redirect()->route('supportProblem.index')->with('success', 'تم إضافة المشكلة بنجاح');
     }
@@ -225,13 +191,20 @@ class ProblemRepository implements ProblemRepositoryInterface
         ]);
 
         $data = Problem::findOrFail($id);
+        $currentStatus = $data->status;
         $data->status = $request->status;
         $data->updated_at = now();
-        if($request->status == "6")
-        {
+        if ($request->status == "6") {
             $data->end_task = now();
         }
         $data->save();
+
+        DB::table('issue_status_history')->insert([
+            'issue_id' => $id,
+            'from_status' => $currentStatus,
+            'to_status' => $request->status,
+            'transition_time' => now(),
+        ]);
 
         return redirect()->route('supportProblem.show', $data->id)->with('success', 'تم تحديث حالة المشكلة بنجاح');
     }
@@ -248,35 +221,27 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data->problem_id = $request->problem_id;
         $data->descr = $request->descr;
         if ($request->hasFile('file')) {
-            // $data->file = $request->file('file')->store('uploads/new_photos', 'public');
             $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
             $filePath = 'techical_support/' . $fileName;
             $request->file('file')->move(public_path('techical_support'), $fileName);
-            $data->file = $filePath; // Save the relative path to the database
-            
+            $data->file = $filePath;
         }
         $data->user_id = Auth::user()->id;
         $data->save();
 
         if (Auth::user()->support == 1) {
-
             $pr = Problem::with('user')->where('id', $request->problem_id)->first();
             $notification = new Notification();
             $notification->title = "تعليق جديد على مشكلة في الدعم الفني";
             $notification->descr = $request->descr;
             $notification->user_id = $pr->user_id;
             $notification->problem_id = $data->problem_id;
-            /* if ($request->hasFile('file')) {
-            $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
-            }
-             */
             $notification->created_at = now();
             $notification->save();
         } else {
             $support_users = User::where('support', 1)->get();
 
             foreach ($support_users as $one) {
-
                 $notification = new Notification();
                 $notification->title = 'تم اضافة مشكلة جديدة بالدعم الفني';
                 $notification->descr = '';
@@ -287,14 +252,12 @@ class ProblemRepository implements ProblemRepositoryInterface
                 }
                 $notification->created_at = now();
                 $notification->save();
-
             }
         }
 
         return redirect()->route('supportProblem.show', ['id' => $request->problem_id])
             ->with('success', 'تم إضافة رد على المشكلة بنجاح');
     }
-
 
     public function updatedeveloper($id, Request $request)
     {
@@ -308,5 +271,32 @@ class ProblemRepository implements ProblemRepositoryInterface
         $data->save();
 
         return redirect()->back()->with('success', 'تم تحديث   بنجاح');
+    }
+
+    public function getStatusDurations($status, $problemId = null)
+    {
+        $query = Problem::where('status', $status);
+
+        if ($problemId) {
+            $query->where('id', $problemId);
+        }
+
+        $problems = $query->get();
+        $durations = [];
+
+        foreach ($problems as $problem) {
+            $lastTransition = DB::table('issue_status_history')
+                ->where('issue_id', $problem->id)
+                ->where('to_status', $status)
+                ->orderBy('transition_time', 'desc')
+                ->first();
+
+            if ($lastTransition) {
+                $duration = now()->diff($lastTransition->transition_time)->format('%d أيام, %h ساعات, %i دقائق');
+                $durations[$problem->id] = $duration;
+            }
+        }
+
+        return $durations;
     }
 }
