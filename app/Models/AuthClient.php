@@ -16,7 +16,7 @@ class AuthClient extends Authenticatable
 {
     use HasFactory , Notifiable ;
     protected $table = 'client_new';
-    protected $fillable = ['location_google_map', 'kwfinder', 'location', 'Latitude', 'Longitude', 'house_id','email','password'];
+    protected $fillable = ['email','password'];
     protected $guard = 'client';
     protected $hidden = [
         'password',

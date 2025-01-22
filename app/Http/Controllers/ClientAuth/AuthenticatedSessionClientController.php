@@ -21,11 +21,11 @@ class AuthenticatedSessionClientController extends Controller
     {
     //    dd('ff');
         // 
-        return Inertia::render('ClientAuth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
-        // return view('ClientDashboard.login');
+        // return Inertia::render('ClientAuth/Login', [
+        //     'canResetPassword' => Route::has('password.request'),
+        //     'status' => session('status'),
+        // ]);
+        return view('ClientDashboard.login');
     }
 
     /**
@@ -33,11 +33,12 @@ class AuthenticatedSessionClientController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->authenticate('client');
 
         $request->session()->regenerate();
+        return redirect()->route('client.index');
 
-        return redirect()->intended(RouteServiceProvider::Client_HOME);
+        // return redirect()->intended(RouteServiceProvider::Client_HOME);
     }
 
     /**
@@ -51,6 +52,6 @@ class AuthenticatedSessionClientController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('client.login');
     }
 }

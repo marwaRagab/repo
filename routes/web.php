@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/auth.php';
+require __DIR__ . '/client.php';
 
 use App\Exports\ClientsExport;
 use Illuminate\Support\Facades\Route;
@@ -743,12 +744,7 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
 });
 
 
-Route::middleware('client')->group(function () {
-    // dd("client");
-    Route::get('clientDash/login', [ClientAuthController::class, 'showLoginForm'])->name('client.login.show');
-    Route::post('clientDash/login', [ClientAuthController::class, 'login'])->name('client.login');
-    Route::post('clientDash/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
-});
 
 
-// require __DIR__ . '/Clientauth.php';
+
+

@@ -45,11 +45,11 @@
 
                                
 
-                                {{-- @if ($errors->has('error'))
+                                 @if ($errors->has('error'))
                                 <div class="alert alert-danger">
                                     {{ $errors->first('error') }}
                                 </div>
-                            @endif --}}
+                                @endif 
                                 <form class="mega-vertical" action="{{ route('client.login') }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
