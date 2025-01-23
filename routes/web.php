@@ -58,6 +58,7 @@ use App\Http\Controllers\Military_affairs\SearchController;
 // use App\Http\Controllers\Military_affairs\Military_affairsController;
 use App\Http\Controllers\ImportingCompanies\ClassController;
 use App\Http\Controllers\TechnicalSupport\ProblemController;
+use App\Http\Controllers\TechnicalSupport\ReportController;
 
 // use App\Http\Controllers\Military_affairs\EqrardainController;
 
@@ -717,6 +718,11 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::post('/transfer-products/transfer', [TransferProductController::class, 'transfer'])->name('transferProduct.transfer');
 
     //Technical Support
+    Route::get('/technical-support/reports/prbs_num', [ReportController::class, 'prbs_num'])->name('technical_support.reports.prbs_num');
+    Route::get('/technical-support/reports/timeline', [ReportController::class, 'timeline'])->name('technical_support.reports.timeline');
+    Route::get('/technical-support/reports/progress', [ReportController::class, 'progress'])->name('technical_support.reports.progress');
+
+    Route::get('/technical-support/reports', [ReportController::class, 'index'])->name('technical_support.reports.index');
     Route::get('/technical-support/problems', [ProblemController::class, 'index'])->name('supportProblem.index');
     Route::post('/technical-support/problems', [ProblemController::class, 'store'])->name('supportProblem.store');
     Route::get('/technical-support/problems/{id}', [ProblemController::class, 'show'])->name('supportProblem.show');
@@ -743,9 +749,3 @@ Route::put('/human-resources/users-profile/{id}', [UserController::class, 'updat
     Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 });
-
-
-
-
-
-

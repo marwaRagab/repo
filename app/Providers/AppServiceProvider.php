@@ -111,6 +111,8 @@ use App\Interfaces\ImportingCompanies\PurchaseOrdersRepositoryInterface;
 use App\Interfaces\Military_affairs\Military_affairsRepositoryInterface;
 use App\Interfaces\ImportingCompanies\TransferProductRepositoryInterface;
 use App\Interfaces\HumanResources\TransactionsCompletedRepositoryInterface;
+use App\Interfaces\TechnicalSupport\ReportRepositoryInterface;
+use App\Repositories\TechnicalSupport\ReportRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -181,8 +183,9 @@ class AppServiceProvider extends ServiceProvider
          $this->app->bind(ProblemRepositoryInterface::class, ProblemRepository::class);
         $this->app->bind(RequestRepositoryInterface::class, RequestRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
+        $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
 
-        
+
 
     }
 
