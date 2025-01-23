@@ -93,8 +93,22 @@
 
 
 
+
+
+
+
+
+
+
                                     @else
                                         <td>{{ number_format(($Installment->total - $mil_amount),3)}}</td>
+
+
+
+
+
+
+
 
 
 
@@ -168,7 +182,7 @@
 
 
                                         @php
-                                            if($data['Installment_Client']>0){
+                                            if($data['Installment_Client']){
                                                $ClientWorking = App\Models\ClientWorking::where('installment_clients_id', $data['Installment_Client']->id)->first();
                                                 $bank = $ClientWorking ? App\Models\Bank::find($ClientWorking->bank_id) : null;
                                             }else{
@@ -2360,6 +2374,11 @@
                                           $extra = $Installment->extra_first_amount ;
                                           else
                                           $extra = 0;
+                                          if($Installment->laws == 0)
+                                           $total_madionia1= $total_madionia1   ;
+                                           else
+
+
 
                                            $total_madionia1= $total_madionia1  +  $Installment->first_amount + $extra ;
                                                 $i=1; $the_balance = $total_madionia1 ;
@@ -2403,28 +2422,54 @@
                                         @if($one->amount !=0 )
                                             <tr>
                                                 <td>{{$i }}</td>
+
                                                 <td>
-                                                    @php $total_madionia = $total_madionia - $one->sum_amount; @endphp
+                                                    @php
+                                                        $discount=\App\Models\Installment_month::where('installment_type','discount')->where('installment_id',$Installment->id)->first();
+
+      if($one->payment_type=='cash/knet/finish'){
+          $total_madionia = $total_madionia- $one->sum_amount -$check_amount ;
+          $total_madionia = $total_madionia *-1 ;
+      } else{
+      $total_madionia = $total_madionia - $one->sum_amount;
+      }
+
+
+                                                    @endphp
+
                                                     {{ number_format(($total_madionia), 3, '.', ',') }}
                                                 </td>
+
                                                 <td>-</td>
-                                                <td>{{$one->sum_amount}}</td>
+
+                                                @if($one->payment_type=='cash/knet/finish')
+                                                    <td>{{number_format($one->sum_amount -$check_amount - $discount->amount,3,'.',',')}}</td>
+                                                @else
+                                                    <td>{{$one->sum_amount}}</td>
+                                                @endif
+
                                                 <td>{{($one->payment_date != 0) ? \Carbon\Carbon::parse($one->payment_date)->format('Y-m-d')  :  date('Y-m-d',$one->created_at) }}
                                                 </td>
                                                 @if($one->payment_type=='cash')
                                                     <td><span class="btn btn-success"> كاش</span></td>
-                                                @endif
-                                                @if ($one->payment_type=='knet')
+
+                                                @elseif($one->payment_type=='knet')
                                                     <td><span class="btn btn-success">كى نت</span></td>
-                                                @endif
-                                                @if ($one->payment_type == 'check')
+
+                                                @elseif($one->payment_type == 'check')
                                                     <td><span class="btn btn-success">شيك </span></td>
-                                                @endif
-                                                @if($one->payment_type == 'part')
+
+                                                @elseif($one->payment_type == 'part')
                                                     <td>
                                                 <span class="btn btn-success">
                                                     رابط </span>
                                                     </td>
+                                                @else
+                                                    <td>
+                                                <span class="btn btn-success">
+                                                    لايوجد </span>
+                                                    </td>
+
                                                 @endif
                                                 <td>
 
@@ -3373,7 +3418,6 @@
             var knet_n = parseFloat(((real_price * 1000) - cash) / 1000).toFixed(3);
             $('#knet_total').val(knet_n);
         }
-
 
 
         return false;

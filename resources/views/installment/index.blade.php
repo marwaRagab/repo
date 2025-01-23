@@ -77,7 +77,7 @@
                                 </a>
                             </td>
                             <td>
-                                {{ $item->installment_client->name_ar ?? 'لا يوجد' }} <br>
+                                {{ $item->installment_client->name_ar ??  $item->client->name_ar ??'لا يوجد' }} <br>
                                 {{ $item->client->civil_number ?? '' }}
                             </td>
                             <td>
