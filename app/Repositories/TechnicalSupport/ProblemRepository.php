@@ -4,6 +4,7 @@ namespace App\Repositories\TechnicalSupport;
 
 use App\Models\User;
 use App\Models\Department;
+use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\SubDepartment;
@@ -207,6 +208,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification->descr = '';
             $notification->user_id = $one->id;
             $notification->problem_id = $data->id;
+            $notification->action = 'create';
             if ($request->hasFile('file')) {
                 // $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
                 $notification->attachment = $data->file;
@@ -236,12 +238,13 @@ class ProblemRepository implements ProblemRepositoryInterface
         $support_users = User::where('support', 1)->get();
 
         foreach ($support_users as $one) {
-
+            $shortTitle = Str::limit($data->title, 20);
             $notification = new Notification();
-            $notification->title = 'تم تحديث حالة المشكلة  ' . $data->id;
+            $notification->title = 'تم تحديث حالة المشكلة  ' . $shortTitle;
             $notification->descr = '';
             $notification->user_id = $one->id;
             $notification->problem_id = $data->id;
+            $notification->action = 'status_change';
             if ($request->hasFile('file')) {
                 // $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
                 $notification->attachment = $data->file;
@@ -283,6 +286,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification->descr = $request->descr;
             $notification->user_id = $pr->user_id;
             $notification->problem_id = $data->problem_id;
+            $notification->action = 'reply';
             /* if ($request->hasFile('file')) {
             $notification->attachment = $request->file('file')->store('uploads/new_photos', 'public');
             }
@@ -299,6 +303,7 @@ class ProblemRepository implements ProblemRepositoryInterface
                 $notification->descr = $request->descr ;
                 $notification->user_id = $one->id;
                 $notification->problem_id = $data->id;
+                $notification->action = 'reply';
                 if ($request->hasFile('file')) {
                     $notification->attachment = $data->file;
                 }
