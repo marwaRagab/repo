@@ -125,7 +125,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
             ->select([
                 'id', 'payment_type', 'date', 'branch_id',
                 'installment_id', 'install_month_id',
-                'description', 'amount', 'print_status'
+                'description', 'amount', 'print_status', 'img'
             ]);
 
         // Process data for DataTables
@@ -190,9 +190,7 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 ]);
                 $archiveUrl = route('set_archief.data', ['id' => $payment->id]);
 
-                $printButton = $payment->print_status == 'done'
-                    ? '<a style="text-decoration: line-through; pointer-events: none" class="btn btn-primary btn-sm rounded-pill">طباعة</a>'
-                    : "<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
+                $printButton ="<a class='btn btn-primary btn-sm rounded-pill' href='$printUrl'>طباعة</a>";
 
                 $archiveButton = $payment->print_status == 'done'
                     ? "<a class='btn btn-danger btn-sm rounded-pill' href='$archiveUrl'>تحويل للأرشيف</a>"
@@ -201,21 +199,28 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 return $printButton . ' ' . $archiveButton;
             })
             ->addColumn('direct', function ($payment) {
-                $printUrl = route('print_invoice', [
-                    'id' => $payment->id,
-                    'id1' => $payment->installment_id,
-                    'id2' => $payment->install_month_id,
-                    'id3' => $payment->serial_no,
-                ]);
-
-                $printButton = "<a class='btn bg-primary-subtle text-primary btn-sm rounded-pill' href='$printUrl'>عرض الصورة</a>";
-
-                return $printButton ;
+                $installment_item = Installment::where('id' ,$payment->installment_id )->first();
+                return match ($installment_item->laws) {
+                    '1' => 'شئون قانونية',
+                    '0' => 'مبيعات',
+                    
+                };
             })
+            // ->addColumn('direct', function ($payment) {
+            //     Log::info('Image URL: ' . $payment->img);
+            //     $primaryUrl = "https://electron-kw.net/{$payment->img}";
+            //     $fallbackUrl = "https://electron-kw.com/{$payment->img}";
+            
+            //     $printButton = "<a class='btn bg-primary-subtle text-primary btn-sm rounded-pill' target='_blank' 
+            //                         onclick=\"checkFileAndPRINT('$primaryUrl', '$fallbackUrl'); return false;\">
+            //                         عرض الصورة
+            //                     </a>";
+            //     return $printButton ;
+            // })
             ->addColumn('select_checkbox', function ($payment) {
                 return '<input type="checkbox" name="checkAll[]" value="' . $payment->id . '" class="form-check-input">'; // Checkbox for bulk actions
             })
-            ->rawColumns(['print_status_label', 'actions', 'select_checkbox', 'direct']) // Allow HTML for specific columns
+            ->rawColumns(['print_status_label', 'actions', 'select_checkbox','direct']) // Allow HTML for specific columns
             ->addIndexColumn() // Add an auto-incrementing index column
             ->make(true); // Generate JSON response for DataTables
     // dd(DataTables::of($payments)->toArray());
@@ -824,7 +829,12 @@ private function convertToArabicWords($amount)
         $data["item"] = $installment_item;
 
         // Handle installment month and amounts
-        $data["installment_month"] = Installment_month::findorfail($id);
+        // $data["installment_month"] = Installment_month::findorfail($id);
+        $data["installment_month"] = Installment_month::where('installment_id', $id)->first();
+        // if (!$data["installment_month"]) {
+        //     // Handle the case when no record is found
+        //     abort(404, "Installment month not found for installment_id: $id");
+        // }
         $explode = explode('.', $data["installment_month"]['amount']);
         $data['first_sum'] = numberToArabicWords($explode[0]);
         $data['secound_sum'] = $explode[1] ?? '';
