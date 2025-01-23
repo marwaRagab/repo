@@ -61,11 +61,22 @@
                             </a>
                         </li>
                         @php
-                        $count = App\Models\Notification::where('user_id', Auth::id())
-                        ->where('show', 0)
-                        ->whereDate('created_at', today())
-                        ->count();
+                        
+                        if(Auth::user()->support == 1){
+                            $count = App\Models\Notification::orderBy('created_at', 'desc')
+                                ->where('user_id', '!=', Auth::id())
+                                ->where('show', 0)
+                                ->count();
 
+                                }
+                                else{
+                                $problems = App\Models\TechnicalSupport\Problem::where('user_id', Auth::id())->pluck('id');
+                                $count = App\Models\Notification::orderBy('created_at', 'desc')
+                                ->whereIn('problem_id', $problems)
+                                ->where('action', '!=', 'create')
+                                ->where('show', 0)
+                                ->count();
+                                }
                         @endphp
                         <li class="nav-item dropdown">
                             <a class="nav-link position-relative" href="javascript:void(0)" id="drop2"
@@ -98,6 +109,7 @@
                                 $problems = App\Models\TechnicalSupport\Problem::where('user_id', Auth::id())->pluck('id');
                                 $lastThreeRows = App\Models\Notification::orderBy('created_at', 'desc')
                                 ->whereIn('problem_id', $problems)
+                                ->where('action', '!=', 'create')
                                 ->where('show', 0)
                                 ->take(2)
                                 ->get();

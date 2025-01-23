@@ -261,14 +261,33 @@ function valthisform(button) {
                         className: 'text-center'
                     },
                     {
-                        data: 'print_status_label',
-                        name: 'print_status_label',
-                        className: 'text-center'
-                    },
-                    {
                         data: 'direct',
                         name: 'direct',
                         className: 'text-center'
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+        // console.log('Image Path from DB:', row.img); // Debugging the `img` value
+
+        // Check if `row.img` is null or empty
+        if (!row.img) {
+            return `<span class="text-danger">لا يوجد</span>`;
+        }
+
+        // Construct the full URL
+        const primaryUrl = `https://electron-kw.net/${row.img}`;
+        const fallbackUrl = `https://electron-kw.com/${row.img}`;
+
+        return `<a target="_blank"
+                   onclick="checkFileAndPRINT('${primaryUrl}', '${fallbackUrl}'); return false;"
+                   class="btn waves-effect waves-light bg-secondary-subtle text-secondary btn-sm"
+                   title="Print the file from the primary or fallback server.">
+                   عرض الصورة
+                </a>`;
+    }
                     },
                     {
                         data: 'description',
@@ -432,4 +451,60 @@ document.getElementById('archive-selected').addEventListener('click', function (
 
     });
 
+    async function checkFileAndPRINT(primaryUrl, fallbackUrl) {
+
+const primaryReachable = await checkImage(primaryUrl);
+if (primaryReachable) {
+    console.log("Primary URL exists, redirecting...");
+    // window.location.href = primaryUrl; // Uncomment to enable redirection
+    const newWindow = window.open(primaryUrl, '_blank');
+    // newWindow.onload = () => newWindow.print();
+} else {
+    console.log("Primary URL not found, redirecting to fallback...");
+    // window.location.href = fallbackUrl; // Uncomment to enable redirection
+    const newWindow = window.open(fallbackUrl, '_blank');
+    // newWindow.onload = () => newWindow.print();
+}
+
+
+}
+
+function checkImage(url) {
+        return new Promise((resolve) => {
+            // Check file extension
+            const extension = url.split('.').pop().toLowerCase();
+            // alert(extension);
+
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
+                // Check if the URL is a valid image
+                const img = new Image();
+                img.onload = () => {
+                    console.log('The file is an accessible image:', url);
+                    resolve(true);
+                };
+                img.onerror = () => {
+                    console.log('The file is not an accessible image:', url);
+                    resolve(false);
+                };
+                img.src = url;
+            } else if (extension === 'pdf') {
+
+                const substring = "uploads/";
+                if (url.includes(substring)) {
+                    console.log("The URL contains the substring:", substring);
+                    resolve(true);  // URL contains the substring
+                } else {
+                    console.log("The URL does not contain the substring:", substring);
+                    // return false;  // URL does not contain the substring
+                    resolve(false);
+                }
+
+
+            } else {
+                console.log('Unknown file type:', url);
+                // resolve('unknown');
+                resolve(false);
+            }
+        });
+    }
 </script>
