@@ -72,6 +72,8 @@ class ReportRepository implements ReportRepositoryInterface
             $query->where('priority', $request->priority);
         }
 
+       
+
         $problemsByStatus = $query
             ->select('status', DB::raw('COUNT(*) as total'))
             ->groupBy('status')

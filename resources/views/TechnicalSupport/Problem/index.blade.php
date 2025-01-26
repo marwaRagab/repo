@@ -22,7 +22,7 @@
             ];
         @endphp
     @foreach ($statusMapping as $key => $label)
-        <a href="{{ route('supportProblem.index', ['status' => $key, 'department_id' => $request->department_id, 'sub_department_id' => $request->sub_department_id]) }}"
+        <a href="{{ route('supportProblem.index', ['status' => $key, 'department_id' => $request->department_id, 'sub_department_id' => $request->sub_department_id, 'user_id' => $request->user_id]) }}"
         class="btn-filter bg-{{ $btnColors[$key] ?? 'primary' }}-subtle text-{{ $btnColors[$key] ?? 'primary' }} {{ request('status') == $key ? 'active' : '' }} px-4 fs-4 mx-1 mb-2">
             {{ $label }} ({{ $statusCounts[$key] ?? 0 }})
         </a>

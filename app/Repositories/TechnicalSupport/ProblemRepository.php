@@ -44,6 +44,11 @@ class ProblemRepository implements ProblemRepositoryInterface
         function ($q) use ($request) {
             $q->where('sub_department_id', $request->sub_department_id);
         }
+    )->when(
+        $request->filled('user_id') ,
+        function ($q) use ($request) {
+            $q->where('developer_id', $request->user_id);
+        }
     );
 
     $statusMapping = [
@@ -58,8 +63,8 @@ class ProblemRepository implements ProblemRepositoryInterface
     ];
 
          $statusCounts = [];
-    
-         if($request->filled('sub_department_id') || $request->filled('department_id'))
+
+         if($request->filled('sub_department_id') || $request->filled('department_id') || $request->filled('user_id'))
          {
             $d = Problem::with('user')
             ->when(
@@ -72,6 +77,11 @@ class ProblemRepository implements ProblemRepositoryInterface
                 function ($q) use ($request) {
                     $q->where('sub_department_id', $request->sub_department_id);
                 }
+            )->when(
+                $request->filled('user_id') ,
+                function ($q) use ($request) {
+                    $q->where('developer_id', $request->user_id);
+                }
             );
             foreach ($statusMapping as $status => $label) {
                 $statusCounts[$status] = (clone $d)->where('status', $status)->count();
@@ -83,7 +93,7 @@ class ProblemRepository implements ProblemRepositoryInterface
                 $statusCounts[$status] = Problem::where('status', $status)->count();
             }
          }
-       
+
 
      $data = $query->orderBy('created_at', 'desc')->get();
 
@@ -101,7 +111,7 @@ class ProblemRepository implements ProblemRepositoryInterface
 
     $title = "الدعم الفني $dpart $subdpart";
 
-        
+
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -123,7 +133,7 @@ class ProblemRepository implements ProblemRepositoryInterface
     public function show($id)
     {
         $pr = Problem::with(['user','developer','department','subdepartment'])->where('id', $id)->first();
-        
+
         if ($pr == null) {
             return redirect()->back()->withErrors(['error' => 'تم حذف المشكلة!!']);
 
@@ -185,12 +195,12 @@ class ProblemRepository implements ProblemRepositoryInterface
             $data->link = $request->link;
             $data->descr = $request->descr;
             if ($request->hasFile('file')) {
-                
+
                 $fileName = time() . '_' . $request->file('file')->getClientOriginalName();
                 $filePath = 'techical_support/' . $fileName;
                 $request->file('file')->move(public_path('techical_support'), $fileName);
                 $data->file = $filePath; // Save the relative path to the database
-                
+
             }
             $data->department_id = $request->department;
             $data->sub_department_id = $request->sub_department;
@@ -273,7 +283,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $filePath = 'techical_support/' . $fileName;
             $request->file('file')->move(public_path('techical_support'), $fileName);
             $data->file = $filePath; // Save the relative path to the database
-            
+
         }
         $data->user_id = Auth::user()->id;
         $data->save();

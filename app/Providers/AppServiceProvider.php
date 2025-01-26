@@ -113,6 +113,8 @@ use App\Interfaces\ImportingCompanies\TransferProductRepositoryInterface;
 use App\Interfaces\HumanResources\TransactionsCompletedRepositoryInterface;
 use App\Interfaces\TechnicalSupport\ReportRepositoryInterface;
 use App\Repositories\TechnicalSupport\ReportRepository;
+use App\Interfaces\InvoicesCashierRepositoryInterface;
+use App\Repositories\InvoicesCashierRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -184,6 +186,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RequestRepositoryInterface::class, RequestRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
         $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
+        $this->app->bind(InvoicesCashierRepositoryInterface::class, InvoicesCashierRepository::class);
 
 
 
