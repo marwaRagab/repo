@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bank;
+use App\Models\Installment;
+use App\Models\Installment_month;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_certificate_type;
 use App\Models\Military_affairs\Military_affairs_status;
@@ -1061,6 +1063,85 @@ class old_dbController extends Controller
                 $item->installment->save();
             }
 
+        }
+
+    }
+
+    public  function array_ministary(){
+        $items=Ministry::groupBy('date')->get();
+         $current_monthe=date('m');
+         $current_year=date('Y');
+
+        $array_new=[];
+        foreach ($items as $item) {
+            $dates=collect();
+//            dd($item);
+            $item->new_date = $current_year . '-' . $current_monthe . '-' . $item->date;
+//            dd($item->new_date);
+            $dates['old_date']= $item->new_date;
+            $item->name = date('l', strtotime($item->new_date));
+            if ($item->name == 'Friday') {
+                $item->new_date = date_create($item->new_date)->modify('-1 days')->format('Y-m-d');
+            }
+            if ($item->name == 'Saturday') {
+                $item->new_date = date_create($item->new_date)->modify('-2 days')->format('Y-m-d');
+            }
+//            dd($item->new_date);
+            $dates['new_date']= $item->new_date;
+            $dates['ministry_id']= $item->id;
+            $installments=Installment::WHERE('ottu_client',1)->get();
+
+            $install_month = Installment_month::with('installment_id')->whereHas('installment_id', function ($query) {
+                $query->where('ottu_client', 1);
+            })->where('status', 'not_done')->where('installment_type','!=', 'law_percent')->where('date','=',$dates['old_date'])->get();
+            $monthes_ids = $install_month->pluck('id')->toArray(); // Get the 'id' field as an array
+            $json_monthes_ids = json_encode($monthes_ids);
+
+//
+
+            $dates['insta']=$install_month;
+            $dates['months_ids']=$json_monthes_ids;
+            array_push( $array_new, $dates);
+
+
+        }
+//        dd($array_new);
+        foreach ($array_new as $obj)
+        {
+
+         //
+            //  dd(count(json_decode($obj['months_ids'],true)));
+            if(count(json_decode($obj['months_ids'],true))>0)
+            {
+//                dd($obj['ministry_id']);
+                DB::table('ottu_dates')->insert([
+                    'ministry_id'=>$obj['ministry_id'],
+                    'old_date'=> $obj['old_date'],
+                    'new_date'=> $obj['new_date'],
+                    'installment_months_id'=> $obj['months_ids'],
+                ]);
+            }
+        }
+        return $array_new;
+
+    }
+
+
+
+    public function everyday_job(){
+        $currentdate = date('Y-m-d');
+        $obj = DB::table('ottu_dates')->where('new_date',$currentdate)->first();
+
+        foreach (json_decode($obj->installment_months_id)as $item)
+        {
+
+            $installment_months =Installment_month::findorfail($item);
+//            dd($installment_months);
+            $installment_months->status ="done";
+            $installment_months->payment_date =$currentdate;
+            $installment_months->save();
+
+            
         }
 
     }

@@ -12,4 +12,9 @@ class Installment_month extends Model
     protected $table ='installment_months';
     protected $guarded = [];
 
+    public function installment_id()
+    {
+        return $this->belongsTo(Installment::class,'installment_id','id');
+    }
+
 }
