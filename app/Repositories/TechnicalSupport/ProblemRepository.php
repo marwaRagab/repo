@@ -242,7 +242,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification = new Notification();
             $notification->title = 'تم تحديث حالة المشكلة  ' . $shortTitle;
             $notification->descr = '';
-            $notification->user_id = $one->id;
+            $notification->user_id = Auth::user()->id;
             $notification->problem_id = $data->id;
             $notification->action = 'status_change';
             if ($request->hasFile('file')) {
@@ -284,7 +284,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification = new Notification();
             $notification->title = "تعليق جديد على مشكلة في الدعم الفني";
             $notification->descr = $request->descr;
-            $notification->user_id = $pr->user_id;
+            $notification->user_id = $data->user_id;
             $notification->problem_id = $data->problem_id;
             $notification->action = 'reply';
             /* if ($request->hasFile('file')) {
