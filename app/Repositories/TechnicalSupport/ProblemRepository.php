@@ -199,14 +199,14 @@ class ProblemRepository implements ProblemRepositoryInterface
             $data->save();
         }
 
-        $support_users = User::where('support', 1)->get();
+        // $support_users = User::where('support', 1)->get();
 
-        foreach ($support_users as $one) {
+        // foreach ($support_users as $one) {
 
             $notification = new Notification();
             $notification->title = 'تم اضافة مشكلة جديدة بالدعم الفني';
             $notification->descr = '';
-            $notification->user_id = $one->id;
+            $notification->user_id = Auth::user()->id;
             $notification->problem_id = $data->id;
             $notification->action = 'create';
             if ($request->hasFile('file')) {
@@ -216,7 +216,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             $notification->created_at = now();
             $notification->save();
 
-        }
+        // }
         return redirect()->route('supportProblem.index')->with('success', 'تم إضافة المشكلة بنجاح');
     }
 
@@ -235,9 +235,9 @@ class ProblemRepository implements ProblemRepositoryInterface
         }
         $data->save();
 
-        $support_users = User::where('support', 1)->get();
+        // $support_users = User::where('support', 1)->get();
 
-        foreach ($support_users as $one) {
+        // foreach ($support_users as $one) {
             $shortTitle = Str::limit($data->title, 20);
             $notification = new Notification();
             $notification->title = 'تم تحديث حالة المشكلة  ' . $shortTitle;
@@ -251,7 +251,7 @@ class ProblemRepository implements ProblemRepositoryInterface
             }
             $notification->created_at = now();
             $notification->save();
-        }
+        // }
 
         return redirect()->route('supportProblem.show', $data->id)->with('success', 'تم تحديث حالة المشكلة بنجاح');
     }
