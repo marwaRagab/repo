@@ -332,7 +332,7 @@ class InstallmentController extends Controller
 
 
         // $military_affair = null; // Default initialization
-        $military_affair = Military_affair::where('installment_id', $id)->first();
+        $military_affair=$data['military_affair'] = Military_affair::where('installment_id', $id)->first();
 
 
         if ($installment->laws == 1) {
@@ -340,13 +340,14 @@ class InstallmentController extends Controller
             $data['mil_amount'] = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->get();
             $data['mil_check'] = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->get();
             $data['settle_item'] = Military_affairs_settlement::with('military_affair', 'settle_month')->where('military_affairs_id', $military_affair->id)->get();
-            $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->sum('amount');
-            $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->sum('amount');
+             $excute_actions_amount = Military_affairs_amount::where('military_affairs_check_id', 0)->where('military_affairs_id', '=', $military_affair->id)->where('check_type', '!=', '0')->where('check_type', '!=', 'update')->sum('amount');
+            $data['check_amount']=  $excute_actions_check_amount = Military_affairs_check::where('military_affairs_id', '=', $military_affair->id)->sum('amount');
             $data['sum'] = $data['not_done_amount'] - $excute_actions_amount - $excute_actions_check_amount;
         } else {
 
             $data['sum'] = $data['not_done_amount'];
-            $data['total_madionia1'] = $installment->eqrardain_amount;
+            $data['check_amount']=0;
+            $data['total_madionia1'] = $installment->total_madionia;
         }
 
         $first_month = Installment_month::where('installment_id', $id)->where('status', 'not_done')->first();
@@ -357,15 +358,19 @@ class InstallmentController extends Controller
         /*  $data['invoices'] = Invoices_installment::with('install_month', 'installment')
             ->where('installment_id', $id)->where('payment_type','!=','check')->get();*/
 
-        $data['invoices'] = Installment_month::where('installment_id', $id)->where('status', '=', 'done')->groupBy('payment_date')->get();
+
+         $data['invoices'] = Installment_month::where('installment_id', $id)->where('status', '=', 'done')->groupBy('payment_date')->get();
 
         foreach ($data['invoices'] as $value) {
 
-            $value->sum_amount = Installment_month::where('installment_id', $id)
+            $sumAmount  = Installment_month::where('installment_id', $id)
                 ->where('status', '=', 'done')
+                ->where('installment_type','!=','discount')
+                ->where('installment_type','!=','law_percent')
 
                 ->where('payment_date', $value->payment_date) // This ensures the sum is calculated for that specific payment_date
                 ->sum('amount'); // This will return the sum directly
+                $value->sum_amount = $sumAmount ;
         }
 
 

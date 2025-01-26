@@ -130,6 +130,8 @@ Route::get('/noimage', function () {
 })->name('noimage');
 Route::get('/db/{type}', [old_dbController::class, 'index']);
 Route::get('/get_reminder_all', [old_dbController::class, 'get_reminder']);
+Route::get('/array_ministary', [old_dbController::class, 'array_ministary']);
+Route::get('/everyday_job', [old_dbController::class, 'everyday_job']);
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully!';

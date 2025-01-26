@@ -392,13 +392,14 @@ class InstallmentApproveController extends Controller
         $installment->first_amount = $request->part;
         $installment->total_first_amount = $request->total_first_amount;
 
-        $installment->amount = $request->final_total;
+        $installment->amount = $request->total;
         $installment->extra_part = $request->extra_first_amount;
         $installment->count_months = $request->count_months;
         $installment->months = $request->count_months;
 
-        $installment->final_installment_amount = $request->total;
-        $installment->total_madionia = $request->total;
+
+        $installment->final_installment_amount = $request->final_total;
+        $installment->total_madionia = $request->final_total;
         $installment->extra_first_amount = $request->extra_first_amount;
 
         $installment->total_part = $request->total_first_amount;
