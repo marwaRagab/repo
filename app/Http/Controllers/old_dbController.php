@@ -1141,7 +1141,7 @@ class old_dbController extends Controller
             $installment_months->payment_date =$currentdate;
             $installment_months->save();
 
-            
+
         }
 
     }
