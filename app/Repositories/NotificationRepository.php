@@ -21,7 +21,7 @@ class NotificationRepository implements NotificationRepositoryInterface
          */
         $notifications = Notification::with('user')
             ->where('user_id', Auth::user()->id)
-            ->where('show', 0)
+            // ->where('show', 0)
             // ->whereDate('created_at', \Carbon\Carbon::today())
             ->orderBy('created_at', 'desc')->get();
         //   }
