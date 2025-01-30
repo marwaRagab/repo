@@ -17,6 +17,21 @@ use Illuminate\Support\Facades\Log as LaravelLog;
 use App\Models\Military_affairs\Military_affair;
 use App\Models\Military_affairs\Military_affairs_notes;
 use App\Models\Military_affairs\Military_affairs_times;
+use App\Models\InvoicesInstallment\Invoices_installment;
+
+if (!function_exists('getRoleIcon')) {
+    function getRoleIcon($role)
+    {
+        $icons = [
+            'admin' => 'fas fa-user-shield',
+            'manager' => 'fas fa-user-tie',
+            'editor' => 'fas fa-edit',
+            'user' => 'fas fa-user',
+        ];
+//dd($icons[$role]);
+        return $icons[$role] ?? 'fas fa-users';
+    }
+}
 
 if (!function_exists('whats_send')) {
     function whats_send($mobile, $message, $country_code)

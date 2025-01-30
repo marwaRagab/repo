@@ -1,32 +1,25 @@
 <?php
-
 namespace App\Models;
 
+use Spatie\Permission\Models\Role as SpatieRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Role extends Model
+class Role extends SpatieRole
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = ['name_ar', 'name_en', 'created_by'];
+    protected $fillable = ['name', 'guard_name'];
 
-    public function user()
+    // Relationship with users
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsToMany(User::class);
     }
 
-    // public function permissions()
-    // {
-    //     return $this->belongsToMany(Permission::class, 'role_permissions');
-    // }
-    public function permissions()
+    // Relationship with permissions (optional, since Spatie handles this)
+    public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions', 'role_id', 'permission_id');
-    }
-
-    public function users() {
-        return $this->hasMany(User::class); // or whatever your relationship is
+        return $this->belongsToMany(Permission::class);
     }
 }

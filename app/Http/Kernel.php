@@ -70,6 +70,10 @@ class Kernel extends HttpKernel
         'permission' => \App\Http\Middleware\CheckPermission::class,
         'cors' => \Fruitcake\Cors\HandleCors::class,
         'IsClient' => \App\Http\Middleware\IsClient::class,
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'check.permission' => \App\Http\Middleware\CheckPermission::class,
+
 
     ];
 }

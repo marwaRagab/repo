@@ -2,22 +2,63 @@
 
 namespace App\Repositories;
 
-use App\Models\Role;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\RoleRepositoryInterface;
-use App\Models\Permission;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleRepository implements RoleRepositoryInterface
 {
-    public function index()
+
+
+    public function index(Request $request)
     {
-        $roles = Role::with('user')->get();
-        $rolescount = Role::with('user')->count();
-        $Permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
+      /*
+        $role = Role::where('name', 'sales manager')->first();
+        User::where('id', '!=', 1)->each(function ($user) use ($role) {
+            $user->assignRole($role);
+        });
+        */
+
+
+        $rolesWithUsers = Role::with('users')->get();
+      //  dd($rolesWithUsers);
+        // Ensure $roles is a collection
+        $roles = Role::all();
+        $query = User::with('roles');
+
+        // Search by user name or civil number
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name_ar', 'LIKE', '%' . $request->search . '%')
+                  ->orWhere('phone', 'LIKE', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter by role
+        if ($request->has('role') && !empty($request->role)) {
+            $query->whereHas('roles', function ($q) use ($request) {
+                $q->where('name', $request->role);
+            });
+        }
+
+        $users = $query->paginate(10); // Paginate results
+
+     //   dd($users[0]->roles);
+        // Removed the call to undefined method 'map'
+        // $roles->map(function ($role) use ($user) {
+        //     $user->assignRole($role); // Assign role
+        // });
+
+        // ...existing code...
+      //  $rolescount = $roles->count();
+       // $Permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
+
         $title = "مجموعات العمل";
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
@@ -27,45 +68,26 @@ class RoleRepository implements RoleRepositoryInterface
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
 
-        $view = 'HumanResources.roles';
+        $view = 'HumanResources.roles_updated';
         // $view = 'setting.permission';
         return view(
             'layout',
-            compact('title', 'view', 'breadcrumb', 'roles', 'Permissions','rolescount')
+            compact('title', 'view', 'breadcrumb', 'roles','users')
         );
     }
-
 
     public function show($id)
     {
         return Role::findOrFail($id);
     }
 
-    public function  create()
+    public function create()
     {
-
+        // Implement the create method if needed
     }
+
     public function store(Request $request)
     {
-        // dd($request);
-        // $data = new Role;
-        // $data->name_ar = $request->name_ar;
-        // $data->name_en = $request->name_en;
-        // $data->created_by = Auth::user()->id;
-        // $data->updated_by = Auth::user()->id;
-        // $data->save();
-
-        // if($request->has('permissions'))
-        // {
-        //     foreach($request->permissions as $item)
-        //     {
-        //         DB::table('role_permissions')->insert([
-        //             'role_id' => $data->id,  // assuming 1 is the role ID
-        //             'permission_id' => $item,  // assuming 2 is the permission ID
-        //         ]);
-        //     }
-        // }
-        // return $data;
         $request->validate([
             'name_ar' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
@@ -77,7 +99,7 @@ class RoleRepository implements RoleRepositoryInterface
         $role = Role::create([
             'name_ar' => $request->name_ar,
             'name_en' => $request->name_en,
-            'created_by' => auth()->id() ?? null ,
+            'created_by' => auth()->id() ?? null,
         ]);
 
         // Attach the selected permissions
@@ -89,61 +111,40 @@ class RoleRepository implements RoleRepositoryInterface
         return redirect()->route('roles.index')->with('success', 'تم الاضافة بنجاح');
     }
 
-    public function  edit($id)
+    public function edit($id)
     {
         $role = Role::with('permissions')->findOrFail($id);
 
-    // Return the role data (you might want to return only specific fields if needed)
-    return response()->json([
-        'name_ar' => $role->name_ar,
-        'name_en' => $role->name_en,
-        'permissions' => $role->permissions->pluck('id')->toArray() // Assuming 'permissions' is a relationship in the Role model
-    ]);
+        // Return the role data (you might want to return only specific fields if needed)
+        return response()->json([
+            'name_ar' => $role->name_ar,
+            'name_en' => $role->name_en,
+            'permissions' => $role->permissions->pluck('id')->toArray() // Assuming 'permissions' is a relationship in the Role model
+        ]);
     }
 
     public function update($id, Request $request)
-   {
-    // dd($request);
-    // Find the role by ID or fail
-    $role = Role::findOrFail($id);
+    {
+        // Find the role by ID or fail
+        $role = Role::findOrFail($id);
 
-    // Update the role's name if provided
-    $role->name_ar = $request->input('name_ar') ?? $role->name_ar;
-    $role->name_en = $request->input('name_en') ?? $role->name_en;
-    $role->updated_by = Auth::id() ?? null;
-    $role->save();
+        // Update the role's name if provided
+        $role->name_ar = $request->input('name_ar') ?? $role->name_ar;
+        $role->name_en = $request->input('name_en') ?? $role->name_en;
+        $role->updated_by = Auth::id() ?? null;
+        $role->save();
 
-    // Check if the request has permissions
-    if ($request->filled('permissions')) {
-        // Retrieve existing permission IDs for this role
-        // $existingPermissions = $role->permissions()->pluck('id')->toArray();
-
-        // Get the submitted permission IDs
-        // $submittedPermissions = $request->permissions;
-
-        // // Find permissions to add and to remove
-        // $permissionsToAdd = array_diff($submittedPermissions, $existingPermissions);
-        // $permissionsToRemove = array_diff($existingPermissions, $submittedPermissions);
-
-        // // Add new permissions
-        // foreach ($permissionsToAdd as $permissionId) {
-        //     $role->permissions()->attach($permissionId);
-        // }
-
-        // // Remove permissions that are no longer assigned
-        // foreach ($permissionsToRemove as $permissionId) {
-        //     $role->permissions()->detach($permissionId);
-        // }
-
-        DB::table('role_permissions')->where('role_id',$role->id)->delete();
-        if ($request->has('permissions')) {
-            $role->permissions()->sync($request->permissions);
+        // Check if the request has permissions
+        if ($request->filled('permissions')) {
+            DB::table('role_permissions')->where('role_id', $role->id)->delete();
+            if ($request->has('permissions')) {
+                $role->permissions()->sync($request->permissions);
+            }
         }
-    }
 
-    // Return the updated role data
-    return response()->json($role);
-}
+        // Return the updated role data
+        return response()->json($role);
+    }
 
     public function destroy($id)
     {

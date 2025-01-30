@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         @php
-                        
+
                         if(Auth::user()->support == 1){
                             $count = App\Models\Notification::orderBy('created_at', 'desc')
                                 ->where('user_id', '!=', Auth::id())
@@ -164,7 +164,7 @@
                                             {{ Auth::user()->name_ar ?? 'Default Name' }}
                                         </h6>
                                         <p class=" lh-base mb-0 profile-subtext">
-                                            {{ Auth::user()?->roles?->name_ar ?? '' }}
+                                  
                                         </p>
                                     </div>
                                 </div>

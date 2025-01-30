@@ -45,6 +45,13 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('technical_support.reports.index') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu">   التقارير
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
@@ -355,6 +362,13 @@
                                 </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ route('invoices_installment') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu">  حسابات الأقساط
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <!-- ============================= -->
@@ -584,7 +598,13 @@
                                 </span>
                             </a>
                         </li>
-
+                        <li class="sidebar-item">
+                            <a href="{{ route('invoices_cashier.index') }}" class="sidebar-link">
+                                <span class="sidebar-icon"></span>
+                                <span class="hide-menu">  حساب الكاشير
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

@@ -34,7 +34,7 @@ class PermissionController extends Controller
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
-        $breadcrumb[1]['title'] = "الفروع";
+        $breadcrumb[1]['title'] = "الصلاحيات";
         $breadcrumb[1]['url'] = route("branch.index");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';

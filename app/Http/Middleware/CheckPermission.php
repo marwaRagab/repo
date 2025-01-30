@@ -2,59 +2,48 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Permission;
-use App\Models\Role;
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\User;
 class CheckPermission
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure  $next
+     * @param  string  $permission
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next, $permission)
+    public function handle($request, Closure $next, $permissions)
     {
-        // dd( $permission);
 
+        // Get authenticated user
         $user = Auth::user();
-        // dd($user);
-        if (!$user) {
-            return redirect('/login');
-        }
+    //    $user = User::find($user->id);
 
-        $role = Role::with(['permissions.parent'])->findOrFail($user->role_id);
-        // dd($role->permissions->pluck('parent'));
-        if (!$role) {
-            abort(403, 'لايسمح لك بالدخول الى هذه الصفحة');
-        }
+       // dd($user->getAllPermissions()  );
 
-        // $permission_ids = explode(',', $rule_permission->permission_ids);
+        // Get roles
+        $roles = $user->getRoleNames();
 
-        // Fetch all permissions that the user has access to based on their role
-        $permission_ids = $role->permissions->pluck('id')->toArray(); // Get IDs of the permissions
-        $allPermissions = Permission::whereIn('id', $permission_ids)->with('parent')->get();
-        // dd($allPermissions);
+        // Get permissions
+    //    $permissions = $user->getAllPermissions();
 
-        // Check if the user has any of the required permissions
-        foreach ($allPermissions as $p) {
+        // Get only permission names
+        $permissionNames =$user->getAllPermissions()->pluck('name');
 
-            // dd($p);
-            // dd($p->parent->title_ar);
-            $txt = $p->title_ar."_". $p->parent->title_ar;
+      //  dd($roles, $permissionNames);
+    
+    if ($user && $user->getAllPermissions()->pluck('name')->intersect($permissions)->isNotEmpty()) {
+        return $next($request);
+    }
 
-
-            if ($txt == $permission) {
-                // dd("true");
-                return $next($request);
-            }
-
-        }
-
-        abort(403, 'لايسمح لك بالدخول الى هذه الصفحة');
+        // Redirect to a specific route or show a 403 error
+        return redirect()->route('no_permission'); // Ensure this route exists
+        // Alternatively, you can abort with a 403 error
+        // return abort(403, 'Unauthorized action.');
     }
 }

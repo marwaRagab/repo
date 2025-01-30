@@ -25,11 +25,11 @@ class RoleController extends Controller
         $this->RoleRepository = $RoleRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         // $permissions = $this->RoleRepository->index();
         // return response()->json($permissions);
-        return $this->RoleRepository->index();
+        return $this->RoleRepository->index($request);
         // return $this->respondSuccess($permissions, 'Get Data successfully.');
     }
 

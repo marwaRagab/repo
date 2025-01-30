@@ -16,39 +16,17 @@ class InvoicesCashierController extends Controller
         $this->invoicesCashierRepository = $invoicesCashierRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return $this->invoicesCashierRepository->index();
+        return $this->invoicesCashierRepository->index($request);
     }
 
-    public function show($id)
+    public function processExport(Request $request)
     {
-        return $this->invoicesCashierRepository->show($id);
+        return $this->invoicesCashierRepository->processExport($request);
     }
-
-    public function create()
+    public function showExportForm()
     {
-        return view('invoices.create');
-    }
-
-    public function store(Request $request)
-    {
-        return $this->invoicesCashierRepository->store($request);
-    }
-
-    public function edit($id)
-    {
-        $invoice = $this->invoicesCashierRepository->show($id);
-        return view('invoices.edit', compact('invoice'));
-    }
-
-    public function update($id, Request $request)
-    {
-        return $this->invoicesCashierRepository->update($id, $request);
-    }
-
-    public function destroy($id)
-    {
-        return $this->invoicesCashierRepository->destroy($id);
+        return $this->invoicesCashierRepository->showExportForm();
     }
 }

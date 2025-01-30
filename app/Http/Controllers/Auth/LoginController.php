@@ -103,8 +103,8 @@ class LoginController extends Controller
             //        $user = Auth::user();
       Auth::user()->id;
 
-            $role = Role::findOrFail($user->role_id);
-
+          //  $role = Role::findOrFail($user->role_id);
+/*
             $permission_ids = $role->permissions->pluck('id')->toArray(); // Get IDs of the permissions
 //        dd($permission_ids);
             $allPermissions = Permission::whereIn('id', $permission_ids)->with('parent')->get();
@@ -122,6 +122,7 @@ class LoginController extends Controller
 
 // Store the concatenated results in the session
             session()->put('user_permission', $permissionsWithParentTitles);
+            */
 //         dd(session()->get('user_permission'));
             // return $this->respondSuccess($success, 'User login successfully.');
             return redirect()->route('dasboard');

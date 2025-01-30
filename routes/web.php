@@ -112,6 +112,9 @@ use App\Http\Controllers\InvoicesCashierController;
 // Route::middleware('auth:client')->get('/clientDash/login', function () {
 //     return view('middleware.login');
 // });
+Route::get('/no-permission', function () {
+    return view('no_permission');
+})->name('no_permission');
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -373,7 +376,7 @@ Route::middleware('auth')->group(function () {
     Route::any('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve_all');
     // Route::post('/archieve_all/{ids}', [PaymentsController::class, 'archieve_all'])->name('archieve.all');
     Route::get('/archive_all_in', [PaymentsController::class, 'archive_all_in'])->name('archive_all_in');
-    Route::get('/invoices_installment', [PaymentsController::class, 'invoices_installment_index'])->name('invoices_installment');
+    Route::get('/invoices_installment', [PaymentsController::class, 'invoices_installment_index'])->name('invoices_installment')->middleware('check.permission:view users');
     Route::post('/get_invoices_papers', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/installment/invoices_installment/print_invoice/{id1}/{id2}', [PaymentsController::class, 'get_invoices_papers']);
     Route::get('/export_all', [PaymentsController::class, 'export_all']);
@@ -633,6 +636,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/human-resources/users', [UserController::class, 'store'])->name('users.store');       //->middleware('permission:create_users');
     Route::put('/human-resources/users/{id}', [UserController::class, 'update'])->name('users.update'); //->middleware('permission:update_users');
 
+    Route::get('/human-resources/users/{id}/delete', [UserController::class, 'delete'])->name('users.destroy');
+
     Route::get('/human-resources/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/human-resources/users-profile/{id}', [UserController::class, 'update'])->name('users.user-profile');
 
@@ -738,11 +743,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/qr-code/generate/{id?}', [QrCodeController::class, 'generate'])->name('qr-code.generate');
     Route::get('/qr-code/download/{id}', [QrCodeController::class, 'download'])->name('qr-code.download');
 
-    Route::get('/invoices_cashier', [InvoicesCashierController::class, 'index'])->name('invoices_cashier.index');
-    Route::post('invoices_cashier', [InvoicesCashierController::class, 'store'])->name('invoices_cashier.export');
-    Route::get('invoices_cashier/create', [InvoicesCashierController::class, 'create'])->name('invoices_cashier.create');
-    Route::get('invoices_cashier/{id}', [InvoicesCashierController::class, 'show'])->name('invoices_cashier.show');
-    Route::get('invoices_cashier/{id}/edit', [InvoicesCashierController::class, 'edit'])->name('invoices_cashier.edit');
-    Route::put('invoices_cashier/{id}', [InvoicesCashierController::class, 'update'])->name('invoices_cashier.update');
-    Route::delete('invoices_cashier/{id}', [InvoicesCashierController::class, 'destroy'])->name('invoices_cashier.destroy');
+    Route::match(['GET', 'POST'], '/invoices_cashier', [InvoicesCashierController::class, 'index'])->name('invoices_cashier.index');
+
+// Display export form
+Route::get('/invoices_cashier/export', [InvoicesCashierController::class, 'showExportForm'])->name('invoices_cashier.export');
+
+// Process export functionality
+Route::post('/invoices_cashier/export', [InvoicesCashierController::class, 'processExport'])->name('invoices_cashier.export.process');
+
 });

@@ -13,13 +13,14 @@ class InvoiceCashier extends Model
     protected $table = 'invoices_cashier';
 
     // Define the fillable attributes
-    /*protected $fillable = [
+    protected $fillable = [
         'invoice_id',
         'cashier_id',
         'amount',
         'payment_date',
+        'img_dir', // Add this line
     ];
-*/
+
     // Define the relationships
     public function invoice()
     {

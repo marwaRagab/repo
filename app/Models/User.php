@@ -11,11 +11,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
-
+    use HasRoles;
     /**
      * The attributes that are mass assignable.
      *
@@ -106,10 +107,7 @@ class User extends Authenticatable
         return $this->hasMany(Installment_Client::class, 'created_by');
     }
 
-    public function roles()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+
     public function branches()
     {
         return $this->belongsTo(Branch::class, 'branch_id');

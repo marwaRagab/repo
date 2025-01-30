@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.7",
         "lesstif/php-jira-rest-client": "^5.9",
         "maatwebsite/excel": "^3.1",
-        "spatie/laravel-permission": "^6.9",
+        "spatie/laravel-permission": "^6.10",
         "spatie/laravel-translation-loader": "^2.8",
         "tightenco/ziggy": "^1.0",
         "yajra/laravel-datatables": "9.0",

@@ -203,15 +203,15 @@ class PaymentsRepository implements PaymentsRepositoryInterface
                 return match ($installment_item->laws) {
                     '1' => 'شئون قانونية',
                     '0' => 'مبيعات',
-                    
+
                 };
             })
             // ->addColumn('direct', function ($payment) {
             //     Log::info('Image URL: ' . $payment->img);
             //     $primaryUrl = "https://electron-kw.net/{$payment->img}";
             //     $fallbackUrl = "https://electron-kw.com/{$payment->img}";
-            
-            //     $printButton = "<a class='btn bg-primary-subtle text-primary btn-sm rounded-pill' target='_blank' 
+
+            //     $printButton = "<a class='btn bg-primary-subtle text-primary btn-sm rounded-pill' target='_blank'
             //                         onclick=\"checkFileAndPRINT('$primaryUrl', '$fallbackUrl'); return false;\">
             //                         عرض الصورة
             //                     </a>";
@@ -343,10 +343,24 @@ public function archive_all_in(Request $request)
     {
         $title = '  عمليات الدفع ';
 
-        $pay_date = $request->month;
+    /*    $pay_date = $request->month;
         $payment_type = $request->payment_type;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
+*/
+         // Validate the dates
+         $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date'   => 'nullable|date',
+            'type'       => 'nullable|in:all,cash,knet',
+        ]);
+
+        // Retrieve or set default dates
+        $pay_date = $request->month;
+        $start_date   = $request->input('start_date') ?? date('Y-m-01');
+        $end_date     = $request->input('end_date') ?? date('Y-m-t');
+        $payment_type = $request->input('payment_type', 'all');
+
         // $this->data["central_bank"] = $this->db_get->get_where_r('invoices_central_bank', 'slug', 'installment');
         $this->data["central_bank"] = DB::table('invoices_central_bank')->where('slug', 'installment')->first();
 
@@ -355,7 +369,7 @@ public function archive_all_in(Request $request)
             $year = $date->format('Y');
             $month = $date->format('m');
             return $q->whereyear('date', $year)->wheremonth('date', $month);
-        })->when($payment_type, function ($q) use ($payment_type) {
+        })->when($payment_type !== 'all', function ($q) use ($payment_type) {
             return $q->where('payment_type', $payment_type);
         })->when($start_date, function ($q) use ($start_date) {
             return $q->whereDate('date', '>=', $start_date);
@@ -385,7 +399,7 @@ public function archive_all_in(Request $request)
         $breadcrumb[2]['url'] = route("invoices_installment");
 
         $this->data['view'] = 'Payments/invoices_installment_index';
-        return view('layout', $this->data, compact('breadcrumb'));
+        return view('layout', $this->data, compact('breadcrumb', 'payment_type', 'start_date', 'end_date'));
 
     }
 
@@ -858,7 +872,7 @@ private function convertToArabicWords($amount)
 
     }
     }
-   
+
 }
 
 public function archieve_all($ids)

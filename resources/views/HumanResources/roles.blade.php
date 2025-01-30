@@ -38,6 +38,13 @@
                 </thead>
                 <tbody>
                     <!-- start row -->
+                    foreach ($rolesWithUsers as $role) {
+                        echo "Role: " . $role->name . "\n";
+                        foreach ($role->users as $user) {
+                            echo "- User: " . $user->name . "\n";
+                        }
+                    }
+
 
                     @foreach ($roles as $item)
                         <tr>
