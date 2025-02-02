@@ -4,7 +4,8 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-
+use Spatie\Permission\PermissionRegistrar;
+use App\Models\Permission; // ✅ Import your custom model
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -26,5 +27,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        app(PermissionRegistrar::class)->setPermissionClass(Permission::class);
     }
 }

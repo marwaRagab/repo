@@ -55,4 +55,5 @@ class UserController extends Controller
     public function edit($id){
         return $this->userRepository->edit( $id);
     }
+   
 }

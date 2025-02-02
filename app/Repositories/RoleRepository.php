@@ -47,7 +47,7 @@ class RoleRepository implements RoleRepositoryInterface
             });
         }
 
-        $users = $query->paginate(10); // Paginate results
+        $users = $query->get(); // Paginate results
 
      //   dd($users[0]->roles);
         // Removed the call to undefined method 'map'
@@ -83,7 +83,56 @@ class RoleRepository implements RoleRepositoryInterface
 
     public function create()
     {
-        // Implement the create method if needed
+        $permissionsTableHTML = $this->buildPermissionTreeHTML(); // Manually construct the tree
+//dd($permissionsTreeHTML);
+        $title = "إضافة مجموعة عمل";
+        $breadcrumb = [
+            ['title' => "الرئيسية", 'url' => route('roles.index')],
+            ['title' => "الموارد البشرية", 'url' => route('roles.index')],
+            ['title' => "مجموعات العمل", 'url' => route('roles.index')],
+            ['title' => $title, 'url' => 'javascript:void(0);']
+        ];
+
+        $view = 'role.create';
+
+        return view('layout', compact('title', 'view', 'breadcrumb', 'permissionsTableHTML'));
+    }
+
+    private function buildPermissionTreeHTML($parentId = null)
+    {
+        $permissions = Permission::where('parent_id', $parentId)->get();
+
+        if ($permissions->isEmpty()) {
+            return '';
+        }
+
+        $html = '<ul class="tree">';
+
+        foreach ($permissions as $permission) {
+            $hasChildren = Permission::where('parent_id', $permission->id)->exists();
+
+            $html .= '<li>';
+
+            // Toggle Arrow (Only if this permission has children)
+            if ($hasChildren) {
+                $html .= '<span class="toggle-arrow">⮟</span>';
+            }
+
+            // Checkbox for permission
+            $html .= '<input type="checkbox" class="parent-checkbox" name="permissions[]" value="' . $permission->id . '"> ' . $permission->name;
+
+            // Recursively call function for child permissions
+            if ($hasChildren) {
+                $html .= '<ul class="child-tree">';
+                $html .= $this->buildPermissionTreeHTML($permission->id);
+                $html .= '</ul>';
+            }
+
+            $html .= '</li>';
+        }
+
+        $html .= '</ul>';
+        return $html;
     }
 
     public function store(Request $request)

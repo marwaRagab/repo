@@ -48,23 +48,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $roles = Role::with('user')->get();
-        $rolescount = Role::with('user')->count();
-        $Permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
-        $title = "مجموعات العمل";
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route('role.create');
-        $breadcrumb[1]['title'] = "الموارد البشرية";
-        $breadcrumb[1]['url'] = route('role.create');
-        $breadcrumb[2]['title'] = $title;
-        $breadcrumb[2]['url'] = 'javascript:void(0);';
-
-        $view = 'role.create';
-        // $view = 'setting.permission';
-        return view('layout',compact('title', 'view', 'breadcrumb', 'roles', 'Permissions','rolescount'));
-
-        // return view('role.create',compact('Permissions'));
+        return $this->RoleRepository->create();
     }
 
     /**

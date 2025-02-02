@@ -639,7 +639,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/human-resources/users/{id}/delete', [UserController::class, 'delete'])->name('users.destroy');
 
     Route::get('/human-resources/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/human-resources/users-profile/{id}', [UserController::class, 'update'])->name('users.user-profile');
+    Route::get('/human-resources/users/{id}/users-profile', [UserController::class, 'edit'])->name('users.user-profile');
 
                                                                                                                              //clients
     Route::get('/human-resources/clients', [ClientController::class, 'index'])->name('clients.index');                       //->middleware('permission:view_clients');
