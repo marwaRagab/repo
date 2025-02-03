@@ -25,12 +25,37 @@ class PermissionController extends Controller
     {
         $this->PermissionRepository = $PermissionRepository;
     }
+
     public function index()
     {
+        $breadcrumb = array();
+        $breadcrumb[0]['title'] = " الرئيسية";
+        $breadcrumb[0]['url'] = route("dashboard");
+        $breadcrumb[1]['title'] = "الصلاحيات";
+        $breadcrumb[1]['url'] = route("branch.index");
 
-        // dd("dd");
-        // $permissions = $this->PermissionRepository->index();
-        $title='الفروع';
+
+        $permissions = Permission::with('parent')->get();
+
+        $data['view'] = 'permissions.index';
+        return view('layout', $data, compact('breadcrumb','data','permissions'));
+
+    }
+    public function search(Request $request)
+{
+    $search = $request->input('q');
+
+    // Fetch permissions (all if no search query is provided)
+    $permissions = Permission::when($search, function ($query, $search) {
+        return $query->where('name', 'LIKE', "%{$search}%")->orWhere('id', $search);
+    })->limit(20)->get();
+
+    return response()->json($permissions);
+}
+
+    public function create()
+    {
+        $title='إضافة صلاحية';
         $breadcrumb = array();
         $breadcrumb[0]['title'] = " الرئيسية";
         $breadcrumb[0]['url'] = route("dashboard");
@@ -38,153 +63,55 @@ class PermissionController extends Controller
         $breadcrumb[1]['url'] = route("branch.index");
         $breadcrumb[2]['title'] = $title;
         $breadcrumb[2]['url'] = 'javascript:void(0);';
-
-        $data['permission']= Permission::all();
-
-        if ($data['permission']) {
-            // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
-            $message = "تم الدخول لصفحة  الصلاحيات";
-            $this->log($user_id, $message);
-        }
-
-
-        $data['view'] = 'setting/permission';
-        return view('layout', $data, compact('breadcrumb','data'));
-        // return response()->json($permissions);
-        // return $this->respondSuccess($permissions, 'Get Data successfully.');
+        $view = 'permissions.create';
+        $permissions = Permission::all(); // Fetch existing permissions for dropdown
+     //   dd($permissions);
+        return view('layout', compact('permissions','breadcrumb','view'));
     }
 
-    public function getall(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Permission::select('*');
-            return DataTables::of($data)->toJson();
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePermissionRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $messages = [
-            'name.required' => ' الاختيار  مطلوب.',
-            'perant_id.required' => 'الرئيسى مطلوب.',
-        ];
+        $request->validate([
+            'name' => 'required|string|unique:permissions,name',
+            'parent_id' => 'nullable|exists:permissions,id'
+        ]);
 
-        $validatedData = Validator::make($request->all(), [
-            'name' => 'required',
-            'perant_id' => 'required',
-        ], $messages);
+        Permission::create([
+            'name' => $request->name,
+            'guard_name' => 'web',
+            'parent_id' => $request->parent_id
+        ]);
 
-        if ($validatedData->fails()) {
-
-            return redirect()->back()->withErrors($validatedData)->withInput();
-        }
-
-        $data = $this->PermissionRepository->store($request);
-        if ($data) {
-            // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
-            $message = "تم اضافة صلاخية {$data->title_ar} ";
-            $this->log($user_id, $message);
-        }
-        // return response()->json($data);
-        return redirect()->back()->with('success','تم الاضافة بنجاخ');
+        return redirect()->route('permissions.index')->with('success', 'تمت إضافة الصلاحية بنجاح');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $data = $this->PermissionRepository->show($id);
-        if ($data) {
-            // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
-            $message = "تم عرض صلاخية {$data->title_ar} ";
-            $this->log($user_id, $message);
-        }
-        return response()->json($data);
-        // return $this->respondSuccess( $data, 'Get Data successfully.');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $data = $this->PermissionRepository->show($id);
-        if ($data) {
-            // $user_id = 1;
-            $user_id =  Auth::user()->id ?? null;
-            $message = "تم عرض صلاخية {$data->title_ar} ";
-            $this->log($user_id, $message);
-        }
-        return response()->json($data);
-
-        // return $this->respondSuccess($data, message: 'Get Data successfully.');
+        $permission = Permission::findOrFail($id);
+        $permissions = Permission::where('id', '!=', $id)->get(); // Exclude current permission to avoid self-parenting
+        return view('permissions.edit', compact('permission', 'permissions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePermissionRequest  $request
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id ,  Request $request)
+    public function update(Request $request, $id)
     {
-        //
-        $data = $this->PermissionRepository->update($id  ,$request);
-        if ($data) {
-            // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
-            $message = "تم تعديل صلاخية {$data->title_ar} ";
-            $this->log($user_id, $message);
-        }
-        // return response()->json($data);
-        return $this->respondSuccess($data, 'Update Data successfully.');
+        $permission = Permission::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|unique:permissions,name,' . $id,
+            'parent_id' => 'nullable|exists:permissions,id'
+        ]);
+
+        $permission->update([
+            'name' => $request->name,
+            'parent_id' => $request->parent_id
+        ]);
+
+        return redirect()->route('permissions.index')->with('success', 'تم تحديث الصلاحية بنجاح');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
-        $data = $this->PermissionRepository->destroy($id);
-        if ($data) {
-            // $user_id = 1;
-              $user_id =  Auth::user()->id ?? null;
-            $message = "تم مسح صلاخية {$data->title_ar} ";
-            $this->log($user_id, $message);
-        }
-        // return response()->json($data);
-        // return $this->respondSuccess($data, message: 'Delete Data successfully.');
-        return redirect()->back()->with('success','تم المسح بنجاخ');
+        Permission::findOrFail($id)->delete();
+        return redirect()->route('permissions.index')->with('success', 'تم حذف الصلاحية بنجاح');
     }
 }

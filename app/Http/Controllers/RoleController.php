@@ -123,69 +123,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        // $data['role'] = $this->RoleRepository->show($id);
-        // $data['permission'] = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
-        // return response()->json($data);
-        // return $this->respondSuccess($data, 'Get Data successfully.');
-
-        $roles =  Role::with('permissions')->findOrFail($id);
-        $rolescount = Role::with('user')->count();
-        $Permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
-        $title = "مجموعات العمل";
-        $breadcrumb = array();
-        $breadcrumb[0]['title'] = " الرئيسية";
-        $breadcrumb[0]['url'] = route('roles.index');
-        $breadcrumb[1]['title'] = "الموارد البشرية";
-        $breadcrumb[1]['url'] = route('roles.index');
-        $breadcrumb[2]['title'] = $title;
-        $breadcrumb[2]['url'] = 'javascript:void(0);';
-
-        $view = 'role.edit';
-        $assignedPermissions = $roles->permissions->pluck('id')->toArray();
-        // $view = 'setting.permission';
-        return view(
-            'layout',
-            compact('title', 'view', 'breadcrumb', 'roles', 'Permissions','rolescount','assignedPermissions')
-        );
+        return $this->RoleRepository->edit($id);
     }
 
-//     public function edit($id)
-// {
-//     // Fetch the role by ID
-//     $role = $this->RoleRepository->show($id);
-
-//     // Fetch permissions with their children
-//     $permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
-
-//     // Format the permissions for easier checking in the frontend
-//     $formattedPermissions = $permissions->map(function($permission) use ($role) {
-//         return [
-//             'id' => $permission->id,
-//             'title_ar' => $permission->title_ar,
-//             'children' => $permission->childrenRecursive->map(function($child) use ($role) {
-//                 return [
-//                     'id' => $child->id,
-//                     'title_ar' => $child->title_ar,
-//                     'checked' => $role->permissions->contains('id', $child->id),
-//                     'subchildren' => $child->childrenRecursive->map(function($subchild)use ($role) {
-//                         return [
-//                             'id' => $subchild->id,
-//                             'title_ar' => $subchild->title_ar,
-//                             'checked' => $role->permissions->contains('id', $subchild->id),
-//                         ];
-//                     }),
-//                 ];
-//             }),
-//             'checked' => $role->permissions->contains('id', $permission->id),
-//         ];
-//     });
-
-//     // Return a JSON response with the role and formatted permissions
-//     return response()->json([
-//         'role' => $role,
-//         'permissions' => $formattedPermissions,
-//     ]);
-// }
 
 
     /**
@@ -199,12 +139,10 @@ class RoleController extends Controller
     {
         //
         // dd($request);
-        $data = $this->RoleRepository->update($id  ,$request);
-        // return response()->json($data);
-        // return redirect()->back();
-        return redirect()->route('roles.index')->with('success', 'تم لتعديل  بنجاح');
-    }
 
+        // return redirect()->back();
+        return $this->RoleRepository->update($id  ,$request);
+    }
     /**
      * Remove the specified resource from storage.
      *

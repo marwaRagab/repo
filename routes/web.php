@@ -467,13 +467,13 @@ Route::middleware('auth')->group(function () {
     Route::any('branch/delete/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
     Route::any('branch/show/{id}', [BranchController::class, 'show'])->name('branch.show');
 
-    // permission
-    Route::get('permission', [PermissionController::class, 'index'])->name('permission.index');
-    Route::post('permission/store', [PermissionController::class, 'store'])->name('permission.store');
-    Route::get('permission/edit/{id}', [PermissionController::class, 'edit'])->name('permission.edit');
-    Route::any('permission/update/{id}', [PermissionController::class, 'update'])->name('permission.update');
-    Route::any('permission/delete/{id}', [PermissionController::class, 'destroy'])->name('permission.destroy');
-    Route::any('permission/show/{id}', [PermissionController::class, 'show'])->name('permission.show');
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
+    Route::post('/permissions/store', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::get('/permissions/{id}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+    Route::put('/permissions/{id}/update', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('/permissions/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+    Route::get('/permissions/search', [PermissionController::class, 'search'])->name('permissions.search');
 
     // Route::Resource( 'broker', BokerController::class);
     Route::get('/broker', [BokerController::class, 'index'])->name('broker.index');
@@ -661,8 +661,8 @@ Route::middleware('auth')->group(function () {
     // roles
     Route::get('/human-resources/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::post('/human-resources/roles/store', [RoleController::class, 'store'])->name('roles.store');
-    Route::any('/human-resources/roles/edit/{id}', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::any('/human-resources/roles/update/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update');
     Route::any('/human-resources/roles/delete/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
     Route::any('/human-resources/roles/show/{id}', [RoleController::class, 'show'])->name('roles.show');
     Route::get('role/create', [RoleController::class, 'create'])->name('role.create');

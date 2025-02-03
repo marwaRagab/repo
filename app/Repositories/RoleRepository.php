@@ -98,7 +98,7 @@ class RoleRepository implements RoleRepositoryInterface
         return view('layout', compact('title', 'view', 'breadcrumb', 'permissionsTableHTML'));
     }
 
-    private function buildPermissionTreeHTML($parentId = null)
+    private function buildPermissionTreeHTML($parentId = null, $selectedPermissions = [])
     {
         $permissions = Permission::where('parent_id', $parentId)->get();
 
@@ -111,7 +111,10 @@ class RoleRepository implements RoleRepositoryInterface
         foreach ($permissions as $permission) {
             $hasChildren = Permission::where('parent_id', $permission->id)->exists();
 
-            $html .= '<li>';
+            // Check if the permission is already assigned to the role
+            $isChecked = in_array($permission->id, $selectedPermissions) ? 'checked' : '';
+
+            $html .= '<li style="background: #f8f9fa;">';
 
             // Toggle Arrow (Only if this permission has children)
             if ($hasChildren) {
@@ -119,12 +122,12 @@ class RoleRepository implements RoleRepositoryInterface
             }
 
             // Checkbox for permission
-            $html .= '<input type="checkbox" class="parent-checkbox" name="permissions[]" value="' . $permission->id . '"> ' . $permission->name;
+            $html .= '<input type="checkbox" class="parent-checkbox" name="permissions[]" value="' . $permission->id . '" ' . $isChecked . '> ' . $permission->name;
 
             // Recursively call function for child permissions
             if ($hasChildren) {
                 $html .= '<ul class="child-tree">';
-                $html .= $this->buildPermissionTreeHTML($permission->id);
+                $html .= $this->buildPermissionTreeHTML($permission->id, $selectedPermissions);
                 $html .= '</ul>';
             }
 
@@ -135,26 +138,21 @@ class RoleRepository implements RoleRepositoryInterface
         return $html;
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
-            'name_ar' => 'required|string|max:255',
-            'name_en' => 'required|string|max:255',
-            'permissions' => 'array', // Ensure permissions is an array
-            'permissions.*' => 'exists:permissions,id', // Each permission should exist in the permissions table
+            'name_ar' => 'required|string|unique:roles,name',
+            'name_en' => 'required|string|unique:roles,name',
+            'permissions' => 'array|required'
         ]);
 
-        // Create the role
-        $role = Role::create([
-            'name_ar' => $request->name_ar,
-            'name_en' => $request->name_en,
-            'created_by' => auth()->id() ?? null,
-        ]);
+        // Create Role
+        $role = Role::create(['name' => $request->name_en,'name_ar' => $request->name_ar]);
 
-        // Attach the selected permissions
-        if ($request->has('permissions')) {
-            $role->permissions()->sync($request->permissions);
-        }
+        // Assign Permissions
+        $permissions = Permission::whereIn('id', $request->permissions)->pluck('name');
+        $role->givePermissionTo($permissions);
 
         // Redirect or return response
         return redirect()->route('roles.index')->with('success', 'تم الاضافة بنجاح');
@@ -164,36 +162,43 @@ class RoleRepository implements RoleRepositoryInterface
     {
         $role = Role::with('permissions')->findOrFail($id);
 
-        // Return the role data (you might want to return only specific fields if needed)
-        return response()->json([
-            'name_ar' => $role->name_ar,
-            'name_en' => $role->name_en,
-            'permissions' => $role->permissions->pluck('id')->toArray() // Assuming 'permissions' is a relationship in the Role model
-        ]);
+        // Pass selected permission IDs to highlight the checked permissions
+        $selectedPermissions = $role->permissions->pluck('id')->toArray();
+
+        // Build the permission tree with selected permissions
+        $permissionsTableHTML = $this->buildPermissionTreeHTML(null, $selectedPermissions);
+
+        $title = "تعديل مجموعة العمل";
+        $breadcrumb = [
+            ['title' => "الرئيسية", 'url' => route('roles.index')],
+            ['title' => "الموارد البشرية", 'url' => route('roles.index')],
+            ['title' => "مجموعات العمل", 'url' => route('roles.index')],
+            ['title' => $title, 'url' => 'javascript:void(0);']
+        ];
+$view='role.edit';
+        return view('layout', compact('title','view', 'breadcrumb', 'role', 'permissionsTableHTML'));
     }
+
 
     public function update($id, Request $request)
     {
-        // Find the role by ID or fail
         $role = Role::findOrFail($id);
 
-        // Update the role's name if provided
-        $role->name_ar = $request->input('name_ar') ?? $role->name_ar;
-        $role->name_en = $request->input('name_en') ?? $role->name_en;
-        $role->updated_by = Auth::id() ?? null;
-        $role->save();
 
-        // Check if the request has permissions
-        if ($request->filled('permissions')) {
-            DB::table('role_permissions')->where('role_id', $role->id)->delete();
-            if ($request->has('permissions')) {
-                $role->permissions()->sync($request->permissions);
-            }
-        }
 
-        // Return the updated role data
-        return response()->json($role);
+        $role->update([
+            'name_ar' => $request->name_ar,
+            'name' => $request->name_en,
+            'updated_by' => Auth::id()
+        ]);
+
+        // Sync permissions
+        $permissions = Permission::whereIn('id', $request->permissions)->pluck('name');
+        $role->syncPermissions($permissions);
+
+        return redirect()->route('roles.index')->with('success', 'تم تحديث المجموعة بنجاح');
     }
+
 
     public function destroy($id)
     {
