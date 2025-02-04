@@ -56,21 +56,32 @@
     }
 </style>
 <div class="row">
-
     @foreach ($roles as $role)
         <div class="col-sm-3">
-            <div class="card shadow-md rounded-lg p-4 w-100 overflow-hidden">
+            <div class="card shadow-md rounded-lg p-4 w-100 overflow-hidden position-relative">
+
+
+                <div class=" align-items-center justify-content-start position-absolute" style="left: 10px; top: 10px;">
+                    <a href="{{ route('roles.edit', $role->id) }}"
+                        class="btn btn-primary btn-sm rounded-circle shadow-lg mr-2"
+                        style="width: 30px; height: 30px;">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-warning btn-sm rounded-circle shadow-lg mr-2"
+                            style="width: 30px; height: 30px;" onclick="return confirm('هل أنت متأكد من الحذف؟')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
 
                 <p class="text-muted small">
                     العدد <span class="font-weight-medium">:{{ $role->users->count() }}</span>
-                    <a href="{{ route('roles.edit', $role->id) }}"
-                        class="btn btn-primary btn-sm rounded-circle shadow-lg mr-2"
-                        style="float: left;width: 30px; height: 30px;">
-                        <i class="fas fa-edit"></i>
-                    </a>
                 </p>
 
-                <div class="d-flex align-items-center mt-2">
+                <div class="d-flex align-items-center">
                     @foreach ($role->users->take(4) as $user)
                         <img class="rounded-circle border border-white mr-2"
                             src="{{ isset($user->img) ? asset('user_profile/' . $user->img) : asset('user_profile/Screenshot 2024-12-03 112316.png') }}"
@@ -141,7 +152,7 @@
 
     <div class="card-body">
         <div class="table-responsive pb-4">
-            <table class="table table-bordered" id="all-student">
+            <table id="file_export" class="table table-bordered border text-nowrap align-middle">
                 <thead>
                     <!-- start row -->
                     <tr>
@@ -157,7 +168,7 @@
                 <tbody>
                     <!-- start row -->
 
-                    @forelse($users as $user)
+                    @foreach($users as $user)
                         <tr>
                             <td>
 
@@ -213,11 +224,8 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">لم يتم العثور على مستخدمين</td>
-                        </tr>
-                    @endforelse
+                  
+                    @endforeach
 
 
                 </tbody>

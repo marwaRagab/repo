@@ -31,8 +31,8 @@ class RoleRepository implements RoleRepositoryInterface
         // Ensure $roles is a collection
         $roles = Role::all();
         $query = User::with('roles');
+//dd($roles[0]);
 
-        // Search by user name or civil number
         if ($request->has('search') && !empty($request->search)) {
             $query->where(function ($q) use ($request) {
                 $q->where('name_ar', 'LIKE', '%' . $request->search . '%')
@@ -47,17 +47,9 @@ class RoleRepository implements RoleRepositoryInterface
             });
         }
 
-        $users = $query->get(); // Paginate results
+        $users = $query->get();
 
-     //   dd($users[0]->roles);
-        // Removed the call to undefined method 'map'
-        // $roles->map(function ($role) use ($user) {
-        //     $user->assignRole($role); // Assign role
-        // });
 
-        // ...existing code...
-      //  $rolescount = $roles->count();
-       // $Permissions = Permission::whereNull('parent_id')->with('childrenRecursive')->get();
 
         $title = "مجموعات العمل";
         $breadcrumb = array();
@@ -83,8 +75,8 @@ class RoleRepository implements RoleRepositoryInterface
 
     public function create()
     {
-        $permissionsTableHTML = $this->buildPermissionTreeHTML(); // Manually construct the tree
-//dd($permissionsTreeHTML);
+        $permissionsTableHTML = $this->buildPermissionTreeHTML();
+
         $title = "إضافة مجموعة عمل";
         $breadcrumb = [
             ['title' => "الرئيسية", 'url' => route('roles.index')],
@@ -100,6 +92,7 @@ class RoleRepository implements RoleRepositoryInterface
 
     private function buildPermissionTreeHTML($parentId = null, $selectedPermissions = [])
     {
+    //    dd($parentId);
         $permissions = Permission::where('parent_id', $parentId)->get();
 
         if ($permissions->isEmpty()) {
@@ -111,20 +104,16 @@ class RoleRepository implements RoleRepositoryInterface
         foreach ($permissions as $permission) {
             $hasChildren = Permission::where('parent_id', $permission->id)->exists();
 
-            // Check if the permission is already assigned to the role
             $isChecked = in_array($permission->id, $selectedPermissions) ? 'checked' : '';
 
             $html .= '<li style="background: #f8f9fa;">';
 
-            // Toggle Arrow (Only if this permission has children)
             if ($hasChildren) {
                 $html .= '<span class="toggle-arrow">⮟</span>';
             }
 
-            // Checkbox for permission
             $html .= '<input type="checkbox" class="parent-checkbox" name="permissions[]" value="' . $permission->id . '" ' . $isChecked . '> ' . $permission->name;
 
-            // Recursively call function for child permissions
             if ($hasChildren) {
                 $html .= '<ul class="child-tree">';
                 $html .= $this->buildPermissionTreeHTML($permission->id, $selectedPermissions);
@@ -200,12 +189,18 @@ $view='role.edit';
     }
 
 
+   
     public function destroy($id)
     {
-        $data = Role::findOrFail($id);
+        $Role = Role::findOrFail($id);
 
-        // Perform soft delete
-        $data->delete();
-        return $data;
+        try {
+            $Role->delete();
+            return redirect()->route('roles.index')->with('success', '✅ تم حذف المجموعة بنجاح.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('roles.index')->with('error', '❌ حدث خطأ أثناء الحذف.');
+
+        }
     }
 }

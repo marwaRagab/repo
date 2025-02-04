@@ -83,53 +83,56 @@
     }
 </style>
 <div class="card">
-    <h4 class="card-title mb-3">إضافة صلاحية</h4>
+    <h4 class="card-title mb-3">تعديل الصلاحية</h4>
     <div class="card-body">
-        <form action="{{ route('permissions.store') }}" method="POST">
+        <form action="{{ route('permissions.update', $permission->id) }}" method="POST">
             @csrf
-            <div class="row">
-                <div class="col-sm-4">
-                    <label class="form-label">اسم الصلاحية (بالإنجليزية)</label>
-                    <input type="text" name="name" class="form-control" value="" required>
-                </div>
-                <div class="col-sm-4">
-                    <label class="form-label">اسم الصلاحية (بالعربية)</label>
-                <input type="text" name="name_ar" class="form-control" value="" required>
+            @method('PUT')
+
+            <div class="mb-3">
+                <label class="form-label">اسم الصلاحية (بالإنجليزية)</label>
+                <input type="text" name="name" class="form-control" value="{{ $permission->name }}" required>
             </div>
-            <div class="col-sm-4">
-                <label class="form-label">الصلاحية الرئيسية </label>
-                <select name="parent_id" id="parent-permission" class="form-control select2" style="direction: rtl !important;"
-                    data-selected-id="{{ old('parent_id') }}">
-                    <option value="">بدون</option>
+
+            <div class="mb-3">
+                <label class="form-label">اسم الصلاحية (بالعربية)</label>
+                <input type="text" name="name_ar" class="form-control" value="{{ $permission->name_ar }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">الصلاحية الرئيسية : </label>
+                @if($permission->parent)
+                <span>{{ $permission->parent->name }}</span>
+            @endif
+                <select name="parent_id" id="parent-permission" class="form-control select2" style="width: 100%" data-selected-id="{{ $permission->parent_id }}">
                 </select>
             </div>
-                </div>
 
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-success">حفظ</button>
-            &nbsp; &nbsp;
+            <button type="submit" class="btn btn-success">تحديث</button>
             <a href="{{ route('permissions.index') }}" class="btn btn-secondary">إلغاء</a>
-        </div>    </form>
+        </form>
     </div>
 </div>
+
+@section('scripts')
 <script>
     $(document).ready(function() {
         // Check if jQuery and Select2 are properly loaded
         jQuery.noConflict();
         $('#parent-permission').select2({
-            placeholder: "ابحث للاضافة...",
+            placeholder: "{{ $permission->parent ? $permission->parent->name : 'ابحث للاضافة...' }}",
             allowClear: true,
             dropdownAutoWidth: true,
             width: '100%',
             dropdownParent: $('#parent-permission').parent(),
             dir: "rtl",
-    language: {
-        noResults: function() {
-            return " لا يوجد نتائج...";
-        }
-    },
+            language: {
+                noResults: function() {
+                    return " لا يوجد نتائج...";
+                }
+            },
             ajax: {
-                url: '/permissions/search',
+                url: '{{ route("permissions.search") }}',
                 dataType: 'json',
                 delay: 250,
                 processResults: function(data) {
@@ -148,7 +151,7 @@
 
         // Load Initial Data (All Permissions)
         $.ajax({
-            url: '/permissions/search',
+            url: '{{ route("permissions.search") }}',
             dataType: 'json',
             success: function(data) {
                 data.forEach(function(permission) {
@@ -163,7 +166,7 @@
 
         if (selectedPermissionId) {
             $.ajax({
-                url: '/permissions/search?q=' + selectedPermissionId,
+                url: '{{ route("permissions.search") }}?q=' + selectedPermissionId,
                 dataType: 'json',
                 success: function(data) {
                     let selectedOption = data.find(p => p.id == selectedPermissionId);
